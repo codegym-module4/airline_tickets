@@ -26,6 +26,14 @@ public class Account {
     @Column(name = "email")
     private String email;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
     @Column(name = "password")
     private String password;
 }

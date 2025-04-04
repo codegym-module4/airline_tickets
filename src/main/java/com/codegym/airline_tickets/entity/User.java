@@ -46,10 +46,6 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @OneToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
-
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime deletedAt;
