@@ -1,0 +1,362 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: 'M PLUS Rounded 1c';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/mplusrounded1c/v15/VdGBAYIAV6gnpUpoWwNkYvrugw9RuM1y55sK.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'M PLUS Rounded 1c';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/mplusrounded1c/v15/VdGBAYIAV6gnpUpoWwNkYvrugw9RuM064ZsK.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/sourcesanspro/v21/6xKydSBYKcSV-LCoeQqfX1RYOo3ik4zAkA.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/sourcesanspro/v21/6xK3dSBYKcSV-LCoeQqfX1RYOo3aPw.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/sourcesanspro/v21/6xKydSBYKcSV-LCoeQqfX1RYOo3i54rAkA.ttf) format('truetype');
+}
+
+body{
+    line-height: 1.43;
+    font-size: 16px;
+    font-family: KoHo, sans-serif;
+    font-weight: 400;
+    background-color: #fafafa;
+}
+
+* {
+    box-sizing: border-box;
+    outline: 0;
+    scroll-behavior: smooth;
+}
+
+main{
+    height: 100%;
+    /* background-image: url('../img/background-main.jpg'); */
+}
+.nav-link{
+    font-weight:600;
+}
+.banner-02 {
+    width: 100%;
+    min-height: 638px;
+    background-image: url('../img/background_02.jpg') ;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.icon img{
+    width: 26px;
+    height: 26px;
+}
+footer{
+    background-color: #fafafa;
+    color:#333333
+}
+
+.nav-item-select a.nav-link {
+    transition: background-color 0.3s, color 0.3s;
+    padding: 10px 10px;
+    display: block;
+}
+
+.nav-item-select a.nav-link:hover {
+    background-color: white !important;
+    color: red !important;
+    border-radius: 5px;
+}
+
+.booking-form {
+    background: linear-gradient(30.3deg, rgba(217, 26, 33, 0.73) 33.94%, #6F0000 163.23%);
+    border-radius: 0 0 5px 5px;
+    color: white;
+    padding: 20px;
+    max-width: 400px;
+    margin: auto;
+}
+.btn-custom {
+    background: linear-gradient(26.73deg, #F9A51A 13.7%, #FBB612 29.8%, #FFDD00 66.81%);
+    border-radius: 10px;
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+.select-btn-left{
+    background: linear-gradient(20.12deg, rgba(217, 26, 33, 0.8) 19.6%, rgba(111, 0, 0, 0.8) 93.86%);
+    font-weight: bold;
+    font-style: italic;
+    color: #ffffff;
+    border-radius: 5px 5px 0 0;
+}
+.select-btn-right{
+    background: linear-gradient(135deg, #FFDD00 39.58%, #E99F24 100%);
+    font-weight: bold;
+    font-style: italic;
+    color: #333333;
+    border-radius: 5px 5px 0 0;
+}
+
+.hot-deal-link{
+    text-decoration: none;
+}
+.title-hot-deal{
+    color: rgb(51, 51, 51); font-weight: 700;
+}
+.title-hot-deal span {
+    color: #EC2029;
+}
+.hot-deal-list{
+    gap:90px;
+    top: 122%;
+    z-index: 9;
+}
+
+.form-search{
+    max-width: 380px;
+    right: 10%;
+    top: 13%;
+    z-index: 5;
+}
+
+.dropdown-menu {
+    width: 88%;
+    padding: 15px;
+}
+/*#passengerInput {*/
+/*    width: 340px;*/
+/*}*/
+.tb-head{
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.095) 100%);
+    background: #CA161C;
+    color: #FFFFFF;
+}
+
+.btn-detail{
+    background: linear-gradient(26.73deg, #F9A51A 13.7%, #FBB612 29.8%, #FFDD00 66.81%);
+    border-radius: 10px;
+}
+.nav-sub{
+    background: linear-gradient(28.91deg, #F9A51A 2.24%, #FBB612 31.03%, #FBF300 97.21%);
+}
+/**-----------------------------------------------
+マイページ
+-----------------------------------------------**/
+#content {
+    line-height: 1.2;
+    margin-top: 60px;
+    padding-bottom: 100px;
+    /*border-bottom: 2px solid #0abab5;*/
+}
+.section {
+    display: block;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+@media screen and (max-width: 1024px) {
+    .section {
+        width: auto;
+        padding-left: 40px !important;
+        padding-right: 40px !important;
+    }
+}
+@media screen and (max-width: 480px) {
+    .section {
+        padding-left: 5% !important;
+        padding-right: 5% !important;
+    }
+}
+.section_margin {
+    margin-bottom: 80px;
+}
+.mypage_block {
+    display: flex;
+}
+@media screen and (max-width: 480px) {
+    .mypage_block {
+        display: block;
+    }
+}
+.mypage_block .mypage_nav {
+    width: 250px;
+    margin-right: 50px;
+}
+@media screen and (max-width: 1024px) {
+    .mypage_block .mypage_nav {
+        display: none;
+    }
+}
+.mypage_block .mypage_nav li {
+    position: relative;
+    margin-bottom: 10px;
+}
+.mypage_block .mypage_nav li a {
+    color: #000000;
+    text-decoration: none;
+}
+.mypage_block .mypage_nav li a:hover {
+    opacity: 0.6;
+}
+.mypage_block .mypage_nav li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    color: #FFF;
+    text-align: center;
+    background-color: #CA161C;
+}
+@media screen and (max-width: 480px) {
+    .mypage_block .mypage_nav li a {
+        padding: 15px;
+    }
+}
+.mypage_block .mypage_nav li span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+    width: 21px;
+    height: 21px;
+    margin-left: 5px;
+    text-align: center;
+    font-size: 0.687rem;
+    background-color: #C1272D;
+    border-radius: 100%;
+}
+.mypage_block .mypage_content {
+    width: calc(100% - 300px);
+}
+@media screen and (max-width: 1024px) {
+    .mypage_block .mypage_content {
+        width: 100%;
+    }
+}
+.mypage_block .mypage_content .mypage_title {
+    color: #FFF;
+    padding: 10px;
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    background-color: #CA161C;
+}
+.mypage_block.user_info .user_info a,
+.mypage_block.user_payment .user_payment a,
+.mypage_block.user_tranfer_history .user_tranfer_history a,
+.mypage_block.user_change_password .user_change_password a {
+    background-color: #FFF;
+    color: #CA161C;
+    border: 1px solid #CA161C;
+}
+.mypage_news {
+    margin-bottom: 40px;
+}
+.mypage_news li {
+    display: flex;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #CCC;
+}
+.mypage_news li time {
+    margin-right: 20px;
+}
+.mypage_news li a {
+    flex: 1;
+}
+
+/* テーブル */
+.table_style {
+    border-collapse: collapse;
+    /* width:100%はみ出し防止 */
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    /* テーブルのはみ出し防止 */
+    word-break: break-all;
+}
+.table_style th {
+    padding: 10px;
+    text-align: left;
+    font-weight: normal;
+    vertical-align: middle;
+    border: 1px solid #B2B2B2;
+    background-color: #ff3333;
+    /* color: #FFF; */
+}
+.table_style td {
+    padding: 15px;
+    vertical-align: middle;
+    border: 1px solid #B2B2B2;
+    background-color: #FFF;
+}
+@media screen and (max-width: 480px) {
+    .table_style.table_vertical {
+        display: block;
+    }
+    .table_style.table_vertical tbody,
+    .table_style.table_vertical tr,
+    .table_style.table_vertical th,
+    .table_style.table_vertical td {
+        display: block;
+    }
+    .table_style.table_vertical tr:first-child th {
+        border-top: 1px solid #B2B2B2;
+    }
+    .table_style.table_vertical th {
+        padding: 10px;
+        border-top: none;
+        border-bottom: none;
+    }
+    .table_style.table_vertical td {
+        padding: 10px;
+    }
+}
+@media screen and (max-width: 480px) {
+    /* 横にスライドさせる */
+    .table_scroll .table_style {
+        display: block;
+        overflow-x: scroll;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+.header-root{
+    /*z-index: 1300;*/
+    width: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.095) 100%);
+    background: #CA161C;
+}
+a{
+    cursor: pointer;
+}
+.nav-link{
+    padding: 0 10px;
+    /*margin-right: 17px;*/
+}
+.footer-root{
+    background-color: rgba(0, 0, 0, 0);
+    margin-top: 40px;
+    border-top: 2px solid rgba(217, 26, 33, 0.73);
+
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<head th:replace="~{user/layouts/head::head ('Thanh toán')}"></head>
+<body>
+    <!--Header-->
+    <th:block th:replace="~{user/layouts/header::header}"></th:block>
+    <main id="content">
+        <section class="section">
+            <div class="mypage_block user_payment">
+                <nav class="mypage_nav">
+                    <ul>
+                        <li class="user_info"><a href="#">Thông tin cá nhân</a></li>
+                        <li class="user_payment"><a href="payment.html">Thanh toán</a></li>
+                        <li class="user_tranfer_history"><a href="tranfer_history.html">Lịch sử giao dịch</a></li>
+                        <li class="user_change_password"><a href="#">Đổi mật khẩu</a></li>
+                    </ul>
+                </nav>
+                <section class="mypage_content">
+                    <div class="table_scroll w-100">
+                        <table class="table_style text-nowrap">
+                            <tbody>
+                            <tr>
+                                <th>Mã vé</th>
+                                <th>Nơi đi</th>
+                                <th>Nơi đến</th>
+                                <th>Ngày đặt</th>
+                                <th>Ngày bay</th>
+                                <th>Giá</th>
+                                <th>Hủy</th>
+                                <th>Chọn</th>
+                            </tr>
+                            <tr>
+                                <td>DN001</td>
+                                <td>Đà Nẵng</td>
+                                <td>Hồ Chí Minh</td>
+                                <td>15/05/2025</td>
+                                <td>25/05/2025</td>
+                                <td>1.500.000</td>
+                                <td>
+                                    <a href="#">Hủy</a>
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" class="form-check-input border border-secondary" value="1"
+                                           name="radio_chosen" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>HCM001</td>
+                                <td>Hồ Chí Minh</td>
+                                <td>Đà Nẵng</td>
+                                <td>15/05/2025</td>
+                                <td>25/05/2025</td>
+                                <td>1.500.000</td>
+                                <td>
+                                    <a href="#">Hủy</a>
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" class="form-check-input border border-secondary" value="1"
+                                           name="radio_chosen" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DN002</td>
+                                <td>Đà Nẵng</td>
+                                <td>Hồ Chí Minh</td>
+                                <td>15/05/2025</td>
+                                <td>25/05/2025</td>
+                                <td>1.500.000</td>
+                                <td>
+                                    <a href="#">Hủy</a>
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" class="form-check-input border border-secondary" value="1"
+                                           name="radio_chosen" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>HN001</td>
+                                <td>Hà Nội</td>
+                                <td>Hồ Chí Minh</td>
+                                <td>15/05/2025</td>
+                                <td>25/05/2025</td>
+                                <td>1.500.000</td>
+                                <td>
+                                    <a href="#">Hủy</a>
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" class="form-check-input border border-secondary" value="1"
+                                           name="radio_chosen" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DN003</td>
+                                <td>Đà Nẵng</td>
+                                <td>Hồ Chí Minh</td>
+                                <td>15/05/2025</td>
+                                <td>25/05/2025</td>
+                                <td>1.500.000</td>
+                                <td>
+                                    <a href="#">Hủy</a>
+                                </td>
+                                <td class="text-center">
+                                    <input type="checkbox" class="form-check-input border border-secondary" value="1"
+                                           name="radio_chosen" />
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pt-3 d-flex justify-content-end">
+                        <div class="text-right">
+                            <button type="button" class="btn btn-sm btn-custom px-3">Thanh toán</button>
+                        </div>
+                    </div>
+                </section>
+            </div><!-- .mypage_block END -->
+        </section>
+    </main>
+    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+    <th:block th:replace="~{user/layouts/script::script}"></th:block>
+</body>
+
+</html>

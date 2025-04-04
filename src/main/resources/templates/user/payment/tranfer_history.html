@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{user/layouts/head::head ('Lịch sử thanh toán')}"></head>
+<body>
+    <th:block th:replace="~{user/layouts/header::header}"></th:block>
+    <main id="content">
+        <section class="section">
+            <div class="mypage_block user_tranfer_history">
+                <nav class="mypage_nav">
+                    <ul>
+                        <li class="user_info"><a href="#">Thông tin cá nhân</a></li>
+                        <li class="user_payment"><a href="payment.html">Thanh toán</a></li>
+                        <li class="user_tranfer_history"><a href="tranfer_history.html">Lịch sử giao dịch</a></li>
+                        <li class="user_change_password"><a href="#">Đổi mật khẩu</a></li>
+                    </ul>
+                </nav>
+                <section class="mypage_content">
+                    <div class="table_scroll w-100">
+                        <table class="table_style text-nowrap">
+                            <tbody>
+                                <tr>
+                                    <th>Nơi đi</th>
+                                    <th>Nơi đến</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Ngày bay</th>
+                                    <th>Giá</th>
+                                    <th>Tình trạng</th>
+                                </tr>
+                                <tr>
+                                    <td>Đà Nẵng</td>
+                                    <td>Hồ Chí Minh</td>
+                                    <td>15/05/2025</td>
+                                    <td>25/05/2025</td>
+                                    <td>1.500.000</td>
+                                    <td>
+                                        Đã thanh toán
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Hồ Chí Minh</td>
+                                    <td>Đà Nẵng</td>
+                                    <td>15/05/2025</td>
+                                    <td>25/05/2025</td>
+                                    <td>1.500.000</td>
+                                    <td>
+                                        Đã Hủy
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Đà Nẵng</td>
+                                    <td>Hồ Chí Minh</td>
+                                    <td>15/05/2025</td>
+                                    <td>25/05/2025</td>
+                                    <td>1.500.000</td>
+                                    <td>
+                                        Chờ thanh toán
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Hà Nội</td>
+                                    <td>Hồ Chí Minh</td>
+                                    <td>15/05/2025</td>
+                                    <td>25/05/2025</td>
+                                    <td>1.500.000</td>
+                                    <td>
+                                        Chờ thanh toán
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Đà Nẵng</td>
+                                    <td>Hồ Chí Minh</td>
+                                    <td>15/05/2025</td>
+                                    <td>25/05/2025</td>
+                                    <td>1.500.000</td>
+                                    <td>
+                                        Đã thanh toán
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div><!-- .mypage_block END -->
+        </section>
+    </main>
+    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+    <th:block th:replace="~{user/layouts/script::script}"></th:block>
+</body>
+
+</html>

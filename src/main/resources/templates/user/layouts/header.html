@@ -1,0 +1,48 @@
+<th:block th:fragment="header">
+    <header class="header-root text-white py-1" >
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center col-12">
+                <div class="header-content-left col-3" >
+                    <a href="/vi">
+                        <img src="/user/img/logo-white.png" alt="logo" height="50">
+                    </a>
+                </div>
+                <div class="header-content-right col-9 d-flex justify-content-end flex-column align-items-end px-0 ">
+
+                    <div class="nav d-flex justify-content-between align-items-center mb-2 px-2">
+                        <div class="nav-item d-flex justify-content-between align-items-center">
+                            <i class="fa-solid fa-headphones-simple"></i>
+                            <a class="nav-link text-white" href="#">Hỗ trợ</a>
+                        </div>
+                        <div class="nav-item d-flex justify-content-between align-items-center">
+                            <i class="fa-solid fa-user" style="color: red">
+                            </i><a class="nav-link text-white" href="#">Đăng kí</a>
+                        </div>
+                        <span style="font-weight: bold; color: #ffffff; margin-left:7px;" >|</span>
+                        <div class="nav-item" style="margin-left: 3px;"><a class="nav-link text-white" href="#" >Đăng nhập</a></div>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle" style="border: solid 1px #fff; border-radius: 3px; background: transparent; color: #ffffff; font-weight: 700;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Tiếng Việt
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">English</a></li>
+                                <li><a class="dropdown-item" href="#">France</a></li>
+                                <li><a class="dropdown-item" href="#">한국어 (o)</a></li>
+                                <li><a class="dropdown-item" href="#">日本語</a></li>
+                                <li><a class="dropdown-item" href="#">ภาษาไทย</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="nav-item d-flex justify-content-between align-items-center">
+                        <ul class="nav">
+                            <li class="nav-item-select"><a class="nav-link text-white" href="#">CHUYẾN BAY CỦA TÔI</a></li>
+                            <li class="nav-item-select"><a class="nav-link text-white" href="#">CHECK-IN</a></li>
+                            <li class="nav-item-select"><a class="nav-link text-white" href="#">DỊCH VỤ CHUYẾN BAY</a></li>
+                            <li class="nav-item-select"><a class="nav-link text-white" href="#">DỊCH VỤ TÀI CHÍNH</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</th:block>
