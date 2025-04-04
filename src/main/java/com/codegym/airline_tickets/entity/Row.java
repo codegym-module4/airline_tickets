@@ -19,6 +19,6 @@ public class Row {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "alphabet")
-    private String alphabet;
+    @Column(name = "number")
+    private String number;
 }

@@ -19,6 +19,6 @@ public class Col {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "number")
-    private String number;
+    @Column(name = "alphabet")
+    private String alphabet;
 }

@@ -10,6 +10,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -44,6 +45,10 @@ public class Ticket {
     @Column(name = "gender")
     private String gender;
 
+    @Column(name = "dob")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dob;
+
     @Column(name = "phone")
     private String phone;
 
@@ -52,6 +57,9 @@ public class Ticket {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "extra_kg")
+    private Integer extraKg;
 
     @Column(name = "price")
     private BigInteger price;
