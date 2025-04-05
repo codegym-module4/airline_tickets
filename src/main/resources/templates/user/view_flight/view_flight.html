@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head th:replace="~{user/layouts/head::head ('Vietjet Air | Bay là thích ngay | Website chính thức')}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<!-- Main Content -->
+<main class="py-0">
+    <!--Header-->
+    <th:block th:replace="~{user/layouts/header::header}"></th:block>
+    <nav class="navbar navbar-expand-lg bg-dark nav-sub">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tin khuyến mãi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled">Quy định hành lý</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">User</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="container-fluid mt-4">
+            <div class="row">
+                <!-- Nội dung chính -->
+                <div class="col-lg-9 content">
+                    <h2 style="font-weight: 500;">Chọn vé cho chiều đi</h2>
+                    <p>Danh sách chuyến bay từ: TP Hồ Chí Minh <i class="fa-solid fa-plane"></i> Hà Nội</p>
+                    <p>Hiển thị các chuyến bay tìm được...</p>
+                    <p>Thứ 4 - Ngày 17/02/2020</p>
+                    <!-- Danh sách chuyến bay -->
+                    <table class="table table-bordered">
+                        <thead class="tb-head">
+                        <tr>
+                            <th>Hãng</th>
+                            <th>Mã chuyến bay</th>
+                            <th>Giờ đi</th>
+                            <th>Giá (VND)</th>
+                            <th>Chi tiết</th>
+                            <th>Đặt vé</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+<!--                        <tr th:if="${listFlights.isEmpty()}">-->
+<!--                            <td th:text="${errorMessage}" colspan="14"></td>-->
+<!--                        </tr>-->
+                        <tr th:each="flight : ${listFlights}" >
+                            <td th:text="${flight.airlineName}"></td>
+                            <td th:text="${flight.flightCode}"></td>
+                            <td th:text="${flight.departureTime} + '-' + ${flight.arrivalTime}  ">08:00 - 10:00</td>
+                            <td th:text="${flight.price}"></td>
+                            <td>
+                                <button class="btn btn-detail" data-bs-toggle="modal"
+                                        data-bs-target="#detailModal">
+                                    Chi Tiết
+                                </button>
+                            </td>
+                            <td>
+                                <input type="radio" name="flightChoice" value="VN123">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 style="font-weight: 500;">Chọn vé cho chiều về</h2>
+                    <p>Danh sách chuyến bay từ: Hà Nội <i class="fa-solid fa-plane"></i> TP Hồ Chí Minh</p>
+                    <p>Hiển thị các chuyến bay tìm được...</p>
+                    <p>Thứ 4 - Ngày 17/02/2020</p>
+                    <!-- Danh sách chuyến bay -->
+                    <table class="table table-bordered">
+                        <thead class="tb-head">
+                        <tr>
+                            <th>Hãng</th>
+                            <th>Mã chuyến bay</th>
+                            <th>Giờ đi</th>
+                            <th>Giá (VND)</th>
+                            <th>Chi tiết</th>
+                            <th>Đặt vé</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Vietnam Airlines</td>
+                            <td>VN123</td>
+                            <td>08:00 - 10:00</td>
+                            <td>1.200.000đ</td>
+                            <td>
+                                <button class="btn btn-detail" data-bs-toggle="modal"
+                                        data-bs-target="#detailModal">
+                                    Chi Tiết
+                                </button>
+                            </td>
+                            <td>
+                                <input type="radio" name="flightChoice" value="VN123">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Bamboo Airways</td>
+                            <td>QH456</td>
+                            <td>12:30 - 14:15</td>
+                            <td>950.000đ</td>
+                            <td>
+                                <button class="btn btn-detail" data-bs-toggle="modal"
+                                        data-bs-target="#detailModal">
+                                    Chi Tiết
+                                </button>
+                            </td>
+                            <td>
+                                <input type="radio" name="flightChoice" value="BB">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-detail" data-bs-toggle="modal"
+                            data-bs-target="#flightDetailsModal">Xác nhận</button>
+                </div>
+                <div class="col-lg-3 sidebar" style="border: 1px solid black ">
+                    <h4 style="font-weight: 500;">Sắp xếp</h4>
+                    <div class="sort-box">
+                        <label><input type="radio" name="option" value="1"> Đề xuất</label><br>
+                        <label><input type="radio" name="option" value="2"> Giá (Thấp đến cao) </label><br>
+                        <label><input type="radio" name="option" value="3"> Thời gian khởi hành </label><br>
+                        <label><input type="radio" name="option" value="4"> Hãng hàng không </label><br>
+                    </div>
+                    <div class="search-box">
+                        <h4 style="font-weight: 500;">Tìm chuyến bay</h4>
+                        <form>
+                            <div class="mb-3">
+                                <label for="from" class="form-label">Điểm đi</label>
+                                <select id="from" class="form-control">
+                                    <option value="DN">Đà Nẵng</option>
+                                    <option value="HCM">Hồ Chí Minh</option>
+                                    <option value="HN">Hà Nội</option>
+                                    <option value="DL">Đà Lạt</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="to" class="form-label">Điểm đi</label>
+                                <select id="to" class="form-control">
+                                    <option value="DN">Đà Nẵng</option>
+                                    <option value="HCM">Hồ Chí Minh</option>
+                                    <option value="HN">Hà Nội</option>
+                                    <option value="DL">Đà Lạt</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Ngày đi</label>
+                                <input type="date" id="date" class="form-control">
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-md-4">
+                                    <label for="adults" class="form-label">Người lớn</label>
+                                    <select id="adults" class="form-control">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="children" class="form-label">Trẻ em</label>
+                                    <select id="children" class="form-control">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="baby" class="form-label">Em bé</label>
+                                    <select id="baby" class="form-control">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-detail w-100">Tìm chuyến bay</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--Modal chi tiết vé-->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">Chi tiết loại vé</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>TP Hồ Chí Minh ---> Hà Nội</th>
+                    <th colspan="2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>TP Hồ Chí Minh (SGN)</td>
+                    <td>Hà Nội (HAN)</td>
+                    <td>Vietnam Airlines</td>
+                </tr>
+                <tr>
+                    <td>08:00, 06/08/2020</td>
+                    <td>10:00, 06/08/2020</td>
+                    <td>Chuyến bay: VN236</td>
+                </tr>
+                <tr>
+                    <td>Tân Sơn Nhất</td>
+                    <td>Nội Bài</td>
+                    <td>Loại vé: Phổ thông</td>
+                </tr>
+                <tr>
+                    <td>Loại khách hàng</td>
+                    <td>Giá mỗi vé</td>
+                    <td>Thuế & Phí</td>
+                    <td>Tổng giá</td>
+                </tr>
+                <tr>
+                    <td>Người lớn</td>
+                    <td>1,109,000 VNĐ</td>
+                    <td>681,000 VNĐ</td>
+                    <td>1,790,000 VNĐ</td>
+                </tr>
+                <tr>
+                    <td>Điều kiện hành lý</td>
+                </tr>
+                <tr>
+                    <td>Hành lý xách tay</td>
+                    <td>10 kg</td>
+                </tr>
+                <tr>
+                    <td>Hành lý ký gửi</td>
+                    <td>23 kg</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--modal chi tiết đặt vé-->
+<div class="modal fade" id="flightDetailsModal" tabindex="-1" aria-labelledby="flightDetailsModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="flightDetailsModalLabel">Chi Tiết Đặt Vé</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>TP Hồ Chí Minh ---> Hà Nội</th>
+                    <th colspan="2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>TP Hồ Chí Minh (SGN)</td>
+                    <td>Hà Nội (HAN)</td>
+                    <td>Vietnam Airlines</td>
+                </tr>
+                <tr>
+                    <td>08:00, 06/08/2020</td>
+                    <td>10:00, 06/08/2020</td>
+                    <td>Chuyến bay: VN236</td>
+                </tr>
+                <tr>
+                    <td>Tân Sơn Nhất</td>
+                    <td>Nội Bài</td>
+                    <td>Loại vé: Phổ thông</td>
+                </tr>
+                <tr>
+                    <td>Loại khách hàng</td>
+                    <td>Số lượng vé</td>
+                    <td>Giá mỗi vé</td>
+                    <td>Thuế & Phí</td>
+                    <td>Tổng giá</td>
+                </tr>
+                <tr>
+                    <td>Người lớn</td>
+                    <td><label for="num" class="form-label"></label>
+                        <select id="num" class="form-control">
+                            <option value="1">1</option>
+                            <option value="2" selected >2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select></td>
+                    <td>1,109,000 VNĐ</td>
+                    <td>681,000 VNĐ</td>
+                    <td>1,790,000 VNĐ</td>
+                </tr>
+                <tr>
+                    <td>Điều kiện hành lý</td>
+                </tr>
+                <tr>
+                    <td>Hành lý xách tay</td>
+                    <td>10 kg</td>
+                </tr>
+                <tr>
+                    <td>Hành lý ký gửi</td>
+                    <td>23 kg</td>
+                </tr>
+                </tbody>
+            </table>
+            <table>
+                <thead>
+                <tr>
+                    <th>Hà Nội ---> TP Hồ Chí Minh</th>
+                    <th colspan="2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>TP Hồ Chí Minh (SGN)</td>
+                    <td>Hà Nội (HAN)</td>
+                    <td>Vietnam Airlines</td>
+                </tr>
+                <tr>
+                    <td>08:00, 06/08/2020</td>
+                    <td>10:00, 06/08/2020</td>
+                    <td>Chuyến bay: VN236</td>
+                </tr>
+                <tr>
+                    <td>Tân Sơn Nhất</td>
+                    <td>Nội Bài</td>
+                    <td>Loại vé: Phổ thông</td>
+                </tr>
+                <tr>
+                    <td>Loại khách hàng</td>
+                    <td>Số lượng vé</td>
+                    <td>Giá mỗi vé</td>
+                    <td>Thuế & Phí</td>
+                    <td>Tổng giá</td>
+                </tr>
+                <tr>
+                    <td>Người lớn</td>
+                    <td><label for="number" class="form-label"></label>
+                        <select id="number" class="form-control">
+                            <option value="1">1</option>
+                            <option value="2" selected >2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select></td>
+                    <td>1,109,000 VNĐ</td>
+                    <td>681,000 VNĐ</td>
+                    <td>1,790,000 VNĐ</td>
+                </tr>
+                <tr>
+                    <td>Điều kiện hành lý</td>
+                </tr>
+                <tr>
+                    <td>Hành lý xách tay</td>
+                    <td>10 kg</td>
+                </tr>
+                <tr>
+                    <td>Hành lý ký gửi</td>
+                    <td>23 kg</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary">Chọn</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+
+<!--</main>-->
+
+</body>
+<!-- Bootstrap 5 JS và Popper.js -->
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+</html>

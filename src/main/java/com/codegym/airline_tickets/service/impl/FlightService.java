@@ -1,15 +1,33 @@
 package com.codegym.airline_tickets.service.impl;
 
+import com.codegym.airline_tickets.dto.FlightDTO;
 import com.codegym.airline_tickets.entity.Booking;
 import com.codegym.airline_tickets.entity.Flight;
+import com.codegym.airline_tickets.repository.FlightRepository;
 import com.codegym.airline_tickets.service.IBookingService;
 import com.codegym.airline_tickets.service.IFlightService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
+@Slf4j(topic = "FLIGHT-SERVICE")
 public class FlightService implements IFlightService {
+
+    @Autowired
+    private FlightRepository flightRepository;
 
     @Override
     public List<Flight> getAll() {
@@ -18,17 +36,17 @@ public class FlightService implements IFlightService {
 
     @Override
     public void save(Flight s) {
-
+//
     }
 
     @Override
     public void update(long id, Flight s) {
-
+    //
     }
 
     @Override
     public void remove(Long id) {
-
+        //
     }
 
     @Override
@@ -40,4 +58,60 @@ public class FlightService implements IFlightService {
     public List<Flight> findByName(String name) {
         return List.of();
     }
+
+
+    public List<FlightDTO> findAll(String departure, String arrival, LocalDate departureTime, LocalDate arrivalTime, String sort, int page, int size) {
+        log.info("findAll flight start");
+
+        // Sorting
+        Sort.Order order = new Sort.Order(Sort.Direction.ASC, "price");
+        if (StringUtils.hasLength(sort)) {
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)"); // tencot:asc|desc
+            Matcher matcher = pattern.matcher(sort);
+            if (matcher.find()) {
+                String columnName = matcher.group(1);
+                if (matcher.group(3).equalsIgnoreCase("asc")) {
+                    order = new Sort.Order(Sort.Direction.ASC, columnName);
+                } else {
+                    order = new Sort.Order(Sort.Direction.DESC, columnName);
+                }
+            }
+        }
+
+        // handle start page = 1
+        int pageNo = 0;
+        if (page > 0) {
+            pageNo = page - 1;
+        }
+
+        // Paging
+        Pageable pageable = PageRequest.of(pageNo, size, Sort.by(order));
+
+        Page<Flight> flightPage;
+
+        if (StringUtils.hasLength(departure) && StringUtils.hasLength(arrival) ) {
+//            keyword = "%" + keyword.toLowerCase() + "%";
+            flightPage = flightRepository.searchByKeyword(departure, arrival, departureTime, arrivalTime, pageable);
+        } else {
+            flightPage = flightRepository.findAll(pageable);
+        }
+
+        return getFlightPageResponse(page, size, flightPage);
+    }
+
+    private static List<FlightDTO> getFlightPageResponse(int page, int size,  Page<Flight> flightPage){
+        log.info("Convert Flight Entity Page");
+
+        List<FlightDTO> listFlightDTO = flightPage.stream().map(flight -> FlightDTO.builder()
+                .flightCode(flight.getCode())
+                .airlineName(flight.getAirline().getName())
+                .departureTime(flight.getDeparture_time())
+                .arrivalTime(flight.getArrival_time())
+                .price(flight.getPrice())
+                .build()
+        ).toList();
+
+        return listFlightDTO;
+    }
+
 }
