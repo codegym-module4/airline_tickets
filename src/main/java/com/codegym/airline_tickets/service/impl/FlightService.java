@@ -57,11 +57,11 @@ public class FlightService implements IFlightService {
     }
 
 
-    public List<FlightResponseDTO> findAll(String departure, String arrival, LocalDate departureTime, LocalDate arrivalTime, String sort, int page, int size) {
+    public List<FlightResponseDTO> findAll(String departure, String arrival, LocalDate departureTime, String sort, int page, int size) {
         log.info("findAll flight start");
 
         // Sorting
-        Sort.Order order = new Sort.Order(Sort.Direction.ASC, "price");
+        Sort.Order order = new Sort.Order(Sort.Direction.ASC, "airline");
         if (StringUtils.hasLength(sort)) {
             Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)"); // tencot:asc|desc
             Matcher matcher = pattern.matcher(sort);
@@ -87,7 +87,7 @@ public class FlightService implements IFlightService {
         Page<Flight> flightPage;
 
         if (StringUtils.hasLength(departure) && StringUtils.hasLength(arrival) ) {
-            flightPage = flightRepository.searchByKeyword(departure, arrival, departureTime, arrivalTime, pageable);
+            flightPage = flightRepository.searchByKeyword(departure, arrival, departureTime, pageable);
         } else {
             flightPage = flightRepository.findAll(pageable);
         }

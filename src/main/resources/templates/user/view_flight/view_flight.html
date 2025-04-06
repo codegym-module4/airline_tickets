@@ -37,9 +37,9 @@
         <div class="container-fluid mt-4">
             <div class="row">
                 <!-- Nội dung chính -->
-                <div class="col-lg-9 content">
+                <div class="col-lg-9 content" th:classappend="${flightReq.type.equals('ROUND-TRIP')} ? '' : 'd-none'">
                     <h2 style="font-weight: 500;">Chọn vé cho chiều đi</h2>
-                    <p>Danh sách chuyến bay từ: <span th:text="${departure}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${arrival}"></span></p>
+                    <p>Danh sách chuyến bay từ: <span th:text="${departure  + ' '}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${' ' + arrival}"></span></p>
                     <p th:text="${departureTime}"></p>
                     <!-- Danh sách chuyến bay -->
                     <table class="table table-bordered">
@@ -54,10 +54,7 @@
                         </tr>
                         </thead>
                         <tbody>
-<!--                        <tr th:if="${listFlights.isEmpty()}">-->
-<!--                            <td th:text="${errorMessage}" colspan="14"></td>-->
-<!--                        </tr>-->
-                        <tr th:each="flight : ${listFlights}" >
+                        <tr th:each="flight : ${listDeparture}" >
                             <td th:text="${flight.airlineName}"></td>
                             <td th:text="${flight.flightCode}"></td>
                             <td th:text="${flight.departureTime.toLocalTime()} + ' - ' + ${flight.arrivalTime.toLocalTime()}  "></td>
@@ -74,9 +71,8 @@
                         </tr>
                         </tbody>
                     </table>
-
                     <h2 style="font-weight: 500;">Chọn vé cho chiều về</h2>
-                    <p>Danh sách chuyến bay từ: <span th:text="${arrival}"> </span><i class="fa-solid fa-plane"></i><span th:text="${departure}"></span> </p>
+                    <p>Danh sách chuyến bay từ: <span th:text="${arrival + ' '}"> </span><i class="fa-solid fa-plane"></i><span th:text="${' ' + departure}"></span> </p>
                     <p th:text="${arrivalTime}"></p>
                     <!-- Danh sách chuyến bay -->
                     <table class="table table-bordered">
@@ -94,7 +90,7 @@
                         <!--                        <tr th:if="${listFlights.isEmpty()}">-->
                         <!--                            <td th:text="${errorMessage}" colspan="14"></td>-->
                         <!--                        </tr>-->
-                        <tr th:each="flight : ${listFlights}" >
+                        <tr th:each="flight : ${listArrival}" >
                             <td th:text="${flight.airlineName}"></td>
                             <td th:text="${flight.flightCode}"></td>
                             <td th:text="${flight.departureTime.toLocalTime()} + ' - ' + ${flight.arrivalTime.toLocalTime()}  "></td>
@@ -114,7 +110,46 @@
                     <button class="btn btn-detail" data-bs-toggle="modal"
                             data-bs-target="#flightDetailsModal">Xác nhận</button>
                 </div>
-                <div class="col-lg-3 sidebar" style="border: 1px solid black ">
+                <div class="col-lg-9 content " th:classappend="${flightReq.type.equals('ONEWAY')} ? '' : 'd-none'">
+                    <h2 style="font-weight: 500;">Chọn vé cho chiều về</h2>
+                    <p>Danh sách chuyến bay từ: <span th:text="${arrival} + ' '"> </span><i class="fa-solid fa-plane"></i><span th:text="${' ' + departure}"></span> </p>
+                    <p th:text="${arrivalTime}"></p>
+                    <!-- Danh sách chuyến bay -->
+                    <table class="table table-bordered">
+                        <thead class="tb-head">
+                        <tr>
+                            <th>Hãng</th>
+                            <th>Mã chuyến bay</th>
+                            <th>Giờ đi</th>
+                            <th>Giá (VND)</th>
+                            <th>Chi tiết</th>
+                            <th>Đặt vé</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="flight : ${listDeparture}" >
+                            <td th:text="${flight.airlineName}"></td>
+                            <td th:text="${flight.flightCode}"></td>
+                            <td th:text="${flight.departureTime.toLocalTime()} + ' - ' + ${flight.arrivalTime.toLocalTime()}  "></td>
+                            <td th:text="${flight.price}"></td>
+                            <td>
+                                <button class="btn btn-detail" data-bs-toggle="modal"
+                                        data-bs-target="#detailModal">
+                                    Chi Tiết
+                                </button>
+                            </td>
+                            <td>
+                                <input type="radio" name="flightChoice" value="VN123">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-detail" data-bs-toggle="modal"
+                            data-bs-target="#flightDetailsModal">Xác nhận</button>
+                </div>
+
+
+                <form th:action="@{/user/flights/cheapest}" th:object="${flightReq}" class="col-lg-3 sidebar" style="border: 1px solid black">
                     <h4 style="font-weight: 500;">Sắp xếp</h4>
                     <div class="sort-box">
                         <label><input type="radio" name="option" value="1"> Đề xuất</label><br>
@@ -124,24 +159,20 @@
                     </div>
                     <div class="search-box">
                         <h4 style="font-weight: 500;">Tìm chuyến bay</h4>
-                        <form>
+                        <div>
                             <div class="mb-3">
-                                <label for="from" class="form-label">Điểm đi</label>
-                                <select id="from" class="form-control">
-                                    <option value="DN">Đà Nẵng</option>
-                                    <option value="HCM">Hồ Chí Minh</option>
-                                    <option value="HN">Hà Nội</option>
-                                    <option value="DL">Đà Lạt</option>
-                                </select>
+                                <label for="departure-area" class="form-label">Điểm đi</label>
+                                <input class="form-control" list="departure-area" id="departure" placeholder="Điểm khởi hành" name="departureAirport" />
+                                <datalist id="departure-area" class="w-100">
+                                    <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
+                                </datalist>
                             </div>
                             <div class="mb-3">
-                                <label for="to" class="form-label">Điểm đi</label>
-                                <select id="to" class="form-control">
-                                    <option value="DN">Đà Nẵng</option>
-                                    <option value="HCM">Hồ Chí Minh</option>
-                                    <option value="HN">Hà Nội</option>
-                                    <option value="DL">Đà Lạt</option>
-                                </select>
+                                <label for="destination-area" class="form-label">Điểm đi</label>
+                                <input class="form-control" list="destination-area" id="destination" placeholder="Điểm đến" name="arrivalAirport" />
+                                <datalist id="destination-area" class="w-100">
+                                    <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
+                                </datalist>
                             </div>
                             <div class="mb-3">
                                 <label for="date" class="form-label">Ngày đi</label>
@@ -181,11 +212,10 @@
                                     </select>
                                 </div>
                             </div>
-
                             <button type="submit" class="btn btn-detail w-100">Tìm chuyến bay</button>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

@@ -2,6 +2,8 @@ package com.codegym.airline_tickets.controller.User;
 
 import com.codegym.airline_tickets.dto.FlightRequestDTO;
 import com.codegym.airline_tickets.dto.FlightResponseDTO;
+import com.codegym.airline_tickets.entity.Airport;
+import com.codegym.airline_tickets.service.impl.AirportService;
 import com.codegym.airline_tickets.service.impl.FlightService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,66 +24,66 @@ import java.util.List;
 public class FlightsController {
 
     private final FlightService flightService;
-
-    @GetMapping("/flights/cheapest")
-    public String getTopCheapestTicket(@RequestParam(required = false) String departure,
-                                       @RequestParam(required = false) String arrival,
-                                       @RequestParam(required = false) LocalDate departureTime,
-                                       @RequestParam(required = false) LocalDate arrivalTime,
-                                       @RequestParam(required = false, defaultValue = "ASC") String sort,
-                                       @RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "10") int size,
-                                       Model model
-                                       ){
-        log.info("Get flight list");
-
-        List<FlightResponseDTO> listFlights = flightService.findAll(departure, arrival, departureTime, arrivalTime, sort, page, size);
-//        System.out.println(listFlights);
-        if(listFlights.isEmpty()){
-            return "redirect:/user/homepage";
-        }
-
-        model.addAttribute("departure", departure);
-        model.addAttribute("arrival", arrival);
-        model.addAttribute("departureTime", departureTime);
-        model.addAttribute("arrivalTime", arrivalTime);
-        model.addAttribute("listFlights",listFlights);
-        return "user/view_flight/view_flight";
-    }
+    private final AirportService airportService;
 
     @PostMapping("/flights/cheapest")
     public String getTopCheapestTicket(@ModelAttribute("flightReq") FlightRequestDTO flightReq, BindingResult bindingResult,
-                                       @RequestParam(required = false, defaultValue = "ASC") String sort,
+                                       @RequestParam(required = false, defaultValue = "DESC") String sort,
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
                                        Model model
     ){
         log.info("Get flight list");
-        System.out.println(flightReq);
 
-
-       if(flightReq != null){
+       if(flightReq != null && flightReq.getType().equals("ROUND-TRIP")) {
            String departure = flightReq.getDepartureAirport();
-           String arrival = flightReq.getArrivalAirport();
-           if(arrival.endsWith(",")){
-               arrival = arrival.substring(0, arrival.length() - 1);
-           }
+           String arrival = flightReq.getArrivalAirport().replaceAll("^,|,$", "");
+
            LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
            LocalDate arrivalTime = LocalDate.from(flightReq.getArrivalTime());
-             List<FlightResponseDTO> listFlights = flightService.findAll(departure, arrival, departureTime, arrivalTime, sort, page, size);
-             System.out.println(listFlights);
 
-           if(listFlights.isEmpty()){
+           List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime, sort, page, size);
+           List<FlightResponseDTO> listArrival = flightService.findAll(departure, arrival, arrivalTime, sort, page, size);
+           List<Airport> listAirports = airportService.getAll();
+
+           if(listDeparture.isEmpty() || listArrival.isEmpty()){
                return "redirect:/user/homepage";
            }
-           model.addAttribute("listFlights",listFlights);
+           model.addAttribute("flightReq",flightReq);
+           model.addAttribute("listDeparture",listDeparture);
+           model.addAttribute("listArrival",listArrival);
+           model.addAttribute("listAirports",listAirports);
+
+
            model.addAttribute("departure", departure);
            model.addAttribute("arrival", arrival);
            model.addAttribute("departureTime", departureTime);
            model.addAttribute("arrivalTime",arrivalTime);
-
        }
+
+       if(flightReq != null && flightReq.getType().equals("ONEWAY")) {
+            String departure = flightReq.getDepartureAirport();
+            String arrival = flightReq.getArrivalAirport().replaceAll("^,|,$", "");
+
+            LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
+
+            List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime, sort, page, size);
+            List<Airport> listAirports = airportService.getAll();
+
+            if(listDeparture.isEmpty()){
+                return "redirect:/user/homepage";
+            }
+           model.addAttribute("flightReq",flightReq);
+            model.addAttribute("listDeparture",listDeparture);
+            model.addAttribute("listAirports",listAirports);
+
+            model.addAttribute("departure", departure);
+            model.addAttribute("arrival", arrival);
+            model.addAttribute("departureTime", departureTime);
+        }
+
         return "user/view_flight/view_flight";
+
     }
 
 //    @GetMapping("/test")

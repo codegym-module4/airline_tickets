@@ -1,5 +1,6 @@
 package com.codegym.airline_tickets.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,4 +17,5 @@ public class FlightRequestDTO {
     private String arrivalAirport;
     private LocalDate departureTime;
     private LocalDate arrivalTime;
+    private String sort;
 }

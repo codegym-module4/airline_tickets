@@ -21,11 +21,9 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             "JOIN Airline airline ON flight.airline.id = airline.id " +
             "WHERE flight.departureAirport.name = :departure " +
             "AND flight.arrivalAirport.name = :arrival " +
-            "AND DATE(flight.departure_time) = :departureTime " +
-            "OR DATE(flight.arrival_time) = :arrivalTime")
+            "AND DATE(flight.departure_time) = :time")
     Page<Flight> searchByKeyword(@Param("departure") String departure,
                                  @Param("arrival") String arrival,
-                                 @Param("departureTime") LocalDate departureTime,
-                                 @Param("arrivalTime") LocalDate arrivalTime,
+                                 @Param("time") LocalDate time,
                                  Pageable pageable);
 }
