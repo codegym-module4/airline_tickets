@@ -39,9 +39,9 @@
                 <!-- Nội dung chính -->
                 <div class="col-lg-9 content">
                     <h2 style="font-weight: 500;">Chọn vé cho chiều đi</h2>
-                    <p>Danh sách chuyến bay từ: TP Hồ Chí Minh <i class="fa-solid fa-plane"></i> Hà Nội</p>
+                    <p>Danh sách chuyến bay từ: <span th:text="${departure}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${arrival}"></span></p>
                     <p>Hiển thị các chuyến bay tìm được...</p>
-                    <p>Thứ 4 - Ngày 17/02/2020</p>
+                    <p th:text="${departureTime}"></p>
                     <!-- Danh sách chuyến bay -->
                     <table class="table table-bordered">
                         <thead class="tb-head">
@@ -61,7 +61,7 @@
                         <tr th:each="flight : ${listFlights}" >
                             <td th:text="${flight.airlineName}"></td>
                             <td th:text="${flight.flightCode}"></td>
-                            <td th:text="${flight.departureTime} + '-' + ${flight.arrivalTime}  ">08:00 - 10:00</td>
+                            <td th:text="${flight.departureTime.toLocalTime()} + ' - ' + ${flight.arrivalTime.toLocalTime()}  "></td>
                             <td th:text="${flight.price}"></td>
                             <td>
                                 <button class="btn btn-detail" data-bs-toggle="modal"
@@ -77,7 +77,7 @@
                     </table>
 
                     <h2 style="font-weight: 500;">Chọn vé cho chiều về</h2>
-                    <p>Danh sách chuyến bay từ: Hà Nội <i class="fa-solid fa-plane"></i> TP Hồ Chí Minh</p>
+                    <p>Danh sách chuyến bay từ:  <i class="fa-solid fa-plane"></i> TP Hồ Chí Minh</p>
                     <p>Hiển thị các chuyến bay tìm được...</p>
                     <p>Thứ 4 - Ngày 17/02/2020</p>
                     <!-- Danh sách chuyến bay -->

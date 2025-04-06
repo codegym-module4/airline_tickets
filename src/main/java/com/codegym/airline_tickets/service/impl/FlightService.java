@@ -1,11 +1,10 @@
 package com.codegym.airline_tickets.service.impl;
 
-import com.codegym.airline_tickets.dto.FlightDTO;
-import com.codegym.airline_tickets.entity.Booking;
+import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.entity.Flight;
 import com.codegym.airline_tickets.repository.FlightRepository;
-import com.codegym.airline_tickets.service.IBookingService;
 import com.codegym.airline_tickets.service.IFlightService;
+import com.codegym.airline_tickets.util.FormaterCustom;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,7 +57,7 @@ public class FlightService implements IFlightService {
     }
 
 
-    public List<FlightDTO> findAll(String departure, String arrival, LocalDate departureTime, LocalDate arrivalTime, String sort, int page, int size) {
+    public List<FlightResponseDTO> findAll(String departure, String arrival, LocalDate departureTime, LocalDate arrivalTime, String sort, int page, int size) {
         log.info("findAll flight start");
 
         // Sorting
@@ -90,28 +87,26 @@ public class FlightService implements IFlightService {
         Page<Flight> flightPage;
 
         if (StringUtils.hasLength(departure) && StringUtils.hasLength(arrival) ) {
-//            keyword = "%" + keyword.toLowerCase() + "%";
             flightPage = flightRepository.searchByKeyword(departure, arrival, departureTime, arrivalTime, pageable);
         } else {
             flightPage = flightRepository.findAll(pageable);
         }
 
         return getFlightPageResponse(page, size, flightPage);
+
     }
 
-    private static List<FlightDTO> getFlightPageResponse(int page, int size,  Page<Flight> flightPage){
+    private static List<FlightResponseDTO> getFlightPageResponse(int page, int size, Page<Flight> flightPage){
         log.info("Convert Flight Entity Page");
-
-        List<FlightDTO> listFlightDTO = flightPage.stream().map(flight -> FlightDTO.builder()
+        System.out.println(flightPage);
+        return flightPage.stream().map(flight -> FlightResponseDTO.builder()
                 .flightCode(flight.getCode())
                 .airlineName(flight.getAirline().getName())
                 .departureTime(flight.getDeparture_time())
                 .arrivalTime(flight.getArrival_time())
-                .price(flight.getPrice())
+                .price(FormaterCustom.withLargeIntegers(flight.getPrice()))
                 .build()
         ).toList();
-
-        return listFlightDTO;
     }
 
 }
