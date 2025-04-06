@@ -1,5 +1,8 @@
 package com.codegym.airline_tickets.service;
 
+import com.codegym.airline_tickets.dto.RevenueByDateDto;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IService<T>{
