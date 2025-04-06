@@ -40,7 +40,6 @@
                 <div class="col-lg-9 content">
                     <h2 style="font-weight: 500;">Chọn vé cho chiều đi</h2>
                     <p>Danh sách chuyến bay từ: <span th:text="${departure}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${arrival}"></span></p>
-                    <p>Hiển thị các chuyến bay tìm được...</p>
                     <p th:text="${departureTime}"></p>
                     <!-- Danh sách chuyến bay -->
                     <table class="table table-bordered">
@@ -77,9 +76,8 @@
                     </table>
 
                     <h2 style="font-weight: 500;">Chọn vé cho chiều về</h2>
-                    <p>Danh sách chuyến bay từ:  <i class="fa-solid fa-plane"></i> TP Hồ Chí Minh</p>
-                    <p>Hiển thị các chuyến bay tìm được...</p>
-                    <p>Thứ 4 - Ngày 17/02/2020</p>
+                    <p>Danh sách chuyến bay từ: <span th:text="${arrival}"> </span><i class="fa-solid fa-plane"></i><span th:text="${departure}"></span> </p>
+                    <p th:text="${arrivalTime}"></p>
                     <!-- Danh sách chuyến bay -->
                     <table class="table table-bordered">
                         <thead class="tb-head">
@@ -93,11 +91,14 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Vietnam Airlines</td>
-                            <td>VN123</td>
-                            <td>08:00 - 10:00</td>
-                            <td>1.200.000đ</td>
+                        <!--                        <tr th:if="${listFlights.isEmpty()}">-->
+                        <!--                            <td th:text="${errorMessage}" colspan="14"></td>-->
+                        <!--                        </tr>-->
+                        <tr th:each="flight : ${listFlights}" >
+                            <td th:text="${flight.airlineName}"></td>
+                            <td th:text="${flight.flightCode}"></td>
+                            <td th:text="${flight.departureTime.toLocalTime()} + ' - ' + ${flight.arrivalTime.toLocalTime()}  "></td>
+                            <td th:text="${flight.price}"></td>
                             <td>
                                 <button class="btn btn-detail" data-bs-toggle="modal"
                                         data-bs-target="#detailModal">
@@ -106,21 +107,6 @@
                             </td>
                             <td>
                                 <input type="radio" name="flightChoice" value="VN123">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Bamboo Airways</td>
-                            <td>QH456</td>
-                            <td>12:30 - 14:15</td>
-                            <td>950.000đ</td>
-                            <td>
-                                <button class="btn btn-detail" data-bs-toggle="modal"
-                                        data-bs-target="#detailModal">
-                                    Chi Tiết
-                                </button>
-                            </td>
-                            <td>
-                                <input type="radio" name="flightChoice" value="BB">
                             </td>
                         </tr>
                         </tbody>

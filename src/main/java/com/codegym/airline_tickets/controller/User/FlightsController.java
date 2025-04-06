@@ -58,21 +58,27 @@ public class FlightsController {
     ){
         log.info("Get flight list");
         System.out.println(flightReq);
+
+
        if(flightReq != null){
            String departure = flightReq.getDepartureAirport();
            String arrival = flightReq.getArrivalAirport();
+           if(arrival.endsWith(",")){
+               arrival = arrival.substring(0, arrival.length() - 1);
+           }
            LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
            LocalDate arrivalTime = LocalDate.from(flightReq.getArrivalTime());
              List<FlightResponseDTO> listFlights = flightService.findAll(departure, arrival, departureTime, arrivalTime, sort, page, size);
              System.out.println(listFlights);
+
            if(listFlights.isEmpty()){
                return "redirect:/user/homepage";
            }
            model.addAttribute("listFlights",listFlights);
-           model.addAttribute("departure", flightReq.getDepartureAirport());
-           model.addAttribute("arrival", flightReq.getArrivalAirport());
-           model.addAttribute("departureTime", flightReq.getDepartureTime());
-           model.addAttribute("arrivalTime", flightReq.getArrivalTime());
+           model.addAttribute("departure", departure);
+           model.addAttribute("arrival", arrival);
+           model.addAttribute("departureTime", departureTime);
+           model.addAttribute("arrivalTime",arrivalTime);
 
        }
         return "user/view_flight/view_flight";

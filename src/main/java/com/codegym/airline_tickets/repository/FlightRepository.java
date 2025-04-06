@@ -22,7 +22,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             "WHERE flight.departureAirport.name = :departure " +
             "AND flight.arrivalAirport.name = :arrival " +
             "AND DATE(flight.departure_time) = :departureTime " +
-            "AND DATE(flight.arrival_time) = :arrivalTime")
+            "OR DATE(flight.arrival_time) = :arrivalTime")
     Page<Flight> searchByKeyword(@Param("departure") String departure,
                                  @Param("arrival") String arrival,
                                  @Param("departureTime") LocalDate departureTime,

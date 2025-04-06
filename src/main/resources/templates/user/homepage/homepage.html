@@ -69,6 +69,7 @@
       </button>
     </div>
     <form th:action="@{/user/flights/cheapest}" th:object="${flightReq}" class="booking-form" style="padding: 8px;" method="POST">
+
       <!--Khứ hồi - một chiều-->
       <div class="mb-3">
         <div class="form-check form-check-inline">
@@ -82,10 +83,10 @@
         <span style="font-weight: 600; margin-left: 40px;">VND<i class="fa-solid fa-caret-down" style="margin-left: 3px;" ></i></span>
       </div>
 
-      <!--Điểm khởi hành-->
+      <!--Ngày đi-->
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="input-group" style="width: 55%;">
-          <span class="input-group-text"><i class="fa-solid fa-plane-departure"></i></span>
+          <span class="input-group-text"><i class="fa-solid fa-plane"></i></span>
           <input class="form-control" list="departure-area" id="departure" placeholder="Điểm khởi hành" name="departureAirport" th:field="*{departureAirport}"/>
           <datalist id="departure-area" class="w-100">
             <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
@@ -96,21 +97,19 @@
         </div>
       </div>
 
-      <!--Điểm đến-->
+      <!--Ngày về-->
       <div class="destination-round-trip d-flex justify-content-between align-items-center mb-3 d-block">
         <div class="input-group" style="width: 55%;">
-          <span class="input-group-text"><i class="fa-solid fa-plane-arrival"></i></span>
+          <span class="input-group-text"><i class="fa-solid fa-plane" style="transform: rotate(180deg);"></i></span>
           <input class="form-control" list="destination-area" id="destination" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
           <datalist id="destination-area" class="w-100">
-            <option th:each="item: ${listAirports}" th:value="${item.name.substring(0, item.name.length() - 1)}" th:text="'Sân bay ' + ${item.city}">
+            <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
           </datalist>
         </div>
         <div class="input-group" style="width: 45%;">
           <input name="arrivalTime" th:field="*{arrivalTime}" type="date" class="form-control" id="return-date" placeholder="Ngày về" style="border-radius: 0 5px 5px 0;"/>
         </div>
       </div>
-
-
 
       <div class="destination-one-way d-flex justify-content-between align-items-center mb-3 d-none">
         <div class="input-group">
