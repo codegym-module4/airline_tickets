@@ -16,11 +16,11 @@ import java.util.*;
 public class PaymentService implements IPaymentService {
 
     @Override
-    public String createPaymentUrl(HttpServletRequest req) throws UnsupportedEncodingException {
+    public Map<String, String> createPaymentUrl(HttpServletRequest req) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long amount = Integer.parseInt(req.getParameter("amount"))*100;
+        long amount = Integer.parseInt(req.getParameter("total"))*100;
         String bankCode = req.getParameter("bankCode");
 
         String vnp_TxnRef = VnPayConfig.getRandomNumber(8);
@@ -87,6 +87,9 @@ public class PaymentService implements IPaymentService {
         String vnp_SecureHash = VnPayConfig.hmacSHA512(VnPayConfig.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = VnPayConfig.vnp_PayUrl + "?" + queryUrl;
-        return paymentUrl;
+        Map<String, String> res = new HashMap<>();
+        res.put("paymentUrl", paymentUrl);
+        res.put("vnp_TxnRef", vnp_TxnRef);
+        return res;
     }
 }

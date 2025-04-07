@@ -1,16 +1,14 @@
 package com.codegym.airline_tickets.controller.Api;
 
 import com.codegym.airline_tickets.config.VnPayConfig;
+import com.codegym.airline_tickets.dto.PaymentDTO;
 import com.codegym.airline_tickets.service.IPaymentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -25,11 +23,11 @@ public class VnPayController {
     private IPaymentService paymentService;
 
     @PostMapping
-    public ResponseEntity<?> createPaymentUrl(HttpServletRequest req) {
+    public ResponseEntity<?> createPaymentUrl(@ModelAttribute PaymentDTO request, HttpServletRequest req) {
         try {
-            String paymentUrl = paymentService.createPaymentUrl(req);
+            Map<String, String> res = paymentService.createPaymentUrl(req);
 
-            return new ResponseEntity<>(paymentUrl, HttpStatus.OK);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

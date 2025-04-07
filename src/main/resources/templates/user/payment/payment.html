@@ -11,7 +11,7 @@
                     <ul>
                         <li class="user_info"><a href="#">Thông tin cá nhân</a></li>
                         <li class="user_payment"><a href="#">Thanh toán</a></li>
-                        <li class="user_transfer_history"><a href="/user/transfer-history">Lịch sử giao dịch</a></li>
+                        <li class="user_transfer_history"><a href="/payment/transfer-history">Lịch sử giao dịch</a></li>
                         <li class="user_change_password"><a href="#">Đổi mật khẩu</a></li>
                     </ul>
                 </nav>
@@ -38,12 +38,12 @@
                                     <td th:text="${booking.returnFlight != null ? booking.returnFlight.departureAirport.city : 'Không'}"></td>
                                     <td th:text="${#temporals.format(booking.createdAt, 'dd/MM/yyyy')}">15/05/2025</td>
                                     <td th:text="${#temporals.format(booking.flight.departure_time, 'dd/MM/yyyy')}">25/05/2025</td>
-                                    <td th:id="'price_' + ${booking.id}" th:text="${booking.totalPrice}"></td>
+                                    <td class="price-txt" th:id="'price_' + ${booking.id}" th:text="${booking.totalPrice}"></td>
                                     <td>
-                                        <a href="#" data-id="${booking.id}">Hủy</a>
+                                        <a href="#" th:data-id="${booking.id}">Hủy</a>
                                     </td>
                                     <td class="text-center">
-                                        <input type="checkbox" class="form-check-input border border-secondary payment-checkbox" value="1" data-id="${booking.id}" name="radio_chosen" />
+                                        <input type="checkbox" class="form-check-input border border-secondary payment-checkbox" value="1" th:data-id="${booking.id}" name="radio_chosen" />
                                     </td>
                                 </tr>
                             </tbody>
