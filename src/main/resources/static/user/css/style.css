@@ -360,3 +360,7 @@ a{
     border-top: 2px solid rgba(217, 26, 33, 0.73);
 
 }
+
+.header-container, .footer-container{
+    margin: 0 30px;
+}
