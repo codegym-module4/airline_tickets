@@ -1,121 +1,92 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revenue Chart</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Revenue Chart</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="stylesheet" th:href="@{/admin/css/chart.css}">
+    </head>
+    <body>
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
+    <div class="chart-container">
+        <canvas id="revenueChart" height="600px"></canvas>
+    </div>
 
-        /* biểu đồ */
-        .chart-container {
-            max-width: 900px;
-            margin: auto;
-            padding-top: 30px;
-        }
 
-        /* nút xuất file */
-        .export-button-container {
-            position: fixed;
-            top: 100px;
-            right: 200px;
-            z-index: 1000;
-        }
+    <!-- Form ẩn để gửi dữ liệu totalRevenue -->
+    <form id="exportForm" action="/admin/export-excel" method="POST" style="display: none;">
+        <input type="hidden" name="totalRevenue" id="totalRevenueData" />
+    </form>
 
-        .export-button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
+    <div class="export-button-container">
+        <p class="export-button" onclick="exportFile()">Xuất File</p>
+    </div>
 
-        .export-button:hover {
-            background-color: #45a049;
-        }
+    <!--Phải dùng th:inline mới áp dụng được cho thymeleaf-->
+    <script th:inline="javascript">
+        // Lấy dữ liệu từ controller
+        var totalRevenue = /*[[${totalRevenue}]]*/ [];
+        var chartType = /*[[${reportContent}]]*/ 'line';
 
-        .export-button:active {
-            background-color: #388e3c;
-        }
-    </style>
-</head>
-<body>
+        var dates = [];
+        var revenues = [];
 
-<div class="chart-container">
-    <canvas id="revenueChart" height="600px"></canvas>
-</div>
+        totalRevenue.forEach(function(revenue) {
+            dates.push(revenue.date);
+            revenues.push(revenue.revenue);
+        });
 
-<div class="export-button-container">
-    <button class="export-button">Xuất File</button>
-</div>
-
-<!-- Bắt đầu block Thymeleaf inline JS -->
-<script th:inline="javascript">
-    // Lấy dữ liệu từ controller
-    var totalRevenue = /*[[${totalRevenue}]]*/ [];
-    var chartType = /*[[${reportContent}]]*/ 'line';
-
-    // Debug dữ liệu
-    console.log("Total Revenue: ", totalRevenue);
-    console.log("Chart Type: ", chartType);
-
-    var dates = [];
-    var revenues = [];
-
-    totalRevenue.forEach(function(revenue) {
-        dates.push(revenue.date);
-        revenues.push(revenue.revenue);
-    });
-
-    // Tạo biểu đồ
-    var ctx = document.getElementById('revenueChart').getContext('2d');
-    var revenueChart = new Chart(ctx, {
-        type: chartType,
-        data: {
-            labels: dates,
-            datasets: [{
-                label: 'Doanh thu (VND)',
-                data: revenues,
-                borderColor: 'blue',
-                borderWidth: 2,
-                pointRadius: 4,
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            layout: {
-                padding: {
-                    top: 150,
-                }
+        // Tạo biểu đồ
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctx, {
+            type: chartType,
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Doanh thu (VND)',
+                    data: revenues,
+                    borderColor: 'blue',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    fill: false
+                }]
             },
-            scales: {
-                x: {
-                    ticks: {
-                        font: {
-                            size: 12
-                        }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 150,
                     }
                 },
-                y: {
-                    ticks: {
-                        font: {
-                            size: 12
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-</script>
+        });
 
-</body>
-</html>
+        function exportFile() {
+            var totalRevenueData = JSON.stringify(totalRevenue);  // Chuyển dữ liệu thành chuỗi JSON
+            document.getElementById('totalRevenueData').value = totalRevenueData;  // Đưa dữ liệu vào input ẩn
+
+            // Submit form gửi dữ liệu tới controller
+            document.getElementById('exportForm').submit();
+        }
+    </script>
+
+    </body>
+    </html>
