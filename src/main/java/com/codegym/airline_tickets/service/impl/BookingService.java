@@ -2,17 +2,24 @@ package com.codegym.airline_tickets.service.impl;
 
 import com.codegym.airline_tickets.entity.Airport;
 import com.codegym.airline_tickets.entity.Booking;
+import com.codegym.airline_tickets.repository.BookingRepository;
 import com.codegym.airline_tickets.service.IAirportService;
 import com.codegym.airline_tickets.service.IBookingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class BookingService implements IBookingService {
+
+    @Autowired
+    private BookingRepository bookingRepository;
+
+
     @Override
     public List<Booking> getAll() {
-        return List.of();
+        return bookingRepository.findAll();
     }
 
     @Override
@@ -38,5 +45,10 @@ public class BookingService implements IBookingService {
     @Override
     public List<Booking> findByName(String name) {
         return List.of();
+    }
+
+    @Override
+    public List<Booking> findByStatus(int status) {
+        return bookingRepository.findByStatus(status);
     }
 }

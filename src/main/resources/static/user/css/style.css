@@ -260,7 +260,7 @@ footer{
 }
 .mypage_block.user_info .user_info a,
 .mypage_block.user_payment .user_payment a,
-.mypage_block.user_tranfer_history .user_tranfer_history a,
+.mypage_block.user_transfer_history .user_transfer_history a,
 .mypage_block.user_change_password .user_change_password a {
     background-color: #FFF;
     color: #CA161C;
