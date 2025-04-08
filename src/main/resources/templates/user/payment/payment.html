@@ -40,7 +40,7 @@
                                     <td th:text="${#temporals.format(booking.flight.departure_time, 'dd/MM/yyyy')}">25/05/2025</td>
                                     <td class="price-txt" th:id="'price_' + ${booking.id}" th:text="${booking.totalPrice}"></td>
                                     <td>
-                                        <a href="#" th:data-id="${booking.id}">Hủy</a>
+                                        <a th:href="@{'/payment/cancel/' + ${booking.id}}" onclick="return confirm('Bạn có chắc muốn hủy vé không?')" th:data-id="${booking.id}">Hủy</a>
                                     </td>
                                     <td class="text-center">
                                         <input type="checkbox" class="form-check-input border border-secondary payment-checkbox" value="1" th:data-id="${booking.id}" name="radio_chosen" />

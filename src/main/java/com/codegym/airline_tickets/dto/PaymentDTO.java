@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentDTO {
-    private List<Integer> bookingId;
+    private List<Long> bookingId;
 
     private BigInteger total;
 }

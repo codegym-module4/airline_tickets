@@ -24,7 +24,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public void save(Booking s) {
-
+        bookingRepository.save(s);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public Booking findById(long id) {
-        return null;
+        return bookingRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -50,5 +50,25 @@ public class BookingService implements IBookingService {
     @Override
     public List<Booking> findByStatus(int status) {
         return bookingRepository.findByStatus(status);
+    }
+
+    @Override
+    public List<Booking> findByIdIn(List<Long> ids) {
+        return bookingRepository.findByIdIn(ids);
+    }
+
+    @Override
+    public void updateVnPayOrderId(Long id, String vnPayOrderId) {
+        bookingRepository.updateVnPayOrderId(id, vnPayOrderId);
+    }
+
+    @Override
+    public void updateStatusById(Long id, Integer status) {
+        bookingRepository.updateStatusById(id, status);
+    }
+
+    @Override
+    public void updateStatusByVnPayId(String vnpayOrderId, Integer status) {
+        bookingRepository.updateStatusByVnPayId(vnpayOrderId, status);
     }
 }
