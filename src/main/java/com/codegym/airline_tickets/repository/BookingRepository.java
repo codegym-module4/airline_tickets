@@ -2,6 +2,7 @@ package com.codegym.airline_tickets.repository;
 
 import com.codegym.airline_tickets.entity.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,4 +21,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "WHERE b.deletedAt IS NULL " +
             "AND DATE(b.payment_date) = :date")
     BigInteger getTotalRevenueByDate(LocalDate date);
+
+    @Modifying
+    @Transactional
+    @Query("update Booking b set b.status = ?2 where b.vnpayOrderId = ?1")
+    void updateStatusByVnPayId(String vnpayOrderId, Integer status);
 }
