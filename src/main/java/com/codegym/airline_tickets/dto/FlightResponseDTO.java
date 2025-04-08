@@ -3,6 +3,7 @@ package com.codegym.airline_tickets.dto;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -17,4 +18,8 @@ public class FlightResponseDTO implements Serializable {
    private LocalDateTime departureTime;
    private LocalDateTime arrivalTime;
    private String price;
+   private String departureAirportCity;
+   private String arrivalAirportCity;
+   private String priceVATTotal;
+   private String priceVAT;
 }

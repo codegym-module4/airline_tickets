@@ -412,3 +412,11 @@ a{
 .table_style_data{
     margin-bottom: 50px;
 }
+
+.table-model{
+    margin: 20px;
+}
+
+.table-model th tr {
+    margin: 10px 0;
+}

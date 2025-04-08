@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -99,12 +100,20 @@ public class FlightService implements IFlightService {
     private static List<FlightResponseDTO> getFlightPageResponse(int page, int size, Page<Flight> flightPage){
         log.info("Convert Flight Entity Page");
         System.out.println(flightPage);
+
+
+
+        BigDecimal taxVAT = new BigDecimal("0.1");
         return flightPage.stream().map(flight -> FlightResponseDTO.builder()
                 .flightCode(flight.getCode())
                 .airlineName(flight.getAirline().getName())
                 .departureTime(flight.getDeparture_time())
                 .arrivalTime(flight.getArrival_time())
                 .price(FormaterCustom.withLargeIntegers(flight.getPrice()))
+                .departureAirportCity(flight.getDepartureAirport().getCity())
+                .arrivalAirportCity(flight.getArrivalAirport().getCity())
+                .priceVATTotal(FormaterCustom.formatPriceVAT(flight.getPrice()))
+                .priceVAT(FormaterCustom.calPriceVAT(flight.getPrice()))
                 .build()
         ).toList();
     }

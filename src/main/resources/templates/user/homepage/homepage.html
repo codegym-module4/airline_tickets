@@ -68,7 +68,7 @@
         <a style="color: inherit; text-decoration: none"  href="#">Gửi hàng nhanh</a>
       </button>
     </div>
-    <form th:action="@{/user/flights/cheapest}" th:object="${flightReq}" class="booking-form" style="padding: 8px;" method="POST">
+    <form th:action="@{/user/select-flight}" th:object="${flightReq}" class="booking-form" style="padding: 8px;" method="POST">
 
       <!--Khứ hồi - một chiều-->
       <div class="mb-3 d-flex align-items-center">
@@ -125,7 +125,7 @@
       <div class="mb-3">
         <div class="dropdown input-group">
           <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-          <input type="text" class="form-control dropdown-toggle" id="passengerInput" placeholder="Chọn số hành khách" readonly data-bs-toggle="dropdown"/>
+          <input type="text" class="form-control dropdown-toggle" id="passengerInput" placeholder="Chọn số hành khách" readonly data-bs-toggle="dropdown" name="numberPassengers"/>
           <ul class="dropdown-menu" id="dropdownMenu">
             <li class="mb-3 d-flex justify-content-between align-items-center">
               <span>Người lớn (12+ tuổi)</span>

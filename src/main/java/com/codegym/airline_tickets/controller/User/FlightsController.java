@@ -27,7 +27,7 @@ public class FlightsController {
     private final FlightService flightService;
     private final AirportService airportService;
 
-    @PostMapping("/flights/cheapest")
+    @PostMapping("/select-flight")
     public String getTopCheapestTicket(@ModelAttribute("flightReq") FlightRequestDTO flightReq, BindingResult bindingResult,
                                        @RequestParam(required = false, defaultValue = "ASC") String sort,
                                        @RequestParam(defaultValue = "0") int page,
@@ -35,6 +35,10 @@ public class FlightsController {
                                        Model model
     ){
         log.info("Get flight list");
+
+        if(flightReq.getSortProperty() == null){
+            return "redirect:/user/homepage";
+        }
 
        if(flightReq != null && flightReq.getType().equals("ROUND-TRIP")) {
            String departure = flightReq.getDepartureAirport();
@@ -65,6 +69,7 @@ public class FlightsController {
        }
 
        if(flightReq != null && flightReq.getType().equals("ONEWAY")) {
+
             String departure = flightReq.getDepartureAirport();
             String arrival = flightReq.getArrivalAirport().replaceAll("^,|,$", "");
 

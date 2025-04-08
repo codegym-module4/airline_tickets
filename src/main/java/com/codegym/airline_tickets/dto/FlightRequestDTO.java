@@ -18,4 +18,6 @@ public class FlightRequestDTO {
     private LocalDate departureTime;
     private LocalDate arrivalTime;
     private String sortProperty;
+    private int numberPassengers;
+
 }
