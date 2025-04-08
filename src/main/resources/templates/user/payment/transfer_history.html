@@ -26,7 +26,7 @@
                                     <th>Giá</th>
                                     <th>Tình trạng</th>
                                 </tr>
-                                <tr th:if="${list.isEmpty()}">
+                                <tr class="text-center" th:if="${list.isEmpty()}">
                                     <td colspan="6">Không tìm thấy dữ liệu</td>
                                 </tr>
                                 <tr th:each="booking : ${list}">

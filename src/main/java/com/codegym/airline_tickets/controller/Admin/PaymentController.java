@@ -64,13 +64,13 @@ public class PaymentController {
     public String cancel(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
         Booking booking = bookingService.findById(id);
         if (booking == null) {
-            redirectAttributes.addAttribute("errorMessage", "Không tìm thấy thông tin thanh toán!!!");
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy thông tin thanh toán!!!");
 
             return "redirect:/payment";
         }
 
         bookingService.updateStatusById(id, 3);
-        redirectAttributes.addAttribute("message", "Hủy đặt vé thành công");
+        redirectAttributes.addFlashAttribute("message", "Hủy đặt vé thành công");
 
         return "redirect:/payment";
     }

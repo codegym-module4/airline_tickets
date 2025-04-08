@@ -4,6 +4,15 @@
     $(function() {
         $('.flash_message').fadeOut(5000);
     });
+
+    $(document).ready(function () {
+        // Kiểm tra nếu biến message có giá trị thì hiển thị modal
+        let message = $("#successModal .modal-body p").text().trim();
+        if (message.length > 0) {
+            $("#successModal").modal("show");
+        }
+    });
+
     $(document).on("click", "#btnPayment", function (e) {
         let booking_id = [];
         let total = 0;
