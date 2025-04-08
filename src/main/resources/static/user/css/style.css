@@ -365,3 +365,59 @@ a{
 .header-container, .footer-container{
     margin: 0 30px;
 }
+
+.sidebar {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background: #f8f9fa;
+}
+
+
+.sort-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background: #fff;
+    margin-bottom: 15px;
+}
+
+
+.search-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    background: #fff;
+}
+.table .tb-head {
+    color: #FFF;
+    font-weight: 600;
+}
+
+.table_style_data th {
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+    vertical-align: middle;
+    border: 1px solid #B2B2B2;
+    background-color: #ff3333;
+    color: #FFF;
+}
+.table_style_data td {
+    padding: 15px;
+    vertical-align: middle;
+    border: 1px solid #B2B2B2;
+    background-color: #FFF;
+}
+
+.table_style_data{
+    margin-bottom: 50px;
+}
+
+.table-model{
+    margin: 20px;
+}
+
+.table-model th tr {
+    margin: 10px 0;
+}
