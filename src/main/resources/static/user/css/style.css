@@ -388,5 +388,27 @@ a{
     padding: 15px;
     background: #fff;
 }
+.table .tb-head {
+    color: #FFF;
+    font-weight: 600;
+}
 
+.table_style_data th {
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+    vertical-align: middle;
+    border: 1px solid #B2B2B2;
+    background-color: #ff3333;
+    color: #FFF;
+}
+.table_style_data td {
+    padding: 15px;
+    vertical-align: middle;
+    border: 1px solid #B2B2B2;
+    background-color: #FFF;
+}
 
+.table_style_data{
+    margin-bottom: 50px;
+}

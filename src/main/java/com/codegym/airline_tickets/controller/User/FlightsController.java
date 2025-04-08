@@ -5,6 +5,7 @@ import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.entity.Airport;
 import com.codegym.airline_tickets.service.impl.AirportService;
 import com.codegym.airline_tickets.service.impl.FlightService;
+import com.codegym.airline_tickets.util.FormaterCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,7 @@ public class FlightsController {
 
     @PostMapping("/flights/cheapest")
     public String getTopCheapestTicket(@ModelAttribute("flightReq") FlightRequestDTO flightReq, BindingResult bindingResult,
-                                       @RequestParam(required = false, defaultValue = "DESC") String sort,
+                                       @RequestParam(required = false, defaultValue = "ASC") String sort,
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
                                        Model model
@@ -42,8 +43,8 @@ public class FlightsController {
            LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
            LocalDate arrivalTime = LocalDate.from(flightReq.getArrivalTime());
 
-           List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime, sort, page, size);
-           List<FlightResponseDTO> listArrival = flightService.findAll(departure, arrival, arrivalTime, sort, page, size);
+           List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime, flightReq.getSortProperty(), sort, page, size);
+           List<FlightResponseDTO> listArrival = flightService.findAll(departure, arrival, arrivalTime, flightReq.getSortProperty(), sort, page, size);
            List<Airport> listAirports = airportService.getAll();
 
            if(listDeparture.isEmpty() || listArrival.isEmpty()){
@@ -57,8 +58,10 @@ public class FlightsController {
 
            model.addAttribute("departure", departure);
            model.addAttribute("arrival", arrival);
-           model.addAttribute("departureTime", departureTime);
-           model.addAttribute("arrivalTime",arrivalTime);
+           model.addAttribute("departureTime", FormaterCustom.formatDateResponse(departureTime) );
+           model.addAttribute("arrivalTime",FormaterCustom.formatDateResponse(arrivalTime));
+           model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
+           model.addAttribute("dayOfWeekArrival",FormaterCustom.formatDayOfWeek(arrivalTime));
        }
 
        if(flightReq != null && flightReq.getType().equals("ONEWAY")) {
@@ -67,7 +70,7 @@ public class FlightsController {
 
             LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
 
-            List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime, sort, page, size);
+            List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime,flightReq.getSortProperty(), sort, page, size);
             List<Airport> listAirports = airportService.getAll();
 
             if(listDeparture.isEmpty()){
@@ -79,15 +82,12 @@ public class FlightsController {
 
             model.addAttribute("departure", departure);
             model.addAttribute("arrival", arrival);
-            model.addAttribute("departureTime", departureTime);
+            model.addAttribute("departureTime", FormaterCustom.formatDateResponse(departureTime));
+           model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
         }
 
         return "user/view_flight/view_flight";
 
     }
 
-//    @GetMapping("/test")
-//    public String test(){
-//        return "user/view_ticket/view_ticket";
-//    }
 }

@@ -17,5 +17,5 @@ public class FlightRequestDTO {
     private String arrivalAirport;
     private LocalDate departureTime;
     private LocalDate arrivalTime;
-    private String sort;
+    private String sortProperty;
 }
