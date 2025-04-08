@@ -2,8 +2,10 @@ package com.codegym.airline_tickets.service.impl;
 
 import com.codegym.airline_tickets.entity.Airline;
 import com.codegym.airline_tickets.entity.Airport;
+import com.codegym.airline_tickets.repository.AirportRepository;
 import com.codegym.airline_tickets.service.IAirlineService;
 import com.codegym.airline_tickets.service.IAirportService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +13,17 @@ import java.util.List;
 @Service
 public class AirportService implements IAirportService {
 
+//    @Override
+//    public List<Airport> getAll() {
+//        return List.of();
+//    }
+
+    @Autowired
+    AirportRepository airportRepository;
+
     @Override
     public List<Airport> getAll() {
-        return List.of();
+        return airportRepository.findAll();
     }
 
     @Override

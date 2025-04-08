@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head th:replace="~{user/layouts/head::head ('Vietjet Air | Bay là thích ngay | Website chính thức')}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+<!-- Main Content -->
+<main class="py-0">
+    <!--Header-->
+    <th:block th:replace="~{user/layouts/header::header}"></th:block>
+    <nav class="navbar navbar-expand-lg bg-dark nav-sub">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tin khuyến mãi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled">Quy định hành lý</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">User</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="container-fluid mt-4">
+            <div class="row">
+                <!-- Nội dung chính -->
+                <div class="col-lg-9 content" th:classappend="${flightReq.type.equals('ROUND-TRIP')} ? '' : 'd-none'">
+                    <div class="d-flex flex-column justify-content-center mb-3 gap-2">
+                    <h2 style="font-weight: 700; font-size: 24px;">Chọn vé cho chiều đi</h2>
+                    <p>Danh sách chuyến bay từ: <span th:text="${departure  + ' '}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${' ' + arrival}"></span></p>
+                        <div class="d-flex gap-1">
+                            <p th:text="${dayOfWeekDeparture} + ', '"></p>
+                            <p th:text=" ${departureTime}"></p>
+                        </div>
+                    </div>
+                    <!-- Danh sách chuyến bay -->
+                    <table id="table1" class="table_style_data table table-bordered">
+                        <thead class="tb-head">
+                        <tr>
+                            <th>Hãng</th>
+                            <th>Mã chuyến bay</th>
+                            <th>Giờ đi</th>
+                            <th>Giá (VND)</th>
+                            <th>Chi tiết</th>
+                            <th>Đặt vé</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="flight : ${listDeparture}" >
+                            <td th:text="${flight.airlineName}"></td>
+                            <td th:text="${flight.flightCode}"></td>
+                            <td th:text="${flight.departureTime.toLocalTime()} + ' - ' + ${flight.arrivalTime.toLocalTime()}  "></td>
+                            <td th:text="${flight.price}"></td>
+                            <td>
+                                <button class="btn btn-detail" data-bs-toggle="modal"
+                                        th:data-bs-target="'#detailModal-' + ${flight.flightCode}">
+                                    Chi Tiết
+                                </button>
+                            </td>
+                            <td>
+                                <input type="radio" th:id="'departure-' + ${flight.flightCode}" name="flightChoiceDeparture" th:value="${flight}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex flex-column justify-content-center mb-3 gap-2">
+                    <h2 style="font-weight: 700; font-size: 24px;">Chọn vé cho chiều về</h2>
+                    <p>Danh sách chuyến bay từ: <span th:text="${arrival + ' '}"> </span><i class="fa-solid fa-plane"></i><span th:text="${' ' + departure}"></span> </p>
+                        <div class="d-flex gap-1">
+                            <p th:text="${dayOfWeekArrival} + ', '"></p>
+                            <p th:text=" ${arrivalTime}"></p>
+                        </div>
+                    </div>
+
+                    <!-- Danh sách chuyến bay -->
+                    <table id="table2" class="table_style_data table table-bordered ">
+                        <thead class="tb-head">
+                        <tr>
+                            <th>Hãng</th>
+                            <th>Mã chuyến bay</th>
+                            <th>Giờ đi</th>
+                            <th>Giá (VND)</th>
+                            <th>Chi tiết</th>
+                            <th>Đặt vé</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="flight : ${listArrival}" >
+                            <td th:text="${flight.airlineName}"></td>
+                            <td th:text="${flight.flightCode}"></td>
+                            <td th:text="${flight.departureTime.toLocalTime()} + ' - ' + ${flight.arrivalTime.toLocalTime()}  "></td>
+                            <td th:text="${flight.price}"></td>
+                            <td>
+                                <button class="btn btn-detail" data-bs-toggle="modal"
+                                       th:data-bs-target="'#detailModal-' + ${flight.flightCode}">
+                                    Chi Tiết
+                                </button>
+                            </td>
+                            <td>
+                                <input type="radio" th:id="'arrival-' + ${flight.flightCode}" name="flightChoice" th:value="${flight}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button id="btnConfirm" class="btn btn-detail" data-bs-toggle="modal"
+                            data-bs-target="#flightDetailsModal">Xác nhận</button>
+                </div>
+
+                <div class="col-lg-9 content " th:classappend="${flightReq.type.equals('ONEWAY')} ? '' : 'd-none'">
+                    <div class="d-flex flex-column justify-content-center mb-3 gap-2">
+                    <h2 style="font-weight: 700; font-size: 24px;">Chọn vé cho chiều đi</h2>
+                    <p>Danh sách chuyến bay từ: <span th:text="${departure} + ' '"> </span><i class="fa-solid fa-plane"></i><span th:text="${' ' + arrival}"></span> </p>
+                        <div class="d-flex gap-1">
+                            <p th:text="${dayOfWeekDeparture} + ', '"></p>
+                            <p th:text=" ${departureTime}"></p>
+                        </div>
+                    </div>
+                    <!-- Danh sách chuyến bay -->
+                    <table id="table3" class="table_style_data table table-bordered ">
+                        <thead class="tb-head">
+                        <tr>
+                            <th>Hãng</th>
+                            <th>Mã chuyến bay</th>
+                            <th>Giờ đi</th>
+                            <th>Giá (VND)</th>
+                            <th>Chi tiết</th>
+                            <th>Đặt vé</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="flight : ${listDeparture}" >
+                            <td th:text="${flight.airlineName}"></td>
+                            <td th:text="${flight.flightCode}"></td>
+                            <td th:text="${flight.departureTime.toLocalTime()} + ' - ' + ${flight.arrivalTime.toLocalTime()}  "></td>
+                            <td th:text="${flight.price}"></td>
+                            <td>
+                                <button class="btn btn-detail" data-bs-toggle="modal"
+                                        th:data-bs-target="'#detailModal-' + ${flight.flightCode}">
+                                    Chi Tiết
+                                </button>
+                            </td>
+                            <td>
+                                <input type="radio" th:id="'departure-' + ${flight.flightCode}" name="flightChoiceArrival" th:value="${flight}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-detail" data-bs-toggle="modal"
+                            data-bs-target="#flightDetailsModal">Xác nhận</button>
+                </div>
+
+
+                <form th:action="@{/user/select-flight}" th:object="${flightReq}" class="col-lg-3 sidebar" style="border: 1px solid black; height: 50%; margin-top: 95px;" method="POST">
+                    <h4 style="font-weight: 600; font-size:24px;">Sắp xếp</h4>
+                    <div class="sort-box">
+                        <label><input checked type="radio" name="sortProperty" th:field="*{sortProperty}" value="price"> Đề xuất</label><br>
+                        <label><input type="radio" name="sortProperty" th:field="*{sortProperty}" value="price"> Giá (Thấp đến cao) </label><br>
+                        <label><input type="radio" name="sortProperty" th:field="*{sortProperty}" value="departure_time"> Thời gian khởi hành </label><br>
+                        <label><input type="radio" name="sortProperty" th:field="*{sortProperty}" value="airline"> Hãng hàng không </label><br>
+                    </div>
+                    <div class="search-box">
+                        <h4 style="font-weight: 500;">Tìm chuyến bay</h4>
+                        <div class="d-flex sort-box gap-3 justify-content-center">
+                            <label><input checked id="round-trip" type="radio" name="type" th:field="*{type}" value="ROUND-TRIP"> Khứ hồi</label><br>
+                            <label><input id="one-way" type="radio" name="type" th:field="*{type}" value="ONEWAY">Một chiều</label><br>
+                        </div>
+                        <div>
+
+<!--                            Điểm đi-->
+                            <div class="mb-3">
+                                <label for="departure-area" class="form-label">Điểm đi</label>
+                                <input class="form-control" list="departure-area" id="departure" placeholder="Điểm khởi hành" name="departureAirport" />
+                                <datalist id="departure-area" class="w-100">
+                                    <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
+                                </datalist>
+                            </div>
+
+<!--                            Điểm đến-->
+                            <div class="mb-3">
+                                <label for="destination-area" class="form-label">Điểm đến</label>
+                                <input class="form-control" list="destination-area" id="destination" placeholder="Điểm đến" name="arrivalAirport" />
+                                <datalist id="destination-area" class="w-100">
+                                    <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
+                                </datalist>
+                            </div>
+
+<!--                            Ngày đi-->
+                            <div class="mb-3">
+                                <label for="deparuteDate" class="form-label">Ngày đi</label>
+                                <input type="date" id="deparuteDate" class="form-control" name="departureTime" th:field="*{departureTime}">
+                            </div>
+
+<!--                            Ngày về-->
+                            <div class="destination-round-trip destination-one-way d-block mb-3">
+                                <label for="arrivalDate" class="form-label">Ngày về</label>
+                                <input  type="date" id="arrivalDate" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
+                            </div>
+
+                            <div class="mb-3 row">
+                                <div class="col-md-4">
+                                    <label for="adults" class="form-label">Người lớn</label>
+                                    <select id="adults" class="form-control" name="numberPassengers">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="children" class="form-label">Trẻ em</label>
+                                    <select id="children" class="form-control" name="numberPassengers">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="baby" class="form-label">Em bé</label>
+                                    <select id="baby" class="form-control" name="numberPassengers">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <button type="submit" class="btn btn-detail w-100">Tìm chuyến bay</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<!--Modal chi tiết vé chiều đi-->
+<div th:each="flight : ${listDeparture}" class="modal fade"  th:id="'detailModal-' + ${flight.flightCode}" tabindex="-1" aria-labelledby="detailModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel_departure">Chi tiết loại vé</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <table class="table-bordered table-model">
+                <thead>
+                <tr>
+                    <th><span th:text="${departure  + ' '}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${' ' + arrival}"></span></th>
+                    <th colspan="2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${departure}"></td>
+                    <td th:text="${arrival}"></td>
+                    <td th:text="${flight.airlineName}"></td>
+                </tr>
+                <tr>
+                    <td th:text="${flight.departureTime.toLocalTime()}  + ', ' + ${departureTime}"></td>
+                    <td th:text="${flight.arrivalTime.toLocalTime()}  + ', ' + ${arrivalTime}"></td>
+                    <td th:text="'Chuyến bay: ' + ${flight.flightCode}"></td>
+                </tr>
+                <tr>
+                    <td th:text="${flight.departureAirportCity}"></td>
+                    <td th:text="${flight.arrivalAirportCity}"></td>
+                    <td>Loại vé: Phổ thông</td>
+                </tr>
+                <tr>
+                    <td>Loại khách hàng</td>
+                    <td>Giá mỗi vé</td>
+                    <td>Thuế & Phí</td>
+                    <td>Tổng giá</td>
+                </tr>
+                <tr>
+                    <td>Người lớn</td>
+                    <td th:text="${flight.price} + 'VNĐ'"></td>
+                    <td th:text="${flight.priceVAT} + 'VNĐ'"></td>
+                    <td th:text="${flight.priceVATTotal} + 'VNĐ'" ></td>
+                </tr>
+                <tr>
+                    <td>Điều kiện hành lý</td>
+                </tr>
+                <tr>
+                    <td>Hành lý xách tay</td>
+                    <td>10 kg</td>
+                </tr>
+                <tr>
+                    <td>Hành lý ký gửi</td>
+                    <td>23 kg</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal chi tiết vé chiều về-->
+<div th:each="flight : ${listArrival}" class="modal fade"  th:id="'detailModal-' + ${flight.flightCode}" tabindex="-1" aria-labelledby="detailModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel_arrival">Chi tiết loại vé</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <table class="table-bordered table-model">
+                <thead>
+                <tr>
+                    <th><span th:text="${arrival + ' '}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${' ' + departure}"></span></th>
+                    <th colspan="2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${departure}"></td>
+                    <td th:text="${arrival}"></td>
+                    <td th:text="${flight.airlineName}"></td>
+                </tr>
+                <tr>
+                    <td th:text="${flight.departureTime.toLocalTime()}  + ', ' + ${departureTime}"></td>
+                    <td th:text="${flight.arrivalTime.toLocalTime()}  + ', ' + ${arrivalTime}"></td>
+                    <td th:text="'Chuyến bay: ' + ${flight.flightCode}"></td>
+                </tr>
+                <tr>
+                    <td th:text="${flight.departureAirportCity}"></td>
+                    <td th:text="${flight.arrivalAirportCity}"></td>
+                    <td>Loại vé: Phổ thông</td>
+                </tr>
+                <tr>
+                    <td>Loại khách hàng</td>
+                    <td>Giá mỗi vé</td>
+                    <td>Thuế & Phí</td>
+                    <td>Tổng giá</td>
+                </tr>
+                <tr>
+                    <td>Người lớn</td>
+                    <td th:text="${flight.price} + 'VNĐ'"></td>
+                    <td th:text="${flight.priceVAT} + 'VNĐ'"></td>
+                    <td th:text="${flight.priceVATTotal} + 'VNĐ'" ></td>
+                </tr>
+                <tr>
+                    <td>Điều kiện hành lý</td>
+                </tr>
+                <tr>
+                    <td>Hành lý xách tay</td>
+                    <td>10 kg</td>
+                </tr>
+                <tr>
+                    <td>Hành lý ký gửi</td>
+                    <td>23 kg</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modal chi tiết đặt vé-->
+<div class="modal fade" id="flightDetailsModal" tabindex="-1" aria-labelledby="flightDetailsModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="flightDetailsModalLabel">Chi Tiết Đặt Vé</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <p id="modalData"></p>
+<!--            <table th:each="flight : ${listDeparture}" class="table-bordered table-model">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th><span th:text="${departure  + ' '}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${' ' + arrival}"></span></th>-->
+<!--                    <th colspan="2"></th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr>-->
+<!--                    <td th:text="${departure}"></td>-->
+<!--                    <td th:text="${arrival}"></td>-->
+<!--                    <td th:text="${flight.airlineName}"></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td th:text="${flight.departureTime.toLocalTime()}  + ', ' + ${departureTime}"></td>-->
+<!--                    <td th:text="${flight.arrivalTime.toLocalTime()}  + ', ' + ${arrivalTime}"></td>-->
+<!--                    <td th:text="'Chuyến bay: ' + ${flight.flightCode}"></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td th:text="${flight.departureAirportCity}"></td>-->
+<!--                    <td th:text="${flight.arrivalAirportCity}"></td>-->
+<!--                    <td>Loại vé: Phổ thông</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Loại khách hàng</td>-->
+<!--                    <td>Giá mỗi vé</td>-->
+<!--                    <td>Thuế & Phí</td>-->
+<!--                    <td>Tổng giá</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Người lớn</td>-->
+<!--                    <td th:text="${flight.price} + 'VNĐ'"></td>-->
+<!--                    <td th:text="${flight.priceVAT} + 'VNĐ'"></td>-->
+<!--                    <td th:text="${flight.priceVATTotal} + 'VNĐ'" ></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Điều kiện hành lý</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Hành lý xách tay</td>-->
+<!--                    <td>10 kg</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Hành lý ký gửi</td>-->
+<!--                    <td>23 kg</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+            <br></br>
+<!--            <table th:each="flight : ${listArrival}" class="table-bordered table-model">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th><span th:text="${arrival + ' '}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${' ' + departure}"></span></th>-->
+<!--                    <th colspan="2"></th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr>-->
+<!--                    <td th:text="${departure}"></td>-->
+<!--                    <td th:text="${arrival}"></td>-->
+<!--                    <td th:text="${flight.airlineName}"></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td th:text="${flight.departureTime.toLocalTime()}  + ', ' + ${departureTime}"></td>-->
+<!--                    <td th:text="${flight.arrivalTime.toLocalTime()}  + ', ' + ${arrivalTime}"></td>-->
+<!--                    <td th:text="'Chuyến bay: ' + ${flight.flightCode}"></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td th:text="${flight.departureAirportCity}"></td>-->
+<!--                    <td th:text="${flight.arrivalAirportCity}"></td>-->
+<!--                    <td>Loại vé: Phổ thông</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Loại khách hàng</td>-->
+<!--                    <td>Giá mỗi vé</td>-->
+<!--                    <td>Thuế & Phí</td>-->
+<!--                    <td>Tổng giá</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Người lớn</td>-->
+<!--                    <td th:text="${flight.price} + 'VNĐ'"></td>-->
+<!--                    <td th:text="${flight.priceVAT} + 'VNĐ'"></td>-->
+<!--                    <td th:text="${flight.priceVATTotal} + 'VNĐ'" ></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Điều kiện hành lý</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Hành lý xách tay</td>-->
+<!--                    <td>10 kg</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Hành lý ký gửi</td>-->
+<!--                    <td>23 kg</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary">Chọn</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+
+<!--</main>-->
+
+</body>
+<!-- Bootstrap 5 JS và Popper.js -->
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+<script>
+    let dataDepature = null;
+    let dataArrival = null;
+
+
+    const tableDeparture = document.querySelectorAll('#table1 input[type="radio"]');
+    tableDeparture.forEach((radio) => {
+        radio.addEventListener("change", (event) => {
+            if (event.target.checked) {
+                dataDepature = event.target.value;
+            }
+        });
+    });
+
+
+    const tableArrival = document.querySelectorAll('#table2 input[type="radio"]');
+    tableArrival.forEach((radio) => {
+        radio.addEventListener("change", (event) => {
+            if (event.target.checked) {
+                dataArrival = event.target.value;
+                console.log(">>>>>>>", dataDepature);
+            }
+        });
+    });
+
+    document.getElementById("btnConfirm").addEventListener("click", () => {
+        const modalData = document.getElementById("modalData");
+
+        // Hiển thị dữ liệu đã chọn từ cả hai bảng
+        modalData.innerHTML = `
+        <p>Bảng 1: ${dataDepature || "Chưa chọn"}</p>
+        <p>Bảng 2: ${dataArrival || "Chưa chọn"}</p>
+    `;
+    });
+
+    console.log(dataDepature)
+
+    console.log(dataDepature)
+
+
+
+</script>
+</html>

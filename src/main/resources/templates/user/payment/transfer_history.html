@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/html">
-<head th:replace="~{user/layouts/head::head ('Thanh toán')}"></head>
+<html lang="en">
+<head th:replace="~{user/layouts/head::head ('Lịch sử thanh toán')}"></head>
 <body>
-    <!--Header-->
     <th:block th:replace="~{user/layouts/header::header}"></th:block>
     <main id="content">
         <section class="section">
-            <div class="mypage_block user_payment">
+            <div class="mypage_block user_transfer_history">
                 <nav class="mypage_nav">
                     <ul>
                         <li class="user_info"><a href="#">Thông tin cá nhân</a></li>
-                        <li class="user_payment"><a href="#">Thanh toán</a></li>
-                        <li class="user_transfer_history"><a href="/payment/transfer-history">Lịch sử giao dịch</a></li>
+                        <li class="user_payment"><a href="/payment">Thanh toán</a></li>
+                        <li class="user_transfer_history"><a href="#">Lịch sử giao dịch</a></li>
                         <li class="user_change_password"><a href="#">Đổi mật khẩu</a></li>
                     </ul>
                 </nav>
@@ -20,45 +19,35 @@
                         <table class="table_style text-nowrap">
                             <tbody>
                                 <tr>
-                                    <th>Mã vé</th>
                                     <th>Nơi đi</th>
                                     <th>Nơi đến</th>
                                     <th>Ngày đặt</th>
                                     <th>Ngày bay</th>
                                     <th>Giá</th>
-                                    <th>Hủy</th>
-                                    <th>Chọn</th>
+                                    <th>Tình trạng</th>
                                 </tr>
                                 <tr class="text-center" th:if="${list.isEmpty()}">
-                                    <td colspan="8">Không tìm thấy dữ liệu</td>
+                                    <td colspan="6">Không tìm thấy dữ liệu</td>
                                 </tr>
                                 <tr th:each="booking : ${list}">
-                                    <td th:text="${booking.code}"></td>
                                     <td th:text="${booking.flight.departureAirport.city}"></td>
                                     <td th:text="${booking.returnFlight != null ? booking.returnFlight.departureAirport.city : 'Không'}"></td>
                                     <td th:text="${#temporals.format(booking.createdAt, 'dd/MM/yyyy')}">15/05/2025</td>
                                     <td th:text="${#temporals.format(booking.flight.departure_time, 'dd/MM/yyyy')}">25/05/2025</td>
-                                    <td class="price-txt" th:id="'price_' + ${booking.id}" th:text="${booking.totalPrice}"></td>
-                                    <td>
-                                        <a th:href="@{'/payment/cancel/' + ${booking.id}}" onclick="return confirm('Bạn có chắc muốn hủy vé không?')" th:data-id="${booking.id}">Hủy</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <input type="checkbox" class="form-check-input border border-secondary payment-checkbox" value="1" th:data-id="${booking.id}" name="radio_chosen" />
+                                    <td th:text="${booking.totalPrice}"></td>
+                                    <td th:switch="${booking.status}">
+                                        <span th:case="1">Chờ thanh toán</span>
+                                        <span th:case="2">Đã thanh toán</span>
+                                        <span th:case="3">Đã hủy</span>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="pt-3 d-flex justify-content-end">
-                        <div class="text-right">
-                            <button type="button" class="btn btn-sm btn-custom px-3" id="btnPayment">Thanh toán</button>
-                        </div>
-                    </div>
                 </section>
             </div><!-- .mypage_block END -->
         </section>
     </main>
-    <th:block th:insert="~{user/layouts/modal_success::modalSuccess}"></th:block>
     <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
     <th:block th:replace="~{user/layouts/script::script}"></th:block>
 </body>
