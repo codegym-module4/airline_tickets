@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,12 +14,12 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "bookings")
+@Table(name = "booking")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE bookings SET deleted_at = Now() WHERE id=?")
+@SQLDelete(sql = "UPDATE booking SET deleted_at = Now() WHERE id=?")
 @Where(clause = "deleted_at is null")
 public class Booking {
 
@@ -57,6 +58,13 @@ public class Booking {
 
     @Column(name = "status")
     private Integer status;
+
+    @Column(name = "vnpay_order_id")
+    private String vnpayOrderId;
+
+    @Column(name = "created_at")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime createdAt;
 
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")

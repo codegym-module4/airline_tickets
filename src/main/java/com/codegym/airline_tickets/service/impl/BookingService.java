@@ -2,22 +2,29 @@ package com.codegym.airline_tickets.service.impl;
 
 import com.codegym.airline_tickets.entity.Airport;
 import com.codegym.airline_tickets.entity.Booking;
+import com.codegym.airline_tickets.repository.BookingRepository;
 import com.codegym.airline_tickets.service.IAirportService;
 import com.codegym.airline_tickets.service.IBookingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class BookingService implements IBookingService {
+
+    @Autowired
+    private BookingRepository bookingRepository;
+
+
     @Override
     public List<Booking> getAll() {
-        return List.of();
+        return bookingRepository.findAll();
     }
 
     @Override
     public void save(Booking s) {
-
+        bookingRepository.save(s);
     }
 
     @Override
@@ -32,11 +39,36 @@ public class BookingService implements IBookingService {
 
     @Override
     public Booking findById(long id) {
-        return null;
+        return bookingRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Booking> findByName(String name) {
         return List.of();
+    }
+
+    @Override
+    public List<Booking> findByStatus(int status) {
+        return bookingRepository.findByStatus(status);
+    }
+
+    @Override
+    public List<Booking> findByIdIn(List<Long> ids) {
+        return bookingRepository.findByIdIn(ids);
+    }
+
+    @Override
+    public void updateVnPayOrderId(Long id, String vnPayOrderId) {
+        bookingRepository.updateVnPayOrderId(id, vnPayOrderId);
+    }
+
+    @Override
+    public void updateStatusById(Long id, Integer status) {
+        bookingRepository.updateStatusById(id, status);
+    }
+
+    @Override
+    public void updateStatusByVnPayId(String vnpayOrderId, Integer status) {
+        bookingRepository.updateStatusByVnPayId(vnpayOrderId, status);
     }
 }
