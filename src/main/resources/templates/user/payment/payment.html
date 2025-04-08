@@ -29,7 +29,7 @@
                                     <th>Hủy</th>
                                     <th>Chọn</th>
                                 </tr>
-                                <tr th:if="${list.isEmpty()}">
+                                <tr class="text-center" th:if="${list.isEmpty()}">
                                     <td colspan="8">Không tìm thấy dữ liệu</td>
                                 </tr>
                                 <tr th:each="booking : ${list}">
@@ -58,6 +58,7 @@
             </div><!-- .mypage_block END -->
         </section>
     </main>
+    <th:block th:insert="~{user/layouts/modal_success::modalSuccess}"></th:block>
     <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
     <th:block th:replace="~{user/layouts/script::script}"></th:block>
 </body>
