@@ -1,5 +1,6 @@
 package com.codegym.airline_tickets.service.impl;
 
+import com.codegym.airline_tickets.dto.RevenueByDateDto;
 import com.codegym.airline_tickets.entity.Airport;
 import com.codegym.airline_tickets.entity.Booking;
 import com.codegym.airline_tickets.repository.BookingRepository;
@@ -8,6 +9,10 @@ import com.codegym.airline_tickets.service.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,15 +21,14 @@ public class BookingService implements IBookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
-
     @Override
     public List<Booking> getAll() {
-        return bookingRepository.findAll();
+        return List.of();
     }
 
     @Override
     public void save(Booking s) {
-        bookingRepository.save(s);
+
     }
 
     @Override
@@ -39,7 +43,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public Booking findById(long id) {
-        return bookingRepository.findById(id).orElse(null);
+        return null;
     }
 
     @Override
@@ -48,27 +52,16 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public List<Booking> findByStatus(int status) {
-        return bookingRepository.findByStatus(status);
-    }
+    public List<RevenueByDateDto> getRevenueByDay(LocalDate start, LocalDate end) {
+        List<RevenueByDateDto> result = new ArrayList<>();
+        for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+            RevenueByDateDto revenueByDateDto = new RevenueByDateDto();
+            revenueByDateDto.setDate(date);
 
-    @Override
-    public List<Booking> findByIdIn(List<Long> ids) {
-        return bookingRepository.findByIdIn(ids);
-    }
-
-    @Override
-    public void updateVnPayOrderId(Long id, String vnPayOrderId) {
-        bookingRepository.updateVnPayOrderId(id, vnPayOrderId);
-    }
-
-    @Override
-    public void updateStatusById(Long id, Integer status) {
-        bookingRepository.updateStatusById(id, status);
-    }
-
-    @Override
-    public void updateStatusByVnPayId(String vnpayOrderId, Integer status) {
-        bookingRepository.updateStatusByVnPayId(vnpayOrderId, status);
+            BigInteger revenue = bookingRepository.getTotalRevenueByDate(date);
+            revenueByDateDto.setRevenue(revenue);
+            result.add(revenueByDateDto);
+        }
+        return result;
     }
 }

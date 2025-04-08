@@ -1,0 +1,38 @@
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* biểu đồ */
+    .chart-container {
+        max-width: 900px;
+        margin: auto;
+        padding-top: 30px;
+    }
+
+    /* nút xuất file */
+    .export-button-container {
+        position: fixed; /* Đặt vị trí cố định */
+        top: 100px; /* Khoảng cách từ trên cùng */
+        right: 200px; /* Khoảng cách từ bên phải */
+        z-index: 1000; /* Đảm bảo nút luôn ở trên cùng */
+    }
+
+    /* Nút xuất file */
+    .export-button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .export-button:hover {
+        background-color: #45a049; /* Màu khi di chuột */
+    }
+
+    .export-button:active {
+        background-color: #388e3c; /* Màu khi click */
+    }
