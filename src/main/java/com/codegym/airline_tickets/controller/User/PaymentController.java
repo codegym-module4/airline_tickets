@@ -1,4 +1,4 @@
-package com.codegym.airline_tickets.controller.Admin;
+package com.codegym.airline_tickets.controller.User;
 
 import com.codegym.airline_tickets.entity.Booking;
 import com.codegym.airline_tickets.service.IBookingService;
