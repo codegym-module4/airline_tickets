@@ -29,7 +29,7 @@
 
     @Controller
     @RequestMapping("/admin/")
-    public class EmployeeController {
+    public class ReportController {
 
         @Autowired
         private IBookingService bookingService;
