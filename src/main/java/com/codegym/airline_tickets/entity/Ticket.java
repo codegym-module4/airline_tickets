@@ -67,6 +67,9 @@ public class Ticket {
     @Column(name = "customer_type")
     private Integer type;
 
+    @Column(name = "nationality")
+    private String nationality;
+
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime deletedAt;
