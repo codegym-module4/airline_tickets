@@ -23,7 +23,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "AND DATE(b.payment_date) = :date")
     BigInteger getTotalRevenueByDate(LocalDate date);
 
-    List<Booking> findByStatus(Integer status);
+    @Query("select b from Booking b where b.status = ?1 and b.user.id = ?2")
+    List<Booking> findByStatusAndUserId(Integer status, Long userid);
 
     List<Booking> findByIdIn(List<Long> ids);
 

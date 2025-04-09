@@ -1,17 +1,14 @@
 package com.codegym.airline_tickets.service.impl;
 
 import com.codegym.airline_tickets.dto.RevenueByDateDto;
-import com.codegym.airline_tickets.entity.Airport;
 import com.codegym.airline_tickets.entity.Booking;
 import com.codegym.airline_tickets.repository.BookingRepository;
-import com.codegym.airline_tickets.service.IAirportService;
 import com.codegym.airline_tickets.service.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,8 +63,8 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public List<Booking> findByStatus(int status) {
-        return bookingRepository.findByStatus(status);
+    public List<Booking> findByStatusAndUserId(int status, long userId) {
+        return bookingRepository.findByStatusAndUserId(status, userId);
     }
 
     @Override

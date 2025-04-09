@@ -10,7 +10,7 @@ import java.util.List;
 public interface IBookingService extends IService<Booking> {
     List<RevenueByDateDto> getRevenueByDay(LocalDate start, LocalDate end);
 
-    List<Booking> findByStatus(int status);
+    List<Booking> findByStatusAndUserId(int status, long userId);
 
     List<Booking> findByIdIn(List<Long> ids);
 
