@@ -21,7 +21,7 @@ public class PaymentController {
 
     @GetMapping()
     public String payment(Model model) {
-        List<Booking> list = bookingService.findByStatusAndUserId(1, 2);
+        List<Booking> list = bookingService.findByStatusAndUserId(1, 1);
         model.addAttribute("list", list);
 
         return "user/payment/payment";
