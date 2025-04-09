@@ -68,6 +68,11 @@ public class BookingService implements IBookingService {
     }
 
     @Override
+    public List<Booking> findByUserId(long userId) {
+        return bookingRepository.findByUserId(userId);
+    }
+
+    @Override
     public List<Booking> findByIdIn(List<Long> ids) {
         return bookingRepository.findByIdIn(ids);
     }

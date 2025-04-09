@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,9 +18,11 @@ import java.util.List;
 public class FlightRestController {
 
     private final FlightService flightService;
+
     @GetMapping()
     public ResponseEntity<List<FlightResponseDTO>> getAllFlights() {
-        List<FlightResponseDTO> medicines = flightService.findAll();
+//        List<FlightResponseDTO> medicines = flightService.findAll();
+        List<FlightResponseDTO> medicines = new ArrayList<FlightResponseDTO>();
         return new ResponseEntity<>(medicines, HttpStatus.OK);
     }
 }

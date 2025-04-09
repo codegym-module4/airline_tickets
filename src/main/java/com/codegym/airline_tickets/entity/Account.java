@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "accounts")
@@ -36,4 +39,8 @@ public class Account {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "deleted_at")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime deletedAt;
 }

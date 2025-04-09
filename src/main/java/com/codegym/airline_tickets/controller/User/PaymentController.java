@@ -1,6 +1,8 @@
 package com.codegym.airline_tickets.controller.User;
 
+import com.codegym.airline_tickets.entity.Account;
 import com.codegym.airline_tickets.entity.Booking;
+import com.codegym.airline_tickets.service.IAccountService;
 import com.codegym.airline_tickets.service.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,9 +21,14 @@ public class PaymentController {
     @Autowired
     private IBookingService bookingService;
 
+    @Autowired
+    private IAccountService accountService;
+
     @GetMapping()
     public String payment(Model model) {
-        List<Booking> list = bookingService.findByStatusAndUserId(1, 1);
+        String email = "hoang123@gmail.com";
+        Account account = accountService.getAccountByEmail(email);
+        List<Booking> list = bookingService.findByStatusAndUserId(1, account.getUser().getId());
         model.addAttribute("list", list);
 
         return "user/payment/payment";
@@ -29,7 +36,9 @@ public class PaymentController {
 
     @GetMapping("/transfer-history")
     public String history(Model model) {
-        List<Booking> list = bookingService.getAll();
+        String email = "hoang123@gmail.com";
+        Account account = accountService.getAccountByEmail(email);
+        List<Booking> list = bookingService.findByUserId(account.getUser().getId());
         model.addAttribute("list", list);
         return "user/payment/transfer_history";
     }

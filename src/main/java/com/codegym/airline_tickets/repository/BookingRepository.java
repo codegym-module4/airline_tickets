@@ -1,6 +1,7 @@
 package com.codegym.airline_tickets.repository;
 
 import com.codegym.airline_tickets.entity.Booking;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,6 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-
     @Transactional
     @Query("SELECT SUM(b.totalPrice) " +
             "FROM Booking b " +
@@ -23,8 +23,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "AND DATE(b.payment_date) = :date")
     BigInteger getTotalRevenueByDate(LocalDate date);
 
-    @Query("select b from Booking b where b.status = ?1 and b.user.id = ?2")
+    @Query("select b from Booking b where b.status = ?1 and b.user.id = ?2 and b.deletedAt is null")
     List<Booking> findByStatusAndUserId(Integer status, Long userid);
+
+    @Query("select b from Booking b where b.user.id = ?1 and b.deletedAt is null")
+    List<Booking> findByUserId(Long userid);
 
     List<Booking> findByIdIn(List<Long> ids);
 

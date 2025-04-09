@@ -12,6 +12,8 @@ public interface IBookingService extends IService<Booking> {
 
     List<Booking> findByStatusAndUserId(int status, long userId);
 
+    List<Booking> findByUserId(long userId);
+
     List<Booking> findByIdIn(List<Long> ids);
 
     void updateVnPayOrderId(Long id, String vnPayOrderId);
