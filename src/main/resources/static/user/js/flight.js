@@ -17,7 +17,7 @@ tableArrival.forEach((radio) => {
     radio.addEventListener("change", (event) => {
         if (event.target.checked) {
             dataArrival = event.target.value;
-            console.log(">>>>>>>", dataDepature);
+
         }
     });
 });
@@ -32,21 +32,26 @@ document.getElementById("btnConfirm").addEventListener("click", () => {
 });
 
 const storage = JSON.parse(window.sessionStorage.getItem("data"))
-if(storage.departureOneWay === ""){
+if(storage.isRoundTrip === true){
+    const divArrivalOneWay = document.getElementById("arrival-option")
+    divArrivalOneWay.classList.add("d-block")
+
     const inputDeparture = document.getElementById('departure');
     inputDeparture.value = storage.departureAirport
 
     const inputArrival = document.getElementById('arrival');
     inputArrival.value = storage.arrivalAirport
 
-    const inputDepartureDate = document.getElementById('departureDate');
+    const inputDepartureDate = document.getElementById('departure-date');
     inputDepartureDate.value = storage.departureTime
 
-    const inputArrivalDate = document.getElementById("arrivalDate");
+    const inputArrivalDate = document.getElementById("arrival-date");
     inputArrivalDate.value = storage.arrivalTime
 
+    // sessionStorage.clear();
 
-}else {
+}
+if(storage.isOneWay === true) {
     const divArrivalOneWay = document.getElementById("arrival-option")
     divArrivalOneWay.classList.add("d-none")
 
@@ -54,13 +59,15 @@ if(storage.departureOneWay === ""){
     inputDeparture.value = storage.departureAirport
 
     const inputArrivalOneWay = document.getElementById('arrival');
-    inputArrivalOneWay.value = storage.departureOneWay
+    inputArrivalOneWay.value = storage.arrivalOneWay
 
-    const inputDepartureDate = document.getElementById('departureDate');
+    const inputDepartureDate = document.getElementById('departure-date');
     inputDepartureDate.value = storage.departureTime
-
-
+    //
+    // sessionStorage.clear();
 }
+
+
 
 
 
