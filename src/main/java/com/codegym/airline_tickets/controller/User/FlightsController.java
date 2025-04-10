@@ -6,6 +6,9 @@ import com.codegym.airline_tickets.entity.Airport;
 import com.codegym.airline_tickets.service.impl.AirportService;
 import com.codegym.airline_tickets.service.impl.FlightService;
 import com.codegym.airline_tickets.util.FormaterCustom;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -32,7 +36,8 @@ public class FlightsController {
                                        @RequestParam(required = false, defaultValue = "ASC") String sort,
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
-                                       Model model
+                                       Model model,
+                                       HttpServletResponse response
     ){
         log.info("Get flight list");
 
@@ -47,8 +52,10 @@ public class FlightsController {
            LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
            LocalDate arrivalTime = LocalDate.from(flightReq.getArrivalTime());
 
+
+
            List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime, flightReq.getSortProperty(), sort, page, size);
-           List<FlightResponseDTO> listArrival = flightService.findAll(departure, arrival, arrivalTime, flightReq.getSortProperty(), sort, page, size);
+           List<FlightResponseDTO> listArrival = flightService.findAll(arrival, departure,  arrivalTime, flightReq.getSortProperty(), sort, page, size);
            List<Airport> listAirports = airportService.getAll();
 
            if(listDeparture.isEmpty() || listArrival.isEmpty()){
@@ -64,6 +71,7 @@ public class FlightsController {
            model.addAttribute("arrival", arrival);
            model.addAttribute("departureTime", FormaterCustom.formatDateResponse(departureTime) );
            model.addAttribute("arrivalTime",FormaterCustom.formatDateResponse(arrivalTime));
+
            model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
            model.addAttribute("dayOfWeekArrival",FormaterCustom.formatDayOfWeek(arrivalTime));
        }
@@ -91,7 +99,7 @@ public class FlightsController {
            model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
         }
 
-        return "user/view_flight/view_flight";
+        return "user/flight/flight";
 
     }
 
