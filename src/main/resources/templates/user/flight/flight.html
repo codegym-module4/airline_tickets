@@ -164,7 +164,7 @@
                 </div>
 
 
-                <form th:action="@{/user/select-flight}" th:object="${flightReq}" class="col-lg-3 sidebar" style="border: 1px solid black; height: 50%; margin-top: 95px;" method="POST">
+                <form id="searchForm" th:action="@{/user/select-flight}" th:object="${flightReq}" class="col-lg-3 sidebar" style="border: 1px solid black; height: 50%; margin-top: 95px;" method="POST">
                     <h4 style="font-weight: 600; font-size:24px;">Sắp xếp</h4>
                     <div class="sort-box">
                         <label><input checked type="radio" name="sortProperty" value="price"> Đề xuất</label><br>
@@ -191,24 +191,29 @@
 
                             <!-- Ngày đi-->
                             <div class="mb-3">
-                                <label for="departureDate" class="form-label">Ngày đi</label>
-                                <input type="date" id="departureDate" class="form-control" name="departureTime">
+                                <label for="departure-date" class="form-label">Ngày đi</label>
+                                <input type="date" id="departure-date" class="form-control" name="departureTime">
                             </div>
 
 <!--                            Điểm đến-->
                             <div class="mb-3">
                                 <label for="arrival" class="form-label">Điểm đến</label>
-                                <input class="form-control" list="destination-area" id="arrival" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
+                                <input  id="arrival" class="form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
+                                <input  id="destination-one-way" class="form-control d-none" list="destination-area" placeholder="Điểm đến"/>
                                 <datalist id="destination-area" class="w-100">
                                     <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
                                 </datalist>
                             </div>
 
+
+
 <!--                            Ngày về-->
                             <div id="arrival-option" class="destination-round-trip destination-one-way d-block mb-3">
-                                <label for="arrivalDate" class="form-label">Ngày về</label>
-                                <input type="date" id="arrivalDate" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
+                                <label for="arrival-date" class="form-label">Ngày về</label>
+                                <input type="date" id="arrival-date" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
                             </div>
+
+
 
                             <div class="mb-3 row">
                                 <div class="col-md-4">
@@ -247,7 +252,7 @@
                                 </div>
 
                             </div>
-                            <button type="submit" class="btn btn-detail w-100">Tìm chuyến bay</button>
+                            <button onclick="submitFormSearch(event)"  type="submit" class="btn btn-detail w-100">Tìm chuyến bay</button>
                         </div>
                     </div>
                 </form>
