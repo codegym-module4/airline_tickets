@@ -46,6 +46,18 @@ public class User {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "nationality")
+    private String nationality;
+
+    @Column(name = "ranking")
+    private String ranking;
+
+    @Column(name = "citizen_identification")
+    private String citizenIdentification;
+
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime deletedAt;
