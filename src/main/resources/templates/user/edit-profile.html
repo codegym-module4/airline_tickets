@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{user/layouts/head::head('Chỉnh sửa hồ sơ - Vietjet Air')}"></head>
+<body style="background: url('/user/img/background-main.jpg'); background-size: cover;">
+<main class="py-0">
+    <th:block th:replace="~{user/layouts/header::header}"></th:block>
+    <div class="container mt-5 d-flex justify-content-center">
+        <div class="booking-form" style="max-width: 400px; padding: 20px; border-radius: 5px;">
+            <h2 class="text-white text-center">Chỉnh sửa hồ sơ</h2>
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+            <form th:action="@{/profile/edit}" th:object="${user}" method="post" class="mt-3">
+                <div class="mb-3">
+                    <label for="fullName" class="form-label text-white">Họ và tên:</label>
+                    <input type="text" id="fullName" th:field="*{fullName}" class="form-control" required/>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label text-white">Số điện thoại:</label>
+                    <input type="text" id="phone" th:field="*{phone}" class="form-control" required pattern="[0-9]{10}"/>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label text-white">Địa chỉ:</label>
+                    <input type="text" id="address" th:field="*{address}" class="form-control" required/>
+                </div>
+                <button type="submit" class="btn btn-custom w-100">Lưu</button>
+            </form>
+        </div>
+    </div>
+    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+</main>
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+</body>
+</html>

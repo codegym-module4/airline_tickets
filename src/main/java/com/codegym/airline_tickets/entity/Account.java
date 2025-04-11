@@ -29,16 +29,23 @@ public class Account {
     @Column(name = "email")
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @Column(name = "password")
+    private String password;
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     private User user;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @Column(name = "password")
-    private String password;
+
+
 
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
