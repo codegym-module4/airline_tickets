@@ -1,5 +1,20 @@
 
-    document.addEventListener("DOMContentLoaded", function () {
+let searchFormData = {
+    departureAirport: null,
+    arrivalAirport: null,
+    departureTime: null,
+    arrivalTime: null,
+    arrivalOneWay:"",
+    isOneWay: false,
+    isRoundTrip:false,
+    quantity:{
+        adult: 1,
+        child: 0,
+        infant: 0
+    },
+};
+
+document.addEventListener("DOMContentLoaded", function () {
     const roundTripRadio = document.getElementById("round-trip");
     const oneWayRadio = document.getElementById("one-way");
     const oneWaySection = document.querySelector(".destination-one-way");
@@ -18,15 +33,25 @@
     roundTripSection.classList.add("d-none");
     // input.id = "destination-one-way"
 
-
 });
 
 });
+
+
+    window.addEventListener("load", (event) => {
+        document.getElementById('passengers').value = "1 Người lớn"
+        sessionStorage.clear()
+
+    });
+
     function changeCount(event, type, value) {
     event.stopPropagation();
     event.preventDefault();
     let element = document.getElementById(type);
     let count = parseInt(element.textContent) + value;
+    if(type === "adults" && count === 0 && value === -1){
+        return;
+    }
     if (count < 0) count = 0;
     element.textContent = count;
 }
@@ -34,10 +59,16 @@
     function submitForm(e) {
     e.preventDefault();
     let counts = {
-    adult: parseInt(document.getElementById('adult').textContent),
+    adult: parseInt(document.getElementById('adults').textContent),
     child: parseInt(document.getElementById('child').textContent),
     infant: parseInt(document.getElementById('infant').textContent)
 };
+
+
+    // searchFormData.quantity.adult = counts.adult
+    // searchFormData.quantity.child = counts.child
+    // searchFormData.quantity.infant = counts.infant
+
 
     let passengerText = [];
     if (counts.adult > 0) passengerText.push(`${counts.adult} Người lớn`);
@@ -51,16 +82,6 @@
 
     function submitFormSearch(e){
         event.preventDefault();
-
-            let searchFormData = {
-                departureAirport: null,
-                arrivalAirport: null,
-                departureTime: null,
-                arrivalTime: null,
-                arrivalOneWay:"",
-                isOneWay: false,
-                isRoundTrip:false
-            };
 
                 const checkedRoundTrip = document.getElementById("round-trip")
                 searchFormData.isRoundTrip= checkedRoundTrip.checked
@@ -85,6 +106,15 @@
 
                 const inputArrivalDate = document.getElementById("arrival-date")
                 searchFormData.arrivalTime = inputArrivalDate.value
+
+                const inputAdults = document.getElementById("adults");
+                searchFormData.quantity.adult = parseInt(inputAdults.textContent)
+
+               const inputChild = document.getElementById("child");
+                searchFormData.quantity.child = parseInt(inputChild.textContent)
+
+                const inputInfant = document.getElementById("infant");
+                searchFormData.quantity.infant = parseInt(inputInfant.textContent)
 
 
                 sessionStorage.setItem("data",JSON.stringify(searchFormData));
