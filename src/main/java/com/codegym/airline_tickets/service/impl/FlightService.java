@@ -49,7 +49,8 @@ public class FlightService implements IFlightService {
 
     @Override
     public Flight findById(long id) {
-        return null;
+
+        return flightRepository.findNotDeletedById(id);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class FlightService implements IFlightService {
         return List.of();
     }
 
-
+    @Override
     public List<FlightResponseDTO> findAll(String departure, String arrival, LocalDate departureTime, String sortProperty, String sort, int page, int size) {
         log.info("findAll flight start");
 
@@ -105,6 +106,7 @@ public class FlightService implements IFlightService {
 
         BigDecimal taxVAT = new BigDecimal("0.1");
         return flightPage.stream().map(flight -> FlightResponseDTO.builder()
+                .id(flight.getId())
                 .flightCode(flight.getCode())
                 .airlineName(flight.getAirline().getName())
                 .departureTime(flight.getDeparture_time())

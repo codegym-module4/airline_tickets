@@ -1,0 +1,66 @@
+<th:block th:fragment="data-flight">
+  <table class="table table-bordered table-nowrap">
+    <thead>
+    <tr>
+      <th><span th:text="${arrival + ' '}"></span> <i class="fa-solid fa-plane"></i> <span th:text="${' ' + departure}"></span></th>
+      <th colspan="3"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${departure}"></td>
+      <td th:text="${arrival}"></td>
+      <td colspan="2" th:text="${flight.airlineName}"></td>
+    </tr>
+    <tr>
+<!--      <td th:text="${flight.departureTime.toLocalTime()}  + ', ' + ${flight.departureTime.toLocalDate()}"></td>-->
+      <td th:text="${#temporals.format(flight.departureTime, 'HH:mm, dd/MM/yyyy')}"></td>
+
+<!--      <td th:text="${flight.arrivalTime.toLocalTime()}  + ', ' + ${flight.arrivalTime.toLocalDate()}"></td>-->
+      <td th:text="${#temporals.format(flight.arrivalTime, 'HH:mm, dd/MM/yyyy')}"></td>
+      <td colspan="2" th:text="'Chuyến bay: ' + ${flight.flightCode}"></td>
+    </tr>
+    <tr>
+      <td th:text="${flight.departureAirportCity}"></td>
+      <td th:text="${flight.arrivalAirportCity}"></td>
+      <td colspan="2">Loại vé: Phổ thông</td>
+    </tr>
+    <tr>
+      <td>Loại khách hàng</td>
+      <td>Giá mỗi vé</td>
+      <td>Thuế & Phí</td>
+      <td>Tổng giá</td>
+    </tr>
+    <tr>
+      <td>Người lớn</td>
+      <td th:text="${flight.price} + ' VNĐ'"></td>
+      <td>0 VNĐ</td>
+      <td th:text="${flight.price} + ' VNĐ'" ></td>
+    </tr>
+    <tr>
+        <td>Em bé</td>
+        <td>100,000 VNĐ</td>
+        <td>0 VNĐ</td>
+        <td>100,000 VNĐ</td>
+    </tr>
+    <tr>
+      <td>Điều kiện hành lý</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Hành lý xách tay</td>
+      <td>10 kg</td>
+      <td></td>
+      <td></td>
+    </tr>
+<!--    <tr>-->
+<!--      <td>Hành lý ký gửi</td>-->
+<!--      <td>23 kg</td>-->
+<!--      <td></td>-->
+<!--      <td></td>-->
+<!--    </tr>-->
+    </tbody>
+  </table>
+</th:block>

@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 "/user/icon/**",
                                 "/admin/css/**"
                         ).permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
                         .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**").authenticated()
                         .anyRequest().authenticated()
                 )

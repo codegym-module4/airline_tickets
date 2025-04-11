@@ -42,7 +42,7 @@ public class FlightsController {
         log.info("Get flight list");
 
         if(flightReq.getSortProperty() == null){
-            return "redirect:/user/homepage";
+            return "redirect:/";
         }
 
        if(flightReq != null && flightReq.getType().equals("ROUND-TRIP")) {
@@ -59,7 +59,7 @@ public class FlightsController {
            List<Airport> listAirports = airportService.getAll();
 
            if(listDeparture.isEmpty() || listArrival.isEmpty()){
-               return "redirect:/user/homepage";
+               return "redirect:/";
            }
            model.addAttribute("flightReq",flightReq);
            model.addAttribute("listDeparture",listDeparture);
@@ -87,7 +87,7 @@ public class FlightsController {
             List<Airport> listAirports = airportService.getAll();
 
             if(listDeparture.isEmpty()){
-                return "redirect:/user/homepage";
+                return "redirect:/";
             }
            model.addAttribute("flightReq",flightReq);
             model.addAttribute("listDeparture",listDeparture);

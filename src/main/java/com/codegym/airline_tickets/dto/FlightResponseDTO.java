@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class FlightResponseDTO implements Serializable {
+   private Long id;
    private String airlineName;
    private String flightCode;
    private LocalDateTime departureTime;

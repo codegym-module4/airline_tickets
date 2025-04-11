@@ -26,4 +26,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
                                  @Param("arrival") String arrival,
                                  @Param("time") LocalDate time,
                                  Pageable pageable);
+
+    @Query("SELECT f from Flight f where f.id = :id and f.deletedAt is null")
+    Flight findNotDeletedById(Long id);
 }
