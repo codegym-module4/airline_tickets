@@ -9,6 +9,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("select u from User u where u.id = ?1 and u.deletedAt is not null")
-    User findNotDeletedById(Long id);
+    @Query("SELECT u.code FROM User u ORDER BY u.code DESC LIMIT 1")
+    String findMaxCode();
+
+
+    @Query("SELECT u FROM User u WHERE u.id = :id AND u.deletedAt IS NULL")
+    User findNotDeletedById(long id);
+
+
 }
