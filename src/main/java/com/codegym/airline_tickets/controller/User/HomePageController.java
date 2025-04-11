@@ -20,7 +20,7 @@ public class HomePageController {
 
     private final AirportService airportService;
 
-    @GetMapping({"/", "/user/homepage"})
+    @GetMapping({"/"})
     public String homepage(Model model) {
         List<Airport> listAirports = airportService.getAll();
         FlightRequestDTO flightRequestDTO = new FlightRequestDTO();

@@ -35,10 +35,11 @@ public class SecurityConfig {
                                 "/user/js/**",
                                 "/user/plugins/**",
                                 "/user/img/**",
-                                "/user/icon/**"
+                                "/user/icon/**",
+                                "/admin/css/**"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/profile/**").authenticated()
+                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
