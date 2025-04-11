@@ -13,26 +13,28 @@
                             <i class="fa-solid fa-headphones-simple"></i>
                             <a class="nav-link text-white" href="#">Hỗ trợ</a>
                         </div>
-                        <!-- Kiểm tra trạng thái đăng nhập với sec:authentication -->
-                        <div sec:authorize="!isAuthenticated()">
-                            <div class="nav-item d-flex justify-content-between align-items-center">
-                                <i class="fa-solid fa-user" style="color: red"></i>
-                                <a class="nav-link text-white" href="/register">Đăng ký</a>
-                            </div>
-                            <span style="font-weight: bold; color: #ffffff; margin-left:7px;">|</span>
-                            <div class="nav-item" style="margin-left: 3px;">
-                                <a class="nav-link text-white" href="/login">Đăng nhập</a>
-                            </div>
-                        </div>
-                        <div sec:authorize="isAuthenticated()">
-                            <div class="nav-item d-flex justify-content-between align-items-center">
-                                <i class="fa-solid fa-user" style="color: red"></i>
-                                <a class="nav-link text-white" th:href="@{/profile}" sec:authentication="principal.fullName"></a>
-                            </div>
-                            <span style="font-weight: bold; color: #ffffff; margin-left:7px;">|</span>
-                            <div class="nav-item" style="margin-left: 3px;">
-                                <a class="nav-link text-white" href="/logout">Đăng xuất</a>
-                            </div>
+
+<div sec:authorize="!isAuthenticated()">
+    <div class="nav-item d-flex justify-content-between align-items-center">
+        <i class="fa-solid fa-user" style="color: red"></i>
+        <a class="nav-link text-white" href="/register">Đăng ký</a>
+    </div>
+    <span style="font-weight: bold; color: #ffffff; margin-left:7px;">|</span>
+    <div class="nav-item" style="margin-left: 3px;">
+        <a class="nav-link text-white" href="/login">Đăng nhập</a>
+    </div>
+</div>
+<div sec:authorize="isAuthenticated()">
+    <div class="nav-item d-flex justify-content-between align-items-center">
+        <i class="fa-solid fa-user" style="color: red"></i>
+        <a class="nav-link text-white" th:href="@{/profile}" sec:authentication="principal.fullName"></a>
+    </div>
+    <span style="font-weight: bold; color: #ffffff; margin-left:7px;">|</span>
+    <div class="nav-item" style="margin-left: 3px;">
+        <a class="nav-link text-white" href="/logout">Đăng xuất</a>
+    </div>
+</div>
+
                         </div>
                         <div class="dropdown">
                             <button class="dropdown-toggle" style="border: solid 1px #fff; border-radius: 3px; background: transparent; color: #ffffff; font-weight: 700;" type="button" data-bs-toggle="dropdown" aria-expanded="false">

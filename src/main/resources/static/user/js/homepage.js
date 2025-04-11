@@ -4,7 +4,7 @@
     const oneWayRadio = document.getElementById("one-way");
     const oneWaySection = document.querySelector(".destination-one-way");
     const roundTripSection = document.querySelector(".destination-round-trip");
-
+    // const input = document.getElementById("arrival")
     roundTripRadio.addEventListener("click", function () {
     oneWaySection.classList.remove("d-block");
     oneWaySection.classList.add("d-none");
@@ -14,8 +14,11 @@
 
     oneWayRadio.addEventListener("click", function () {
     oneWaySection.classList.remove("d-none");
-    oneWaySection.classList.add("d-block");
+    // oneWaySection.classList.add("d-block");
     roundTripSection.classList.add("d-none");
+    // input.id = "destination-one-way"
+
+
 });
 
 });
@@ -41,7 +44,52 @@
     if (counts.child > 0) passengerText.push(`${counts.child} Trẻ em`);
     if (counts.infant > 0) passengerText.push(`${counts.infant} Em bé`);
 
-    document.getElementById('passengerInput').value = passengerText.join(", ") || "Chọn số hành khách";
-    let dropdown = bootstrap.Dropdown.getInstance(document.getElementById('passengerInput'));
+    document.getElementById('passengers').value = passengerText.join(", ") || "Chọn số hành khách";
+    let dropdown = bootstrap.Dropdown.getInstance(document.getElementById('passengers'));
     if (dropdown) dropdown.hide();
 }
+
+    function submitFormSearch(e){
+        event.preventDefault();
+
+            let searchFormData = {
+                departureAirport: null,
+                arrivalAirport: null,
+                departureTime: null,
+                arrivalTime: null,
+                arrivalOneWay:"",
+                isOneWay: false,
+                isRoundTrip:false
+            };
+
+                const checkedRoundTrip = document.getElementById("round-trip")
+                searchFormData.isRoundTrip= checkedRoundTrip.checked
+
+                const checkedOneWay = document.getElementById("one-way")
+                searchFormData.isOneWay= checkedOneWay.checked
+
+                const inputDeparture = document.getElementById("departure")
+                searchFormData.departureAirport = inputDeparture.value
+
+                if(searchFormData.isRoundTrip === true){
+                        const inputArrival = document.getElementById("arrival")
+                        searchFormData.arrivalAirport = inputArrival.value
+                    }
+                if(  searchFormData.isOneWay === true){
+                        const inputArrivalOneWay = document.getElementById("destination-one-way")
+                        searchFormData.arrivalOneWay = inputArrivalOneWay.value
+                    }
+
+                const inputDepartureDate = document.getElementById("departure-date")
+                searchFormData.departureTime = inputDepartureDate.value
+
+                const inputArrivalDate = document.getElementById("arrival-date")
+                searchFormData.arrivalTime = inputArrivalDate.value
+
+
+                sessionStorage.setItem("data",JSON.stringify(searchFormData));
+
+                document.getElementById("searchForm").submit();
+
+    }
+
