@@ -26,11 +26,11 @@
                         <a class="nav-link disabled">Quy định hành lý</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">User</a>
-                    </li>
-                </ul>
+<!--                <ul class="navbar-nav ms-auto">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="#">User</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
             </div>
         </div>
     </nav>
@@ -178,7 +178,7 @@
 <!--                            Điểm đi-->
                             <div class="mb-3">
                                 <label for="departure-area" class="form-label">Điểm đi</label>
-                                <input class="form-control" list="departure-area" id="departure" placeholder="Điểm khởi hành" name="departureAirport" th:field="*{departureAirport}" />
+                                <input required class="form-control" list="departure-area" id="departure" placeholder="Điểm khởi hành" name="departureAirport" th:field="*{departureAirport}" />
                                 <datalist id="departure-area" class="w-100">
                                     <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
                                 </datalist>
@@ -187,13 +187,13 @@
                             <!-- Ngày đi-->
                             <div class="mb-3">
                                 <label for="departure-date" class="form-label">Ngày đi</label>
-                                <input type="date" id="departure-date" class="form-control" name="departureTime">
+                                <input required type="date" id="departure-date" class="form-control" name="departureTime">
                             </div>
 
 <!--                            Điểm đến-->
                             <div  class="destination-round-trip mb-3">
                                 <label for="arrival" class="form-label">Điểm đến</label>
-                                <input id="arrival" class="form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
+                                <input required id="arrival" class="form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
                                 <datalist id="destination-area" class="w-100">
                                     <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
                                 </datalist>
@@ -201,8 +201,8 @@
 
 <!--                            Điểm đến cho 1 chiều-->
                             <div class="destination-one-way mb-3">
-                                <label for="arrival" class="form-label">Điểm đến 1 chiều</label>
-                                <input class="des-one-way form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirportOneWay" th:field="*{arrivalAirportOneWay}"/>
+                                <label for="arrival" class="form-label">Điểm đến</label>
+                                <input required class="des-one-way form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirportOneWay" th:field="*{arrivalAirportOneWay}"/>
                                 <datalist id="destination-area-ow" class="w-100">
                                     <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
                                 </datalist>
@@ -212,7 +212,7 @@
                             <!--                            Ngày về-->
                             <div id="arrival-option" class="destination-round-trip destination-one-way d-block mb-3">
                                 <label for="arrival-date" class="form-label">Ngày về</label>
-                                <input type="date" id="arrival-date" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
+                                <input required type="date" id="arrival-date" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
                             </div>
 
                             <div class="mb-3 row">

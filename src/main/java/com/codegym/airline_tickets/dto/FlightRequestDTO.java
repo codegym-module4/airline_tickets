@@ -29,7 +29,6 @@ public class FlightRequestDTO {
     @NotNull
     private LocalDate departureTime;
 
-    @NotNull
     private LocalDate arrivalTime;
 
     private String sortProperty = "price";

@@ -30,17 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const inputRoundTrip = document.getElementById("arrival")
         inputRoundTrip.value = ""
 
-        const inputArrivalDate = document.getElementById("arrival-date")
-        inputArrivalDate.value = new Date().toISOString().split("T")[0];
-
-        const inputDepartureDate = document.getElementById("departure-date")
-        inputDepartureDate.value = new Date().toISOString().split("T")[0];
-
-    oneWaySection.classList.remove("d-block");
-    oneWaySection.classList.add("d-none");
-    roundTripSection.classList.remove("d-none");
-    arrivalDateOption.classList.remove("d-none")
-    arrivalDateOption.classList.add("d-block")
+        oneWaySection.classList.remove("d-block");
+        oneWaySection.classList.add("d-none");
+        roundTripSection.classList.remove("d-none");
+        arrivalDateOption.classList.remove("d-none")
+        arrivalDateOption.classList.add("d-block")
 
 
 });
@@ -52,29 +46,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const inputOneWay = document.querySelector(".des-one-way")
         inputOneWay.value = ""
 
-        const inputArrivalDate = document.getElementById("arrival-date")
-        inputArrivalDate.value = new Date().toISOString().split("T")[0];
-
-    oneWaySection.classList.remove("d-none");
-    // oneWaySection.classList.add("d-block");
-    roundTripSection.classList.add("d-none");
-    // input.id = "destination-one-way"
-    arrivalDateOption.classList.add("d-none")
+        oneWaySection.classList.remove("d-none");
+        roundTripSection.classList.add("d-none");
+        arrivalDateOption.classList.add("d-none")
 });
 
 });
 
 
     window.addEventListener("load", (event) => {
-
+        document.getElementById('passengers').value = "1 Người lớn"
         const storageDefault = JSON.parse(window.sessionStorage.getItem("data"))
+
         const inputOw = document.querySelector(".des-one-way")
         inputOw.value = storageDefault.arrivalOneWay
 
-        const inputDepartureDate = document.getElementById("departure-date")
-        inputDepartureDate.value = new Date().toISOString().split("T")[0];
-
-        document.getElementById('passengers').value = "1 Người lớn"
         sessionStorage.clear()
 
     });
@@ -84,11 +70,15 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     let element = document.getElementById(type);
     let count = parseInt(element.textContent) + value;
-    if(type === "adults" && count === 0 && value === -1){
+
+    if(type === "adults" && count < 1){
         return;
     }
+
     if (count < 0) count = 0;
     element.textContent = count;
+
+
 }
 
     function submitForm(e) {
@@ -98,12 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
     child: parseInt(document.getElementById('child').textContent),
     infant: parseInt(document.getElementById('infant').textContent)
 };
-
-
-    // searchFormData.quantity.adult = counts.adult
-    // searchFormData.quantity.child = counts.child
-    // searchFormData.quantity.infant = counts.infant
-
 
     let passengerText = [];
     if (counts.adult > 0) passengerText.push(`${counts.adult} Người lớn`);
@@ -146,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const inputAdults = document.getElementById("adults");
                 searchFormData.quantity.adult = parseInt(inputAdults.textContent)
 
-               const inputChild = document.getElementById("child");
+                const inputChild = document.getElementById("child");
                 searchFormData.quantity.child = parseInt(inputChild.textContent)
 
                 const inputInfant = document.getElementById("infant");

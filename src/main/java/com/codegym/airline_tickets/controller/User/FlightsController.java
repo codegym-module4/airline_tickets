@@ -7,6 +7,7 @@ import com.codegym.airline_tickets.service.impl.AirportService;
 import com.codegym.airline_tickets.service.impl.FlightService;
 import com.codegym.airline_tickets.util.FormaterCustom;
 import com.codegym.airline_tickets.util.ValidationMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class FlightsController {
         log.info("Get flight list");
 
         if(bindingResult.hasErrors()){
+
             redirectAttributes.addFlashAttribute("messageError","Bạn chưa điền đầy đủ thông tin tìm chuyến bay");
             return "redirect:/";
         }
@@ -49,6 +51,12 @@ public class FlightsController {
 
 
         if(flightReq != null && flightReq.getType().equals("ROUND-TRIP")) {
+
+            if(flightReq.getArrivalTime() == null){
+                redirectAttributes.addFlashAttribute("messageError","Bạn chưa điền đầy đủ thông tin tìm chuyến bay");
+                return "redirect:/";
+            }
+
            String departure = flightReq.getDepartureAirport();
            String arrival = flightReq.getArrivalAirport();
 
@@ -58,6 +66,11 @@ public class FlightsController {
 
            List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime, flightReq.getSortProperty(), sort, page, size);
            List<FlightResponseDTO> listArrival = flightService.findAll(arrival, departure,  arrivalTime, flightReq.getSortProperty(), sort, page, size);
+
+           if(listDeparture.isEmpty() || listArrival.isEmpty() ){
+               redirectAttributes.addFlashAttribute("messageError","Không tìm thấy thông tin chuyến bay");
+               return "redirect:/";
+           }
            List<Airport> listAirports = airportService.getAll();
 
            if(listDeparture.isEmpty() || listArrival.isEmpty()){
@@ -87,6 +100,10 @@ public class FlightsController {
             LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
 
             List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime,flightReq.getSortProperty(), sort, page, size);
+            if(listDeparture.isEmpty()){
+               redirectAttributes.addFlashAttribute("messageError","Không tìm thấy thông tin chuyến bay");
+               return "redirect:/";
+            }
             List<Airport> listAirports = airportService.getAll();
 
             if(listDeparture.isEmpty()){

@@ -72,11 +72,11 @@
       <!--Khứ hồi - một chiều-->
       <div id="type-flight" class="mb-3 d-flex align-items-center">
         <div class="form-check form-check-inline d-flex align-items-center">
-          <input id="round-trip" class="check-type-flight form-check-input  mr10" type="radio" name="type" value="ROUND-TRIP" checked/>
+          <input  id="round-trip" class="check-type-flight form-check-input  mr10" type="radio" name="type" value="ROUND-TRIP" checked/>
           <label  for="round-trip" class="form-check-label d-flex align-items-center gap-1 mt-1"><i class="fa-solid fa-repeat" ></i>Khứ hồi</label>
         </div>
         <div class="form-check form-check-inline d-flex align-items-center">
-          <input id="one-way" class="check-type-flight form-check-input mr10" type="radio" name="type" value="ONEWAY" />
+          <input  id="one-way" class="check-type-flight form-check-input mr10" type="radio" name="type" value="ONEWAY" />
           <label for="one-way" class="form-check-label d-flex align-items-center gap-1 mt-1"><i class="fa-solid fa-arrow-right"></i>Một chiều</label>
         </div>
         <span style="font-weight: 600; margin-left: 40px;">VND<i class="fa-solid fa-caret-down" style="margin-left: 3px;" ></i></span>
@@ -86,13 +86,13 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="input-group" style="width: 55%;">
           <span class="input-group-text"><i class="fa-solid fa-plane"></i></span>
-          <input type="text" id="departure"  class="form-control" list="departure-area" placeholder="Điểm khởi hành" name="departureAirport" th:field="*{departureAirport}"/>
+          <input required type="text" id="departure"  class="form-control" list="departure-area" placeholder="Điểm khởi hành" name="departureAirport" th:field="*{departureAirport}"/>
           <datalist id="departure-area" class="w-100">
             <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
           </datalist>
         </div>
         <div class="input-group" style="width: 45%;">
-          <input id="departure-date" name="departureTime" th:field="*{departureTime}"  type="date" class="form-control"  placeholder="Ngày đi" style="border-radius: 0 5px 5px 0;"/>
+          <input required id="departure-date" name="departureTime" th:field="*{departureTime}"  type="date" class="form-control"  placeholder="Ngày đi" style="border-radius: 0 5px 5px 0;"/>
         </div>
       </div>
 
@@ -100,20 +100,20 @@
       <div class="destination-round-trip d-flex justify-content-between align-items-center mb-3 d-block">
         <div class="input-group" style="width: 55%;">
           <span class="input-group-text"><i class="fa-solid fa-plane" style="transform: rotate(180deg);"></i></span>
-          <input type="text" class="form-control" list="destination-area" id="arrival" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
+          <input required type="text" class="form-control" list="destination-area" id="arrival" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
           <datalist id="destination-area" class="w-100">
             <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
           </datalist>
         </div>
         <div class="input-group" style="width: 45%;">
-          <input id="arrival-date" name="arrival-date" th:field="*{arrivalTime}" type="date" class="form-control" placeholder="Ngày về" style="border-radius: 0 5px 5px 0;"/>
+          <input required id="arrival-date" name="arrival-date" th:field="*{arrivalTime}" type="date" class="form-control" placeholder="Ngày về" style="border-radius: 0 5px 5px 0;"/>
         </div>
       </div>
 
       <div class="destination-one-way d-flex justify-content-between align-items-center mb-3 d-none">
         <div class="input-group">
           <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
-          <input class="des-one-way form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirportOneWay" th:field="*{arrivalAirportOneWay}"/>
+          <input required class="des-one-way form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirportOneWay" th:field="*{arrivalAirportOneWay}"/>
           <datalist th:field="*{arrivalAirport}" id="destination-area-one-way" class="w-100">
             <option th:each="item: ${listAirports}" th:value="${item.name}" th:text=" 'Sân bay ' + ${item.city}">
           </datalist>
@@ -124,14 +124,14 @@
       <div class="mb-3">
         <div class="dropdown input-group">
           <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-          <input type="text" class="form-control dropdown-toggle" id="passengers" placeholder="Chọn số hành khách" readonly data-bs-toggle="dropdown" name="numberPassengers"/>
+          <input required type="text" class="form-control dropdown-toggle" id="passengers" placeholder="Chọn số hành khách" readonly data-bs-toggle="dropdown" name="numberPassengers"/>
           <ul class="dropdown-menu" id="dropdownMenu">
             <li class="mb-3 d-flex justify-content-between align-items-center">
               <span>Người lớn (12+ tuổi)</span>
               <div>
-                <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adult', -1)">-</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adults', -1)">-</button>
                 <span id="adults" class="count">1</span>
-                <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adult', 1)">+</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adults', 1)">+</button>
               </div>
             </li>
             <li class="mb-3 d-flex justify-content-between align-items-center">
