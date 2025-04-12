@@ -4,7 +4,7 @@ let searchFormData = {
     arrivalAirport: null,
     departureTime: null,
     arrivalTime: null,
-    arrivalOneWay:"",
+    arrivalOneWay:"none",
     isOneWay: false,
     isRoundTrip:false,
     quantity:{
@@ -14,31 +14,66 @@ let searchFormData = {
     },
 };
 
+
 document.addEventListener("DOMContentLoaded", function () {
     const roundTripRadio = document.getElementById("round-trip");
     const oneWayRadio = document.getElementById("one-way");
     const oneWaySection = document.querySelector(".destination-one-way");
     const roundTripSection = document.querySelector(".destination-round-trip");
-    // const input = document.getElementById("arrival")
+    const arrivalDateOption = document.getElementById("arrival-option");
+
+
     roundTripRadio.addEventListener("click", function () {
+        const inputOneWay = document.querySelector(".des-one-way")
+        inputOneWay.value = "none"
+
+        const inputRoundTrip = document.getElementById("arrival")
+        inputRoundTrip.value = ""
+
+        const inputArrivalDate = document.getElementById("arrival-date")
+        inputArrivalDate.value = new Date().toISOString().split("T")[0];
+
+        const inputDepartureDate = document.getElementById("departure-date")
+        inputDepartureDate.value = new Date().toISOString().split("T")[0];
+
     oneWaySection.classList.remove("d-block");
     oneWaySection.classList.add("d-none");
     roundTripSection.classList.remove("d-none");
+    arrivalDateOption.classList.remove("d-none")
+    arrivalDateOption.classList.add("d-block")
+
 
 });
 
     oneWayRadio.addEventListener("click", function () {
+        const inputRoundTrip = document.getElementById("arrival")
+        inputRoundTrip.value = "none"
+
+        const inputOneWay = document.querySelector(".des-one-way")
+        inputOneWay.value = ""
+
+        const inputArrivalDate = document.getElementById("arrival-date")
+        inputArrivalDate.value = new Date().toISOString().split("T")[0];
+
     oneWaySection.classList.remove("d-none");
     // oneWaySection.classList.add("d-block");
     roundTripSection.classList.add("d-none");
     // input.id = "destination-one-way"
-
+    arrivalDateOption.classList.add("d-none")
 });
 
 });
 
 
     window.addEventListener("load", (event) => {
+
+        const storageDefault = JSON.parse(window.sessionStorage.getItem("data"))
+        const inputOw = document.querySelector(".des-one-way")
+        inputOw.value = storageDefault.arrivalOneWay
+
+        const inputDepartureDate = document.getElementById("departure-date")
+        inputDepartureDate.value = new Date().toISOString().split("T")[0];
+
         document.getElementById('passengers').value = "1 Người lớn"
         sessionStorage.clear()
 
@@ -95,9 +130,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 if(searchFormData.isRoundTrip === true){
                         const inputArrival = document.getElementById("arrival")
                         searchFormData.arrivalAirport = inputArrival.value
-                    }
+                }
+
                 if(  searchFormData.isOneWay === true){
-                        const inputArrivalOneWay = document.getElementById("destination-one-way")
+                        const inputArrivalOneWay = document.querySelector(".des-one-way")
                         searchFormData.arrivalOneWay = inputArrivalOneWay.value
                     }
 

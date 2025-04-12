@@ -191,16 +191,25 @@
                             </div>
 
 <!--                            Điểm đến-->
-                            <div class="mb-3">
+                            <div  class="destination-round-trip mb-3">
                                 <label for="arrival" class="form-label">Điểm đến</label>
                                 <input id="arrival" class="form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
-                                <input id="destination-one-way" class="form-control d-none" list="destination-area" placeholder="Điểm đến"/>
                                 <datalist id="destination-area" class="w-100">
                                     <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
                                 </datalist>
                             </div>
 
-<!--                            Ngày về-->
+<!--                            Điểm đến cho 1 chiều-->
+                            <div class="destination-one-way mb-3">
+                                <label for="arrival" class="form-label">Điểm đến 1 chiều</label>
+                                <input class="des-one-way form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirportOneWay" th:field="*{arrivalAirportOneWay}"/>
+                                <datalist id="destination-area-ow" class="w-100">
+                                    <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
+                                </datalist>
+                            </div>
+
+
+                            <!--                            Ngày về-->
                             <div id="arrival-option" class="destination-round-trip destination-one-way d-block mb-3">
                                 <label for="arrival-date" class="form-label">Ngày về</label>
                                 <input type="date" id="arrival-date" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
@@ -365,12 +374,11 @@
     </div>
 </div>
 <!-- Footer -->
+<th:block th:insert="~{user/layouts/modal_success::modalSuccess}"></th:block>
+<th:block th:insert="~{user/layouts/modal_error::modalError}"></th:block>
 <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
 
-<!--</main>-->
-
 </body>
-<!-- Bootstrap 5 JS và Popper.js -->
 <th:block th:replace="~{user/layouts/script::script}"></th:block>
 
 </html>

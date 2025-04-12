@@ -38,6 +38,9 @@
             const divArrivalOneWay = document.getElementById("arrival-option")
             divArrivalOneWay.classList.add("d-block")
 
+            const div = document.querySelector(".destination-one-way")
+            div.classList.add("d-none")
+
             const inputDeparture = document.getElementById('departure');
             inputDeparture.value = storage.departureAirport
 
@@ -59,18 +62,23 @@
             const inputInfant = document.getElementById("infant");
             inputInfant.textContent = storage.quantity.infant
 
-
             // sessionStorage.clear();
-
         }
+
         if(storage.isOneWay === true) {
             const divArrivalOneWay = document.getElementById("arrival-option")
             divArrivalOneWay.classList.add("d-none")
 
+            const div = document.querySelector(".destination-one-way")
+            div.classList.add("d-block")
+
+            const divrt = document.querySelector(".destination-round-trip")
+            divrt.classList.add("d-none")
+
             const inputDeparture = document.getElementById('departure');
             inputDeparture.value = storage.departureAirport
 
-            const inputArrivalOneWay = document.getElementById('arrival');
+            const inputArrivalOneWay = document.querySelector('.des-one-way');
             inputArrivalOneWay.value = storage.arrivalOneWay
 
             const inputDepartureDate = document.getElementById('departure-date');
