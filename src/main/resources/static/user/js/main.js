@@ -53,4 +53,46 @@
 
     });
 
+    $(document).on("click", "#btnSubmit", function (e) {
+        setDataInitialize();
+        let formId = $(this).data("form_id");
+        $.ajax({
+            method: $(formId).attr('method'),
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            dataType: 'json'
+        }).done(function (data) {
+            console.log(data);
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                if (jqXhr.responseJSON.message == 'Validation failed') {
+                    console.log(jqXhr.responseJSON.validator)
+                    $.each(jqXhr.responseJSON.validator, function (key, value) {
+                        var element = 'input';
+                        if (key.includes("gender") || key.includes("extraKg") || key.includes("nationality")) {
+                            element = "select";
+                        }
+                        var input = formId + ' ' + element + '[name="' + key + '"]';
+                        if (element == "input") {
+                            $(input).addClass('is-invalid');
+                        }
+                        $(input + '+span strong').text(value);
+                        return;
+                    });
+                } else {
+                    alert(jqXhr.responseJSON.message);
+                }
+            }
+        });
+
+    });
+
 })();
+function setDataInitialize()
+{
+    $('.invalid-feedback strong').text('');
+    $('div.invalid-feedback').text('');
+    $('.text-danger strong').text('');
+    $('input').removeClass('is-invalid');
+    $('textarea').removeClass('is-invalid');
+}
