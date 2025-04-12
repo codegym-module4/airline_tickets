@@ -1,0 +1,17 @@
+<th:block th:fragment="modalError">
+  <div class="modal fade" id="successError" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Thông báo</h4>
+        </div>
+        <div class="modal-body">
+          <p th:text="${messageError}"></p> <!-- Dùng biến `message` từ controller -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
