@@ -162,7 +162,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3">
-                    <form id="searchForm" th:action="@{/user/select-flight}" th:object="${flightReq}" class="sidebar" style="border: 1px solid black; margin-top: 95px;" method="POST">
+                    <form id="searchForm" th:action="@{/user/select-flight}" th:object="${flightReq}" class="sidebar" style="border: 1px solid black; height: 50%; margin-top: 95px;" method="POST">
                         <h4 style="font-weight: 600; font-size:24px;">Sắp xếp</h4>
                         <div class="sort-box">
                             <label><input checked type="radio" name="sortProperty" value="price"> Đề xuất</label><br>
@@ -177,72 +177,62 @@
                                 <label><input id="one-way" type="radio" name="type" th:field="*{type}" value="ONEWAY">Một chiều</label><br>
                             </div>
                             <div>
-
+    
     <!--                            Điểm đi-->
                                 <div class="mb-3">
                                     <label for="departure-area" class="form-label">Điểm đi</label>
-                                    <input class="form-control" list="departure-area" id="departure" placeholder="Điểm khởi hành" name="departureAirport" th:field="*{departureAirport}" />
+                                    <input required class="form-control" list="departure-area" id="departure" placeholder="Điểm khởi hành" name="departureAirport" th:field="*{departureAirport}" />
                                     <datalist id="departure-area" class="w-100">
                                         <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
                                     </datalist>
                                 </div>
-
+    
                                 <!-- Ngày đi-->
                                 <div class="mb-3">
                                     <label for="departure-date" class="form-label">Ngày đi</label>
-                                    <input type="date" id="departure-date" class="form-control" name="departureTime">
+                                    <input required type="date" id="departure-date" class="form-control" name="departureTime">
                                 </div>
-
+    
     <!--                            Điểm đến-->
-                                <div class="mb-3">
+                                <div  class="destination-round-trip mb-3">
                                     <label for="arrival" class="form-label">Điểm đến</label>
-                                    <input id="arrival" class="form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
-                                    <input id="destination-one-way" class="form-control d-none" list="destination-area" placeholder="Điểm đến"/>
+                                    <input required id="arrival" class="form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
                                     <datalist id="destination-area" class="w-100">
                                         <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
                                     </datalist>
                                 </div>
-
-    <!--                            Ngày về-->
+    
+    <!--                            Điểm đến cho 1 chiều-->
+                                <div class="destination-one-way mb-3">
+                                    <label for="arrival" class="form-label">Điểm đến</label>
+                                    <input required class="des-one-way form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirportOneWay" th:field="*{arrivalAirportOneWay}"/>
+                                    <datalist id="destination-area-ow" class="w-100">
+                                        <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
+                                    </datalist>
+                                </div>
+    
+    
+                                <!--                            Ngày về-->
                                 <div id="arrival-option" class="destination-round-trip destination-one-way d-block mb-3">
                                     <label for="arrival-date" class="form-label">Ngày về</label>
-                                    <input type="date" id="arrival-date" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
+                                    <input required type="date" id="arrival-date" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
                                 </div>
-
+    
                                 <div class="mb-3 row">
-                                    <div class="col-md-4 px-2">
+                                    <div class="col-md-4">
                                         <label for="adults" class="form-label">Người lớn</label>
-                                        <select id="adults" class="form-control" name="numberPassengers">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
+    <!--                                    <input readonly id="adults" class="form-control" name="numberPassengers">-->
+                                        <span id="adults" class="form-control"></span>
                                     </div>
-
                                     <div class="col-md-4">
-                                        <label for="children" class="form-label">Trẻ em</label>
-                                        <select id="children" class="form-control" name="numberPassengers">
-                                            <option value="0" selected>0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
+                                        <label for="child" class="form-label">Trẻ em</label>
+    <!--                                    <input readonly id="child" class="form-control" name="numberPassengers">-->
+                                        <span  id="child" class="form-control"></span>
                                     </div>
-
                                     <div class="col-md-4">
-                                        <label for="baby" class="form-label">Em bé</label>
-                                        <select id="baby" class="form-control" name="numberPassengers">
-                                            <option value="0" selected>0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
+                                        <label for="infant" class="form-label">Em bé</label>
+    <!--                                    <input readonly id="infant" class="form-control" name="numberPassengers">-->
+                                        <span  id="infant" class="form-control"></span>
                                     </div>
                                 </div>
                                 <button onclick="submitFormSearch(event)"  type="submit" class="btn btn-detail w-100">Tìm chuyến bay</button>
@@ -250,6 +240,8 @@
                         </div>
                     </form>
                 </div>
+
+                
                 <input type="hidden" name="num_of_adult" value="2" />
                 <input type="hidden" name="num_of_child" value="0" />
                 <input type="hidden" name="num_of_baby" value="2" />
@@ -296,6 +288,8 @@
     </div>
 </div>
 <!-- Footer -->
+<th:block th:insert="~{user/layouts/modal_success::modalSuccess}"></th:block>
+<th:block th:insert="~{user/layouts/modal_error::modalError}"></th:block>
 <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
 
 <!--</main>-->

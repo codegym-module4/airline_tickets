@@ -1,40 +1,90 @@
 
-    document.addEventListener("DOMContentLoaded", function () {
+let searchFormData = {
+    departureAirport: null,
+    arrivalAirport: null,
+    departureTime: null,
+    arrivalTime: null,
+    arrivalOneWay:"none",
+    isOneWay: false,
+    isRoundTrip:false,
+    quantity:{
+        adult: 1,
+        child: 0,
+        infant: 0
+    },
+};
+
+
+document.addEventListener("DOMContentLoaded", function () {
     const roundTripRadio = document.getElementById("round-trip");
     const oneWayRadio = document.getElementById("one-way");
     const oneWaySection = document.querySelector(".destination-one-way");
     const roundTripSection = document.querySelector(".destination-round-trip");
-    // const input = document.getElementById("arrival")
+    const arrivalDateOption = document.getElementById("arrival-option");
+
+
     roundTripRadio.addEventListener("click", function () {
-    oneWaySection.classList.remove("d-block");
-    oneWaySection.classList.add("d-none");
-    roundTripSection.classList.remove("d-none");
+        const inputOneWay = document.querySelector(".des-one-way")
+        inputOneWay.value = "none"
+
+        const inputRoundTrip = document.getElementById("arrival")
+        inputRoundTrip.value = ""
+
+        oneWaySection.classList.remove("d-block");
+        oneWaySection.classList.add("d-none");
+        roundTripSection.classList.remove("d-none");
+        arrivalDateOption.classList.remove("d-none")
+        arrivalDateOption.classList.add("d-block")
+
 
 });
 
     oneWayRadio.addEventListener("click", function () {
-    oneWaySection.classList.remove("d-none");
-    // oneWaySection.classList.add("d-block");
-    roundTripSection.classList.add("d-none");
-    // input.id = "destination-one-way"
+        const inputRoundTrip = document.getElementById("arrival")
+        inputRoundTrip.value = "none"
 
+        const inputOneWay = document.querySelector(".des-one-way")
+        inputOneWay.value = ""
 
+        oneWaySection.classList.remove("d-none");
+        roundTripSection.classList.add("d-none");
+        arrivalDateOption.classList.add("d-none")
 });
 
 });
+
+
+    window.addEventListener("load", (event) => {
+        document.getElementById('passengers').value = "1 Người lớn"
+        const storageDefault = JSON.parse(window.sessionStorage.getItem("data"))
+
+        const inputOw = document.querySelector(".des-one-way")
+        inputOw.value = storageDefault.arrivalOneWay
+
+        sessionStorage.clear()
+
+    });
+
     function changeCount(event, type, value) {
     event.stopPropagation();
     event.preventDefault();
     let element = document.getElementById(type);
     let count = parseInt(element.textContent) + value;
+
+    if(type === "adults" && count < 1){
+        return;
+    }
+
     if (count < 0) count = 0;
     element.textContent = count;
+
+
 }
 
     function submitForm(e) {
     e.preventDefault();
     let counts = {
-    adult: parseInt(document.getElementById('adult').textContent),
+    adult: parseInt(document.getElementById('adults').textContent),
     child: parseInt(document.getElementById('child').textContent),
     infant: parseInt(document.getElementById('infant').textContent)
 };
@@ -52,16 +102,6 @@
     function submitFormSearch(e){
         event.preventDefault();
 
-            let searchFormData = {
-                departureAirport: null,
-                arrivalAirport: null,
-                departureTime: null,
-                arrivalTime: null,
-                arrivalOneWay:"",
-                isOneWay: false,
-                isRoundTrip:false
-            };
-
                 const checkedRoundTrip = document.getElementById("round-trip")
                 searchFormData.isRoundTrip= checkedRoundTrip.checked
 
@@ -74,9 +114,10 @@
                 if(searchFormData.isRoundTrip === true){
                         const inputArrival = document.getElementById("arrival")
                         searchFormData.arrivalAirport = inputArrival.value
-                    }
+                }
+
                 if(  searchFormData.isOneWay === true){
-                        const inputArrivalOneWay = document.getElementById("destination-one-way")
+                        const inputArrivalOneWay = document.querySelector(".des-one-way")
                         searchFormData.arrivalOneWay = inputArrivalOneWay.value
                     }
 
@@ -85,6 +126,15 @@
 
                 const inputArrivalDate = document.getElementById("arrival-date")
                 searchFormData.arrivalTime = inputArrivalDate.value
+
+                const inputAdults = document.getElementById("adults");
+                searchFormData.quantity.adult = parseInt(inputAdults.textContent)
+
+                const inputChild = document.getElementById("child");
+                searchFormData.quantity.child = parseInt(inputChild.textContent)
+
+                const inputInfant = document.getElementById("infant");
+                searchFormData.quantity.infant = parseInt(inputInfant.textContent)
 
 
                 sessionStorage.setItem("data",JSON.stringify(searchFormData));
