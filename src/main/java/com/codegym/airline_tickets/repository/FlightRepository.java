@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
@@ -29,4 +30,16 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     @Query("SELECT f from Flight f where f.id = :id and f.deletedAt is null")
     Flight findNotDeletedById(Long id);
+
+    @Query(value = "SELECT flight from Flight flight  " +
+            "JOIN Airport departure ON flight.departureAirport.id = departure.id " +
+            "JOIN Airport arrival  ON flight.departureAirport.id = arrival.id " +
+            "JOIN Airline airline ON flight.airline.id = airline.id " +
+            "WHERE flight.departureAirport.name = :departure " +
+            "AND flight.arrivalAirport.name = :arrival " +
+            "AND flight.price >= :price")
+    Page<Flight> searchFightDiscount(@Param("departure") String departure,
+                                     @Param("arrival") String arrival,
+                                     @Param("price") int price,
+                                     Pageable pageable);
 }

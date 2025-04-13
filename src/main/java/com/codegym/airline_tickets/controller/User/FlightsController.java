@@ -1,5 +1,6 @@
 package com.codegym.airline_tickets.controller.User;
 
+import com.codegym.airline_tickets.dto.FlightDiscountReqDTO;
 import com.codegym.airline_tickets.dto.FlightRequestDTO;
 import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.entity.Airport;
@@ -34,7 +35,7 @@ public class FlightsController {
     private final AirportService airportService;
 
     @PostMapping("/select-flight")
-    public String getTopCheapestTicket(@Validated @ModelAttribute("flightReq") FlightRequestDTO flightReq, BindingResult bindingResult,
+    public String getFlightByCondition(@Validated @ModelAttribute("flightReq") FlightRequestDTO flightReq, BindingResult bindingResult,
                                        @RequestParam(required = false, defaultValue = "ASC") String sort,
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
@@ -43,12 +44,9 @@ public class FlightsController {
         log.info("Get flight list");
 
         if(bindingResult.hasErrors()){
-
             redirectAttributes.addFlashAttribute("messageError","Bạn chưa điền đầy đủ thông tin tìm chuyến bay");
             return "redirect:/";
         }
-
-
 
         if(flightReq != null && flightReq.getType().equals("ROUND-TRIP")) {
 
@@ -110,18 +108,43 @@ public class FlightsController {
                 return "redirect:/";
             }
            model.addAttribute("flightReq",flightReq);
-            model.addAttribute("listDeparture",listDeparture);
-            model.addAttribute("listAirports",listAirports);
+           model.addAttribute("listDeparture",listDeparture);
+           model.addAttribute("listAirports",listAirports);
 
-            model.addAttribute("departure", departure);
-            model.addAttribute("arrival", arrival);
-            model.addAttribute("departureTime", FormaterCustom.formatDateResponse(departureTime));
+           model.addAttribute("departure", departure);
+           model.addAttribute("arrival", arrival);
+           model.addAttribute("departureTime", FormaterCustom.formatDateResponse(departureTime));
            model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
            model.addAttribute("message","Tìm kiếm thành công");
         }
-
         return "user/flight/flight";
-
     }
+
+    @GetMapping("/select-discount")
+    public String getFlightDiscount (@RequestParam(required = false) String departure,
+                                     @RequestParam(required = false) String arrival,
+                                     @RequestParam(required = false) String price,
+                                     @RequestParam(required = false, defaultValue = "ASC") String sort,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size,
+                                     @RequestParam(required = false, defaultValue = "price") String sortProperty,
+                                     Model model, RedirectAttributes redirectAttributes){
+
+        log.info("Get flight discount");
+
+//        if(bindingResult.hasErrors()){
+//            redirectAttributes.addFlashAttribute("messageError","Bạn chưa điền đầy đủ thông tin tìm chuyến bay");
+//            return "redirect:/";
+//        }
+
+//        String departure = flightReq.getDepartureAirport();
+//        String arrival = flightReq.getArrivalAirport();
+//        int price = flightReq.getPrice();
+
+        List<FlightResponseDTO> list = flightService.searchFightDiscount(departure, arrival, Integer.parseInt(price),sortProperty, sort, page, size);
+        System.out.println(list);
+        return null;
+    }
+
 
 }
