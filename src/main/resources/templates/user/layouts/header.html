@@ -1,14 +1,13 @@
-<th:block th:fragment="header">
+<th:block th:fragment="header" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <header class="header-root text-white py-1" >
         <div class="header-container">
             <div class="d-flex justify-content-between align-items-center col-12">
                 <div class="header-content-left col-3" >
-                    <a href="/user/homepage">
+                    <a href="/">
                         <img src="/user/img/logo-white.png" alt="logo" height="50">
                     </a>
                 </div>
                 <div class="header-content-right col-9 d-flex justify-content-end flex-column align-items-end px-0 ">
-
                     <div class="nav d-flex justify-content-between align-items-center mb-2 px-2">
                         <div class="nav-item d-flex justify-content-between align-items-center">
                             <i class="fa-solid fa-headphones-simple"></i>
@@ -16,14 +15,18 @@
                         </div>
                         <div class="nav-item d-flex justify-content-between align-items-center">
                             <i class="fa-solid fa-user" style="color: red"></i>
-                            <div class="d-flex">
-                                <a class="nav-link text-white" href="#">Đăng kí</a>
+                            <div class="d-flex" sec:authorize="!isAuthenticated()">
+                                <a class="nav-link text-white" href="/register">Đăng kí</a>
                                 <span style="font-weight: bold; color: #ffffff; margin-left:7px;" >|</span>
-                                <a class="nav-link text-white" style="margin-left: 3px;" href="#" >Đăng nhập</a>
+                                <a class="nav-link text-white" style="margin-left: 3px;" href="/login" >Đăng nhập</a>
                             </div>
-<!--                            <div class="d-flex">-->
-<!--                                <a class="nav-link text-white" href="#">Nguyen Van A</a>-->
-<!--                            </div>-->
+                            <div class="d-flex" sec:authorize="isAuthenticated()">
+                                <a class="nav-link text-white" th:href="@{/profile}" sec:authentication="principal.fullName"></a>
+                                <span style="font-weight: bold; color: #ffffff; margin-left:7px;">|</span>
+                                <div class="nav-item" style="margin-left: 3px;">
+                                    <a class="nav-link text-white" href="/logout">Đăng xuất</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="dropdown">
                             <button class="dropdown-toggle" style="border: solid 1px #fff; border-radius: 3px; background: transparent; color: #ffffff; font-weight: 700;" type="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -46,6 +46,10 @@ public class User {
     @Column(name = "address")
     private String address;
 
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
     @Column(name = "nationality")
     private String nationality;
 
@@ -57,6 +61,7 @@ public class User {
 
     @Column(name = "image")
     private String image;
+
 
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
