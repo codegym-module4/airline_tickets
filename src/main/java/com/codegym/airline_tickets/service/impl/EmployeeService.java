@@ -22,7 +22,7 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public void save(Employee s) {
-
+        employeeRepository.save(s);
     }
 
     @Override
@@ -32,12 +32,13 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public void remove(Long id) {
+        employeeRepository.deleteById(id);
 
     }
 
     @Override
     public Employee findById(long id) {
-        return null;
+        return employeeRepository.findById(id).get();
     }
 
     @Override

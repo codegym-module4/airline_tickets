@@ -34,6 +34,7 @@ public class Employee {
     @Column(name = "full_name")
     private String fullName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "dob")
     private LocalDate dob;
 
