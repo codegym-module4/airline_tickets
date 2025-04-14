@@ -161,7 +161,7 @@
                         <button type="button" class="btn btn-detail" id="btnConfirm">Xác nhận</button>
                     </div>
                 </div>
-                <div class="col-lg-3 h-50">
+                <div class="col-lg-3 h-50 p-1">
                     <form id="searchForm" th:action="@{/user/select-flight}" th:object="${flightReq}" class="sidebar" style="border: 1px solid black; height: 50%; margin-top: 95px;" method="GET">
 
                         <h4 style="font-weight: 600; font-size:24px;">Sắp xếp</h4>
@@ -219,8 +219,8 @@
                                     <input required type="date" id="arrival-date" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
                                 </div>
 
-
                                 <div class="mb-3 row">
+                                        <span style="margin-bottom: 8px;">Chọn số hành khách</span>
                                     <div class="dropdown input-group">
                                         <input required type="text" class="form-control dropdown-toggle" id="passengers" placeholder="Chọn số hành khách" readonly data-bs-toggle="dropdown" name="numberPassengers"/>
                                         <ul class="dropdown-menu" id="dropdownMenu">
@@ -252,6 +252,7 @@
                                         </ul>
                                     </div>
                                 </div>
+
                               
                                 <button onclick="submitFormSearch(event)"  type="submit" class="btn btn-detail w-100">Tìm chuyến bay</button>
                             </div>
@@ -312,6 +313,7 @@
 
 <!--</main>-->
 <th:block th:replace="~{user/layouts/script::script}"></th:block>
+<script src="/user/js/homepage.js"></script>
 <script src="/user/js/flight.js"></script>
 </body>
 

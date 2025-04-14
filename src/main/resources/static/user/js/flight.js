@@ -24,14 +24,6 @@
             });
         });
 
-        // document.getElementById("btnConfirm").addEventListener("click", () => {
-        //     const modalData = document.getElementById("modalData");
-        //
-        //     modalData.innerHTML = `
-        //         <p>Bảng 1: ${dataDepature || "Chưa chọn"}</p>
-        //         <p>Bảng 2: ${dataArrival || "Chưa chọn"}</p>
-        //     `;
-        // });
 
         const storage = JSON.parse(window.sessionStorage.getItem("data"))
         if(storage.isRoundTrip === true){
@@ -100,14 +92,6 @@
             // sessionStorage.clear();
         }
 
-        const inputAdults = document.getElementById("adults");
-        inputAdults.textContent = storage.quantity.adult
-
-        const inputChild = document.getElementById("child");
-        inputChild.textContent = storage.quantity.child
-
-        const inputInfant = document.getElementById("infant");
-        inputInfant.textContent = storage.quantity.infant
 
         $("input[name='num_of_adult']").val(storage.quantity.adult);
         $("input[name='num_of_child']").val(storage.quantity.child);
