@@ -34,11 +34,11 @@ public class FlightController {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @PostMapping()
-    public ResponseEntity<List<FlightResponseDTO>> getAllFlights(String departure, String arrival, LocalDate departureTime, String sortProperty, String sort, int page, int size) {
-        List<FlightResponseDTO> list = flightService.findAll(departure,arrival,departureTime,sortProperty,sort,page,size);
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
+//    @PostMapping()
+//    public ResponseEntity<List<FlightResponseDTO>> getAllFlights(String departure, String arrival, LocalDate departureTime, String sortProperty, String sort, int page, int size) {
+//        List<FlightResponseDTO> list = flightService.findAll(departure,arrival,departureTime,sortProperty,sort,page,size);
+//        return new ResponseEntity<>(list, HttpStatus.OK);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<FlightResponse> getDataFlightById(@PathVariable("id") Long id) {
@@ -111,11 +111,11 @@ public class FlightController {
                     .arrivalAirportCity(flightDepart.getArrivalAirport().getCity())
                     .departureAirportName(flightDepart.getDepartureAirport().getName())
                     .arrivalAirportName(flightDepart.getArrivalAirport().getName())
-                    .priceVATTotal(FormaterCustom.formatPriceVAT(totalDepart))
+                    .priceVATTotal(FormaterCustom.withLargeIntegers(totalDepart))
                     .priceVAT("0")
                     .build();
         FlightResponseDTO flightArrivalDTO = new FlightResponseDTO();
-        if (request.get("idArrival") != null) {
+        if (request.get("idArrival") != null && !request.get("idArrival").isEmpty()) {
             Flight flightArrival = flightService.findById(Long.parseLong(request.get("idArrival")));
             if (flightArrival == null) {
                 return ResponseEntity.badRequest().body(
@@ -139,7 +139,7 @@ public class FlightController {
                     .arrivalAirportCity(flightArrival.getArrivalAirport().getCity())
                     .departureAirportName(flightArrival.getDepartureAirport().getName())
                     .arrivalAirportName(flightArrival.getArrivalAirport().getName())
-                    .priceVATTotal(FormaterCustom.formatPriceVAT(totalArrival))
+                    .priceVATTotal(FormaterCustom.withLargeIntegers(totalArrival))
                     .priceVAT("0")
                     .build();
         }

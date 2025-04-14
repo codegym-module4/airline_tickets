@@ -22,8 +22,6 @@ public class FlightRequestDTO {
     @NotEmpty
     private String arrivalAirport;
 
-    @NotNull
-    @NotEmpty
     private String arrivalAirportOneWay;
 
     @NotNull
@@ -31,7 +29,9 @@ public class FlightRequestDTO {
 
     private LocalDate arrivalTime;
 
-    private String sortProperty = "price";
+    private String sortProperty;
+
+    private Integer price;
 
 //    @NotEmpty
 //    private int numberPassengers;

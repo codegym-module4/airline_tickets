@@ -24,14 +24,6 @@
             });
         });
 
-        // document.getElementById("btnConfirm").addEventListener("click", () => {
-        //     const modalData = document.getElementById("modalData");
-        //
-        //     modalData.innerHTML = `
-        //         <p>Bảng 1: ${dataDepature || "Chưa chọn"}</p>
-        //         <p>Bảng 2: ${dataArrival || "Chưa chọn"}</p>
-        //     `;
-        // });
 
         const storage = JSON.parse(window.sessionStorage.getItem("data"))
         if(storage.isRoundTrip === true){
@@ -52,16 +44,7 @@
 
             const inputArrivalDate = document.getElementById("arrival-date");
             inputArrivalDate.value = storage.arrivalTime
-
-            const inputAdults = document.getElementById("adults");
-            inputAdults.textContent = storage.quantity.adult
-
-            const inputChild = document.getElementById("child");
-            inputChild.textContent = storage.quantity.child
-
-            const inputInfant = document.getElementById("infant");
-            inputInfant.textContent = storage.quantity.infant
-
+            
             // sessionStorage.clear();
         }
 
@@ -84,16 +67,15 @@
             const inputDepartureDate = document.getElementById('departure-date');
             inputDepartureDate.value = storage.departureTime
 
-            const inputAdult = document.getElementById("adults");
-            inputAdult.textContent = storage.quantity.adult
-
-            const inputChild = document.getElementById("child");
-            inputChild.textContent = storage.quantity.child
-
-            const inputInfant = document.getElementById("infant");
-            inputInfant.textContent = storage.quantity.infant
             // sessionStorage.clear();
         }
+
+
+        document.getElementById('passengers').value = `${storage.quantity.adult} Người lớn, ${storage.quantity.child} Trẻ em, ${storage.quantity.infant} Em bé`
+
+        $("input[name='num_of_adult']").val(storage.quantity.adult);
+        $("input[name='num_of_child']").val(storage.quantity.child);
+        $("input[name='num_of_baby']").val(storage.quantity.infant);
 
         $(document).on("click", ".btn-data-flight", function () {
             let id = $(this).data("id");

@@ -5,6 +5,8 @@
         $('.flash_message').fadeOut(5000);
     });
 
+    const PRICE_FOR_A_KG = 10000;
+
     $(document).ready(function () {
         // Kiểm tra nếu biến message có giá trị thì hiển thị modal
         let message = $("#successModal .modal-body p").text().trim();
@@ -53,4 +55,61 @@
 
     });
 
+    $(document).on("click", "#btnSubmitBooking", function (e) {
+        setDataInitialize();
+        let formId = $(this).data("form_id");
+        $.ajax({
+            method: $(formId).attr('method'),
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            dataType: 'json'
+        }).done(function (data) {
+            $("#modalResult").modal("show");
+            setTimeout(function () {
+                window.location.href = "/payment";
+            }, 9000)
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                if (jqXhr.responseJSON.message == 'Validation failed') {
+                    console.log(jqXhr.responseJSON.validator)
+                    $.each(jqXhr.responseJSON.validator, function (key, value) {
+                        var element = 'input';
+                        if (key.includes("gender") || key.includes("extraKg") || key.includes("nationality")) {
+                            element = "select";
+                        }
+                        var input = formId + ' ' + element + '[name="' + key + '"]';
+                        if (element == "input") {
+                            $(input).addClass('is-invalid');
+                        }
+                        $(input + '+span strong').text(value);
+                        return;
+                    });
+                } else {
+                    alert(jqXhr.responseJSON.message);
+                }
+            }
+        });
+
+    });
+    $(document).on("change", ".luggage-select", function (e) {
+        let total = parseInt($("input[name='ticket_total']").val());
+        $(".luggage-select").each(function(index, element) {
+            let $element = $(element);
+            let kg = $element.val();
+            if (kg != "" && kg != 0) {
+                let price = kg * PRICE_FOR_A_KG;
+                total += parseInt(price);
+                $("input[name='totalPrice']").val(total);
+            }
+        });
+    });
+
 })();
+function setDataInitialize()
+{
+    $('.invalid-feedback strong').text('');
+    $('div.invalid-feedback').text('');
+    $('.text-danger strong').text('');
+    $('input').removeClass('is-invalid');
+    $('textarea').removeClass('is-invalid');
+}

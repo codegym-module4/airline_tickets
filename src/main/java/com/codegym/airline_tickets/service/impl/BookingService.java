@@ -91,4 +91,29 @@ public class BookingService implements IBookingService {
     public void updateStatusByVnPayId(String vnpayOrderId, Integer status) {
         bookingRepository.updateStatusByVnPayId(vnpayOrderId, status);
     }
+
+    @Override
+    public Booking findLatest() {
+        return bookingRepository.findLatest();
+    }
+
+    @Override
+    public Booking updateOrCreate(Booking b) {
+        Long id = b.getId();
+        if (id == null) {
+            Booking latest = findLatest();
+            long number = latest.getId() == null ? 0 : latest.getId();
+            String code = generateNextCode(number);
+            b.setCode(code);
+        }
+        return bookingRepository.save(b);
+    }
+
+    private static String generateNextCode(long number) {
+        if (number == 0) {
+            return "BK001";
+        }
+        number++;
+        return String.format("BK%03d", number);
+    }
 }

@@ -69,4 +69,16 @@ public class Booking {
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime deletedAt;
+
+    public Booking (Long id, User user, Flight flight, Flight returnFlight, Integer flightType, Integer numTickets, Integer status, BigInteger totalPrice,LocalDateTime createdAt) {
+        this.id = id;
+        this.user = user;
+        this.flight = flight;
+        this.returnFlight = returnFlight;
+        this.flightType = flightType;
+        this.numTickets = numTickets;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
 }
