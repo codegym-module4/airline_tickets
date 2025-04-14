@@ -122,6 +122,11 @@ public class BookingRestController {
                     item.getNationality()
             );
             Ticket result = ticketService.updateOrCreate(ticket);
+            FlightSeat seat = new FlightSeat(
+                    s.getId(),
+                    2
+            );
+            flightSeatService.save(seat);
         }
     }
 }

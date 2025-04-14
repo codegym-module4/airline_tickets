@@ -106,6 +106,11 @@ public class FlightSeatService implements IFlightSeatService {
         return Collections.emptyList();
     }
 
+    @Override
+    public FlightSeat updateOrCreate(FlightSeat flightSeat) {
+        return flightSeatRepository.save(flightSeat);
+    }
+
     private List<FlightSeat> findConsecutiveFlightSeats(List<FlightSeat> seats, int numberOfPeople) {
         for (int i = 0; i <= seats.size() - numberOfPeople; i++) {
             boolean consecutive = true;

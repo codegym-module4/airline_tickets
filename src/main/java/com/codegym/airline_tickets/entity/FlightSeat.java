@@ -32,4 +32,9 @@ public class FlightSeat {
 
     @Column(name = "status")
     private Integer status;
+
+    public FlightSeat(Long id, Integer status) {
+        this.id = id;
+        this.status = status;
+    }
 }
