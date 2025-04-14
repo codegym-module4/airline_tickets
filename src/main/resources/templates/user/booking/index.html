@@ -1,151 +1,279 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/html">
-<head th:replace="~{user/layouts/head::head ('Thanh toán')}"></head>
+<head th:replace="~{user/layouts/head::head ('Thông tin đặt vé')}"></head>
 <body>
 <!--Header-->
 <th:block th:replace="~{user/layouts/header::header}"></th:block>
 <div class="main-content">
-    <form action="/confirm" method="post">
-        <div class="container mt-4 p-4 border rounded bg-light">
-            <div class="mb-3">
-                <h4>Người lớn </h4>
+    <form action="/api/booking" method="post" id="form_submit" th:object="${data}">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{flight}">
+        <input type="hidden" th:field="*{returnFlight}">
+        <input type="hidden" th:field="*{flightType}">
+        <input type="hidden" th:field="*{totalPrice}">
+        <input type="hidden" th:field="*{numberOfTickets}">
+        <input type="hidden" th:field="*{key}">
+        <th:block th:each="item, stat : ${data.items}">
+            <div th:if="${item.customerType == 1}" class="container mt-4 p-4 border rounded bg-light">
+                <div class="mb-3">
+                    <h4>Người lớn </h4>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'fullName' + ${stat.index}" class="col-sm-3">Họ và Tên: </label>
+                            <div class="col-sm-9">
+                                <input type="text" th:id="'fullName' + ${stat.index}" th:field="*{items[__${stat.index}__].fullName}" class="form-control">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'birthDate' + ${stat.index}" class="col-sm-3">Ngày sinh</label>
+                            <div class="col-sm-9">
+                                <input type="date" th:id="'birthDate' + ${stat.index}" class="form-control" th:field="*{items[__${stat.index}__].birthDate}">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'nationality' + ${stat.index}" class="col-sm-3">Quốc gia</label>
+                            <div class="col-sm-9">
+                                <select th:id="'nationality' + ${stat.index}" th:field="*{items[__${stat.index}__].nationality}" class="form-select">
+                                    <option value="">-- Chọn quốc gia --</option>
+                                    <th:block th:each="country : ${countries}">
+                                        <option th:value="${country.niceName}" th:text="${country.niceName}"></option>
+                                    </th:block>
+                                </select>
+                                <span class="text-danger" style="font-size: 80%" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'gender' + ${stat.index}" class="col-sm-3" >Giới tính:</label>
+                            <div class="col-sm-9">
+                                <select th:id="'gender' + ${stat.index}" th:field="*{items[__${stat.index}__].gender}" class="form-select">
+                                    <option value="Male">Nam</option>
+                                    <option value="Female">Nữ</option>
+                                    <option value="Other">Khác</option>
+                                </select>
+                                <span class="text-danger" style="font-size: 80%" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'email' + ${stat.index}" class="col-sm-3">Email:</label>
+                            <div class="col-sm-9">
+                                <input type="email" th:id="'email' + ${stat.index}" class="form-control" th:field="*{items[__${stat.index}__].email}" required>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:id="'phone' + ${stat.index}" class="col-sm-3">Điện thoại:</label>
+                            <div class="col-sm-9">
+                                <input type="text" th:for="'phone' + ${stat.index}" th:field="*{items[__${stat.index}__].phone}" class="form-control" required>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'citizen_identification' + ${stat.index}" class="col-sm-3">CMND/Passport:</label>
+                            <div class="col-sm-9">
+                                <input type="text" th:id="'citizen_identification' + ${stat.index}" th:field="*{items[__${stat.index}__].citizenIdentification}" class="form-control" required>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'luggage_go' + ${stat.index}" class="col-sm-3">Hành lý chuyến đi: </label>
+                            <div class="col-sm-9">
+                                <select th:id="'luggage_go' + ${stat.index}" th:field="*{items[__${stat.index}__].extraKgGo}" class="form-select luggage-select">
+                                    <option value="0">Mua thêm khối lượng hành lý</option>
+                                    <option value="15">Mua thêm 15kg - 150.000 VNĐ</option>
+                                    <option value="20">Mua thêm 20kg - 200.000 VNĐ</option>
+                                    <option value="25">Mua thêm 25kg - 250.000 VNĐ</option>
+                                    <option value="30">Mua thêm 30kg - 300.000 VNĐ</option>
+                                </select>
+                                <span class="text-danger" style="font-size: 80%" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" th:if="${data.flightType == 2}">
+                        <div class="row align-items-center">
+                            <label th:for="'luggage_return' + ${stat.index}" class="col-sm-3">Hành lý chuyến về: </label>
+                            <div class="col-sm-9">
+                                <select th:id="'luggage_return' + ${stat.index}" th:field="*{items[__${stat.index}__].extraKgReturn}" class="form-select luggage-select">
+                                    <option value="0">Mua thêm khối lượng hành lý</option>
+                                    <option value="15">Mua thêm 15kg - 150.000 VNĐ</option>
+                                    <option value="20">Mua thêm 20kg - 200.000 VNĐ</option>
+                                    <option value="25">Mua thêm 25kg - 250.000 VNĐ</option>
+                                    <option value="30">Mua thêm 30kg - 300.000 VNĐ</option>
+                                </select>
+                                <span class="text-danger" style="font-size: 80%" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" th:field="*{items[__${stat.index}__].customerType}" />
             </div>
-            <div class="row mb-3">
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="name1" class="mb-0" style="display: inline-block; width: 30%">Họ và Tên: </label>
-                    <input type="text" id="name1" name="name1" class="form-control"
-                           style="display: inline-block; width: 70%">
+
+            <div th:if="${item.customerType == 2}" class="container mt-4 p-4 border rounded bg-light">
+                <div class="mb-3">
+                    <h4>Trẻ em </h4>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'fullName' + ${stat.index}" class="col-sm-3 mb-0">Họ và Tên: </label>
+                            <div class="col-sm-9">
+                                <input type="text" th:id="'fullName' + ${stat.index}" th:field="*{items[__${stat.index}__].fullName}" class="form-control">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'gender' + ${stat.index}" class="col-sm-3 mb-0">Giới tính:</label>
+                            <div class="col-sm-9">
+                                <select th:id="'gender' + ${stat.index}" th:field="*{items[__${stat.index}__].gender}" class="form-select">
+                                    <option value="Male">Nam</option>
+                                    <option value="Female">Nữ</option>
+                                    <option value="Other">Khác</option>
+                                </select>
+                                <span class="text-danger" style="font-size: 80%" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="luggage1" class="mb-0" style="display: inline-block; width: 30%">Hành lý kí
-                        gửi: </label>
-                    <select id="luggage1" name="luggage1" class="form-select"
-                            style="display: inline-block; width: 70%">
-                        <option value="15">Mua thêm 15kg - 150.000 VNĐ</option>
-                        <option value="25">Mua thêm 25kg - 250.000 VNĐ</option>
-                    </select>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'birthDate' + ${stat.index}" class="col-sm-3 mb-0">Ngày sinh</label>
+                            <div class="col-sm-9">
+                                <input type="date" th:id="'birthDate' + ${stat.index}" class="form-control" th:field="*{items[__${stat.index}__].birthDate}">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <input type="hidden" th:field="*{items[__${stat.index}__].customerType}" />
             </div>
 
-            <div class="row mb-3">
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="date2" class="mb-0" style="display: inline-block; width: 30%">Ngày sinh</label>
-                    <input type="date" id="date2" class="form-control" style="display: inline-block; width: 70%">
+            <div th:if="${item.customerType == 3}" class="container mt-4 p-4 border rounded bg-light">
+                <div class="mb-3">
+                    <h4>Em bé </h4>
                 </div>
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="date2" class="mb-0" style="display: inline-block; width: 30%">Quốc gia</label>
-                    <select id="nationality" name="nationality" class="form-select"
-                            style="display: inline-block; width: 70%">
-                        <option value="">-- Chọn quốc gia --</option>
-                        <th:block th:each="country : ${countries}">
-                            <option th:value="${country.niceName}" th:text="${country.niceName}"></option>
-                        </th:block>
-                    </select>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'fullName' + ${stat.index}" class="col-sm-3 mb-0">Họ và Tên: </label>
+                            <div class="col-sm-9">
+                                <input type="text" th:id="'fullName' + ${stat.index}" th:field="*{items[__${stat.index}__].fullName}" class="form-control">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'gender' + ${stat.index}" class="col-sm-3 mb-0">Giới tính:</label>
+                            <div class="col-sm-9">
+                                <select th:id="'gender' + ${stat.index}" th:field="*{items[__${stat.index}__].gender}" class="form-select">
+                                    <option value="Male">Nam</option>
+                                    <option value="Female">Nữ</option>
+                                    <option value="Other">Khác</option>
+                                </select>
+                                <span class="text-danger" style="font-size: 80%" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'birthDate' + ${stat.index}" class="col-sm-3 mb-0">Ngày sinh</label>
+                            <div class="col-sm-9">
+                                <input type="date" th:id="'birthDate' + ${stat.index}" class="form-control" th:field="*{items[__${stat.index}__].birthDate}">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" th:field="*{items[__${stat.index}__].customerType}" />
             </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="gender1" class="mb-0" style="display: inline-block; width: 30%">Giới tính:</label>
-                    <select id="gender1" name="gender1" class="form-select"
-                            style="display: inline-block; width: 70%">
-                        <option value="Male">Nam</option>
-                        <option value="Female">Nữ</option>
-                        <option value="Other">Khác</option>
-                    </select>
-                </div>
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="email1" class="mb-0" style="display: inline-block; width: 30%">Email:</label>
-                    <input type="email" id="email1" name="email1" class="form-control"
-                           style="display: inline-block; width: 70%" required>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="phone1" class="mb-0" style="display: inline-block; width: 30%">Điện thoại:</label>
-                    <input type="text" id="phone1" name="phone1" class="form-control"
-                           style="display: inline-block; width: 70%" required>
-                </div>
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="citizen_identification1" class="mb-0" style="display: inline-block; width: 30%">CMND/Passport:</label>
-                    <input type="text" id="citizen_identification1" name="citizen_identification1"
-                           class="form-control" style="display: inline-block; width: 70%"
-                           required>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="container mt-4 p-4 border rounded bg-light">
-            <div class="mb-3">
-                <h4>Trẻ em </h4>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="name2" class="mb-0" style="display: inline-block; width: 30%">Họ và Tên: </label>
-                    <input type="text" id="name2" name="name2" class="form-control"
-                           style="display: inline-block; width: 70%">
-                </div>
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="gender2" class="mb-0" style="display: inline-block; width: 30%">Giới tính:</label>
-                    <select id="gender2" name="gender2" class="form-select"
-                            style="display: inline-block; width: 70%">
-                        <option value="Male">Nam</option>
-                        <option value="Female">Nữ</option>
-                        <option value="Other">Khác</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="date2" class="mb-0" style="display: inline-block; width: 30%">Ngày sinh</label>
-                    <input type="date" id="date4" class="form-control" style="display: inline-block; width: 70%">
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="container mt-4 p-4 border rounded bg-light">
-            <div class="mb-3">
-                <h4>Em bé </h4>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="name3" class="mb-0" style="display: inline-block; width: 30%">Họ và Tên: </label>
-                    <input type="text" id="name3" name="name3" class="form-control"
-                           style="display: inline-block; width: 70%">
-                </div>
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="gender3" class="mb-0" style="display: inline-block; width: 30%">Giới tính:</label>
-                    <select id="gender3" name="gender3" class="form-select"
-                            style="display: inline-block; width: 70%">
-                        <option value="Male">Nam</option>
-                        <option value="Female">Nữ</option>
-                        <option value="Other">Khác</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6 d-flex align-items-center">
-                    <label for="date" class="mb-0" style="display: inline-block; width: 30%">Ngày sinh</label>
-                    <input type="date" id="date" class="form-control" style="display: inline-block; width: 70%">
-                </div>
-            </div>
-
-        </div>
+        </th:block>
         <div class="container mt-4 d-flex justify-content-between">
-            <a href="/views/flight_list.html" class="btn btn-outline-secondary" style="width: 15%">Chọn lại chuyến bay</a>
-            <button type="submit" class="btn btn-custom mx-auto" style="width: 15%">Đặt vé</button>
+            <button type="button" class="btn btn-outline-secondary" th:onclick="'history.back()'" style="width: 15%">Chọn lại chuyến bay</button>
+            <button type="button" class="btn btn-custom mx-auto" id="btnSubmitBooking" data-form_id="#form_submit" style="width: 15%">Đặt vé</button>
         </div>
     </form>
 </div>
-<th:block th:insert="~{user/layouts/modal_success::modalSuccess}"></th:block>
+<div class="modal fade" id="modalResult" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng thực hiện thanh toán để hoàn tất việc đặt vé.</p>
+            </div>
+            <div class="modal-footer">
+                <a role="button" class="btn btn-primary" href="/payment">Thanh toán</a>
+            </div>
+        </div>
+    </div>
+</div>
 <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
 <th:block th:replace="~{user/layouts/script::script}"></th:block>
 </body>

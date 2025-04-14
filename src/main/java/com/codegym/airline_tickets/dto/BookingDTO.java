@@ -3,6 +3,7 @@ package com.codegym.airline_tickets.dto;
 import com.codegym.airline_tickets.entity.Flight;
 import com.codegym.airline_tickets.entity.User;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,8 @@ public class BookingDTO {
     private Integer numberOfTickets;
 
     private BigInteger totalPrice;
-
+    @Valid
     private List<BookingTicketDTO> items;
+
+    private String key;
 }

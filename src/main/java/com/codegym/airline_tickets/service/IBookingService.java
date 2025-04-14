@@ -22,4 +22,8 @@ public interface IBookingService extends IService<Booking> {
 
     void updateStatusByVnPayId(String vnpayOrderId, Integer status);
 
+    Booking findLatest();
+
+    Booking updateOrCreate(Booking b);
+
 }

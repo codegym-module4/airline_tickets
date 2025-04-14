@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "cols")
+@Table(name = "seat_cols")
 @Getter
 @Setter
 @AllArgsConstructor

@@ -163,6 +163,7 @@
                 </div>
                 <div class="col-lg-3 h-50">
                     <form id="searchForm" th:action="@{/user/select-flight}" th:object="${flightReq}" class="sidebar" style="border: 1px solid black; height: 50%; margin-top: 95px;" method="GET">
+
                         <h4 style="font-weight: 600; font-size:24px;">Sắp xếp</h4>
                         <div class="sort-box">
                             <label><input checked type="radio" name="sortProperty" value="price"> Đề xuất</label><br>
@@ -218,24 +219,6 @@
                                     <input required type="date" id="arrival-date" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
                                 </div>
 
-    
-<!--                                <div class="mb-3 row">-->
-<!--                                    <div class="col-md-4">-->
-<!--                                        <label for="adults" class="form-label">Người lớn</label>-->
-<!--    &lt;!&ndash;                                    <input readonly id="adults" class="form-control" name="numberPassengers">&ndash;&gt;-->
-<!--                                        <span id="adults" class="form-control"></span>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-4">-->
-<!--                                        <label for="child" class="form-label">Trẻ em</label>-->
-<!--    &lt;!&ndash;                                    <input readonly id="child" class="form-control" name="numberPassengers">&ndash;&gt;-->
-<!--                                        <span  id="child" class="form-control"></span>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-4">-->
-<!--                                        <label for="infant" class="form-label">Em bé</label>-->
-<!--    &lt;!&ndash;                                    <input readonly id="infant" class="form-control" name="numberPassengers">&ndash;&gt;-->
-<!--                                        <span  id="infant" class="form-control"></span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
 
                                 <div class="mb-3 row">
                                     <div class="dropdown input-group">
@@ -269,6 +252,7 @@
                                         </ul>
                                     </div>
                                 </div>
+                              
                                 <button onclick="submitFormSearch(event)"  type="submit" class="btn btn-detail w-100">Tìm chuyến bay</button>
                             </div>
                         </div>
@@ -276,9 +260,9 @@
                 </div>
 
                 
-                <input type="hidden" name="num_of_adult" value="2" />
+                <input type="hidden" name="num_of_adult" value="1" />
                 <input type="hidden" name="num_of_child" value="0" />
-                <input type="hidden" name="num_of_baby" value="2" />
+                <input type="hidden" name="num_of_baby" value="0" />
                 <input type="hidden" name="flight_type" th:value="${flightReq.type}">
             </div>
         </div>
@@ -328,6 +312,7 @@
 
 <!--</main>-->
 <th:block th:replace="~{user/layouts/script::script}"></th:block>
+<script src="/user/js/flight.js"></script>
 </body>
 
 </html>
