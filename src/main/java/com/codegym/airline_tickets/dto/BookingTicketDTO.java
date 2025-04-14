@@ -35,7 +35,8 @@ public class BookingTicketDTO {
 
 //    @NotEmpty(message = "Số điện thoại không được để trống")
     private String phone;
-    private Integer extraKg;
+    private Integer extraKgGo;
+    private Integer extraKgReturn;
 
 //    @NotEmpty(message = "Quốc gia không được để trống")
     private String nationality;

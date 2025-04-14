@@ -55,7 +55,7 @@
 
     });
 
-    $(document).on("click", "#btnSubmit", function (e) {
+    $(document).on("click", "#btnSubmitBooking", function (e) {
         setDataInitialize();
         let formId = $(this).data("form_id");
         $.ajax({
@@ -64,7 +64,10 @@
             data: $(formId).serialize(),
             dataType: 'json'
         }).done(function (data) {
-            console.log(data);
+            $("#modalResult").modal("show");
+            setTimeout(function () {
+                window.location.href = "/payment";
+            }, 3500)
         }).fail(function (jqXhr, json, errorThrown) {
             if (jqXhr.responseJSON.errors) {
                 if (jqXhr.responseJSON.message == 'Validation failed') {

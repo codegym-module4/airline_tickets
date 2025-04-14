@@ -76,11 +76,11 @@ public class BookingRestController {
         );
         Booking res = bookingService.updateOrCreate(booking);
         List<FlightSeat> seats = flightSeatService.allocateSeats(data.getFlight().getId(), num_of_seat);
-        saveTicket(data, seats, res, res.getFlight());
-        List<FlightSeat> seatReturn = new ArrayList<FlightSeat>();
+        saveTicket(data, seats, res, res.getFlight(), 1);
+        List<FlightSeat> seatReturn = new ArrayList<>();
         if (res.getReturnFlight() != null) {
             seatReturn = flightSeatService.allocateSeats(data.getReturnFlight().getId(), num_of_seat);
-            saveTicket(data, seats, res, res.getReturnFlight());
+            saveTicket(data, seatReturn, res, res.getReturnFlight(), 2);
         }
         Map<String, String> result = new HashMap<>();
         result.put("errors", "true");
@@ -89,15 +89,21 @@ public class BookingRestController {
         return ResponseEntity.ok(result);
     }
 
-    private void saveTicket(BookingDTO data, List<FlightSeat> seats, Booking res, Flight flight) {
+    private void saveTicket(BookingDTO data, List<FlightSeat> seats, Booking res, Flight flight, Integer flightType) {
         List<BookingTicketDTO> items = data.getItems();
+        int extraKg = 0;
         int i_seat = 0;
         for (int i = 0; i < items.size(); i++) {
             BookingTicketDTO item = items.get(i);
-            FlightSeat s = seats.get(i);
+            FlightSeat s;
             if (item.getCustomerType() == 3) {
                 s = seats.get(i_seat);
                 i_seat++;
+            } else {
+                s = seats.get(i);
+            }
+            if (item.getCustomerType() == 1) {
+                extraKg = (flightType == 2 ? item.getExtraKgReturn() : item.getExtraKgGo());
             }
             Ticket ticket = new Ticket(
                     item.getId(),
@@ -110,8 +116,8 @@ public class BookingRestController {
                     item.getPhone(),
                     item.getCitizenIdentification(),
                     item.getEmail(),
-                    item.getExtraKg(),
-                    res.getFlight().getPrice().add(BigInteger.valueOf(item.getExtraKg() * PRICE_FOR_A_KG)),
+                    extraKg,
+                    res.getFlight().getPrice().add(BigInteger.valueOf(extraKg * PRICE_FOR_A_KG)),
                     item.getCustomerType(),
                     item.getNationality()
             );

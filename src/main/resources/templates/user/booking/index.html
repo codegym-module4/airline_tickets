@@ -30,24 +30,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-6">
-                        <div class="row align-items-center">
-                            <label th:for="'luggage' + ${stat.index}" class="col-sm-3">Hành lý kí gửi: </label>
-                            <div class="col-sm-9">
-                                <select th:id="'luggage' + ${stat.index}" th:field="*{items[__${stat.index}__].extraKg}" class="form-select luggage-select">
-                                    <option value="0">Mua thêm khối lượng hành lý</option>
-                                    <option value="15">Mua thêm 15kg - 150.000 VNĐ</option>
-                                    <option value="20">Mua thêm 20kg - 200.000 VNĐ</option>
-                                    <option value="25">Mua thêm 25kg - 250.000 VNĐ</option>
-                                    <option value="30">Mua thêm 30kg - 300.000 VNĐ</option>
-                                </select>
-                                <span class="text-danger" style="font-size: 80%" role="alert">
-                                    <strong></strong>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="row mb-3">
@@ -127,6 +109,43 @@
                             <div class="col-sm-9">
                                 <input type="text" th:id="'citizen_identification' + ${stat.index}" th:field="*{items[__${stat.index}__].citizenIdentification}" class="form-control" required>
                                 <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="row align-items-center">
+                            <label th:for="'luggage_go' + ${stat.index}" class="col-sm-3">Hành lý chuyến đi: </label>
+                            <div class="col-sm-9">
+                                <select th:id="'luggage_go' + ${stat.index}" th:field="*{items[__${stat.index}__].extraKgGo}" class="form-select luggage-select">
+                                    <option value="0">Mua thêm khối lượng hành lý</option>
+                                    <option value="15">Mua thêm 15kg - 150.000 VNĐ</option>
+                                    <option value="20">Mua thêm 20kg - 200.000 VNĐ</option>
+                                    <option value="25">Mua thêm 25kg - 250.000 VNĐ</option>
+                                    <option value="30">Mua thêm 30kg - 300.000 VNĐ</option>
+                                </select>
+                                <span class="text-danger" style="font-size: 80%" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" th:if="${data.flightType == 2}">
+                        <div class="row align-items-center">
+                            <label th:for="'luggage_return' + ${stat.index}" class="col-sm-3">Hành lý chuyến về: </label>
+                            <div class="col-sm-9">
+                                <select th:id="'luggage_return' + ${stat.index}" th:field="*{items[__${stat.index}__].extraKgReturn}" class="form-select luggage-select">
+                                    <option value="0">Mua thêm khối lượng hành lý</option>
+                                    <option value="15">Mua thêm 15kg - 150.000 VNĐ</option>
+                                    <option value="20">Mua thêm 20kg - 200.000 VNĐ</option>
+                                    <option value="25">Mua thêm 25kg - 250.000 VNĐ</option>
+                                    <option value="30">Mua thêm 30kg - 300.000 VNĐ</option>
+                                </select>
+                                <span class="text-danger" style="font-size: 80%" role="alert">
                                     <strong></strong>
                                 </span>
                             </div>
@@ -236,11 +255,25 @@
         </th:block>
         <div class="container mt-4 d-flex justify-content-between">
             <button type="button" class="btn btn-outline-secondary" th:onclick="'history.back()'" style="width: 15%">Chọn lại chuyến bay</button>
-            <button type="button" class="btn btn-custom mx-auto" id="btnSubmit" data-form_id="#form_submit" style="width: 15%">Đặt vé</button>
+            <button type="button" class="btn btn-custom mx-auto" id="btnSubmitBooking" data-form_id="#form_submit" style="width: 15%">Đặt vé</button>
         </div>
     </form>
 </div>
-<th:block th:insert="~{user/layouts/modal_success::modalSuccess}"></th:block>
+<div class="modal fade" id="modalResult" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng thực hiện thanh toán để hoàn tất việc đặt vé.</p>
+            </div>
+            <div class="modal-footer">
+                <a role="button" class="btn btn-primary" href="/payment">Thanh toán</a>
+            </div>
+        </div>
+    </div>
+</div>
 <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
 <th:block th:replace="~{user/layouts/script::script}"></th:block>
 </body>
