@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Revenue Chart</title>
-    <link rel="stylesheet" th:href="@{/admin/css/chart.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" th:href="@{/admin/css/chart.css}">
 
 </head>
 <body>
@@ -15,11 +16,6 @@
     <canvas id="revenueChart" height="600px"></canvas>
 </div>
 
-<!-- Form ẩn để gửi dữ liệu totalRevenue -->
-<form id="exportForm" action="/admin/export-excel2" method="POST" style="display: none;">
-    <input type="hidden" name="totalSumRevenue" id="totalSumRevenueData" />
-    <input type="hidden" name="totalSumCompareRevenue" id="totalSumCompareRevenueData" />
-</form>
 
 <div class="export-button-container">
     <p class="export-button" onclick="exportFile()">Xuất File</p>
@@ -48,20 +44,7 @@
                 pointBorderColor: ['blue', 'green'],
                 pointRadius: 6
             }]
-        };
-    } else if (chartType === 'pie') {
-        var total = totalSumRevenue + totalSumCompareRevenue;
-        var percentRevenue = total > 0 ? (totalSumRevenue / total * 100).toFixed(2) : 0;
-        var percentCompare = total > 0 ? (totalSumCompareRevenue / total * 100).toFixed(2) : 0;
-
-        chartData = {
-            labels: ['Thời gian chính (' + percentRevenue + '%)', 'Thời gian so sánh (' + percentCompare + '%)'],
-            datasets: [{
-                data: [totalSumRevenue, totalSumCompareRevenue],
-                backgroundColor: ['blue', 'green'],
-                hoverOffset: 10
-            }]
-        };
+        }
     } else {
         chartData = {
             labels: ['So sánh Doanh Thu'],
@@ -106,9 +89,35 @@
     });
 
     function exportFile() {
-        document.getElementById('totalSumRevenueData').value = totalSumRevenue;
-        document.getElementById('totalSumCompareRevenueData').value = totalSumCompareRevenue;
-        document.getElementById('exportForm').submit();
+
+        const canvas = document.getElementById('revenueChart');
+        const image = canvas.toDataURL('image/png');
+
+        $.ajax({
+            url: '/admin/export-excel2',
+            type: 'POST',
+            contentType: 'application/json', //gửi đến backend là json
+            data: JSON.stringify({
+                totalSumRevenue: totalSumRevenue,
+                totalSumCompareRevenue: totalSumCompareRevenue,
+                chartImage: image
+            }),
+            xhrFields: {
+                responseType: 'blob' // nhận về dữ liệu nhị phân (binary) như file, ảnh, Excel, PDF..từ backend
+            },
+            success: function(blob) {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "report.xlsx";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            },
+            error: function() {
+                alert("Xuất file thất bại!");
+            }
+        })
     }
 </script>
 
