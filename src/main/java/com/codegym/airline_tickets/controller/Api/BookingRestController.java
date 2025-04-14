@@ -92,15 +92,18 @@ public class BookingRestController {
     private void saveTicket(BookingDTO data, List<FlightSeat> seats, Booking res, Flight flight, Integer flightType) {
         List<BookingTicketDTO> items = data.getItems();
         int extraKg = 0;
+        BigInteger price = new BigInteger("0");
         int i_seat = 0;
         for (int i = 0; i < items.size(); i++) {
             BookingTicketDTO item = items.get(i);
             FlightSeat s;
             if (item.getCustomerType() == 3) {
                 s = seats.get(i_seat);
+                price = BigInteger.valueOf(100000);
                 i_seat++;
             } else {
                 s = seats.get(i);
+                price = res.getFlight().getPrice();
             }
             if (item.getCustomerType() == 1) {
                 extraKg = (flightType == 2 ? item.getExtraKgReturn() : item.getExtraKgGo());
@@ -117,7 +120,7 @@ public class BookingRestController {
                     item.getCitizenIdentification(),
                     item.getEmail(),
                     extraKg,
-                    res.getFlight().getPrice().add(BigInteger.valueOf(extraKg * PRICE_FOR_A_KG)),
+                    price.add(BigInteger.valueOf(extraKg * PRICE_FOR_A_KG)),
                     item.getCustomerType(),
                     item.getNationality()
             );
