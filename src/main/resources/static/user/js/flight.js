@@ -53,6 +53,17 @@
             const inputArrivalDate = document.getElementById("arrival-date");
             inputArrivalDate.value = storage.arrivalTime
 
+            const inputAdults = document.getElementById("adults");
+            inputAdults.textContent = storage.quantity.adult
+
+            const inputChild = document.getElementById("child");
+            inputChild.textContent = storage.quantity.child
+
+            const inputInfant = document.getElementById("infant");
+            inputInfant.textContent = storage.quantity.infant
+
+            document.getElementById('passengers').value = `${storage.quantity.adult} Người lớn, ${storage.quantity.child} Trẻ em, ${storage.quantity.infant} Em bé`
+
             // sessionStorage.clear();
         }
 
@@ -74,6 +85,17 @@
 
             const inputDepartureDate = document.getElementById('departure-date');
             inputDepartureDate.value = storage.departureTime
+
+            const inputAdult = document.getElementById("adults");
+            inputAdult.textContent = storage.quantity.adult
+
+            const inputChild = document.getElementById("child");
+            inputChild.textContent = storage.quantity.child
+
+            const inputInfant = document.getElementById("infant");
+            inputInfant.textContent = storage.quantity.infant
+
+            document.getElementById('passengers').value = `${storage.quantity.adult} Người lớn, ${storage.quantity.child} Trẻ em, ${storage.quantity.infant} Em bé`
 
             // sessionStorage.clear();
         }

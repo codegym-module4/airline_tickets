@@ -34,11 +34,11 @@ public class FlightController {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @PostMapping()
-    public ResponseEntity<List<FlightResponseDTO>> getAllFlights(String departure, String arrival, LocalDate departureTime, String sortProperty, String sort, int page, int size) {
-        List<FlightResponseDTO> list = flightService.findAll(departure,arrival,departureTime,sortProperty,sort,page,size);
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
+//    @PostMapping()
+//    public ResponseEntity<List<FlightResponseDTO>> getAllFlights(String departure, String arrival, LocalDate departureTime, String sortProperty, String sort, int page, int size) {
+//        List<FlightResponseDTO> list = flightService.findAll(departure,arrival,departureTime,sortProperty,sort,page,size);
+//        return new ResponseEntity<>(list, HttpStatus.OK);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<FlightResponse> getDataFlightById(@PathVariable("id") Long id) {
