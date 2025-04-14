@@ -10,17 +10,14 @@ public class SortOrderHelper {
 
     public static Sort.Order createOrder(String sort, String sortProperty) {
         Sort.Order order = new Sort.Order(Sort.Direction.ASC, sortProperty);
-
         if (StringUtils.hasLength(sort)) {
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)"); // tencot:asc|desc
             Matcher matcher = pattern.matcher(sort);
-
             if (matcher.find()) {
                 String columnName = matcher.group(1);
-                String direction = matcher.group(3);
-                if ("asc".equalsIgnoreCase(direction)) {
+                if (matcher.group(3).equalsIgnoreCase("asc")) {
                     order = new Sort.Order(Sort.Direction.ASC, columnName);
-                } else if ("desc".equalsIgnoreCase(direction)) {
+                } else {
                     order = new Sort.Order(Sort.Direction.DESC, columnName);
                 }
             }

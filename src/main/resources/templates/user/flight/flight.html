@@ -161,8 +161,8 @@
                         <button type="button" class="btn btn-detail" id="btnConfirm">Xác nhận</button>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <form id="searchForm" th:action="@{/user/select-flight}" th:object="${flightReq}" class="sidebar" style="border: 1px solid black; height: 50%; margin-top: 95px;" method="POST">
+                <div class="col-lg-3 h-50">
+                    <form id="searchForm" th:action="@{/user/select-flight}" th:object="${flightReq}" class="sidebar" style="border: 1px solid black; height: 50%; margin-top: 95px;" method="GET">
                         <h4 style="font-weight: 600; font-size:24px;">Sắp xếp</h4>
                         <div class="sort-box">
                             <label><input checked type="radio" name="sortProperty" value="price"> Đề xuất</label><br>
@@ -217,22 +217,56 @@
                                     <label for="arrival-date" class="form-label">Ngày về</label>
                                     <input required type="date" id="arrival-date" class="form-control" name="arrivalTime" th:field="*{arrivalTime}">
                                 </div>
+
     
+<!--                                <div class="mb-3 row">-->
+<!--                                    <div class="col-md-4">-->
+<!--                                        <label for="adults" class="form-label">Người lớn</label>-->
+<!--    &lt;!&ndash;                                    <input readonly id="adults" class="form-control" name="numberPassengers">&ndash;&gt;-->
+<!--                                        <span id="adults" class="form-control"></span>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4">-->
+<!--                                        <label for="child" class="form-label">Trẻ em</label>-->
+<!--    &lt;!&ndash;                                    <input readonly id="child" class="form-control" name="numberPassengers">&ndash;&gt;-->
+<!--                                        <span  id="child" class="form-control"></span>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4">-->
+<!--                                        <label for="infant" class="form-label">Em bé</label>-->
+<!--    &lt;!&ndash;                                    <input readonly id="infant" class="form-control" name="numberPassengers">&ndash;&gt;-->
+<!--                                        <span  id="infant" class="form-control"></span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
                                 <div class="mb-3 row">
-                                    <div class="col-md-4">
-                                        <label for="adults" class="form-label">Người lớn</label>
-    <!--                                    <input readonly id="adults" class="form-control" name="numberPassengers">-->
-                                        <span id="adults" class="form-control"></span>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="child" class="form-label">Trẻ em</label>
-    <!--                                    <input readonly id="child" class="form-control" name="numberPassengers">-->
-                                        <span  id="child" class="form-control"></span>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="infant" class="form-label">Em bé</label>
-    <!--                                    <input readonly id="infant" class="form-control" name="numberPassengers">-->
-                                        <span  id="infant" class="form-control"></span>
+                                    <div class="dropdown input-group">
+                                        <input required type="text" class="form-control dropdown-toggle" id="passengers" placeholder="Chọn số hành khách" readonly data-bs-toggle="dropdown" name="numberPassengers"/>
+                                        <ul class="dropdown-menu" id="dropdownMenu">
+                                            <li class="mb-3 d-flex justify-content-between align-items-center">
+                                                <span>Người lớn</span>
+                                                <div>
+                                                    <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adults', -1)">-</button>
+                                                    <span id="adults" class="count">1</span>
+                                                    <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adults', 1)">+</button>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3 d-flex justify-content-between align-items-center">
+                                                <span>Trẻ em (2-11 tuổi)</span>
+                                                <div>
+                                                    <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'child', -1)">-</button>
+                                                    <span id="child" class="count">0</span>
+                                                    <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'child', 1)">+</button>
+                                                </div>
+                                            </li>
+                                            <li class="mb-3 d-flex justify-content-between align-items-center">
+                                                <span>Em bé (<2 tuổi)</span>
+                                                <div>
+                                                    <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'infant', -1)">-</button>
+                                                    <span id="infant" class="count">0</span>
+                                                    <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'infant', 1)">+</button>
+                                                </div>
+                                            </li>
+                                            <li><button class="btn btn-custom w-100"  onclick="submitForm(event)">Xác nhận</button></li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <button onclick="submitFormSearch(event)"  type="submit" class="btn btn-detail w-100">Tìm chuyến bay</button>

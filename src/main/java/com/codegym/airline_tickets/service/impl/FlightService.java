@@ -63,21 +63,7 @@ public class FlightService implements IFlightService {
     public List<FlightResponseDTO> findAll(String departure, String arrival, LocalDate departureTime, String sortProperty, String sort, int page, int size) {
         log.info("findAll flight start");
 
-        // Sorting
-//        Sort.Order order = new Sort.Order(Sort.Direction.ASC, sortProperty);
-//        if (StringUtils.hasLength(sort)) {
-//            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)"); // tencot:asc|desc
-//            Matcher matcher = pattern.matcher(sort);
-//            if (matcher.find()) {
-//                String columnName = matcher.group(1);
-//                if (matcher.group(3).equalsIgnoreCase("asc")) {
-//                    order = new Sort.Order(Sort.Direction.ASC, columnName);
-//                } else {
-//                    order = new Sort.Order(Sort.Direction.DESC, columnName);
-//                }
-//            }
-//        }
-        Sort.Order order = SortOrderHelper.createOrder(sortProperty, sort);
+        Sort.Order order = SortOrderHelper.createOrder(sort,sortProperty);
 
         // handle start page = 1
         int pageNo = 0;
@@ -100,6 +86,29 @@ public class FlightService implements IFlightService {
 
     }
 
+
+    public  List<FlightResponseDTO> findFightHotDeal (String departure, String arrival, int price, String sortProperty, String sort, int page, int size){
+
+        Sort.Order order = SortOrderHelper.createOrder(sort, sortProperty);
+
+        int pageNo = 0;
+        if (page > 0) {
+            pageNo = page - 1;
+        }
+
+        Pageable pageable = PageRequest.of(pageNo, size, Sort.by(order));
+
+        Page<Flight> flightPage;
+
+        if (StringUtils.hasLength(departure) && StringUtils.hasLength(arrival)) {
+            flightPage = flightRepository.searchFightHotDeal(departure, arrival, price, pageable);
+            System.out.println(flightPage);
+        }else {
+            flightPage = flightRepository.findAll(pageable);
+        }
+        return getFlightPageResponse(page, size, flightPage);
+    }
+
     public static List<FlightResponseDTO> getFlightPageResponse(int page, int size, Page<Flight> flightPage){
         log.info("Convert Flight Entity Page");
 
@@ -118,41 +127,7 @@ public class FlightService implements IFlightService {
         ).toList();
     }
 
-    public  List<FlightResponseDTO> searchFightDiscount (String departure, String arrival, int price, String sortProperty, String sort, int page, int size){
 
-        Sort.Order order = SortOrderHelper.createOrder(sortProperty, sort);
 
-        int pageNo = 0;
-        if (page > 0) {
-            pageNo = page - 1;
-        }
-
-        Pageable pageable = PageRequest.of(pageNo, size, Sort.by(order));
-
-        Page<Flight> flightPage;
-
-        if (StringUtils.hasLength(departure) && StringUtils.hasLength(arrival)) {
-            flightPage = flightRepository.searchFightDiscount(departure, arrival, price, pageable);
-        }else {
-            flightPage = flightRepository.findAll(pageable);
-        }
-        return getFlightPageDiscount(page, size, flightPage);
-    }
-
-     public static List<FlightResponseDTO> getFlightPageDiscount (int page, int size, Page<Flight> flightPage){
-         return flightPage.stream().map(flight -> FlightResponseDTO.builder()
-                 .id(flight.getId())
-                 .flightCode(flight.getCode())
-                 .airlineName(flight.getAirline().getName())
-                 .departureTime(flight.getDeparture_time())
-                 .arrivalTime(flight.getArrival_time())
-                 .price(FormaterCustom.withLargeIntegers(flight.getPrice()))
-                 .departureAirportCity(flight.getDepartureAirport().getCity())
-                 .arrivalAirportCity(flight.getArrivalAirport().getCity())
-                 .priceVATTotal(FormaterCustom.formatPriceVAT(flight.getPrice()))
-                 .priceVAT(FormaterCustom.calPriceVAT(flight.getPrice()))
-                 .build()
-         ).toList();
-    }
 
 }

@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     window.addEventListener("load", (event) => {
-        document.getElementById('passengers').value = "1 Người lớn"
+        // document.getElementById('passengers').value = "1 Người lớn"
         const storageDefault = JSON.parse(window.sessionStorage.getItem("data"))
 
         const inputOw = document.querySelector(".des-one-way")
@@ -65,13 +65,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-    function changeCount(event, type, value) {
+    const changeCount = (event, type, value) => {
     event.stopPropagation();
     event.preventDefault();
     let element = document.getElementById(type);
     let count = parseInt(element.textContent) + value;
 
+    let elementAdult = document.getElementById("adults");
+    let countAdults =  parseInt(elementAdult.textContent) + value;
+
     if(type === "adults" && count < 1){
+        return;
+    }
+    if (type === 'infant' && value > 0 &&  count >= countAdults) {
         return;
     }
 
@@ -81,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 }
 
-    function submitForm(e) {
+    const submitForm = (e) => {
     e.preventDefault();
     let counts = {
     adult: parseInt(document.getElementById('adults').textContent),
@@ -99,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (dropdown) dropdown.hide();
 }
 
-    function submitFormSearch(e){
+    const submitFormSearch = (e) =>{
         event.preventDefault();
 
                 const checkedRoundTrip = document.getElementById("round-trip")
@@ -142,4 +148,40 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("searchForm").submit();
 
     }
+
+
+    $(document).ready( () => {
+    $('.hot-deal-link').on('click', function (e) {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định khi click
+
+        const departure = $(this).find('.departure-hotdeal').text().trim();
+        const arrival = $(this).find('.arrival-hotdeal').text().trim();
+        const price = $(this).find('.price-hotdeal').text().trim().replace(",","");
+
+        const data = {
+            departure: departure,
+            arrival: arrival,
+            price: price,
+            isHotdeal: true
+        };
+
+        searchFormData.departureAirport =departure
+        searchFormData.arrivalOneWay = arrival
+        searchFormData.isOneWay = true
+
+        sessionStorage.setItem("data",JSON.stringify(searchFormData));
+
+        window.location.href = `/user/select-flight?departureAirport=${data.departure}&arrivalAirportOneWay=${data.arrival}&price=${data.price}&isHotdeal=${data.isHotdeal}`
+
+        console.log('Điểm đi:', departure);
+        console.log('Điểm đến:', arrival);
+        console.log('Giá vé:', price);
+
+    });
+});
+
+
+
+
+
 

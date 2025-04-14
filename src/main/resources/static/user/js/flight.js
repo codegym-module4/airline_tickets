@@ -62,6 +62,7 @@
             const inputInfant = document.getElementById("infant");
             inputInfant.textContent = storage.quantity.infant
 
+            document.getElementById('passengers').value = `${storage.quantity.adult} Người lớn, ${storage.quantity.child} Trẻ em, ${storage.quantity.infant} Em bé`
             // sessionStorage.clear();
         }
 
@@ -92,6 +93,8 @@
 
             const inputInfant = document.getElementById("infant");
             inputInfant.textContent = storage.quantity.infant
+
+            document.getElementById('passengers').value = `${storage.quantity.adult} Người lớn, ${storage.quantity.child} Trẻ em, ${storage.quantity.infant} Em bé`
             // sessionStorage.clear();
         }
 
