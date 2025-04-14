@@ -111,7 +111,7 @@ public class FlightController {
                     .arrivalAirportCity(flightDepart.getArrivalAirport().getCity())
                     .departureAirportName(flightDepart.getDepartureAirport().getName())
                     .arrivalAirportName(flightDepart.getArrivalAirport().getName())
-                    .priceVATTotal(FormaterCustom.formatPriceVAT(totalDepart))
+                    .priceVATTotal(FormaterCustom.withLargeIntegers(totalDepart))
                     .priceVAT("0")
                     .build();
         FlightResponseDTO flightArrivalDTO = new FlightResponseDTO();
@@ -139,7 +139,7 @@ public class FlightController {
                     .arrivalAirportCity(flightArrival.getArrivalAirport().getCity())
                     .departureAirportName(flightArrival.getDepartureAirport().getName())
                     .arrivalAirportName(flightArrival.getArrivalAirport().getName())
-                    .priceVATTotal(FormaterCustom.formatPriceVAT(totalArrival))
+                    .priceVATTotal(FormaterCustom.withLargeIntegers(totalArrival))
                     .priceVAT("0")
                     .build();
         }

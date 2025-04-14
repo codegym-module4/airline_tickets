@@ -103,7 +103,7 @@ public class BookingRestController {
                 i_seat++;
             } else {
                 s = seats.get(i);
-                price = res.getFlight().getPrice();
+                price = flight.getPrice();
             }
             if (item.getCustomerType() == 1) {
                 extraKg = (flightType == 2 ? item.getExtraKgReturn() : item.getExtraKgGo());
