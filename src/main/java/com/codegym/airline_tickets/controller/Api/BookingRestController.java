@@ -5,6 +5,7 @@ import com.codegym.airline_tickets.dto.BookingTicketDTO;
 import com.codegym.airline_tickets.entity.*;
 import com.codegym.airline_tickets.service.*;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,7 @@ public class BookingRestController {
     private static final Integer PRICE_FOR_A_KG = 10000;
 
     @PostMapping()
+    @Transactional
     public ResponseEntity<?> create(@Validated @ModelAttribute("data") BookingDTO data, HttpSession session,BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             // Trả về JSON đúng format
@@ -91,7 +93,7 @@ public class BookingRestController {
 
     private void saveTicket(BookingDTO data, List<FlightSeat> seats, Booking res, Flight flight, Integer flightType) {
         List<BookingTicketDTO> items = data.getItems();
-        int extraKg = 0;
+        int extraKg;
         BigInteger price = new BigInteger("0");
         int i_seat = 0;
         for (int i = 0; i < items.size(); i++) {
@@ -107,6 +109,8 @@ public class BookingRestController {
             }
             if (item.getCustomerType() == 1) {
                 extraKg = (flightType == 2 ? item.getExtraKgReturn() : item.getExtraKgGo());
+            } else {
+                extraKg = 0;
             }
             Ticket ticket = new Ticket(
                     item.getId(),
@@ -125,11 +129,7 @@ public class BookingRestController {
                     item.getNationality()
             );
             Ticket result = ticketService.updateOrCreate(ticket);
-            FlightSeat seat = new FlightSeat(
-                    s.getId(),
-                    2
-            );
-            flightSeatService.save(seat);
+            flightSeatService.updateStatusById(s.getId(), 2);
         }
     }
 }

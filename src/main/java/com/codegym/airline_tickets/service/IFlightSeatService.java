@@ -12,4 +12,6 @@ public interface IFlightSeatService extends IService<FlightSeat> {
     List<FlightSeat> allocateSeats(Long flightId, int numberOfPeople);
 
     FlightSeat updateOrCreate(FlightSeat flightSeat);
+
+    void updateStatusById(Long flightId, Integer status);
 }

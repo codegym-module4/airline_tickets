@@ -253,13 +253,14 @@
                 <input type="hidden" th:field="*{items[__${stat.index}__].customerType}" />
             </div>
         </th:block>
+        <input type="hidden" name="ticket_total" th:value="${data.totalPrice}">
         <div class="container mt-4 d-flex justify-content-between">
             <button type="button" class="btn btn-outline-secondary" th:onclick="'history.back()'" style="width: 15%">Chọn lại chuyến bay</button>
             <button type="button" class="btn btn-custom mx-auto" id="btnSubmitBooking" data-form_id="#form_submit" style="width: 15%">Đặt vé</button>
         </div>
     </form>
 </div>
-<div class="modal fade" id="modalResult" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalResult" tabindex="-1" role="dialog" data-bs-keyboard="false" data-bs-backdrop="static">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -267,6 +268,9 @@
             </div>
             <div class="modal-body">
                 <p>Vui lòng thực hiện thanh toán để hoàn tất việc đặt vé.</p>
+                <p>
+                    <b>Lưu ý: Nếu bạn không thực hiện thanh toán trong vòng 30 phút thì hệ thống sẽ tự động hủy bỏ đặt vé của quý khách</b>
+                </p>
             </div>
             <div class="modal-footer">
                 <a role="button" class="btn btn-primary" href="/payment">Thanh toán</a>

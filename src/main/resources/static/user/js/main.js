@@ -67,7 +67,7 @@
             $("#modalResult").modal("show");
             setTimeout(function () {
                 window.location.href = "/payment";
-            }, 3500)
+            }, 9000)
         }).fail(function (jqXhr, json, errorThrown) {
             if (jqXhr.responseJSON.errors) {
                 if (jqXhr.responseJSON.message == 'Validation failed') {
@@ -92,14 +92,16 @@
 
     });
     $(document).on("change", ".luggage-select", function (e) {
-        let kg = $(this).val();
-        console.log(kg);
-        let total = parseInt($("input[name='totalPrice']").val());
-        if (kg != "") {
-            let price = kg * PRICE_FOR_A_KG;
-            total += parseInt(price);
-            $("input[name='totalPrice']").val(total);
-        }
+        let total = parseInt($("input[name='ticket_total']").val());
+        $(".luggage-select").each(function(index, element) {
+            let $element = $(element);
+            let kg = $element.val();
+            if (kg != "" && kg != 0) {
+                let price = kg * PRICE_FOR_A_KG;
+                total += parseInt(price);
+                $("input[name='totalPrice']").val(total);
+            }
+        });
     });
 
 })();
