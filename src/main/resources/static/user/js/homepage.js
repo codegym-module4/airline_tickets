@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded", function () {
         arrivalDateOption.classList.remove("d-none")
         arrivalDateOption.classList.add("d-block")
 
+        console.log("check round-trip")
+
 
 });
 
@@ -49,6 +51,8 @@ document.addEventListener("DOMContentLoaded", function () {
         oneWaySection.classList.remove("d-none");
         roundTripSection.classList.add("d-none");
         arrivalDateOption.classList.add("d-none")
+
+        console.log("check oneway")
 });
 
 });
@@ -56,12 +60,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.addEventListener("load", (event) => {
         // document.getElementById('passengers').value = "1 Người lớn"
+
         const storageDefault = JSON.parse(window.sessionStorage.getItem("data"))
 
         const inputOw = document.querySelector(".des-one-way")
         inputOw.value = storageDefault.arrivalOneWay
 
-        sessionStorage.clear()
+        // sessionStorage.clear()
 
     });
 
@@ -84,8 +89,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (count < 0) count = 0;
     element.textContent = count;
 
+        }
 
-}
+
 
     const submitForm = (e) => {
     e.preventDefault();
@@ -93,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
     adult: parseInt(document.getElementById('adults').textContent),
     child: parseInt(document.getElementById('child').textContent),
     infant: parseInt(document.getElementById('infant').textContent)
-};
+    };
 
     let passengerText = [];
     if (counts.adult > 0) passengerText.push(`${counts.adult} Người lớn`);
@@ -103,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('passengers').value = passengerText.join(", ") || "Chọn số hành khách";
     let dropdown = bootstrap.Dropdown.getInstance(document.getElementById('passengers'));
     if (dropdown) dropdown.hide();
-}
+    }
 
     const submitFormSearch = (e) =>{
         event.preventDefault();
@@ -152,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     $(document).ready( () => {
     $('.hot-deal-link').on('click', function (e) {
-        e.preventDefault(); // Ngăn chặn hành vi mặc định khi click
+        e.preventDefault();
 
         const departure = $(this).find('.departure-hotdeal').text().trim();
         const arrival = $(this).find('.arrival-hotdeal').text().trim();
@@ -173,13 +179,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         window.location.href = `/user/select-flight?departureAirport=${data.departure}&arrivalAirportOneWay=${data.arrival}&price=${data.price}&isHotdeal=${data.isHotdeal}`
 
-        console.log('Điểm đi:', departure);
-        console.log('Điểm đến:', arrival);
-        console.log('Giá vé:', price);
 
     });
 });
-
 
 
 

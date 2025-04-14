@@ -30,8 +30,15 @@ public class BuildFlightRequest {
                     .build();
         }else {
 
-            if (departureAirport.isEmpty() || arrivalAirport.isEmpty() || departureTime.isEmpty() || arrivalTime.isEmpty()) {
-                return null;
+            if(type.equals("ROUND-TRIP")){
+                if (departureAirport.isEmpty() || arrivalAirport.isEmpty() || departureTime.isEmpty() || arrivalTime.isEmpty()) {
+                    return null;
+                }
+            }
+            if(type.equals("ONEWAY")){
+                if (departureAirport.isEmpty() || arrivalAirport.isEmpty() || departureTime.isEmpty()) {
+                    return null;
+                }
             }
 
             return FlightRequestDTO.builder()
