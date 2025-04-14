@@ -12,6 +12,7 @@
         <input type="hidden" th:field="*{flightType}">
         <input type="hidden" th:field="*{totalPrice}">
         <input type="hidden" th:field="*{numberOfTickets}">
+        <input type="hidden" th:field="*{key}">
         <th:block th:each="item, stat : ${data.items}">
             <div th:if="${item.customerType == 1}" class="container mt-4 p-4 border rounded bg-light">
                 <div class="mb-3">
@@ -34,10 +35,12 @@
                         <div class="row align-items-center">
                             <label th:for="'luggage' + ${stat.index}" class="col-sm-3">Hành lý kí gửi: </label>
                             <div class="col-sm-9">
-                                <select th:id="'luggage' + ${stat.index}" th:field="*{items[__${stat.index}__].extraKg}" class="form-select">
-                                    <option value="">Mua thêm khối lượng hành lý</option>
+                                <select th:id="'luggage' + ${stat.index}" th:field="*{items[__${stat.index}__].extraKg}" class="form-select luggage-select">
+                                    <option value="0">Mua thêm khối lượng hành lý</option>
                                     <option value="15">Mua thêm 15kg - 150.000 VNĐ</option>
+                                    <option value="20">Mua thêm 20kg - 200.000 VNĐ</option>
                                     <option value="25">Mua thêm 25kg - 250.000 VNĐ</option>
+                                    <option value="30">Mua thêm 30kg - 300.000 VNĐ</option>
                                 </select>
                                 <span class="text-danger" style="font-size: 80%" role="alert">
                                     <strong></strong>

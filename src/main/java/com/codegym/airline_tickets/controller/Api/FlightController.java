@@ -115,7 +115,7 @@ public class FlightController {
                     .priceVAT("0")
                     .build();
         FlightResponseDTO flightArrivalDTO = new FlightResponseDTO();
-        if (request.get("idArrival") != null) {
+        if (request.get("idArrival") != null && !request.get("idArrival").isEmpty()) {
             Flight flightArrival = flightService.findById(Long.parseLong(request.get("idArrival")));
             if (flightArrival == null) {
                 return ResponseEntity.badRequest().body(

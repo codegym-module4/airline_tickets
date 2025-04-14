@@ -36,6 +36,10 @@ public class Ticket {
     private Booking booking;
 
     @ManyToOne
+    @JoinColumn(name = "flight_id")
+    private Flight flight;
+
+    @ManyToOne
     @JoinColumn(name = "flight_seat_id")
     private FlightSeat seat;
 
@@ -73,4 +77,21 @@ public class Ticket {
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime deletedAt;
+
+    public Ticket(Long id, Booking booking, Flight flight, FlightSeat flightSeat, String name, String gender, LocalDate dob, String phone, String citizenIdentification, String email, Integer extraKg, BigInteger price, Integer type, String nationality) {
+        this.id = id;
+        this.booking = booking;
+        this.flight = flight;
+        this.seat = flightSeat;
+        this.name = name;
+        this.gender = gender;
+        this.dob = dob;
+        this.phone = phone;
+        this.citizenIdentification = citizenIdentification;
+        this.email = email;
+        this.extraKg = extraKg;
+        this.price = price;
+        this.type = type;
+        this.nationality = nationality;
+    }
 }

@@ -33,4 +33,6 @@ public class BookingDTO {
     private BigInteger totalPrice;
     @Valid
     private List<BookingTicketDTO> items;
+
+    private String key;
 }

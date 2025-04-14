@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
@@ -35,13 +36,14 @@ public class BookingController {
             return "redirect:/";
         }
         BookingDTO data = new BookingDTO();
+        data.setKey(key);
         List<BookingTicketDTO> list = new ArrayList<BookingTicketDTO>();
         List<CountryDTO> countries = GetCountries.getCountries();
         Map<String, String> dataConfirm = (Map<String, String>) session.getAttribute("confirm-data" + key);
         int num_of_adult = Integer.parseInt(dataConfirm.get("num_of_adult"));
         int num_of_child = Integer.parseInt(dataConfirm.get("num_of_child"));
         int num_of_baby = Integer.parseInt(dataConfirm.get("num_of_baby"));
-        int num_of_ticket = num_of_adult + num_of_child;
+        int num_of_ticket = num_of_adult + num_of_child + num_of_baby;
         data.setTotalPrice(new BigInteger(dataConfirm.get("total")));
         data.setNumberOfTickets(num_of_ticket);
         if ("ROUND-TRIP".equals(dataConfirm.get("flight_type"))) {
@@ -52,8 +54,8 @@ public class BookingController {
         long idDepart = Long.parseLong(dataConfirm.get("idDepart"));
         Flight flight = flightService.findById(idDepart);
         data.setFlight(flight);
-        Long idArrival = dataConfirm.containsKey("idArrival") ? Long.parseLong(dataConfirm.get("idArrival")) : null;
-        if (idArrival != null) {
+        if (dataConfirm.get("idArrival") != null && !Objects.equals(dataConfirm.get("idArrival"), "")) {
+            long idArrival = Long.parseLong(dataConfirm.get("idArrival"));
             Flight returnFlight = flightService.findById(idArrival);
             data.setReturnFlight(returnFlight);
         }

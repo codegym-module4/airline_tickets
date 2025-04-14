@@ -5,6 +5,8 @@
         $('.flash_message').fadeOut(5000);
     });
 
+    const PRICE_FOR_A_KG = 10000;
+
     $(document).ready(function () {
         // Kiểm tra nếu biến message có giá trị thì hiển thị modal
         let message = $("#successModal .modal-body p").text().trim();
@@ -85,6 +87,16 @@
             }
         });
 
+    });
+    $(document).on("change", ".luggage-select", function (e) {
+        let kg = $(this).val();
+        console.log(kg);
+        let total = parseInt($("input[name='totalPrice']").val());
+        if (kg != "") {
+            let price = kg * PRICE_FOR_A_KG;
+            total += parseInt(price);
+            $("input[name='totalPrice']").val(total);
+        }
     });
 
 })();
