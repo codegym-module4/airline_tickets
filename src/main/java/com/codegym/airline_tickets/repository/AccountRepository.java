@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-
-    @Query("SELECT a FROM Account a WHERE a.email = :email AND a.deletedAt IS NULL")
-
+    @Query("SELECT a FROM Account a LEFT JOIN FETCH a.user WHERE a.email = :email AND a.deletedAt IS NULL")
     Account findByNotDeleteEmail(String email);
 }

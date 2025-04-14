@@ -62,7 +62,7 @@ public class AccountService implements IAccountService, UserDetailsService {
 
     @Override
     public List<Account> findByName(String name) {
-        return List.of(); // Nếu cần sẽ bổ sung sau
+        return List.of();
     }
 
     @Override
@@ -78,18 +78,39 @@ public class AccountService implements IAccountService, UserDetailsService {
         }
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + account.getRole().getRoleName());
 
-        // Trả về UserDetails với fullName từ User
         org.springframework.security.core.userdetails.User userDetails =
                 new org.springframework.security.core.userdetails.User(
                         account.getEmail(),
                         account.getPassword(),
                         List.of(authority)
                 );
-        // Lưu fullName vào Authentication bằng cách mở rộng User
-        return new UserWithFullName(userDetails, account.getUser().getFullName());
+        String fullName = account.getUser() != null ? account.getUser().getFullName() : "Unknown";
+        return new UserWithFullName(userDetails, fullName);
     }
 
-    // Class mở rộng để thêm fullName
+    public void register(Account account) {
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setRole(roleRepository.findById(3L).orElseThrow());
+
+        User user = account.getUser();
+        if (user != null) {
+            String maxCode = userRepository.findMaxCode();
+            int nextNumber = 1;
+            if (maxCode != null && maxCode.startsWith("KH")) {
+                try {
+                    nextNumber = Integer.parseInt(maxCode.substring(2)) + 1;
+                } catch (NumberFormatException ignored) {
+                }
+            }
+            String newCode = String.format("KH%03d", nextNumber);
+            user.setCode(newCode);
+            userRepository.save(user); // Lưu User trước
+            account.setUser(user); // Gán User cho Account
+        }
+
+        accountRepository.save(account);
+    }
+
     public static class UserWithFullName extends org.springframework.security.core.userdetails.User {
         private final String fullName;
 
@@ -101,27 +122,5 @@ public class AccountService implements IAccountService, UserDetailsService {
         public String getFullName() {
             return fullName;
         }
-    }
-
-    public void register(Account account) {
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        account.setRole(roleRepository.findById(3L).orElseThrow());
-
-        User user = account.getUser();
-        user.setAccount(account);
-
-        // Tạo mã KH00x
-        String maxCode = userRepository.findMaxCode(); // VD: KH005
-        int nextNumber = 1;
-        if (maxCode != null && maxCode.startsWith("KH")) {
-            try {
-                nextNumber = Integer.parseInt(maxCode.substring(2)) + 1;
-            } catch (NumberFormatException ignored) {}
-        }
-        String newCode = String.format("KH%03d", nextNumber);
-        user.setCode(newCode);
-
-        account.setUser(user);
-        accountRepository.save(account);
     }
 }
