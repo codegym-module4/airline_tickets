@@ -27,6 +27,6 @@ public interface IBookingService extends IService<Booking> {
 
     Booking updateOrCreate(Booking b);
 
-    List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time);
+    List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time, Integer status);
 
 }

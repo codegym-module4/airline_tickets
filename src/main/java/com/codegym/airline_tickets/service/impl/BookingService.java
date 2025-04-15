@@ -111,8 +111,8 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time) {
-        return bookingRepository.findByCreatedAtLessThanEqual(time);
+    public List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time, Integer status) {
+        return bookingRepository.findByCreatedAtLessThanEqualAndStatus(time, status);
     }
 
     private static String generateNextCode(long number) {

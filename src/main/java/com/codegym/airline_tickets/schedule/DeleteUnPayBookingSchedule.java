@@ -27,7 +27,7 @@ public class DeleteUnPayBookingSchedule {
     @Scheduled(cron = "0 0 * * * *")
     public void runEveryMinute() {
         LocalDateTime timeThreshold = LocalDateTime.now().minusMinutes(30);
-        List<Booking> records = bookingService.findByCreatedAtLessThanEqual(timeThreshold);
+        List<Booking> records = bookingService.findByCreatedAtLessThanEqual(timeThreshold, 1);
         if (records.size() > 0) {
             // Xử lý các bản ghi
             records.forEach(record -> {
@@ -35,7 +35,7 @@ public class DeleteUnPayBookingSchedule {
                 tickets.forEach(ticket -> {flightSeatService.updateStatusById(ticket.getSeat().getId(), 1);});
                 ticketService.deleteAll(tickets);
                 bookingService.remove(record.getId());
-                System.out.println("Đã xóa thành công bản ghi" + record.getId());
+                System.out.println("Đã xóa thành công bản ghi " + record.getId());
             });
         } else {
             System.out.println("Không có bản ghi cần xóa");

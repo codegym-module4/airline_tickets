@@ -50,5 +50,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("SELECT b FROM Booking b ORDER BY b.id DESC LIMIT 1")
     Booking findLatest();
 
-    List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time);
+    List<Booking> findByCreatedAtLessThanEqualAndStatus(LocalDateTime time, Integer status);
 }
