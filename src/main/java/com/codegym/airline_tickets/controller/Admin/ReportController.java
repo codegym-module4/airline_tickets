@@ -1,11 +1,10 @@
     package com.codegym.airline_tickets.controller.Admin;
 
+    import com.codegym.airline_tickets.dto.ExportRequestDTO;
     import com.codegym.airline_tickets.dto.RevenueByDateDto;
     import com.codegym.airline_tickets.service.IBookingService;
     import com.fasterxml.jackson.databind.ObjectMapper;
-    import org.apache.poi.ss.usermodel.Row;
-    import org.apache.poi.ss.usermodel.Sheet;
-    import org.apache.poi.ss.usermodel.Workbook;
+    import org.apache.poi.ss.usermodel.*;
     import org.apache.poi.xssf.usermodel.XSSFWorkbook;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.format.annotation.DateTimeFormat;
@@ -14,16 +13,17 @@
     import org.springframework.http.ResponseEntity;
     import org.springframework.stereotype.Controller;
     import org.springframework.ui.Model;
-    import org.springframework.web.bind.annotation.GetMapping;
-    import org.springframework.web.bind.annotation.PostMapping;
-    import org.springframework.web.bind.annotation.RequestMapping;
-    import org.springframework.web.bind.annotation.RequestParam;
+    import org.springframework.web.bind.annotation.*;
 
+    import javax.imageio.ImageIO;
+    import java.awt.image.BufferedImage;
+    import java.io.ByteArrayInputStream;
     import java.io.ByteArrayOutputStream;
     import java.io.IOException;
     import java.math.BigInteger;
     import java.time.DayOfWeek;
     import java.time.LocalDate;
+    import java.util.Base64;
     import java.util.List;
     import java.util.Map;
 
@@ -77,13 +77,17 @@
                         List<RevenueByDateDto> mainRevenue = bookingService.getRevenueByDay(mainRange[0], mainRange[1]);
                         BigInteger totalSumRevenue = BigInteger.ZERO;
                         for (RevenueByDateDto revenue : mainRevenue) {
-                            totalSumRevenue = totalSumRevenue.add(revenue.getRevenue());
+                            if (revenue.getRevenue() != null) {
+                                totalSumRevenue = totalSumRevenue.add(revenue.getRevenue());
+                            }
                         }
 
                         List<RevenueByDateDto> compareRevenue = bookingService.getRevenueByDay(compareRange[0], compareRange[1]);
                         BigInteger totalSumCompareRevenue = BigInteger.ZERO;
                         for (RevenueByDateDto revenue : compareRevenue) {
-                            totalSumCompareRevenue = totalSumCompareRevenue.add(revenue.getRevenue());
+                            if (revenue.getRevenue() != null) {
+                                totalSumCompareRevenue = totalSumCompareRevenue.add(revenue.getRevenue());
+                            }
                         }
 
                         model.addAttribute("totalSumRevenue", totalSumRevenue);
@@ -98,13 +102,17 @@
                         List<RevenueByDateDto> mainRevenue = bookingService.getRevenueByDay(mainRange[0], mainRange[1]);
                         BigInteger totalSumRevenue = BigInteger.ZERO;
                         for (RevenueByDateDto revenue : mainRevenue) {
-                            totalSumRevenue = totalSumRevenue.add(revenue.getRevenue());
+                            if (revenue.getRevenue() != null) {
+                                totalSumRevenue = totalSumRevenue.add(revenue.getRevenue());
+                            }
                         }
 
                         List<RevenueByDateDto> compareRevenue = bookingService.getRevenueByDay(compareRange[0], compareRange[1]);
                         BigInteger totalSumCompareRevenue = BigInteger.ZERO;
                         for (RevenueByDateDto revenue : compareRevenue) {
-                            totalSumCompareRevenue = totalSumCompareRevenue.add(revenue.getRevenue());
+                            if (revenue.getRevenue() != null) {
+                                totalSumCompareRevenue = totalSumCompareRevenue.add(revenue.getRevenue());
+                            }
                         }
 
                         model.addAttribute("totalSumRevenue", totalSumRevenue);
@@ -119,12 +127,17 @@
                         List<RevenueByDateDto> mainRevenue = bookingService.getRevenueByDay(mainRange[0], mainRange[1]);
                         BigInteger totalSumRevenue = BigInteger.ZERO;
                         for (RevenueByDateDto revenue : mainRevenue) {
-                            totalSumRevenue = totalSumRevenue.add(revenue.getRevenue());
+                            if (revenue.getRevenue() != null) {
+                                totalSumRevenue = totalSumRevenue.add(revenue.getRevenue());
+                            }
                         }
+
                         List<RevenueByDateDto> compareRevenue = bookingService.getRevenueByDay(compareRange[0], compareRange[1]);
                         BigInteger totalSumCompareRevenue = BigInteger.ZERO;
                         for (RevenueByDateDto revenue : compareRevenue) {
-                            totalSumCompareRevenue = totalSumCompareRevenue.add(revenue.getRevenue());
+                            if (revenue.getRevenue() != null) {
+                                totalSumCompareRevenue = totalSumCompareRevenue.add(revenue.getRevenue());
+                            }
                         }
 
                         model.addAttribute("totalSumRevenue", totalSumRevenue);
@@ -139,13 +152,17 @@
                         List<RevenueByDateDto> mainRevenue = bookingService.getRevenueByDay(mainRange[0], mainRange[1]);
                         BigInteger totalSumRevenue = BigInteger.ZERO;
                         for (RevenueByDateDto revenue : mainRevenue) {
-                            totalSumRevenue = totalSumRevenue.add(revenue.getRevenue());
+                            if (revenue.getRevenue() != null) {
+                                totalSumRevenue = totalSumRevenue.add(revenue.getRevenue());
+                            }
                         }
 
                         List<RevenueByDateDto> compareRevenue = bookingService.getRevenueByDay(compareRange[0], compareRange[1]);
                         BigInteger totalSumCompareRevenue = BigInteger.ZERO;
                         for (RevenueByDateDto revenue : compareRevenue) {
-                            totalSumCompareRevenue = totalSumCompareRevenue.add(revenue.getRevenue());
+                            if (revenue.getRevenue() != null) {
+                                totalSumCompareRevenue = totalSumCompareRevenue.add(revenue.getRevenue());
+                            }
                         }
 
                         model.addAttribute("totalSumRevenue", totalSumRevenue);
@@ -192,10 +209,13 @@
         }
 
         @PostMapping("export-excel")
-        public ResponseEntity<byte[]> exportExcel(@RequestParam("totalRevenue") String totalRevenueJson) throws IOException {
-            // Chuyển đổi chuỗi JSON thành List
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<Map<String, Object>> totalRevenue = objectMapper.readValue(totalRevenueJson, List.class);
+        public ResponseEntity<byte[]> exportExcel(@RequestBody ExportRequestDTO request) throws IOException {
+            // Lấy dữ liệu từ request
+            List<RevenueByDateDto> totalRevenue = request.getTotalRevenue();
+            String chartBase64 = request.getChartImage();
+
+            // Decode ảnh từ base64
+            byte[] imageBytes = Base64.getDecoder().decode(chartBase64.split(",")[1]);
 
             // Tạo workbook và sheet cho Excel
             Workbook workbook = new XSSFWorkbook();
@@ -208,11 +228,11 @@
 
             // Thêm dữ liệu vào sheet
             int rowNum = 1;
-            for (Map<String, Object> revenueData : totalRevenue) {
+            for (RevenueByDateDto revenueData : totalRevenue) {
                 Row row = sheet.createRow(rowNum++);
 
-                Object dateObj = revenueData.get("date");
-                Object revenueObj = revenueData.get("revenue");
+                Object dateObj = revenueData.getDate();
+                Object revenueObj = revenueData.getRevenue();
             //  Xét null ngày
                 row.createCell(0).setCellValue(dateObj != null ? dateObj.toString() : "N/A");
 
@@ -227,6 +247,18 @@
                     row.createCell(1).setCellValue("N/A");
                 }
             }
+
+            // Thêm ảnh vào sheet
+            int pictureIndex = workbook.addPicture(imageBytes, Workbook.PICTURE_TYPE_PNG);
+
+            CreationHelper helper = workbook.getCreationHelper();
+            Drawing<?> drawing = sheet.createDrawingPatriarch();
+            ClientAnchor anchor = helper.createClientAnchor(); //anchor để xác định vị trí ảnh (tọa độ), lớp ClientAnchor hỗ trợ thiết lập tọa độ
+            anchor.setCol1(0);
+            anchor.setRow1(rowNum + 2); // Chèn ảnh bắt đầu từ dòng cuối cùng + 2
+
+            Picture pict = drawing.createPicture(anchor, pictureIndex);
+            pict.resize(); // Tự động chỉnh kích thước ảnh
 
             // Chuyển dữ liệu trong workbook thành byte array để gửi qua HTTP response
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -245,10 +277,16 @@
         }
 
         @PostMapping("export-excel2")
-        public ResponseEntity<byte[]> exportExcel(
-                @RequestParam("totalSumRevenue") Double totalSumRevenue,
-                @RequestParam("totalSumCompareRevenue") Double totalSumCompareRevenue
-        ) throws IOException {
+        public ResponseEntity<byte[]> exportExcel2(@RequestBody ExportRequestDTO request) throws IOException {
+
+            // Lấy dữ liệu từ request
+            BigInteger totalSumRevenue = request.getTotalSumRevenue();
+            BigInteger totalSumCompareRevenue = request.getTotalSumCompareRevenue();
+
+            String chartBase64 = request.getChartImage();
+
+            // Decode ảnh từ base64
+            byte[] imageBytes = Base64.getDecoder().decode(chartBase64.split(",")[1]);
 
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet("Doanh Thu");
@@ -258,20 +296,35 @@
             header.createCell(1).setCellValue("Doanh thu so sánh");
 
             Row row = sheet.createRow(1);
-            row.createCell(0).setCellValue(totalSumRevenue);
-            row.createCell(1).setCellValue(totalSumCompareRevenue);
+            row.createCell(0).setCellValue(totalSumRevenue.doubleValue());
+            row.createCell(1).setCellValue(totalSumCompareRevenue.doubleValue());
 
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            workbook.write(outputStream);
+
+            // Thêm ảnh vào sheet
+            int pictureIndex = workbook.addPicture(imageBytes, Workbook.PICTURE_TYPE_PNG);
+            CreationHelper helper = workbook.getCreationHelper();
+            Drawing<?> drawing = sheet.createDrawingPatriarch();
+            ClientAnchor anchor = helper.createClientAnchor();
+            anchor.setCol1(0);
+            anchor.setRow1(3); // Chèn ảnh bắt đầu từ dòng cuối cùng + 2
+
+            Picture pict = drawing.createPicture(anchor, pictureIndex);
+            pict.resize(); // Tự động chỉnh kích thước ảnh
+
+            // Chuyển dữ liệu trong workbook thành byte array để gửi qua HTTP response
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            workbook.write(byteArrayOutputStream);
             workbook.close();
 
-            byte[] content = outputStream.toByteArray();
+            byte[] excelData = byteArrayOutputStream.toByteArray();
 
+            // Cấu hình headers cho file Excel
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "attachment; filename=doanh_thu.xlsx");
+            headers.add("Content-Disposition", "attachment; filename=revenue.xlsx");
             headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
-            return new ResponseEntity<>(content, headers, HttpStatus.OK);
+            // Trả về file Excel dưới dạng ResponseEntity
+            return new ResponseEntity<>(excelData, headers, HttpStatus.OK);
         }
 
     }
