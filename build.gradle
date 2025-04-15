@@ -40,6 +40,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.apache.poi:poi-ooxml:5.2.3'
+	implementation 'com.paypal.sdk:paypal-core:1.7.2'
+	implementation 'com.paypal.sdk:rest-api-sdk:1.14.0'
 }
 
 tasks.named('test') {

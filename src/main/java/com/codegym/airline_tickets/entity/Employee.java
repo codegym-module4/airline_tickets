@@ -34,6 +34,7 @@ public class Employee {
     @Column(name = "full_name")
     private String fullName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "dob")
     private LocalDate dob;
 
@@ -46,19 +47,23 @@ public class Employee {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "nationality")
-    private String nationality;
+//    @Column(name = "nationality")
+//    private String nationality;
 
-    @Column(name = "ranking")
-    private String ranking;
+//    @Column(name = "ranking")
+//    private String ranking;
 
-    @Column(name = "citizen_identification")
-    private String citizenIdentification;
-
-    @Column(name = "image")
-    private String image;
+//    @Column(name = "citizen_identification")
+//    private String citizenIdentification;
+//
+//    @Column(name = "image")
+//    private String image;
 
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime deletedAt;
+
+    @Column(name = "create_at")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime createAt;
 }

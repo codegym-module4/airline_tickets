@@ -6,12 +6,10 @@ Author: Richard Clark - http://richclarkdesign.com
 Twitter: @rich_clark
 */
 
-html, body, div, span, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+html, body, div, span, object, iframe, p, blockquote, pre,
 abbr, address, cite, code,
 del, dfn, em, img, ins, kbd, q, samp,
 small, strong, sub, sup, var,
-b, i,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
@@ -170,7 +168,7 @@ input, select {
 		display:block!important;
 	}
 	
-	/* iOS‚Å‚ÌƒfƒtƒHƒ‹ƒgƒXƒ^ƒCƒ‹‚ðƒŠƒZƒbƒg */
+	/* iOSï¿½Å‚Ìƒfï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Xï¿½^ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g */
 	input[type="submit"],
 	input[type="button"] {
 	  border-radius: 0;

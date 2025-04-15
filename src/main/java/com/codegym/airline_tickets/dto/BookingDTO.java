@@ -3,17 +3,24 @@ package com.codegym.airline_tickets.dto;
 import com.codegym.airline_tickets.entity.Flight;
 import com.codegym.airline_tickets.entity.User;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookingDTO {
+
     private Long id;
-
-    private String code;
-
-    private User user;
 
     private Flight flight;
 
@@ -21,12 +28,11 @@ public class BookingDTO {
 
     private Integer flightType;
 
-    private Integer numTickets;
+    private Integer numberOfTickets;
 
     private BigInteger totalPrice;
+    @Valid
+    private List<BookingTicketDTO> items;
 
-    private Integer status;
-
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime createdAt;
+    private String key;
 }
