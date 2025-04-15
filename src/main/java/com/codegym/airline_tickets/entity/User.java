@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE users SET deleted_at = Now() WHERE id=?")
-@Where(clause = "deleted_at is null")
+@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class User {
 
     @Id
@@ -46,9 +46,21 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @OneToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @Column(name = "nationality")
+    private String nationality;
+
+    @Column(name = "ranking")
+    private String ranking;
+
+    @Column(name = "citizen_identification")
+    private String citizenIdentification;
+
+    @Column(name = "image")
+    private String image;
+
+    @Column(name = "create_at")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime createAt;
 
     @Column(name = "nationality")
     private String nationality;
@@ -66,4 +78,9 @@ public class User {
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime deletedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = LocalDateTime.now();
+    }
 }
