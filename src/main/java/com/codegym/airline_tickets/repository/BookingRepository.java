@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -48,4 +49,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("SELECT b FROM Booking b ORDER BY b.id DESC LIMIT 1")
     Booking findLatest();
+
+    List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time);
 }

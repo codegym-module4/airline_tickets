@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public void remove(Long id) {
-
+        bookingRepository.deleteById(id);
     }
 
     @Override
@@ -107,6 +108,11 @@ public class BookingService implements IBookingService {
             b.setCode(code);
         }
         return bookingRepository.save(b);
+    }
+
+    @Override
+    public List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time) {
+        return bookingRepository.findByCreatedAtLessThanEqual(time);
     }
 
     private static String generateNextCode(long number) {

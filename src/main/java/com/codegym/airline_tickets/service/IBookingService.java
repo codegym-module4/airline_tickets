@@ -5,6 +5,7 @@ import com.codegym.airline_tickets.dto.RevenueByDateDto;
 import com.codegym.airline_tickets.entity.Booking;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IBookingService extends IService<Booking> {
@@ -25,5 +26,7 @@ public interface IBookingService extends IService<Booking> {
     Booking findLatest();
 
     Booking updateOrCreate(Booking b);
+
+    List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time);
 
 }
