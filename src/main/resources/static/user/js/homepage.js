@@ -36,8 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
         arrivalDateOption.classList.remove("d-none")
         arrivalDateOption.classList.add("d-block")
 
-        console.log("check round-trip")
-
 
 });
 
@@ -52,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
         roundTripSection.classList.add("d-none");
         arrivalDateOption.classList.add("d-none")
 
-        console.log("check oneway")
 });
 
 });

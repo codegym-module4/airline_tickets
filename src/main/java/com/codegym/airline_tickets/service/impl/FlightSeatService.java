@@ -2,6 +2,7 @@ package com.codegym.airline_tickets.service.impl;
 
 import com.codegym.airline_tickets.entity.FlightSeat;
 import com.codegym.airline_tickets.repository.FlightSeatRepository;
+import com.codegym.airline_tickets.response.SeatAvailable;
 import com.codegym.airline_tickets.service.IFlightSeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,6 +115,16 @@ public class FlightSeatService implements IFlightSeatService {
     @Override
     public void updateStatusById(Long id, Integer status) {
         flightSeatRepository.updateSeatStatus(id, status);
+    }
+
+    @Override
+    public  List<Object[]> countSeatAvailable(List<Long> flightIds) {
+        return flightSeatRepository.countSeatAvailable(flightIds);
+    }
+
+    @Override
+    public int countSingleFlightSeat(Long flightId) {
+        return flightSeatRepository.countSingleFlightSeat(flightId);
     }
 
     private List<FlightSeat> findConsecutiveFlightSeats(List<FlightSeat> seats, int numberOfPeople) {

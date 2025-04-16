@@ -113,11 +113,12 @@
             }
         });
     });
-    $(document).on("click", "#btnBooking", function () {
+
+    $(document).on("click", "#btnBooking",  function () {
         let data = getDataRequired();
         let total = $("input[name='total']").val();
         data['total'] = total;
-        $.ajax({
+         $.ajax({
             type: 'POST',
             url: '/api/flight/accept-booking',
             data: data,
@@ -127,10 +128,11 @@
                 window.location.href = data.url
             }
         }).fail(function (jqXhr, json, errorThrown) {
-            if (jqXhr.responseJSON.errors) {
-                alert(jqXhr.responseJSON.message);
-            }
+             if (jqXhr.responseJSON.errors) {
+                 window.location.reload();
+             }
         });
+
     });
 })();
 
@@ -151,7 +153,7 @@ function getDataRequired() {
         num_of_baby : num_of_baby,
         flight_type : flight_type,
         idDepart : idDepart,
-        idArrival : idArrival
+        idArrival : idArrival,
     }
 
     return object;
