@@ -113,11 +113,32 @@
             }
         });
     });
-    $(document).on("click", "#btnBooking", function () {
+
+    $(document).on("click", "#btnBooking", async function () {
         let data = getDataRequired();
         let total = $("input[name='total']").val();
         data['total'] = total;
-        $.ajax({
+        debugger
+
+        await $.ajax({
+            type: 'GET',
+            url: `/api/flight/count-seat/${data.idDepart}`,
+            dataType: 'json'
+        }).done(function (data) {
+
+            console.log("data", data)
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+
+
+        console.log("data modal", data)
+        console.log("total",total)
+
+
+        await $.ajax({
             type: 'POST',
             url: '/api/flight/accept-booking',
             data: data,
@@ -131,6 +152,7 @@
                 alert(jqXhr.responseJSON.message);
             }
         });
+
     });
 })();
 

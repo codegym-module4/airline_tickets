@@ -3,7 +3,9 @@ package com.codegym.airline_tickets.controller.Api;
 import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.entity.Flight;
 import com.codegym.airline_tickets.response.FlightResponse;
+import com.codegym.airline_tickets.response.SeatAvailable;
 import com.codegym.airline_tickets.service.IFlightService;
+import com.codegym.airline_tickets.service.impl.FlightSeatService;
 import com.codegym.airline_tickets.service.impl.FlightService;
 import com.codegym.airline_tickets.util.FormaterCustom;
 import jakarta.servlet.http.HttpSession;
@@ -18,10 +20,9 @@ import org.thymeleaf.context.Context;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/flight")
@@ -34,11 +35,9 @@ public class FlightController {
     @Autowired
     private TemplateEngine templateEngine;
 
-//    @PostMapping()
-//    public ResponseEntity<List<FlightResponseDTO>> getAllFlights(String departure, String arrival, LocalDate departureTime, String sortProperty, String sort, int page, int size) {
-//        List<FlightResponseDTO> list = flightService.findAll(departure,arrival,departureTime,sortProperty,sort,page,size);
-//        return new ResponseEntity<>(list, HttpStatus.OK);
-//    }
+    @Autowired
+    private FlightSeatService flightSeatService;
+
 
     @GetMapping("/{id}")
     public ResponseEntity<FlightResponse> getDataFlightById(@PathVariable("id") Long id) {
@@ -170,5 +169,39 @@ public class FlightController {
 
         return ResponseEntity.ok(res);
     }
+
+
+
+    @GetMapping("/count-seat")
+    public ResponseEntity<Object> countSeat(
+            @RequestParam(required = false) Long idDepart,
+            @RequestParam(required = false) String idArrival
+    ) {
+        List<Object[]> results;
+
+        if (idArrival == null || idArrival.equalsIgnoreCase("null")) {
+            results = flightSeatService.countSeatAvailable(idDepart, null);
+        } else {
+            results = flightSeatService.countSeatAvailable(idDepart, Long.valueOf(idArrival));
+        }
+
+        List<SeatAvailable> data = new ArrayList<>();
+        for (Object[] row : results) {
+            Integer flightId = ((Number) row[0]).intValue();
+            String flightCode = (String) row[1];
+            Integer seatAvailable = ((Number) row[2]).intValue();
+
+            SeatAvailable flight = new SeatAvailable(flightId, flightCode, seatAvailable);
+            data.add(flight);
+        }
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("status", HttpStatus.OK.value());
+        result.put("message", "Count seat success");
+        result.put("data", data);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
 }

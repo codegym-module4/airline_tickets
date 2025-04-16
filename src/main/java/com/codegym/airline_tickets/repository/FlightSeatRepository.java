@@ -1,6 +1,7 @@
 package com.codegym.airline_tickets.repository;
 
 import com.codegym.airline_tickets.entity.FlightSeat;
+import com.codegym.airline_tickets.response.SeatAvailable;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,4 +21,14 @@ public interface FlightSeatRepository extends JpaRepository<FlightSeat, Long> {
     @Modifying
     @Query("update FlightSeat fl set fl.status = :status where fl.id = :id")
     void updateSeatStatus(@Param("id") Long id, @Param("status") Integer status);
+
+
+    @Query("select fl.flight.id, fl.flight.code, count (*) AS seatAvailable " +
+            " from FlightSeat fl " +
+            "JOIN Flight f on fl.flight.id = f.id" +
+            " where fl.flight.id IN (:idDepart,:idArrival) " +
+            "and fl.status = 1 " +
+            "GROUP BY fl.flight.id")
+    List<Object[]> countSeatAvailable (@Param("idDepart") Long idDepart, @Param("idArrival") Long idArrival);
+
 }
