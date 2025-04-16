@@ -24,7 +24,7 @@ public class DeleteUnPayBookingSchedule {
     @Autowired
     private IFlightSeatService flightSeatService;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void runEveryMinute() {
         LocalDateTime timeThreshold = LocalDateTime.now().minusMinutes(30);
         List<Booking> records = bookingService.findByCreatedAtLessThanEqual(timeThreshold, 1);

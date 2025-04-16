@@ -44,8 +44,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Modifying
     @Transactional
-    @Query("update Booking b set b.status = ?2 where b.vnpayOrderId = ?1")
-    void updateStatusByVnPayId(String vnpayOrderId, Integer status);
+    @Query("update Booking b set b.status = ?2, b.payment_date = :date where b.vnpayOrderId = ?1")
+    void updateStatusAndPaymentDateByVnPayId(String vnpayOrderId, Integer status, LocalDateTime date);
 
     @Query("SELECT b FROM Booking b ORDER BY b.id DESC LIMIT 1")
     Booking findLatest();

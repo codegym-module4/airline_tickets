@@ -89,8 +89,8 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public void updateStatusByVnPayId(String vnpayOrderId, Integer status) {
-        bookingRepository.updateStatusByVnPayId(vnpayOrderId, status);
+    public void updateStatusAndPaymentDateByVnPayId(String vnpayOrderId, Integer status, LocalDateTime date) {
+        bookingRepository.updateStatusAndPaymentDateByVnPayId(vnpayOrderId, status, date);
     }
 
     @Override

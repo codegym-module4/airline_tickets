@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -51,7 +53,8 @@ public class PaymentController {
         String status = params.get("vnp_ResponseCode");
         String vnp_TxnRef = params.get("vnp_TxnRef");
         if (Objects.equals(status, "00")) {
-            bookingService.updateStatusByVnPayId(vnp_TxnRef, 2);
+            LocalDateTime date = LocalDateTime.now();
+            bookingService.updateStatusAndPaymentDateByVnPayId(vnp_TxnRef, 2, date);
 
             return "redirect:/payment/success";
         }
