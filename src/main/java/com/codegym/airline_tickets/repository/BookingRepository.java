@@ -21,7 +21,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("SELECT SUM(b.totalPrice) " +
             "FROM Booking b " +
             "WHERE b.deletedAt IS NULL " +
-            "AND DATE(b.payment_date) = :date")
+            "AND DATE(b.payment_date) = :date AND b.status = 2")
     BigInteger getTotalRevenueByDate(LocalDate date);
 
     @Query("select b from Booking b where b.status = ?1 and b.user.id = ?2 and b.deletedAt is null")
