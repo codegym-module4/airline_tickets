@@ -114,31 +114,11 @@
         });
     });
 
-    $(document).on("click", "#btnBooking", async function () {
+    $(document).on("click", "#btnBooking",  function () {
         let data = getDataRequired();
         let total = $("input[name='total']").val();
         data['total'] = total;
-        debugger
-
-        await $.ajax({
-            type: 'GET',
-            url: `/api/flight/count-seat/${data.idDepart}`,
-            dataType: 'json'
-        }).done(function (data) {
-
-            console.log("data", data)
-        }).fail(function (jqXhr, json, errorThrown) {
-            if (jqXhr.responseJSON.errors) {
-                alert(jqXhr.responseJSON.message);
-            }
-        });
-
-
-        console.log("data modal", data)
-        console.log("total",total)
-
-
-        await $.ajax({
+         $.ajax({
             type: 'POST',
             url: '/api/flight/accept-booking',
             data: data,
@@ -148,9 +128,9 @@
                 window.location.href = data.url
             }
         }).fail(function (jqXhr, json, errorThrown) {
-            if (jqXhr.responseJSON.errors) {
-                alert(jqXhr.responseJSON.message);
-            }
+             if (jqXhr.responseJSON.errors) {
+                 window.location.reload();
+             }
         });
 
     });
@@ -173,7 +153,7 @@ function getDataRequired() {
         num_of_baby : num_of_baby,
         flight_type : flight_type,
         idDepart : idDepart,
-        idArrival : idArrival
+        idArrival : idArrival,
     }
 
     return object;

@@ -4,11 +4,14 @@ import com.codegym.airline_tickets.dto.FlightRequestDTO;
 import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.entity.Airport;
 import com.codegym.airline_tickets.service.impl.AirportService;
+import com.codegym.airline_tickets.service.impl.FlightSeatService;
 import com.codegym.airline_tickets.service.impl.FlightService;
 import com.codegym.airline_tickets.util.BuildFlightRequest;
 import com.codegym.airline_tickets.util.FormaterCustom;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,19 +20,25 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Controller
 @RequestMapping("/user")
 @Slf4j(topic = "FLIGHT-CONTROLLER")
-@RequiredArgsConstructor
-
 public class FlightsController {
 
-    private final FlightService flightService;
-    private final AirportService airportService;
+    @Autowired
+    private FlightService flightService;
+
+    @Autowired
+    private  AirportService airportService;
+
+    @Autowired
+    private  FlightSeatService flightSeatService;
 
 
     @GetMapping("/select-flight")
@@ -38,13 +47,19 @@ public class FlightsController {
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
                                        @RequestParam(required = false, defaultValue = "price") String sortProperty,
-                                       Model model, RedirectAttributes redirectAttributes
+                                       Model model, RedirectAttributes redirectAttributes, HttpSession session
     ){
 
         log.info("Get flight list");
 
-        FlightRequestDTO flightReq = BuildFlightRequest.build(request,sortProperty);
+        Object errorObj = session.getAttribute("errorMessage");
+        if (errorObj != null) {
+            String errorMessage = errorObj.toString();
+            model.addAttribute("messageError", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
 
+        FlightRequestDTO flightReq = BuildFlightRequest.build(request,sortProperty);
 
         if(flightReq == null ){
             redirectAttributes.addFlashAttribute("messageError","Bạn chưa điền đầy đủ thông tin tìm chuyến bay");
@@ -67,12 +82,14 @@ public class FlightsController {
            List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime, flightReq.getSortProperty(), sort, page, size);
            List<FlightResponseDTO> listArrival = flightService.findAll(arrival, departure,  arrivalTime, flightReq.getSortProperty(), sort, page, size);
 
-
            if(listDeparture.isEmpty() || listArrival.isEmpty() ){
                redirectAttributes.addFlashAttribute("messageError","Không tìm thấy thông tin chuyến bay");
                return "redirect:/";
            }
-           List<Airport> listAirports = airportService.getAll();
+           listDeparture.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0).toList();
+           listArrival.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0 ).toList();
+
+            List<Airport> listAirports = airportService.getAll();
 
            model.addAttribute("flightReq",flightReq);
            model.addAttribute("listDeparture",listDeparture);
@@ -87,7 +104,10 @@ public class FlightsController {
 
            model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
            model.addAttribute("dayOfWeekArrival",FormaterCustom.formatDayOfWeek(arrivalTime));
+           if(errorObj == null){
            model.addAttribute("message","Tìm kiếm thành công");
+
+           }
        }
 
        if(flightReq != null && flightReq.getType().equals("ONEWAY")) {
@@ -121,11 +141,13 @@ public class FlightsController {
            model.addAttribute("arrival", arrival);
            model.addAttribute("departureTime", FormaterCustom.formatDateResponse(departureTime));
            model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
-           model.addAttribute("message","Tìm kiếm thành công");
+           if(errorObj == null){
+               model.addAttribute("message","Tìm kiếm thành công");
+
+           }
         }
         return "user/flight/flight";
     }
-
 
 
 }

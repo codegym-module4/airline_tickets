@@ -118,8 +118,13 @@ public class FlightSeatService implements IFlightSeatService {
     }
 
     @Override
-    public  List<Object[]> countSeatAvailable(Long idDepart, Long idArrival) {
-        return flightSeatRepository.countSeatAvailable(idDepart, idArrival);
+    public  List<Object[]> countSeatAvailable(List<Long> flightIds) {
+        return flightSeatRepository.countSeatAvailable(flightIds);
+    }
+
+    @Override
+    public int countSingleFlightSeat(Long flightId) {
+        return flightSeatRepository.countSingleFlightSeat(flightId);
     }
 
     private List<FlightSeat> findConsecutiveFlightSeats(List<FlightSeat> seats, int numberOfPeople) {

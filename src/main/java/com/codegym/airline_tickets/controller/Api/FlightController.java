@@ -8,6 +8,7 @@ import com.codegym.airline_tickets.service.IFlightService;
 import com.codegym.airline_tickets.service.impl.FlightSeatService;
 import com.codegym.airline_tickets.service.impl.FlightService;
 import com.codegym.airline_tickets.util.FormaterCustom;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,47 +161,45 @@ public class FlightController {
 
     @PostMapping("/accept-booking")
     public ResponseEntity<?> acceptBooking(@RequestParam Map<String, String> request, HttpSession session) {
+
         String key = UUID.randomUUID().toString().replace("-", "");
         session.setAttribute("confirm-data" + key, request);
+
+        Integer totalPassenger = Integer.valueOf(request.get("num_of_adult")) + Integer.valueOf(request.get("num_of_child"));
+
+        List<Long> listFlightId = new ArrayList<>();
+
+        Long idDepart = Long.valueOf(request.get("idDepart"));
+        String idArrival = request.get("idArrival");
+        listFlightId.add(idDepart);
+
+        List<Object[]> results;
+        if(idArrival.equals("")){
+            listFlightId.add(null);
+            results = flightSeatService.countSeatAvailable(listFlightId);
+        }
+        else {
+            listFlightId.add( Long.valueOf(idArrival));
+            results = flightSeatService.countSeatAvailable(listFlightId);
+        }
+        for (Object[] row : results) {
+            Integer seatAvailable = ((Number) row[2]).intValue();
+            String flightCode = (String) row[1];
+            if(totalPassenger > seatAvailable){
+                Map<String, String> res = new HashMap<>();
+                res.put("errors", "true");
+                res.put("url", "/");
+                String message = String.format("Vé của chuyến " + flightCode + " không đủ theo yêu cầu của bạn. Vui lòng thử lại!");
+                session.setAttribute("errorMessage",message);
+                return ResponseEntity.badRequest().body(res);
+            }
+        }
 
         Map<String, String> res = new HashMap<>();
         res.put("errors", "false");
         res.put("url", "/booking/" + key);
 
         return ResponseEntity.ok(res);
-    }
-
-
-
-    @GetMapping("/count-seat")
-    public ResponseEntity<Object> countSeat(
-            @RequestParam(required = false) Long idDepart,
-            @RequestParam(required = false) String idArrival
-    ) {
-        List<Object[]> results;
-
-        if (idArrival == null || idArrival.equalsIgnoreCase("null")) {
-            results = flightSeatService.countSeatAvailable(idDepart, null);
-        } else {
-            results = flightSeatService.countSeatAvailable(idDepart, Long.valueOf(idArrival));
-        }
-
-        List<SeatAvailable> data = new ArrayList<>();
-        for (Object[] row : results) {
-            Integer flightId = ((Number) row[0]).intValue();
-            String flightCode = (String) row[1];
-            Integer seatAvailable = ((Number) row[2]).intValue();
-
-            SeatAvailable flight = new SeatAvailable(flightId, flightCode, seatAvailable);
-            data.add(flight);
-        }
-
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("status", HttpStatus.OK.value());
-        result.put("message", "Count seat success");
-        result.put("data", data);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 

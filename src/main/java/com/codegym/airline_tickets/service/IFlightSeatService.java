@@ -16,5 +16,7 @@ public interface IFlightSeatService extends IService<FlightSeat> {
 
     void updateStatusById(Long id, Integer status);
 
-    List<Object[]> countSeatAvailable (Long idDepart, Long idArrival);
+    List<Object[]> countSeatAvailable (List<Long> flightIds);
+
+    int countSingleFlightSeat(Long flightId);
 }
