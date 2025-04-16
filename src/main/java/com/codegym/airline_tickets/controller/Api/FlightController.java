@@ -171,6 +171,7 @@ public class FlightController {
 
         Long idDepart = Long.valueOf(request.get("idDepart"));
         String idArrival = request.get("idArrival");
+        String type = request.get("flight_type");
         listFlightId.add(idDepart);
 
         List<Object[]> results;
@@ -182,17 +183,29 @@ public class FlightController {
             listFlightId.add( Long.valueOf(idArrival));
             results = flightSeatService.countSeatAvailable(listFlightId);
         }
+
+        List<SeatAvailable> data = new ArrayList<>();
+
         for (Object[] row : results) {
-            Integer seatAvailable = ((Number) row[2]).intValue();
+            Integer flightId = ((Number) row[0]).intValue();
             String flightCode = (String) row[1];
-            if(totalPassenger > seatAvailable){
-                Map<String, String> res = new HashMap<>();
-                res.put("errors", "true");
-                res.put("url", "/");
-                String message = String.format("Vé của chuyến " + flightCode + " không đủ theo yêu cầu của bạn. Vui lòng thử lại!");
-                session.setAttribute("errorMessage",message);
-                return ResponseEntity.badRequest().body(res);
-            }
+            Integer seatAvailable = ((Number) row[2]).intValue();
+
+            SeatAvailable flight = new SeatAvailable(flightId, flightCode, seatAvailable);
+            data.add(flight);
+        }
+
+        data.stream().filter(item -> item.getSeatAvailable() < totalPassenger).toList();
+        StringBuilder messageBuilder = new StringBuilder("Chuyến bay  ");
+        if(!data.isEmpty()){
+            data.stream().forEach(item -> {
+                messageBuilder.append(item.getFlightCode()).append(", ");
+            });
+            Map<String, String> res = new HashMap<>();
+            res.put("errors", "true");
+            res.put("url", "/");
+            session.setAttribute("errorMessage",messageBuilder + " không đủ chỗ. Vui lòng thử lại!");
+            return ResponseEntity.badRequest().body(res);
         }
 
         Map<String, String> res = new HashMap<>();
