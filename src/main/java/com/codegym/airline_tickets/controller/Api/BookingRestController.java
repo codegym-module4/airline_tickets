@@ -84,6 +84,7 @@ public class BookingRestController {
             seatReturn = flightSeatService.allocateSeats(data.getReturnFlight().getId(), num_of_seat);
             saveTicket(data, seatReturn, res, res.getReturnFlight(), 2);
         }
+        session.removeAttribute("confirm-data" + data.getKey());
         Map<String, String> result = new HashMap<>();
         result.put("errors", "true");
         result.put("message", "Vui lòng thực hiện thanh toán");
