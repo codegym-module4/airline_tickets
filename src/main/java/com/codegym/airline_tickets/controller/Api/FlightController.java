@@ -215,5 +215,4 @@ public class FlightController {
         return ResponseEntity.ok(res);
     }
 
-
 }
