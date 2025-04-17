@@ -129,6 +129,7 @@
             }
         }).fail(function (jqXhr, json, errorThrown) {
              if (jqXhr.responseJSON.errors) {
+                 alert(jqXhr.responseJSON.message);
                  window.location.reload();
              }
         });
