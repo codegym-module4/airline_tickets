@@ -31,12 +31,7 @@ public interface FlightSeatRepository extends JpaRepository<FlightSeat, Long> {
             "GROUP BY fl.flight.id")
     List<Object[]> countSeatAvailable (@Param("flightIds") List<Long> flightIds);
 
-    @Query("select fl.flight.id, fl.flight.code, count (*) AS seatAvailable " +
-            " from FlightSeat fl " +
-            "JOIN Flight f on fl.flight.id = f.id" +
-            " where fl.flight.id = :flightId " +
-            "and fl.status = 1 " +
-            "GROUP BY fl.flight.id")
-    int countSingleFlightSeat(@Param("flightId") Long flightId);
+    @Query("SELECT COUNT(fs) FROM FlightSeat fs WHERE fs.flight.id = :flightId AND fs.status = 1")
+    Integer countSingleFlightSeat(@Param("flightId") Long flightId);
 
 }

@@ -83,11 +83,11 @@ public class FlightsController {
            List<FlightResponseDTO> listArrival = flightService.findAll(arrival, departure,  arrivalTime, flightReq.getSortProperty(), sort, page, size);
 
            if(listDeparture.isEmpty() || listArrival.isEmpty() ){
-               redirectAttributes.addFlashAttribute("messageError","Không tìm thấy thông tin chuyến bay");
+               redirectAttributes.addFlashAttribute("messageError","Chuyến bay đã hết chỗ hoặc không tìm thấy thông tin chuyến!");
                return "redirect:/";
            }
-           listDeparture.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0).toList();
-           listArrival.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0 ).toList();
+           listDeparture = listDeparture.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0).toList();
+           listArrival = listArrival.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0 ).toList();
 
             List<Airport> listAirports = airportService.getAll();
 
@@ -118,19 +118,23 @@ public class FlightsController {
             LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
             if(flightReq.getPrice() != null){
                 List<FlightResponseDTO> listHotdeal = flightService.findFightHotDeal(departure, arrival, flightReq.getPrice(), sortProperty, sort, page, size);
+                listHotdeal =  listHotdeal.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0).toList();
                 model.addAttribute("listDeparture",listHotdeal);
                 if(listHotdeal.isEmpty()){
-                    redirectAttributes.addFlashAttribute("messageError","Không tìm thấy thông tin chuyến bay");
+                    redirectAttributes.addFlashAttribute("messageError","Chuyến bay đã hết chỗ hoặc không tìm thấy thông tin chuyến!");
                     return "redirect:/";
                 }
 
             }else {
             List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime,flightReq.getSortProperty(), sort, page, size);
-                model.addAttribute("listDeparture",listDeparture);
+                listDeparture = listDeparture.stream().filter(item ->
+                        flightSeatService.countSingleFlightSeat(item.getId()) > 0
+                ).toList();
                 if(listDeparture.isEmpty()){
-                    redirectAttributes.addFlashAttribute("messageError","Không tìm thấy thông tin chuyến bay");
+                    redirectAttributes.addFlashAttribute("messageError","Chuyến bay đã hết chỗ hoặc không tìm thấy thông tin chuyến!");
                     return "redirect:/";
                 }
+                model.addAttribute("listDeparture",listDeparture);
             }
 
             List<Airport> listAirports = airportService.getAll();

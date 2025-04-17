@@ -18,5 +18,5 @@ public interface IFlightSeatService extends IService<FlightSeat> {
 
     List<Object[]> countSeatAvailable (List<Long> flightIds);
 
-    int countSingleFlightSeat(Long flightId);
+    Integer countSingleFlightSeat(Long flightId);
 }

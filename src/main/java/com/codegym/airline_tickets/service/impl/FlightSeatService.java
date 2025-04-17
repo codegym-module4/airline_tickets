@@ -123,7 +123,7 @@ public class FlightSeatService implements IFlightSeatService {
     }
 
     @Override
-    public int countSingleFlightSeat(Long flightId) {
+    public Integer countSingleFlightSeat(Long flightId) {
         return flightSeatRepository.countSingleFlightSeat(flightId);
     }
 
