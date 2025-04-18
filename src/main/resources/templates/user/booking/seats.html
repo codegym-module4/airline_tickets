@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<head th:replace="~{user/layouts/head::head ('Thông tin đặt vé')}"></head>
+<body>
+<!--Header-->
+<th:block th:replace="~{user/layouts/header::header}"></th:block>
+<div class="main-content">
+    <!-- Legend -->
+    <div class="legend">
+        <div class="d-flex align-items-center">
+            <div class="seat seat-available"></div>
+            <span class="ps-2">Ghế trống</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="seat seat-booked"></div>
+            <span class="ps-2">Đã đặt</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="seat seat-selected"></div>
+            <span class="ps-2">Đang chọn</span>
+        </div>
+    </div>
+
+    <!-- Seat map -->
+    <div class="seat-map-container">
+        <div id="seat-map">
+            <div th:each="row : ${#numbers.sequence(1, maxRow)}" class="seat-row pb-3">
+                <!-- Lặp qua các ghế trong mỗi hàng -->
+                <th:block th:each="seat : ${seats}" th:if="${seat.rowAsInt == row}">
+                    <div th:class="'seat ' + (${seat.status == 2} ? 'seat-booked' : 'seat-available')"
+                            th:data-seat-id="${seat.id}">
+                        <span th:text="${seat.seatRow + seat.seatCol}"></span>
+                    </div>
+                    <div th:if="${seat.seatCol == 'C'}" style="width: 85px;"></div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+<script>
+    $('.seat-available').on('click', function () {
+        $(this).toggleClass('seat-selected');
+    });
+</script>
+</body>
+
+</html>

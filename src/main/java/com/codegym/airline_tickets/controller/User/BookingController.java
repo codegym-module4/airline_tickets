@@ -3,15 +3,19 @@ package com.codegym.airline_tickets.controller.User;
 import com.codegym.airline_tickets.dto.BookingDTO;
 import com.codegym.airline_tickets.dto.BookingTicketDTO;
 import com.codegym.airline_tickets.dto.CountryDTO;
+import com.codegym.airline_tickets.dto.FlightSeatDTO;
 import com.codegym.airline_tickets.entity.Flight;
+import com.codegym.airline_tickets.service.IFlightSeatService;
 import com.codegym.airline_tickets.service.IFlightService;
 import com.codegym.airline_tickets.util.GetCountries;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Objects;
@@ -24,12 +28,16 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/booking")
 public class BookingController {
 
     @Autowired
     private IFlightService flightService;
 
-    @GetMapping("/booking/{key}")
+    @Autowired
+    private IFlightSeatService flightSeatService;
+
+    @GetMapping("/{key}")
     public String index(@PathVariable String key, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if (session.getAttribute("confirm-data" + key) == null) {
             redirectAttributes.addFlashAttribute("messageError", "Thời hạn để đặt vé đã hết!!");
@@ -90,5 +98,28 @@ public class BookingController {
             dto.setCustomerType(customerType);
             return dto;
         }).limit(count);
+    }
+
+    @GetMapping("/seat-selection/{flightId}")
+    public String seatSelection(@PathVariable("flightId") Long id, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        String url = "/";
+        if (referer != null) {
+            url =  referer;
+        }
+        Flight flight = flightService.findById(id);
+        if (flight == null) {
+            return "redirect:" + url;
+        }
+        List<FlightSeatDTO> lists = flightSeatService.getAllSeatByFlightId(id);
+        lists.forEach(seat -> seat.setRowAsInt(Integer.parseInt(seat.getSeatRow())));
+        int maxRow = lists.stream()
+                .mapToInt(seat -> Integer.parseInt(seat.getSeatRow()))
+                .max()
+                .orElse(40);
+        model.addAttribute("maxRow", maxRow);
+        model.addAttribute("seats", lists);
+
+        return "user/booking/seats";
     }
 }
