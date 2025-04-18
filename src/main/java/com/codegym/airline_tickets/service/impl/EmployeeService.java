@@ -48,7 +48,6 @@ public class EmployeeService implements IEmployeeService {
 
 
     public void update(EmployeeAccountDTO dto) {
-        // Cập nhật Account (nếu có)
         Account account = accountRepository.findById(dto.getAccountId()).orElse(null);
         if (account != null) {
             account.setEmail(dto.getEmail());
@@ -201,7 +200,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     public void saveNewEmployeeAndAccount(EmployeeAccountDTO dto) {
-        // 1. Tạo Employee
+        
         Employee employee = new Employee();
         employee.setCode(dto.getCode());
         employee.setFullName(dto.getFullName());
@@ -215,10 +214,10 @@ public class EmployeeService implements IEmployeeService {
         Account account = new Account();
         account.setEmail(dto.getEmail());
         account.setPassword(dto.getPassword());
-        account.setRole(account.getRole()); // hoặc dùng roleRepository.findById(dto.getRoleId())
+        account.setRole(account.getRole()); 
         accountRepository.save(account);
 
-        // 3. Cập nhật employee_id vào bảng accounts (bằng tay)
+        
         updateEmployeeIdInAccount(account.getId(), employee.getId());
     }
 
