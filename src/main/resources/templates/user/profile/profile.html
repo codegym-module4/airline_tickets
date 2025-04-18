@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{user/layouts/head::head('Hồ sơ - Vietjet Air')}"></head>
+<body style="background: white; background-size: cover;">
+<th:block th:replace="~{user/layouts/header::header}"></th:block>
+<main id="content">
+    <section class="section">
+        <div class="mypage_block user_info">
+            <nav class="mypage_nav">
+                <ul>
+                    <li class="user_info"><a href="#">Thông tin cá nhân</a></li>
+                    <li class="user_payment"><a href="/payment">Thanh toán</a></li>
+                    <li class="user_transfer_history"><a href="/payment/transfer-history">Lịch sử giao dịch</a></li>
+                    <li class="user_change_password"><a th:href="@{/profile/change-password}">Đổi mật khẩu</a></li>
+                </ul>
+            </nav>
+            <section class="mypage_content">
+                <div class="booking-form profile-card">
+                    <h2>Hồ sơ người dùng</h2>
+                    <div sec:authorize="isAuthenticated()">
+                        <img th:if="${user.image != null}" th:src="${user.image}" alt="Ảnh đại diện" class="avatar"/>
+                        <img th:if="${user.image == null}" src="/user/img/default-avatar.png" alt="Ảnh mặc định" class="avatar"/>
+                        <ul class="info-list">
+                            <li><span class="label">Họ và tên:</span><span class="value" sec:authentication="principal.fullName"></span></li>
+                            <li><span class="label">Ngày sinh:</span><span class="value" th:text="${#temporals.format(user.dob, 'dd/MM/yyyy')}"></span></li>
+                            <li><span class="label">Địa chỉ:</span><span class="value" th:text="${user.address}"></span></li>
+                            <li><span class="label">Email:</span><span class="value" sec:authentication="name"></span></li>
+                            <li><span class="label">Giới tính:</span><span class="value" th:text="${user.gender}"></span></li>
+                            <li><span class="label">Điện thoại:</span><span class="value" th:text="${user.phone}"></span></li>
+                            <li><span class="label">Xếp hạng:</span><span class="value" th:text="${user.ranking}"></span></li>
+                            <li><span class="label">Quốc tịch:</span><span class="value" th:text="${user.getNationality()}"></span></li>
+                        </ul>
+                        <a th:href="@{/profile/edit}" class="btn btn-custom">Chỉnh sửa</a>
+                    </div>
+                </div>
+
+            </section>
+        </div><!-- .mypage_block END -->
+    </section>
+    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+</main>
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+</body>
+</html>

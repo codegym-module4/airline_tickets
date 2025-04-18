@@ -49,45 +49,54 @@ document.addEventListener("DOMContentLoaded", function () {
         oneWaySection.classList.remove("d-none");
         roundTripSection.classList.add("d-none");
         arrivalDateOption.classList.add("d-none")
+
 });
 
 });
 
 
     window.addEventListener("load", (event) => {
-        document.getElementById('passengers').value = "1 Người lớn"
+        // document.getElementById('passengers').value = "1 Người lớn"
+
         const storageDefault = JSON.parse(window.sessionStorage.getItem("data"))
 
         const inputOw = document.querySelector(".des-one-way")
         inputOw.value = storageDefault.arrivalOneWay
 
-        sessionStorage.clear()
+        // sessionStorage.clear()
 
     });
 
-    function changeCount(event, type, value) {
+    const changeCount = (event, type, value) => {
     event.stopPropagation();
     event.preventDefault();
     let element = document.getElementById(type);
     let count = parseInt(element.textContent) + value;
 
+    let elementAdult = document.getElementById("adults");
+    let countAdults =  parseInt(elementAdult.textContent) + value;
+
     if(type === "adults" && count < 1){
+        return;
+    }
+    if (type === 'infant' && value > 0 &&  count >= countAdults) {
         return;
     }
 
     if (count < 0) count = 0;
     element.textContent = count;
 
+        }
 
-}
 
-    function submitForm(e) {
+
+    const submitForm = (e) => {
     e.preventDefault();
     let counts = {
     adult: parseInt(document.getElementById('adults').textContent),
     child: parseInt(document.getElementById('child').textContent),
     infant: parseInt(document.getElementById('infant').textContent)
-};
+    };
 
     let passengerText = [];
     if (counts.adult > 0) passengerText.push(`${counts.adult} Người lớn`);
@@ -97,9 +106,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('passengers').value = passengerText.join(", ") || "Chọn số hành khách";
     let dropdown = bootstrap.Dropdown.getInstance(document.getElementById('passengers'));
     if (dropdown) dropdown.hide();
-}
+    }
 
-    function submitFormSearch(e){
+    const submitFormSearch = (e) =>{
         event.preventDefault();
 
                 const checkedRoundTrip = document.getElementById("round-trip")
@@ -142,4 +151,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("searchForm").submit();
 
     }
+
+
+    $(document).ready( () => {
+    $('.hot-deal-link').on('click', function (e) {
+        e.preventDefault();
+
+        const departure = $(this).find('.departure-hotdeal').text().trim();
+        const arrival = $(this).find('.arrival-hotdeal').text().trim();
+        const price = $(this).find('.price-hotdeal').text().trim().replace(",","");
+
+        const data = {
+            departure: departure,
+            arrival: arrival,
+            price: price,
+            isHotdeal: true
+        };
+
+        searchFormData.departureAirport =departure
+        searchFormData.arrivalOneWay = arrival
+        searchFormData.isOneWay = true
+
+        sessionStorage.setItem("data",JSON.stringify(searchFormData));
+
+        window.location.href = `/user/select-flight?departureAirport=${data.departure}&arrivalAirportOneWay=${data.arrival}&price=${data.price}&isHotdeal=${data.isHotdeal}`
+
+
+    });
+});
+
+
+
+
 

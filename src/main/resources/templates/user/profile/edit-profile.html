@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{user/layouts/head::head('Chỉnh sửa hồ sơ - Vietjet Air')}"></head>
+<body style="background: white; background-size: cover;">
+<th:block th:replace="~{user/layouts/header::header}"></th:block>
+<main id="content">
+    <section class="section">
+        <div class="mypage_block user_info">
+            <nav class="mypage_nav">
+                <ul>
+                    <li class="user_info"><a href="/profile">Thông tin cá nhân</a></li>
+                    <li class="user_payment"><a href="/payment">Thanh toán</a></li>
+                    <li class="user_transfer_history"><a href="/payment/transfer-history">Lịch sử giao dịch</a></li>
+                    <li class="user_change_password"><a href="/profile/change-password">Đổi mật khẩu</a></li>
+                </ul>
+            </nav>
+            <section class="mypage_content">
+                <div class="booking-form" style="max-width: 400px; padding: 20px; border-radius: 5px;">
+                    <h2 class="text-white text-center">Chỉnh sửa hồ sơ</h2>
+                    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                    <form th:action="@{/profile/edit}" th:object="${user}" method="post" enctype="multipart/form-data" class="mt-3">
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label text-white">Họ và tên:</label>
+                            <input type="text" id="fullName" th:field="*{fullName}" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dob" class="form-label text-white">Ngày sinh:</label>
+                            <input type="text" id="dob" name="dob" th:value="${#temporals.format(user.dob, 'dd/MM/yyyy')}" class="form-control" required pattern="\d{2}/\d{2}/\d{4}" placeholder="dd/MM/yyyy"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label text-white">Địa chỉ:</label>
+                            <input type="text" id="address" th:field="*{address}" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label text-white">Email:</label>
+                            <input type="email" id="email" th:value="${#authentication.name}" class="form-control" readonly/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="form-label text-white">Giới Tính:</label>
+                            <select id="gender" th:field="*{gender}" class="form-control" required>
+                                <option value="Male">Nam</option>
+                                <option value="Female">Nữ</option>
+                                <option value="Other">Khác</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label text-white">Số điện thoại:</label>
+                            <input type="text" id="phone" th:field="*{phone}" class="form-control" required pattern="[0-9]{10}"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="citizenIdentification" class="form-label text-white">CCCD:</label>
+                            <input type="text" id="citizenIdentification" th:field="*{citizenIdentification}" class="form-control" required pattern="[0-9]{12}"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nationality" class="form-label text-white">Quốc tịch:</label>
+                            <input type="text" id="nationality" th:field="*{nationality}" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ranking" class="form-label text-white">Xếp hạng:</label>
+                            <input type="text" id="ranking" th:field="*{ranking}" class="form-control" readonly/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="profileImage" class="form-label text-white">Ảnh đại diện:</label>
+                            <input type="file" id="profileImage" name="profileImage" class="form-control" accept="image/*"/>
+                        </div>
+                        <button type="submit" class="btn btn-custom w-100">Lưu</button>
+                    </form>
+                </div>
+            </section>
+        </div><!-- .mypage_block END -->
+    </section>
+    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+</main>
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+</body>
+</html>

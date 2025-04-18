@@ -358,8 +358,7 @@ a{
 .footer-root{
     background-color: rgba(0, 0, 0, 0);
     margin-top: 40px;
-    border-top: 2px solid rgba(217, 26, 33, 0.73);
-
+    border-top: 1px solid rgba(217, 26, 33, 0.73);
 }
 
 .header-container, .footer-container{
@@ -373,7 +372,6 @@ a{
     background: #f8f9fa;
 }
 
-
 .sort-box {
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -381,7 +379,6 @@ a{
     background: #fff;
     margin-bottom: 15px;
 }
-
 
 .search-box {
     border: 1px solid #ccc;
@@ -421,3 +418,161 @@ a{
 .table-model th tr {
     margin: 10px 0;
 }
+
+/* ---------------------------------------------------- AUTH CSS ---------------------------------------------------- */
+.auth-page {
+    background: url('/user/img/background-main.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.auth-container {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 30px 25px;
+    background: linear-gradient(30.3deg, rgba(217, 26, 33, 0.73) 33.94%, #6F0000 163.23%);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.auth-container h2 {
+    margin-bottom: 20px;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
+}
+
+.auth-container .form-label {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.auth-container .form-control {
+    border-radius: 6px;
+    border: 1px solid #CCCCCC;
+    padding: 8px 12px;
+    font-size: 1rem;
+}
+
+.auth-container .btn-custom {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    margin-top: 10px;
+    background: linear-gradient(26.73deg, #F9A51A 13.7%, #FBB612 29.8%, #FFDD00 66.81%);
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.auth-container .btn-custom:hover {
+    transform: translateY(-2px);
+}
+
+.auth-container p.text-center a {
+    color: #ffffff;
+    text-decoration: underline;
+    margin: 0 5px;
+    font-size: 0.95rem;
+}
+
+.auth-container .alert {
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+.auth-container .alert-danger {
+    background-color: rgba(217, 26, 33, 0.1);
+    color: #D91A21;
+    border: 1px solid #D91A21;
+}
+.auth-container .alert-success {
+    background-color: rgba(213, 174, 52, 0.1);
+    color: #baa228;
+    border: 1px solid #e4c009;
+}
+
+/* ---------------------------------------------------- AUTH CSS ---------------------------------------------------- */
+
+/* ---------------------------------------------------- PROFILE CSS ---------------------------------------------------- */
+.mypage_block.user_info .profile-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    max-width: 500px;
+    margin: 0 auto;
+    color: #333333;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.mypage_block.user_info .profile-card h2 {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-size: 1.75rem;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.mypage_block.user_info .profile-card .avatar {
+    display: block;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    border: 3px solid #FFDD00FF;
+    object-fit: cover;
+}
+
+.mypage_block.user_info .profile-card .info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mypage_block.user_info .profile-card .info-list li {
+    display: flex;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mypage_block.user_info .profile-card .info-list li:last-child {
+    border-bottom: none;
+}
+
+.mypage_block.user_info .profile-card .info-list li .label {
+    flex: 0 0 120px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.mypage_block.user_info .profile-card .info-list li .value {
+    flex: 1;
+    color: #ffffff;
+}
+
+.mypage_block.user_info .profile-card .btn-custom {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    margin-top: 25px;
+    background: linear-gradient(26.73deg, #F9A51A 13.7%, #FBB612 29.8%, #FFDD00 66.81%);
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.mypage_block.user_info .profile-card .btn-custom:hover {
+    transform: translateY(-2px);
+}
+
+
+/* ---------------------------------------------------- PROFILE CSS ---------------------------------------------------- */
+

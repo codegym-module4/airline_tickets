@@ -24,14 +24,6 @@
             });
         });
 
-        // document.getElementById("btnConfirm").addEventListener("click", () => {
-        //     const modalData = document.getElementById("modalData");
-        //
-        //     modalData.innerHTML = `
-        //         <p>Bảng 1: ${dataDepature || "Chưa chọn"}</p>
-        //         <p>Bảng 2: ${dataArrival || "Chưa chọn"}</p>
-        //     `;
-        // });
 
         const storage = JSON.parse(window.sessionStorage.getItem("data"))
         if(storage.isRoundTrip === true){
@@ -52,16 +44,7 @@
 
             const inputArrivalDate = document.getElementById("arrival-date");
             inputArrivalDate.value = storage.arrivalTime
-
-            const inputAdults = document.getElementById("adults");
-            inputAdults.textContent = storage.quantity.adult
-
-            const inputChild = document.getElementById("child");
-            inputChild.textContent = storage.quantity.child
-
-            const inputInfant = document.getElementById("infant");
-            inputInfant.textContent = storage.quantity.infant
-
+            
             // sessionStorage.clear();
         }
 
@@ -84,16 +67,15 @@
             const inputDepartureDate = document.getElementById('departure-date');
             inputDepartureDate.value = storage.departureTime
 
-            const inputAdult = document.getElementById("adults");
-            inputAdult.textContent = storage.quantity.adult
-
-            const inputChild = document.getElementById("child");
-            inputChild.textContent = storage.quantity.child
-
-            const inputInfant = document.getElementById("infant");
-            inputInfant.textContent = storage.quantity.infant
             // sessionStorage.clear();
         }
+
+
+        document.getElementById('passengers').value = `${storage.quantity.adult} Người lớn, ${storage.quantity.child} Trẻ em, ${storage.quantity.infant} Em bé`
+
+        $("input[name='num_of_adult']").val(storage.quantity.adult);
+        $("input[name='num_of_child']").val(storage.quantity.child);
+        $("input[name='num_of_baby']").val(storage.quantity.infant);
 
         $(document).on("click", ".btn-data-flight", function () {
             let id = $(this).data("id");
@@ -131,11 +113,12 @@
             }
         });
     });
-    $(document).on("click", "#btnBooking", function () {
+
+    $(document).on("click", "#btnBooking",  function () {
         let data = getDataRequired();
         let total = $("input[name='total']").val();
         data['total'] = total;
-        $.ajax({
+         $.ajax({
             type: 'POST',
             url: '/api/flight/accept-booking',
             data: data,
@@ -145,10 +128,12 @@
                 window.location.href = data.url
             }
         }).fail(function (jqXhr, json, errorThrown) {
-            if (jqXhr.responseJSON.errors) {
-                alert(jqXhr.responseJSON.message);
-            }
+             if (jqXhr.responseJSON.errors) {
+                 alert(jqXhr.responseJSON.message);
+                 window.location.reload();
+             }
         });
+
     });
 })();
 
@@ -169,7 +154,7 @@ function getDataRequired() {
         num_of_baby : num_of_baby,
         flight_type : flight_type,
         idDepart : idDepart,
-        idArrival : idArrival
+        idArrival : idArrival,
     }
 
     return object;

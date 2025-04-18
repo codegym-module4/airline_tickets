@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Revenue Chart</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <link rel="stylesheet" th:href="@{/admin/css/chart.css}">
     </head>
@@ -13,11 +14,6 @@
         <canvas id="revenueChart" height="600px"></canvas>
     </div>
 
-
-    <!-- Form ẩn để gửi dữ liệu totalRevenue -->
-    <form id="exportForm" action="/admin/export-excel" method="POST" style="display: none;">
-        <input type="hidden" name="totalRevenue" id="totalRevenueData" />
-    </form>
 
     <div class="export-button-container">
         <p class="export-button" onclick="exportFile()">Xuất File</p>
@@ -80,12 +76,37 @@
         });
 
         function exportFile() {
-            var totalRevenueData = JSON.stringify(totalRevenue);  // Chuyển dữ liệu thành chuỗi JSON
-            document.getElementById('totalRevenueData').value = totalRevenueData;  // Đưa dữ liệu vào input ẩn
 
-            // Submit form gửi dữ liệu tới controller
-            document.getElementById('exportForm').submit();
+            // Lấy ảnh biểu đồ từ canvas
+            const canvas = document.getElementById('revenueChart');
+            const image = canvas.toDataURL('image/png');
+
+            $.ajax({
+                url: '/admin/export-excel',
+                type: 'POST',
+                contentType: 'application/json', //gửi đến backend là json
+                data: JSON.stringify({
+                    totalRevenue: totalRevenue,
+                    chartImage: image
+                }),
+                xhrFields: {
+                    responseType: 'blob' // nhận về dữ liệu nhị phân (binary) như file, ảnh, Excel, PDF..từ backend
+                },
+                success: function(blob) {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "report.xlsx";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+                error: function() {
+                    alert("Xuất file thất bại!");
+                }
+            })
         }
+
     </script>
 
     </body>

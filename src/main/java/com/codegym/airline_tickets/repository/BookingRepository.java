@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -20,7 +21,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("SELECT SUM(b.totalPrice) " +
             "FROM Booking b " +
             "WHERE b.deletedAt IS NULL " +
-            "AND DATE(b.payment_date) = :date")
+            "AND DATE(b.payment_date) = :date AND b.status = 2")
     BigInteger getTotalRevenueByDate(LocalDate date);
 
     @Query("select b from Booking b where b.status = ?1 and b.user.id = ?2 and b.deletedAt is null")
@@ -43,6 +44,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Modifying
     @Transactional
-    @Query("update Booking b set b.status = ?2 where b.vnpayOrderId = ?1")
-    void updateStatusByVnPayId(String vnpayOrderId, Integer status);
+    @Query("update Booking b set b.status = ?2, b.payment_date = :date where b.vnpayOrderId = ?1")
+    void updateStatusAndPaymentDateByVnPayId(String vnpayOrderId, Integer status, LocalDateTime date);
+
+    @Query("SELECT b FROM Booking b ORDER BY b.id DESC LIMIT 1")
+    Booking findLatest();
+
+    List<Booking> findByCreatedAtLessThanEqualAndStatus(LocalDateTime time, Integer status);
 }
