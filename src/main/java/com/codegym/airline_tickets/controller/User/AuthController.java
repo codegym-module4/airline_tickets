@@ -3,6 +3,7 @@ package com.codegym.airline_tickets.controller.User;
 import com.codegym.airline_tickets.entity.Account;
 import com.codegym.airline_tickets.entity.User;
 import com.codegym.airline_tickets.repository.UserRepository;
+import com.codegym.airline_tickets.service.impl.FirebaseStorageService;
 import com.codegym.airline_tickets.service.impl.AccountService;
 import com.codegym.airline_tickets.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -39,6 +46,9 @@ public class AuthController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
 
     private final Map<String, String> resetCodes = new HashMap<>();
 
@@ -147,21 +157,51 @@ public class AuthController {
 
     @PostMapping("/profile/edit")
     public String processEditProfile(@ModelAttribute("user") @Valid User user,
+                                     @RequestParam("dob") String dobString,
+                                     @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
                                      BindingResult result,
                                      Authentication authentication,
                                      Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("error", "Dữ liệu không hợp lệ!");
             return "user/profile/edit-profile";
         }
+
         String email = authentication.getName();
         Account account = accountService.getAccountByEmail(email);
         User existingUser = account.getUser();
+
         existingUser.setFullName(user.getFullName());
-        existingUser.setPhone(user.getPhone());
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            existingUser.setDob(LocalDate.parse(dobString, formatter));
+        } catch (DateTimeParseException e) {
+            model.addAttribute("error", "Ngày sinh không đúng định dạng (dd/MM/yyyy)!");
+            return "user/profile/edit-profile";
+        }
         existingUser.setAddress(user.getAddress());
+        existingUser.setGender(user.getGender());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setCitizenIdentification(user.getCitizenIdentification());
+        existingUser.setNationality(user.getNationality());
+
+        if (profileImage != null && !profileImage.isEmpty()) {
+            try {
+                String oldImageUrl = existingUser.getImage();
+                if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
+                    firebaseStorageService.deleteFileFromUrl(oldImageUrl);
+                }
+
+                String imageUrl = firebaseStorageService.uploadFile(profileImage, existingUser.getId().toString());
+                existingUser.setImage(imageUrl);
+            } catch (IOException e) {
+                model.addAttribute("error", "Không thể upload ảnh!");
+                return "user/profile/edit-profile";
+            }
+        }
+
         userRepository.save(existingUser);
 
-        // Làm mới SecurityContext với UserDetails mới
         UserDetails updatedUserDetails = accountService.loadUserByUsername(email);
         Authentication newAuth = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
                 updatedUserDetails, authentication.getCredentials(), authentication.getAuthorities());
