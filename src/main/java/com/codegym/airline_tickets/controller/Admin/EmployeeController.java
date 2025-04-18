@@ -7,6 +7,7 @@ import com.codegym.airline_tickets.entity.Role;
 import com.codegym.airline_tickets.repository.AccountRepository;
 import com.codegym.airline_tickets.repository.EmployeeRepository;
 import com.codegym.airline_tickets.repository.RoleRepository;
+import com.codegym.airline_tickets.service.IAccountService;
 import com.codegym.airline_tickets.service.impl.EmployeeService;
 import com.codegym.airline_tickets.service.impl.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class EmployeeController {
     private RoleRepository roleRepository;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate; // Inject JdbcTemplate
+    private IAccountService accountService;
+
 
     // ============================ LIST ===================================
     @GetMapping("/listEmployee")
@@ -123,14 +125,6 @@ public class EmployeeController {
             return "admin/employee/createEmployee";
         }
 
-        // Tạo tài khoản
-        Account account = new Account();
-        account.setEmail(dto.getEmail());
-        account.setPassword(dto.getPassword()); // 👉 Nên mã hóa nếu triển khai thật
-        account.setRole(role);
-        accountRepository.save(account);
-
-        // Tạo nhân viên
         Employee employee = new Employee();
         employee.setCode(dto.getCode());
         employee.setFullName(dto.getFullName());
@@ -138,15 +132,21 @@ public class EmployeeController {
         employee.setGender(dto.getGender());
         employee.setPhone(dto.getPhone());
         employee.setAddress(dto.getAddress());
-        employeeService.updateOrCreate(employee);
+        Employee e = employeeService.updateOrCreate(employee);
+
+        Account account = new Account();
+        account.setEmail(dto.getEmail());
+        account.setPassword(dto.getPassword()); // 👉 Nên mã hóa nếu triển khai thật
+        account.setRole(role);
+        account.setEmployee(e);
+        accountService.save(account);
 
         // Sau khi tạo xong, cập nhật employee_id trong bảng account
-        updateEmployeeIdInAccount(account.getId(), employee.getId());
+//        updateEmployeeIdInAccount(account.getId(), employee.getId());
 
         redirect.addFlashAttribute("message", "Thêm nhân viên thành công!");
         return "redirect:/admin/employee/listEmployee";
     }
-
 //    // ============================ UPDATE GET =============================
 //    @GetMapping("/updateEmployee")
 //    public String updateForm(@RequestParam("id") Long id, Model model) {
@@ -207,10 +207,6 @@ public class EmployeeController {
 //
 
 
-    // ============================ UPDATE EMPLOYEE ID ============================
-    private void updateEmployeeIdInAccount(Long accountId, Long employeeId) {
-        String sql = "UPDATE accounts SET employee_id = ? WHERE id = ?";
-        jdbcTemplate.update(sql, employeeId, accountId);
-    }
+
 
 }

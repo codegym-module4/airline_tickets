@@ -52,8 +52,7 @@ public class EmployeeService implements IEmployeeService {
         Account account = accountRepository.findById(dto.getAccountId()).orElse(null);
         if (account != null) {
             account.setEmail(dto.getEmail());
-            account.setPassword(dto.getPassword()); // nếu bạn cho phép sửa pass
-            // Có thể cập nhật role nếu muốn:
+            account.setPassword(dto.getPassword());
             // Role role = roleRepository.findById(dto.getRoleId()).orElse(null);
             // account.setRole(role);
             accountRepository.save(account);
