@@ -136,7 +136,7 @@ public class EmployeeController {
 
         Account account = new Account();
         account.setEmail(dto.getEmail());
-        account.setPassword(dto.getPassword()); // 👉 Nên mã hóa nếu triển khai thật
+        account.setPassword(dto.getPassword()); // chưa mã hóa 
         account.setRole(role);
         account.setEmployee(e);
         accountService.save(account);
