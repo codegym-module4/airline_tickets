@@ -10,4 +10,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("SELECT a FROM Account a WHERE a.email = :email AND a.deletedAt IS NULL")
 
     Account findByNotDeleteEmail(String email);
+
+
+    Account findByEmail(String email);
+
+    Account findByEmployeeId(Long id);
 }

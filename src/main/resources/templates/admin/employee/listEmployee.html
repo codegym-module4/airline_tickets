@@ -13,23 +13,19 @@
 </head>
 <body>
 
-<!-- Thanh điều hướng với menu -->
-<!-- Gọi fragment sidebar -->
-<div th:replace="admin/sidebar/sidebar :: adminSidebar"></div>
-
+<!-- Gọi sidebar -->
+<div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
 
 <!-- Nội dung chính -->
 <div class="main-content container" style="margin-top: 60px;" id="mainContent">
   <h2 class="mb-4">Quản lý Nhân Viên</h2>
 
-  <!-- Hàng nút: Thêm mới + Xem Báo Cáo -->
   <div class="d-flex justify-content-between mb-3">
     <div class="d-flex gap-2">
       <a th:href="@{/admin/employee/createEmployee}" class="btn btn-success"> Thêm Nhân Viên</a>
       <a th:href="@{/admin/report}" class="btn btn-primary"> Xem Báo Cáo</a>
     </div>
 
-    <!-- Form Tìm kiếm -->
     <form th:action="@{/admin/employee/search}" method="get" class="d-flex" style="gap: 10px;">
       <select name="filter" class="form-select w-auto">
         <option value="id">Mã Nhân Viên</option>
@@ -44,7 +40,6 @@
     <p>Không có sản phẩm nào!</p>
   </th:block>
 
-  <!-- Bảng danh sách nhân viên -->
   <table class="table table-bordered text-center">
     <thead>
     <tr>
@@ -55,6 +50,8 @@
       <th>Giới Tính</th>
       <th>Số Điện Thoại</th>
       <th>Quê Quán</th>
+      <th>Email</th>
+      <th>Phân Quyền</th>
       <th>Thao Tác</th>
     </tr>
     </thead>
@@ -67,34 +64,62 @@
       <td th:text="${employee.gender}"></td>
       <td th:text="${employee.phone}"></td>
       <td th:text="${employee.address}"></td>
+      <td th:text="${employee.email}"></td>
+      <td th:text="${employee.roleName}"></td>
       <td>
-        <a th:href="@{'/admin/employee/updateEmployee'(id=${employee.id})}" class="btn btn-primary btn-sm">Sửa</a>
-        <a th:href="@{'/admin/employee/delete'(id=${employee.id})}"
-           class="btn btn-danger btn-sm"
-           th:attr="data-code=${employee.code}"
-           onclick="return confirmDelete(this)">
+        <a th:href="@{'/admin/employee/updateEmployee'(id=${employee.employeeId})}" class="btn btn-primary btn-sm">Sửa</a>
+        <button type="button"
+                class="btn btn-danger btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#confirmDeleteModal"
+                th:attr="data-id=${employee.employeeId}, data-code=${employee.code}">
           Xóa
-        </a>
-
-
+        </button>
       </td>
     </tr>
+
     </tbody>
   </table>
 </div>
 
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận xóa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn muốn xóa nhân viên mã <strong id="employeeCodeText"></strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <a id="confirmDeleteBtn" class="btn btn-danger">Xóa</a>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Bootstrap JS & Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-
-
-
-
-
+<!-- Script xử lý modal -->
 <script>
-  function confirmDelete(element) {
-    const code = element.getAttribute("data-code");
-    return confirm("Bạn có chắc chắn muốn xóa nhân viên mã " + code + "?");
-  }
+  document.addEventListener('DOMContentLoaded', function () {
+    const deleteModal = document.getElementById('confirmDeleteModal');
+    const employeeCodeText = document.getElementById('employeeCodeText');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+      const button = event.relatedTarget;
+      const id = button.getAttribute('data-id');
+      const code = button.getAttribute('data-code');
+
+      employeeCodeText.textContent = code;
+      confirmDeleteBtn.setAttribute('href', `/admin/employee/delete?id=${id}`);
+    });
+  });
 </script>
 
 </body>
