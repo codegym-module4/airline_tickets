@@ -135,6 +135,7 @@
                     $("#detailModal .modal-body").html((jqXhr.responseJSON.message));
                     $("#detailModal").modal("show");
                 }
+
         });
 
     });
