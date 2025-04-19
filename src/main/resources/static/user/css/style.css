@@ -359,6 +359,7 @@ a{
     background-color: rgba(0, 0, 0, 0);
     margin-top: 40px;
     border-top: 1px solid rgba(217, 26, 33, 0.73);
+    margin-bottom: 20px;
 }
 
 .header-container, .footer-container{
@@ -658,6 +659,10 @@ a{
     font-size: 16px;
 }
 
+.policy-footer a{
+    text-decoration: none;
+    color: #555555;
+}
 
 /* ---------------------------------------------------- PROFILE CSS ---------------------------------------------------- */
 
