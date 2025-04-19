@@ -1,0 +1,24 @@
+<th:block th:fragment="modalPolicyConfirm">
+    <div class="modal fade" id="modalPolicy" tabindex="-1" role="dialog"  data-toggle="modal-backdrop">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông báo</h4>
+                </div>
+                <div class="modal-body">
+                    <h5 class="mb-2" style="font-size: 18px; font-weight: 600;">Chấp Nhận Điều Khoản Sử Dụng</h5>
+                    <p class="mb-2">Bằng việc tiếp tục sử dụng dịch vụ của chúng tôi, bạn xác nhận rằng đã đọc, hiểu và đồng ý với tất cả các điều khoản và điều kiện sử dụng được quy định – vì một trải nghiệm an toàn, minh bạch và tối ưu nhất dành cho bạn.</p>
+                    <a style="color: #555555" href="/policy/1">Tìm hiểu thêm tại đây</a>
+                    <label class="mt-2">
+                        <input type="checkbox" id="agreeCheckbox">
+                        Tôi đã đọc và đồng ý với Điều khoản sử dụng và Chính sách quyền riêng tư.
+                    </label>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button id="acceptPolicyBtn" type="button" class="btn btn-default" >Chấp nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
