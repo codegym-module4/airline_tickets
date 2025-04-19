@@ -15,36 +15,7 @@ let searchFormData = {
 };
 
 
-// $(document).ready(function () {
-//     // Hiển thị modal ngay khi trang tải
-//     $('#modalPolicy').modal({
-//         backdrop: 'static', // Không cho click ra ngoài để tắt
-//         keyboard: false     // Không cho bấm ESC để tắt
-//     });
-//
-//     // Xử lý khi bấm nút "Chấp nhận"
-//     $('#acceptPolicyBtn').click(function () {
-//         if ($('#agreeCheckbox').is(':checked')) {
-//             $('#modalPolicy').modal('hide'); // Đóng modal
-//         } else {
-//             alert('Vui lòng đồng ý với điều khoản sử dụng trước khi tiếp tục.');
-//         }
-//     });
-// });
-
-
 document.addEventListener("DOMContentLoaded", function () {
-    $("#modalPolicy").modal({backdrop: "static"});
-    $("#modalPolicy").modal("show");
-
-    $('#acceptPolicyBtn').click(function (e) {
-        if ($('#agreeCheckbox').is(':checked')) {
-            $('#modalPolicy').modal('hide');
-        } else {
-            e.preventDefault();
-        }
-    });
-
     const roundTripRadio = document.getElementById("round-trip");
     const oneWayRadio = document.getElementById("one-way");
     const oneWaySection = document.querySelector(".destination-one-way");
@@ -165,17 +136,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 const inputArrivalDate = document.getElementById("arrival-date")
                 searchFormData.arrivalTime = inputArrivalDate.value
 
-                const inputAdults = document.getElementById("adults");
-                searchFormData.quantity.adult = parseInt(inputAdults.textContent)
+    const inputAdults = document.getElementById("adults");
+    searchFormData.quantity.adult = parseInt(inputAdults.textContent)
 
-                const inputChild = document.getElementById("child");
-                searchFormData.quantity.child = parseInt(inputChild.textContent)
+    const inputChild = document.getElementById("child");
+    searchFormData.quantity.child = parseInt(inputChild.textContent)
 
                 const inputInfant = document.getElementById("infant");
                 searchFormData.quantity.infant = parseInt(inputInfant.textContent)
 
 
-                sessionStorage.setItem("data",JSON.stringify(searchFormData));
+    sessionStorage.setItem("data",JSON.stringify(searchFormData));
 
                 document.getElementById("searchForm").submit();
 
@@ -208,7 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 });
-
 
 
 

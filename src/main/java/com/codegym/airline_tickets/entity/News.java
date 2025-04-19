@@ -26,6 +26,4 @@ public class News {
     @Column(name = "imageURL")
     private String imageURL;
 
-    @Column(name = "type")
-    private Integer type;
 }

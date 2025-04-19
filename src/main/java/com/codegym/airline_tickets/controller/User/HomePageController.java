@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,5 +40,15 @@ public class HomePageController {
 
         model.addAttribute("newsList", newsList);
         return "user/homepage/homepage";
+    }
+
+    @GetMapping("/news/detail/{id}")
+    public String getNewsDetail(@PathVariable("id") Long id, Model model) {
+        News news = newsService.findById(id);
+        String[] paragraphs = news.getContent().split("\n");
+        model.addAttribute("news", news);
+        model.addAttribute("paragraphs", paragraphs);
+
+        return "user/homepage/news_detail"; // Đường dẫn tới file Thymeleaf
     }
 }
