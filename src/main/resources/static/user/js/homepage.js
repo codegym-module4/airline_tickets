@@ -15,7 +15,36 @@ let searchFormData = {
 };
 
 
+// $(document).ready(function () {
+//     // Hiển thị modal ngay khi trang tải
+//     $('#modalPolicy').modal({
+//         backdrop: 'static', // Không cho click ra ngoài để tắt
+//         keyboard: false     // Không cho bấm ESC để tắt
+//     });
+//
+//     // Xử lý khi bấm nút "Chấp nhận"
+//     $('#acceptPolicyBtn').click(function () {
+//         if ($('#agreeCheckbox').is(':checked')) {
+//             $('#modalPolicy').modal('hide'); // Đóng modal
+//         } else {
+//             alert('Vui lòng đồng ý với điều khoản sử dụng trước khi tiếp tục.');
+//         }
+//     });
+// });
+
+
 document.addEventListener("DOMContentLoaded", function () {
+    $("#modalPolicy").modal({backdrop: "static"});
+    $("#modalPolicy").modal("show");
+
+    $('#acceptPolicyBtn').click(function (e) {
+        if ($('#agreeCheckbox').is(':checked')) {
+            $('#modalPolicy').modal('hide');
+        } else {
+            e.preventDefault();
+        }
+    });
+
     const roundTripRadio = document.getElementById("round-trip");
     const oneWayRadio = document.getElementById("one-way");
     const oneWaySection = document.querySelector(".destination-one-way");
