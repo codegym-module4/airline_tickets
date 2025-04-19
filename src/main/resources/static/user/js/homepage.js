@@ -16,6 +16,18 @@ let searchFormData = {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    $("#modalPolicy").modal({backdrop: "static"});
+    $("#modalPolicy").modal("show");
+
+    $('#acceptPolicyBtn').click(function (e) {
+        if ($('#agreeCheckbox').is(':checked')) {
+            $('#modalPolicy').modal('hide');
+        } else {
+            e.preventDefault();
+        }
+    });
+
     const roundTripRadio = document.getElementById("round-trip");
     const oneWayRadio = document.getElementById("one-way");
     const oneWaySection = document.querySelector(".destination-one-way");

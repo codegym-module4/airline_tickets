@@ -42,4 +42,9 @@ public class PolicyController {
         return "user/homepage/homepage";
 
     }
+
+    @GetMapping("/test")
+    public String test(){
+        return "/user/flight/ticket_detail";
+    }
 }
