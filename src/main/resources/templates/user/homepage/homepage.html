@@ -264,6 +264,49 @@
       </div>
     </a>
   </div>
+
+<!--  news-->
+  <div class="news">
+
+    <!-- Background A: Nền chính cho slide -->
+    <div class="news-background p-3 position-relative">
+
+      <!-- Carousel -->
+      <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+          <!-- Lặp từng nhóm 3 tin -->
+          <div class="carousel-item"
+               th:each="group, stat : ${newsList}"
+               th:classappend="${stat.index == 0} ? 'active'">
+            <div class="row">
+              <div class="news-item col-md-4" th:each="news : ${group}" >
+                <div class="card mb-3">
+                  <img th:src="${news.imageURL}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title" th:text="${news.title}">Title</h5>
+                    <p class="card-text" th:text="${#strings.abbreviate(news.content, 100)}">Short</p>
+                    <a th:href="@{/news/detail/{id}(id=${news.id})}" class="btn btn-primary">Xem thêm</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Nút điều hướng (nằm trong background A) -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
   <!-- Footer -->
   <th:block th:insert="~{user/layouts/modal_success::modalSuccess}"></th:block>
   <th:block th:insert="~{user/layouts/modal_error::modalError}"></th:block>
