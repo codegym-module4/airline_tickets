@@ -573,6 +573,84 @@ a{
     transform: translateY(-2px);
 }
 
+/*news*/
+.news {
+    background-image: url('../img/background.jpg');
+    background-size: cover;
+    padding: 30px;
+}
+
+.news-background {
+    /*background-color: #fff9db;*/
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+}
+
+.news-item {
+    background-color: white;
+    border-radius: 10px;
+    padding: 0; /* Bỏ padding */
+    margin: 10px 0; /* Cách các item nhau */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease;
+}
+
+.news-item:hover {
+    transform: scale(1.02);
+}
+
+.card {
+    border: none; /* Bỏ border của card */
+    margin: 0; /* Đảm bảo không có margin thừa */
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px; /* Cố định chiều cao ảnh */
+    object-fit: cover; /* Đảm bảo ảnh sẽ full card */
+    border-radius: 10px;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 1;
+    z-index: 2;
+}
+
+.row-cols-md-3 {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row-cols-1,
+.row-cols-md-3 {
+    gap: 10px; /* Khoảng cách giữa các item */
+}
+.carousel-item .row {
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.news-item {
+    transition: transform 0.3s ease;
+    z-index: 1;
+    position: relative;
+    padding: 0;
+}
+
+.news-item:hover {
+    transform: scale(1.02);
+    z-index: 2; /* nổi lên trên */
+}
+
 
 /* ---------------------------------------------------- PROFILE CSS ---------------------------------------------------- */
 
