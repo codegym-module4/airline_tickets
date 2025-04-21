@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head th:replace="~{user/layouts/head::head ('Vietjet Air | Bay là thích ngay | Website chính thức')}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h2>Thêm tin tức</h2>
+<form th:action="@{/admin/news/create}" th:object="${news}" method="post" enctype="multipart/form-data">
+  <input type="text" th:field="*{title}" placeholder="Tiêu đề" class="form-control mb-2"/>
+  <textarea th:field="*{content}" placeholder="Nội dung" class="form-control mb-2"></textarea>
+  <input type="file" name="imageFile" class="form-control mb-2"/>
+
+
+  <button type="submit" class="btn btn-success">Lưu</button>
+</form>
+
+</body>
+</html>
