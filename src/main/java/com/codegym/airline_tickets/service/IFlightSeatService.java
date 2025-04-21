@@ -1,5 +1,6 @@
 package com.codegym.airline_tickets.service;
 
+import com.codegym.airline_tickets.dto.FlightSeatDTO;
 import com.codegym.airline_tickets.entity.Airline;
 import com.codegym.airline_tickets.entity.FlightSeat;
 import com.codegym.airline_tickets.response.SeatAvailable;
@@ -19,4 +20,6 @@ public interface IFlightSeatService extends IService<FlightSeat> {
     List<Object[]> countSeatAvailable (List<Long> flightIds);
 
     Integer countSingleFlightSeat(Long flightId);
+
+    List<FlightSeatDTO> getAllSeatByFlightId(Long flightId);
 }

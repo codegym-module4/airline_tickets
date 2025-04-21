@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    @Query("SELECT t FROM Ticket t ORDER BY t.id DESC LIMIT 1")
+    @Query(value = "SELECT t.* FROM tickets t ORDER BY t.id DESC LIMIT 1", nativeQuery = true)
     Ticket findLatest();
 
     List<Ticket> findByBooking(Booking b);

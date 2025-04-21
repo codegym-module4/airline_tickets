@@ -1,5 +1,6 @@
 package com.codegym.airline_tickets.service.impl;
 
+import com.codegym.airline_tickets.dto.FlightSeatDTO;
 import com.codegym.airline_tickets.entity.FlightSeat;
 import com.codegym.airline_tickets.repository.FlightSeatRepository;
 import com.codegym.airline_tickets.response.SeatAvailable;
@@ -125,6 +126,11 @@ public class FlightSeatService implements IFlightSeatService {
     @Override
     public Integer countSingleFlightSeat(Long flightId) {
         return flightSeatRepository.countSingleFlightSeat(flightId);
+    }
+
+    @Override
+    public List<FlightSeatDTO> getAllSeatByFlightId(Long flightId) {
+        return flightSeatRepository.getAllSeatByFlightId(flightId);
     }
 
     private List<FlightSeat> findConsecutiveFlightSeats(List<FlightSeat> seats, int numberOfPeople) {

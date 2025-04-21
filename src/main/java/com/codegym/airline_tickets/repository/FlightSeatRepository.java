@@ -1,5 +1,6 @@
 package com.codegym.airline_tickets.repository;
 
+import com.codegym.airline_tickets.dto.FlightSeatDTO;
 import com.codegym.airline_tickets.entity.FlightSeat;
 import com.codegym.airline_tickets.response.SeatAvailable;
 import jakarta.transaction.Transactional;
@@ -33,5 +34,14 @@ public interface FlightSeatRepository extends JpaRepository<FlightSeat, Long> {
 
     @Query("SELECT COUNT(fs) FROM FlightSeat fs WHERE fs.flight.id = :flightId AND fs.status = 1")
     Integer countSingleFlightSeat(@Param("flightId") Long flightId);
+
+    @Query("select new com.codegym.airline_tickets.dto.FlightSeatDTO(fl.id, f.id, sr.number, sc.alphabet, fl.status) " +
+            "from FlightSeat fl " +
+            "join Flight f on fl.flight.id = f.id " +
+            "join Seat s on s.id = fl.seat.id " +
+            "join Row sr on sr.id = s.row.id " +
+            "join Col sc on sc.id = s.col.id " +
+            "where f.id = :flightId")
+    List<FlightSeatDTO> getAllSeatByFlightId(Long flightId);
 
 }
