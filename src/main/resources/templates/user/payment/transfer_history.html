@@ -25,6 +25,7 @@
                                     <th>Ngày bay</th>
                                     <th>Giá</th>
                                     <th>Tình trạng</th>
+                                    <th>Chi tiết vé</th>
                                 </tr>
                                 <tr class="text-center" th:if="${list.isEmpty()}">
                                     <td colspan="6">Không tìm thấy dữ liệu</td>
@@ -40,6 +41,18 @@
                                         <span th:case="2">Đã thanh toán</span>
                                         <span th:case="3">Đã hủy</span>
                                     </td>
+                                    <td>
+                                        <button id="btnTicketDepart" class="btn btn-custom"
+                                                th:data-id="${booking.id}"
+                                                th:data-flight-id="${booking.flight.id}"
+                                                th:disabled="${booking.status != 2}">Chiều đi</button>
+
+                                        <button id="btnTicketDetailArrival" class="btn btn-custom"
+                                                th:data-id="${booking.id}"
+                                                th:data-flight-id="${booking.returnFlight == null ? '' : booking.returnFlight.id}"
+                                                th:disabled="${booking.status != 2 or booking.returnFlight == null}">Chiều về</button>
+                                    </td>
+
                                 </tr>
                             </tbody>
                         </table>
@@ -48,6 +61,19 @@
             </div><!-- .mypage_block END -->
         </section>
     </main>
+
+    <div class="modal fade"  id="ticketDetail" tabindex="-1" aria-labelledby="ticketDetail" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--    <th:block th:replace="~{user/payment/ticket_detail::ticket-detail}"></th:block>-->
     <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
     <th:block th:replace="~{user/layouts/script::script}"></th:block>
 </body>

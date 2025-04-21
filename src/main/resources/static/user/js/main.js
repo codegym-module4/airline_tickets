@@ -104,6 +104,58 @@
         });
     });
 
+
+    $(document).on("click", "#btnTicketDepart", function (e) {
+        // $("#ticketDetail").modal("show");
+        const bookingId = $(this).data("id");
+        const flightId = $(this).data("flight-id");
+        console.log(bookingId)
+        console.log(flightId)
+        const url = `/api/ticket/${bookingId}/${flightId}`;
+        console.log(url)
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.html) {
+                $("#ticketDetail .modal-body").html(data.html);
+                $("#ticketDetail").modal("show");
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on("click", "#btnTicketDetailArrival", function (e) {
+        const bookingId = $(this).data("id");
+        const flightId = $(this).data("flight-id");
+        console.log(bookingId)
+        console.log(flightId)
+        const url = `/api/ticket/${bookingId}/${flightId}`;
+        console.log(url)
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.html) {
+                $("#ticketDetail .modal-body").html(data.html);
+                $("#ticketDetail").modal("show");
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+
+
 })();
 function setDataInitialize()
 {

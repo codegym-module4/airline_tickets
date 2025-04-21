@@ -26,4 +26,6 @@ public class FlightResponseDTO implements Serializable {
    private String priceVATTotal;
    private String priceVAT;
    private Integer seatAvailability;
+   private String departureIATA;
+   private String arrivalIATA;
 }

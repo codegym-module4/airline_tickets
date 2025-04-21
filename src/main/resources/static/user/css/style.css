@@ -779,6 +779,17 @@ a{
     margin-top: 20px;
 }
 
+.container-ticket span {
+    margin: 10px 0;
+}
+
+.container-ticket hr{
+    margin: 10px 0;
+}
+
+
+/* ---------------------------------------------------- PROFILE CSS ---------------------------------------------------- */
+
 /* Lưng ghế */
 .seat::before {
     content: '';
@@ -823,6 +834,7 @@ a{
     cursor: not-allowed;
     opacity: 0.7;
 }
+
 
 .seat-selected {
     color: #ffc107;
