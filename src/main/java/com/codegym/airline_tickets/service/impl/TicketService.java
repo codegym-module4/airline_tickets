@@ -74,6 +74,16 @@ public class TicketService implements ITicketService {
         ticketRepository.deleteAll(tickets);
     }
 
+    @Override
+    public List<Ticket> findTicketByBookingId(Long bookingId) {
+        return ticketRepository.findTicketByBookingId(bookingId);
+    }
+
+    @Override
+    public Ticket findByBookingIdAndFlightId(Long bookingId, Long flightId) {
+        return ticketRepository.findByBookingIdAndFlightId(bookingId, flightId);
+    }
+
     private static String generateNextCode(long number) {
         if (number == 0) {
             return "VE001";

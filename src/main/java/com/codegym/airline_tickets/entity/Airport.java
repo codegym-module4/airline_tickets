@@ -36,6 +36,9 @@ public class Airport {
     @Column(name = "city")
     private String city;
 
+    @Column(name = "IATA")
+    private String IATA;
+
     @Column(name = "deleted_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime deletedAt;

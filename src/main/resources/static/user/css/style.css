@@ -764,9 +764,14 @@ a{
     margin-top: 20px;
 }
 
-.container-ticket p {
-    margin: 1em 0;
+.container-ticket span {
+    margin: 10px 0;
 }
+
+.container-ticket hr{
+    margin: 10px 0;
+}
+
 
 /* ---------------------------------------------------- PROFILE CSS ---------------------------------------------------- */
 

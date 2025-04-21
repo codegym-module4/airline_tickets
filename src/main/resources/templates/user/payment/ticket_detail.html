@@ -1,18 +1,61 @@
 <th:block th:fragment="ticket-detail">
-    <div class="modal fade" id="ticketDetail" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-xl" role="document">
             <div class="container container-ticket py-4">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-8">
                         <h2>Thông tin chuyến bay</h2>
-                        <div class="d-flex align-items-center fs-4 fw-bold">
-                            SGN <span class="mx-2">✈</span> HUI
+                        <hr>
+                        <div class="d-flex justify-content-around align-items-center">
+                            <div class="d-flex align-items-center flex-column">
+                                <span class="fw-bold fs-4 " th:text="${ticket.flight.departureIATA}"></span>
+                                <p class="fw-bold fs-4" th:text="${#temporals.format(ticket.flight.departureTime, 'HH:mm')}"></p>
+                            </div>
+                            <div class="d-flex flex-column align-items-center flex-column">
+                                <span th:text="${ticket.flightTime}" class="text-danger ml10"></span>
+                                <img src="/user/icon/icon_flight.c92d4c69.png" alt="Airplane" class="img-fluid" width="15px" height="24px">
+<!--                                <span class="mx-2 fs-5 m-0">✈</span>-->
+                                <span>Bay thẳng</span>
+                            </div>
+                            <div class="d-flex align-items-center flex-column">
+                                <span class="fw-bold fs-4 " th:text="${ticket.flight.arrivalIATA}"></span>
+                                <p class="fw-bold fs-4" th:text="${#temporals.format(ticket.flight.arrivalTime, 'HH:mm')}"></p>
+                            </div>
                         </div>
-                        <p>06:20 → 07:45</p>
-                        <p><span class="text-danger fw-bold">Số hiệu chuyến bay:</span> VJ316</p>
-                        <p>Khởi hành: 06:20, 01/04/2025 (Giờ địa phương)<br>Tp. Hồ Chí Minh - Sân bay Tân Sơn Nhất</p>
-                        <p>Đến: 07:45, 01/04/2025 (Giờ địa phương)<br>Huế - Sân bay Phú Bài</p>
-                        <p>Thời gian: <span class="text-danger">1 giờ 25 phút</span> – Airbus: A320B – Khai thác bởi: <span class="text-danger">Vietjet</span></p>
+
+                        <div class="d-flex align-items-center mt-3">
+                            <img src="/user/icon/icon_flight.c92d4c69.png" alt="Airplane" class="img-fluid" width="15px" height="24px">
+                            <span class="ml10">Số hiệu chuyến bay:</span>
+                            <span th:text="${ticket.flight.flightCode}" class="text-danger fw-bold ml10"></span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img src="/user/icon/departure-icon.25d3557e.png" alt="Airplane" class="img-fluid" width="12px" height="24px">
+                            <span class="ml10">Khởi hành: </span>
+                            <span class="ml10" th:text="${#temporals.format(ticket.flight.departureTime, 'HH:mm, dd/MM/yyyy')}"></span>
+                            <span class="ml10">(Giờ địa phương)</span>
+                        </div>
+                        <div class="d-flex align-items-center" >
+                            <span th:text="${ticket.flight.departureAirportCity}"></span>
+                            <span class="mx-2 fw-bold">-</span>
+                            <span th:text="'Sân bay ' + ${ticket.flight.departureAirportName}"></span>
+                        </div>
+                        <div class="d-flex align-items-center mt-2">
+                            <img src="/user/icon/arrival-icon.a05c5d78.png" alt="Airplane" class="img-fluid" width="12px" height="24px">
+                            <span class="ml10">Đến:</span>
+                            <span class="ml10" th:text="${#temporals.format(ticket.flight.arrivalTime, 'HH:mm, dd/MM/yyyy')}" ></span>
+                            <span class="ml10">(Giờ địa phương)</span>
+                        </div>
+                        <div class="d-flex align-items-center" >
+                            <span th:text="${ticket.flight.arrivalAirportCity}"> </span>
+                            <span class="mx-2 fw-bold">-</span>
+                            <span th:text="'Sân bay ' + ${ticket.flight.arrivalAirportName}"></span>
+                        </div>
+                        <div class="d-flex align-items-center mt-2">
+                            <span>Thời gian bay: </span>
+                            <span th:text="${ticket.flightTime}" class="text-danger ml10"></span>
+                            <span class="mx-2">-</span>
+                            <span>A320B</span>
+                            <span class="mx-2">-</span>
+                            <span  th:text="'Khai thác bởi: ' + ${ticket.flight.airlineName}" class="text-danger"></span>
+                        </div>
                         <hr>
                         <h4>HƯỚNG DẪN DI CHUYỂN TIẾP THEO</h4>
                         <div class="d-flex justify-content-between text-center mt-4">
@@ -42,32 +85,77 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 mt-4 mt-lg-0">
+                    <div class="col-lg-4 mt-4 mt-lg-0">
                         <div class="header-root text-white p-2 fw-bold text-center">Vietjetair.com</div>
                         <div class="border p-3">
                             <h4>THẺ LÊN TÀU BAY</h4>
-                            <p class="fw-bold">TP. HỒ CHÍ MINH ➝ HUẾ</p>
-                            <p><strong>SGN ➝ HUI</strong></p>
-                            <p>Hành khách: <strong>LE XUAN, NGOC</strong></p>
-                            <p>Ngày: 01/04/2025</p>
-                            <p>Chuyến bay: <strong>VJ316</strong> | Mã đặt chỗ: <strong>A728MH</strong></p>
-                            <p>Cửa: 4</p>
-                            <p>Giờ ra tàu bay:
-                                <strong>05:30</strong> | Ghế: <strong>25B</strong></p>
-                            <p>Seq: 40 – Hạng vé: Y</p>
-                            <p class="small text-danger">Lưu ý: Cửa khởi hành sẽ đóng 15 phút trước giờ khởi hành.<br>Hành khách sẽ không được phép lên tàu bay khi cửa khởi hành đã đóng.</p>
-                            <div class="text-center">
-                                <!--                    <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=VJ316-LE-XUAN-NGOC" alt="QR Code" class="img-fluid">-->
-                                <p><a style="text-decoration: none" href="#"> <i class="fa-solid fa-download"></i> Tải vé</a></p>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-start flex-column">
+                                    <span th:text="${ticket.flight.departureAirportCity}"></span>
+                                    <span class="fw-bold fs-4" th:text="${ticket.flight.departureIATA}"></span>
+                                </div>
+                                <span class="mx-2 fs-5">✈</span>
+                                <div class="d-flex align-items-end flex-column">
+                                    <span th:text="${ticket.flight.arrivalAirportCity}"></span>
+                                    <span class="fw-bold fs-4" th:text="${ticket.flight.arrivalIATA}"></span>
+                                </div>
                             </div>
-                            <div class="text-center">
-                                <button class="btn-detail btn me-2">Gửi Email</button>
-                                <button class="btn-detail btn ">Hoàn thành</button>
+                            <hr>
+                            <div class="d-flex align-items-center">
+                                <span>Hành khách:</span>
+                                <span class="ml10 m-0 fs-4" th:text="${ticket.name}"></span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3" >
+                                <div class="d-flex align-items-start flex-column">
+                                    <span>Ngày:</span>
+                                    <span class="m-0" th:text="${#temporals.format(ticket.flight.departureTime, 'dd/MM/yyyy')}"></span>
+                                </div>
+                                <div class="d-flex align-items-center flex-column">
+                                    <span>Chuyến bay:</span>
+                                    <span class="ml10 fs-4 m-0 fw-bold" th:text="${ticket.flight.flightCode}"></span>
+
+                                </div>
+                                <div class="d-flex align-items-end flex-column">
+                                    <span>Mã đặt chỗ:</span>
+                                    <span class="ml10 m-0 fw-bold" th:text="${ticket.code}"></span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-3">
+                                <div class="d-flex align-items-start flex-column">
+                                    <span>Cửa</span>
+                                    <span class="m-0">4</span>
+                                </div>
+                                <div class="d-flex align-items-center flex-column">
+                                    <span>Giờ ra tàu bay:</span>
+                                    <span th:text="${ticket.timeToBoard}" class="ml10 fs-4 fw-bold m-0"></span>
+                                </div>
+                                <div class="d-flex align-items-center flex-column">
+                                    <span>Ghế:</span>
+                                    <span class="ml10 fs-4 fw-bold m-0" th:text="${ticket.seat.seat.row.number} + ${ticket.seat.seat.col.alphabet}"></span>
+                                </div>
+                                <div class="d-flex align-items-end flex-column">
+                                    <span>Seq</span>
+                                    <span class="m-0">40</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start flex-column mt-3">
+                                <span>Hạng vé:</span>
+                                <span class="m-0">Y</span>
+                            </div>
+                            <hr>
+                            <span class="small text-danger">Lưu ý: Cửa khởi hành sẽ đóng 15 phút trước giờ khởi hành.<br>Hành khách sẽ không được phép lên tàu bay khi cửa khởi hành đã đóng.</span>
+<!--                            <div class="text-center">-->
+<!--                                &lt;!&ndash;                    <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=VJ316-LE-XUAN-NGOC" alt="QR Code" class="img-fluid">&ndash;&gt;-->
+<!--                                <p><a style="text-decoration: none" href="#"> <i class="fa-solid fa-download"></i> Tải vé</a></p>-->
+<!--                            </div>-->
+                            <div class="text-center mt-3">
+                                <button disabled class="btn-detail btn me-2">Gửi Email</button>
+                                <button disabled class="btn-detail btn "><i class="fa-solid fa-download"></i> Tải vé</button>
                             </div>
                         </div>
                     </div>
              </div>
             </div>
-        </div>
-    </div>
 </th:block>

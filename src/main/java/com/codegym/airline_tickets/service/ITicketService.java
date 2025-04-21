@@ -14,4 +14,8 @@ public interface ITicketService extends IService<Ticket> {
     List<Ticket> findByBooking(Booking booking);
 
     void deleteAll(List<Ticket> tickets);
+
+    List<Ticket> findTicketByBookingId(Long bookingId);
+
+    Ticket findByBookingIdAndFlightId(Long bookingId, Long flightId);
 }
