@@ -13,15 +13,20 @@ let searchFormData = {
         infant: 0
     },
 };
+let isConfirm = false;
 
 
 document.addEventListener("DOMContentLoaded", function () {
-
     $("#modalPolicy").modal({backdrop: "static"});
-    $("#modalPolicy").modal("show");
+    if(!sessionStorage.getItem("checkPolicy")){
+        $("#modalPolicy").modal("show");
+    }else{
+        $('#modalPolicy').modal('hide');
+    }
 
     $('#acceptPolicyBtn').click(function (e) {
-        if ($('#agreeCheckbox').is(':checked')) {
+        if ($('#agreeCheckbox').is(':checked')){
+            sessionStorage.setItem("checkPolicy", "true");
             $('#modalPolicy').modal('hide');
         } else {
             e.preventDefault();

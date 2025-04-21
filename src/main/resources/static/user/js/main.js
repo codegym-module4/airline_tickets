@@ -104,6 +104,11 @@
         });
     });
 
+
+    $(document).on("click", "#btnTicketDetail", function (e) {
+        $("#ticketDetail").modal("show");
+    });
+
 })();
 function setDataInitialize()
 {

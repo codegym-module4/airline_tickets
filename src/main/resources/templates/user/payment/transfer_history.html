@@ -25,6 +25,7 @@
                                     <th>Ngày bay</th>
                                     <th>Giá</th>
                                     <th>Tình trạng</th>
+                                    <th>Tác vụ</th>
                                 </tr>
                                 <tr class="text-center" th:if="${list.isEmpty()}">
                                     <td colspan="6">Không tìm thấy dữ liệu</td>
@@ -40,6 +41,11 @@
                                         <span th:case="2">Đã thanh toán</span>
                                         <span th:case="3">Đã hủy</span>
                                     </td>
+                                    <td th:switch="${booking.status}">
+                                        <button disabled th:case="1" class="btn btn-custom">Chi tiết vé</button>
+                                        <button id="btnTicketDetail" th:data-id="${booking.id}" th:case="2" class="btn btn-custom">Chi tiết vé</button>
+                                        <button disabled th:case="3" class="btn btn-custom">Chi tiết vé</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -48,6 +54,7 @@
             </div><!-- .mypage_block END -->
         </section>
     </main>
+    <th:block th:replace="~{user/payment/ticket_detail::ticket-detail}"></th:block>
     <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
     <th:block th:replace="~{user/layouts/script::script}"></th:block>
 </body>

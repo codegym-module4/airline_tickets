@@ -117,7 +117,9 @@ public class FlightsController {
 
             }else {
             List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime,flightReq.getSortProperty(), sort, page, size);
+                System.out.println(flightSeatService.countSingleFlightSeat(1l));
                 listDeparture = listDeparture.stream().filter(item ->
+
                         flightSeatService.countSingleFlightSeat(item.getId()) > 0
                 ).toList();
                 if(listDeparture.isEmpty()){
@@ -125,6 +127,7 @@ public class FlightsController {
                     return "redirect:/";
                 }
                 model.addAttribute("listDeparture",listDeparture);
+
             }
 
             List<Airport> listAirports = airportService.getAll();
