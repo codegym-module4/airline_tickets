@@ -54,7 +54,7 @@
             </td>
             <td>
                 <a th:href="@{/admin/news/edit(id=${news.id})}" class="btn btn-sm btn-warning me-2"> <i class="bi bi-pencil-square"></i></a>
-                <a th:href="@{/admin/news/delete(id=${news.id})}" class="btn btn-sm btn-danger"> <i class="bi bi-trash"></i></a>
+                <a th:href="@{/admin/news/delete/{id}(id=${news.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa không?');"> <i class="bi bi-trash"></i></a>
             </td>
         </tr>
         </tbody>

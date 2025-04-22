@@ -44,6 +44,16 @@ public class NewsController {
         return "redirect:/admin/news";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteNews(@PathVariable Long id) {
+        News news = newsService.findById(id);
+        if (news != null) {
+            firebaseStorageService.deleteFileFromUrl(news.getImageURL());
+            newsService.remove(id);
+        }
+        return "redirect:/admin/news";
+    }
+
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         News news = newsService.findById(id);
