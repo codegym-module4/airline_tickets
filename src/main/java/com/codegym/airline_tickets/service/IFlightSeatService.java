@@ -11,8 +11,6 @@ import java.util.List;
 public interface IFlightSeatService extends IService<FlightSeat> {
     List<FlightSeat> findSeatsByFlightAndStatus(long flightId, int status);
 
-    List<FlightSeat> allocateSeats(Long flightId, int numberOfPeople);
-
     FlightSeat updateOrCreate(FlightSeat flightSeat);
 
     void updateStatusById(Long id, Integer status);
@@ -22,4 +20,6 @@ public interface IFlightSeatService extends IService<FlightSeat> {
     Integer countSingleFlightSeat(Long flightId);
 
     List<FlightSeatDTO> getAllSeatByFlightId(Long flightId);
+
+    FlightSeat getRandomAvailableSeat(List<Long> ids, Long flightId);
 }

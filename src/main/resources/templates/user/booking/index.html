@@ -23,7 +23,7 @@
                         <div class="row align-items-center">
                             <label th:for="'fullName' + ${stat.index}" class="col-sm-3">Họ và Tên: </label>
                             <div class="col-sm-9">
-                                <input type="text" th:id="'fullName' + ${stat.index}" th:field="*{items[__${stat.index}__].fullName}" class="form-control">
+                                <input type="text" th:id="'fullName' + ${stat.index}" th:field="*{items[__${stat.index}__].fullName}" class="form-control name-adult">
                                 <span class="invalid-feedback" role="alert">
                                     <strong></strong>
                                 </span>
@@ -31,7 +31,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
@@ -61,7 +60,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
@@ -90,7 +88,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
@@ -209,6 +206,17 @@
                     <h4>Em bé </h4>
                 </div>
                 <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="row align-items-center">
+                            <label th:for="'seat_with' + ${stat.index}" class="col-sm-1 mb-0">Ngồi cùng: </label>
+                            <div class="col-sm-10" style="margin-left: 3.3rem">
+                                <select class="form-control form-control-sm select-index-seat" th:id="'seat_with' + ${stat.index}" th:field="*{items[__${stat.index}__].indexSeatWith}">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
                             <label th:for="'fullName' + ${stat.index}" class="col-sm-3 mb-0">Họ và Tên: </label>
@@ -267,19 +275,39 @@
                 <h4 class="modal-title">Thông báo</h4>
             </div>
             <div class="modal-body">
-                <p>Vui lòng thực hiện thanh toán để hoàn tất việc đặt vé.</p>
+                <p>Hãy chọn ghế ngồi mà bạn mong muốn (Không bắt buộc).</p>
                 <p>
-                    <b>Lưu ý: Nếu bạn không thực hiện thanh toán trong vòng 30 phút thì hệ thống sẽ tự động hủy bỏ đặt vé của quý khách</b>
+                    <b>Lưu ý: Nếu bạn không thực hiện việc chọn ghế thì chúng tôi sẽ tự động chọn ghế ngồi cho bạn.</b>
                 </p>
             </div>
             <div class="modal-footer">
-                <a role="button" class="btn btn-primary" href="/payment">Thanh toán</a>
+                <a role="button" class="btn btn-primary link-seat-select" href="#">Tiếp tục</a>
             </div>
         </div>
     </div>
 </div>
 <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
 <th:block th:replace="~{user/layouts/script::script}"></th:block>
+<script>
+    $(document).ready(function () {
+        if ($(".select-index-seat").length) {
+            getAdult();
+        }
+    });
+
+    $(document).on("change", ".name-adult", function () {
+        getAdult();
+    });
+
+    function getAdult() {
+        let html = "";
+        $('.name-adult').each(function (index, el) {
+            let option = "<option value='"+index+"'>"+el.value+"</option>";
+            html += option;
+        });
+        $(".select-index-seat").html(html);
+    }
+</script>
 </body>
 
 </html>

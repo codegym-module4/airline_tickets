@@ -44,4 +44,7 @@ public interface FlightSeatRepository extends JpaRepository<FlightSeat, Long> {
             "where f.id = :flightId")
     List<FlightSeatDTO> getAllSeatByFlightId(Long flightId);
 
+    @Query(value = "select * from flight_seat fs where fs.status = 1 and fs.flight_id = :flightId and fs.id NOT IN (:ids) ORDER BY RAND() LIMIT 1", nativeQuery = true)
+    FlightSeat getRandomAvailableSeat(List<Long> ids, Long flightId);
+
 }

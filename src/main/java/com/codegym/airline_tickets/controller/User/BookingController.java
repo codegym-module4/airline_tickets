@@ -4,20 +4,22 @@ import com.codegym.airline_tickets.dto.BookingDTO;
 import com.codegym.airline_tickets.dto.BookingTicketDTO;
 import com.codegym.airline_tickets.dto.CountryDTO;
 import com.codegym.airline_tickets.dto.FlightSeatDTO;
-import com.codegym.airline_tickets.entity.Flight;
-import com.codegym.airline_tickets.service.IFlightSeatService;
-import com.codegym.airline_tickets.service.IFlightService;
+import com.codegym.airline_tickets.entity.*;
+import com.codegym.airline_tickets.service.*;
 import com.codegym.airline_tickets.util.GetCountries;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
@@ -36,6 +38,15 @@ public class BookingController {
 
     @Autowired
     private IFlightSeatService flightSeatService;
+
+    @Autowired
+    private IBookingService bookingService;
+
+    @Autowired
+    private IAccountService accountService;
+
+    @Autowired
+    private ITicketService ticketService;
 
     @GetMapping("/{key}")
     public String index(@PathVariable String key, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
@@ -100,16 +111,18 @@ public class BookingController {
         }).limit(count);
     }
 
-    @GetMapping("/seat-selection/{flightId}")
-    public String seatSelection(@PathVariable("flightId") Long id, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        String url = "/";
-        if (referer != null) {
-            url =  referer;
-        }
+    @GetMapping("/{key}/seat-selection/{flightId}")
+    public String seatSelection(
+        @PathVariable("key") String key,
+        @PathVariable("flightId") Long id,
+        Model model,
+        RedirectAttributes redirectAttributes,
+        HttpSession session
+    ) {
         Flight flight = flightService.findById(id);
         if (flight == null) {
-            return "redirect:" + url;
+            redirectAttributes.addFlashAttribute("messageError", "Chuyến bay không tồn tại");
+            return "redirect:/";
         }
         List<FlightSeatDTO> lists = flightSeatService.getAllSeatByFlightId(id);
         lists.forEach(seat -> seat.setRowAsInt(Integer.parseInt(seat.getSeatRow())));
@@ -119,6 +132,22 @@ public class BookingController {
                 .orElse(40);
         model.addAttribute("maxRow", maxRow);
         model.addAttribute("seats", lists);
+        model.addAttribute("flight", flight);
+        model.addAttribute("key", key);
+        Map<String, String> dataConfirm = (Map<String, String>) session.getAttribute("confirm-data" + key);
+        BookingDTO dataBooking = (BookingDTO) session.getAttribute("BookingDTO" + key);
+        String noFlight = "2";
+        String textFlight = "Chuyến về";
+        if (id == Long.parseLong(dataConfirm.get("idDepart"))) {
+            textFlight = "Chuyến đi";
+            if (dataConfirm.get("idArrival") != null && !Objects.equals(dataConfirm.get("idArrival"), "")) {
+                noFlight = "1";
+            }
+        }
+
+        model.addAttribute("noFlight", noFlight);
+        model.addAttribute("dataBooking", dataBooking);
+        model.addAttribute("textFlight", textFlight);
 
         return "user/booking/seats";
     }

@@ -4,35 +4,119 @@
 <body>
 <!--Header-->
 <th:block th:replace="~{user/layouts/header::header}"></th:block>
-<div class="main-content">
-    <!-- Legend -->
-    <div class="legend">
-        <div class="d-flex align-items-center">
-            <div class="seat seat-available"></div>
-            <span class="ps-2">Ghế trống</span>
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="seat seat-booked"></div>
-            <span class="ps-2">Đã đặt</span>
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="seat seat-selected"></div>
-            <span class="ps-2">Đang chọn</span>
+<main class="content">
+    <div class="col-12">
+        <div class="row p-5">
+            <div class="col-sm-10 col-md-9">
+                <div class="row">
+                    <div class="col-sm-8 col-md-5 pe-md-4" style="border-right: 1px solid #222222">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="fw-bold" th:text="${flight.departureAirport.city}"></span>
+                            <span style="border: 1px dotted #222222; height: 1px" class="w-50">&nbsp;</span>
+                            <i class="fa-solid fa-plane"></i>
+                            <span class="fw-bold" th:text="${flight.arrivalAirport.city}"></span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div th:text="${flight.departureAirport.name}"></div>
+                            <div th:text="${flight.arrivalAirport.name}"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-2 ps-4 fw-bold">
+                        <div class="d-flex align-items-center mb-3">
+                            <span th:text="${textFlight}"></span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div th:text="${#temporals.format(flight.departure_time, 'HH:mm, dd/MM/yyyy')}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 text-end">
+                <button type="button" class="btn btn-detail h-100" data-form_id="#form_select_seat" id="btnSaveSeat">Xác Nhận</button>
+            </div>
         </div>
     </div>
-
-    <!-- Seat map -->
-    <div class="seat-map-container">
-        <div id="seat-map">
-            <div th:each="row : ${#numbers.sequence(1, maxRow)}" class="seat-row pb-3">
-                <!-- Lặp qua các ghế trong mỗi hàng -->
-                <th:block th:each="seat : ${seats}" th:if="${seat.rowAsInt == row}">
-                    <div th:class="'seat ' + (${seat.status == 2} ? 'seat-booked' : 'seat-available')"
-                            th:data-seat-id="${seat.id}">
-                        <span th:text="${seat.seatRow + seat.seatCol}"></span>
+    <section class="section">
+        <div class="col-12">
+            <form method="post" action="/api/flight-seat/select" id="form_select_seat">
+                <input type="hidden" name="key" th:value="${key}" />
+                <input type="hidden" name="noFlight" th:value="${noFlight}">
+                <div class="row py-4">
+                    <th:block th:each="item, stat : ${dataBooking.items}">
+                        <div class="col-4 mb-3" th:if="${item.customerType != 3}">
+                            <div class="row align-items-center">
+                                <div class="col-5 px-0">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input border-dark" th:data-index="${stat.index}" type="radio" name="check_seat" th:id="'radio' +  ${stat.index}" th:checked="${stat.index == 0}">
+                                        <label class="form-check-label" th:for="'radio' +  ${stat.index}" th:text="${item.fullName}"></label>
+                                    </div>
+                                </div>
+                                <div class="col-2 customer-seat" th:classappend="${stat.index == 0 ? 'selected-seat' : ''}">
+                                    -
+                                </div>
+                                <input type="hidden" class="seat-selection" th:data-index="${stat.index}" th:name="'seat' + ${stat.index}" />
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </form>
+            <div class="row mt-3">
+                <div class="col-md-3 pe-0">
+                    <!-- Legend -->
+                    <div class="legend">
+                        <div class="bg-danger p-3 w-100 text-center" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                            <h5 class="text-white">Chú thích sơ đồ chỗ ngồi</h5>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="seat seat-available"></div>
+                            <span class="ps-2">Ghế trống</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="seat seat-booked"></div>
+                            <span class="ps-2">Đã đặt</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="seat seat-selected"></div>
+                            <span class="ps-2">Đang chọn</span>
+                        </div>
                     </div>
-                    <div th:if="${seat.seatCol == 'C'}" style="width: 85px;"></div>
-                </th:block>
+                </div>
+                <div class="col-md-9 ps-0">
+                    <!-- Seat map -->
+                    <div class="seat-map-container bg-secondary">
+                        <div id="seat-map" class="bg-white mx-5">
+                            <div th:each="row : ${#numbers.sequence(1, maxRow)}" class="seat-row pb-3">
+                                <!-- Lặp qua các ghế trong mỗi hàng -->
+                                <th:block th:each="seat : ${seats}" th:if="${seat.rowAsInt == row}">
+                                    <div th:class="'seat ' + (${seat.status == 2} ? 'seat-booked' : 'seat-available')"
+                                         th:id="'flight_seat_' + ${seat.id}"
+                                         th:data-id="${seat.id}">
+                                        <span th:text="${seat.seatRow + seat.seatCol}"></span>
+                                    </div>
+                                    <div th:if="${seat.seatCol == 'C'}" style="width: 85px;"></div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<div class="modal fade" id="modalResult" tabindex="-1" role="dialog" data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng thực hiện thanh toán để hoàn tất việc đặt vé.</p>
+                <p>
+                    <b>Lưu ý: Nếu bạn không thực hiện thanh toán trong vòng 30 phút thì hệ thống sẽ tự động hủy bỏ đặt vé của quý khách</b>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a role="button" class="btn btn-primary link-seat-select" href="#">Tiếp tục</a>
             </div>
         </div>
     </div>
@@ -40,8 +124,67 @@
 <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
 <th:block th:replace="~{user/layouts/script::script}"></th:block>
 <script>
-    $('.seat-available').on('click', function () {
-        $(this).toggleClass('seat-selected');
+    $(document).on('click', '.seat-available', function () {
+        let element = $(this);
+        let values = [];
+        let selectedIndex = $('input[type="radio"]:checked').data("index");
+        $('.seat-selection').map(function(index, el) {
+            if (index != selectedIndex) {
+                let id = el.value;
+                values.push(id);
+            }
+        }).get();
+
+        let seatId = $(this).data('id');
+        if (!values.includes(seatId)) {
+            if (element.hasClass('seat-selected')) {
+                $("input[name='seat"+selectedIndex+"']").val('');
+                $("input[name='seat"+selectedIndex+"']").siblings('.customer-seat').text('-')
+                element.removeClass('seat-selected');
+            } else {
+                let seatSelect = $('input[name="seat' + selectedIndex + '"]').val();
+                if (seatSelect != "undefined") {
+                    $('.seat-available[data-id="'+seatSelect+'"]').removeClass("seat-selected");
+                }
+                $("input[name='seat"+selectedIndex+"']").val(seatId);
+                $("input[name='seat"+selectedIndex+"']").siblings('.customer-seat').text(element.find('span').text());
+                element.addClass('seat-selected');
+            }
+        }
+    });
+
+    $(document).on('change', 'input[type="radio"]', function () {
+        let element = $(this);
+        let customer_seat = element.parent().parent().siblings('.customer-seat');
+        $('.customer-seat').removeClass('selected-seat');
+        if (!customer_seat.hasClass('selected-seat')) {
+            customer_seat.addClass('selected-seat')
+        }
+    });
+
+    $(document).on('click', '#btnSaveSeat', function () {
+        let formId = $(this).data("form_id");
+        $.ajax({
+            method: $(formId).attr('method'),
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.url) {
+                window.location.href = data.url
+            } else {
+                // console.log(data);
+                $("#modalResult .link-seat-select").attr("href", "/payment");
+                $("#modalResult").modal("show");
+                setTimeout(function () {
+                    window.location.href = "/payment";
+                }, 9000)
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
     });
 </script>
 </body>
