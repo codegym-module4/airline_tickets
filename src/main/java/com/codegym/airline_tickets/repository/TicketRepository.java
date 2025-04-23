@@ -17,4 +17,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     Ticket findLatest();
 
     List<Ticket> findByBooking(Booking b);
+
+    List<Ticket> findTicketByBookingId(Long bookingId);
+
+    Ticket findByBookingIdAndFlightId(Long bookingId, Long flightId);
 }

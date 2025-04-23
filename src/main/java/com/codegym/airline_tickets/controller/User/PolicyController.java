@@ -1,6 +1,5 @@
 package com.codegym.airline_tickets.controller.User;
 
-import org.apache.poi.ss.formula.atp.Switch;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
