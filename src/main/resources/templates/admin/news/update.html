@@ -43,6 +43,7 @@
             <div class="mb-3 text-center">
                 <input type="file" name="imageFile" class="form-control" onchange="previewImage(event)"/>
                 <img id="previewImage" class="img-thumbnail mt-2 d-block mx-auto" style="max-height: 200px; display: none;"/>
+                <div class="text-danger mt-1" th:if="${#fields.hasErrors('imageURL')}" th:errors="*{imageURL}"></div>
             </div>
         </div>
         <div class="btn-action mt-3 text-center">
