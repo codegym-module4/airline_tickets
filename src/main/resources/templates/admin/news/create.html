@@ -25,7 +25,9 @@
 
 <div class="main-content container" style="margin-top: 60px;" id="mainContent">
     <h4 class="text-center mb-4">THÊM TIN TỨC</h4>
-    <form th:action="@{/admin/news/create}" th:object="${news}" method="post">
+    <form th:action="@{/admin/news/create}" th:object="${news}" method="post" enctype="multipart/form-data">
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
         <div class="row">
             <div class="mb-3">
                 <label>Tiêu đề</label>
@@ -44,6 +46,7 @@
                 <input type="file" name="imageFile" class="form-control" onchange="previewImage(event)"/>
                 <img id="previewImage" class="img-thumbnail mt-2 d-block mx-auto"
                      style="max-height: 200px; display: none;"/>
+                <div class="text-danger mt-1" th:if="${#fields.hasErrors('imageURL')}" th:errors="*{imageURL}"></div>
             </div>
         </div>
         <div class="btn-action mt-3 text-center">
