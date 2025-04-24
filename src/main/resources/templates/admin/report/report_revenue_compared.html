@@ -22,10 +22,14 @@
 </div>
 
 <script th:inline="javascript">
+
     // Lấy dữ liệu từ controller
     var totalSumRevenue = /*[[${totalSumRevenue}]]*/ 0;
     var totalSumCompareRevenue = /*[[${totalSumCompareRevenue}]]*/ 0;
     var chartType = /*[[${reportContent}]]*/ 'bar';
+
+    var mainRevenue = /*[[${mainRevenue}]]*/ [];
+    var compareRevenue = /*[[${compareRevenue}]]*/ [];
 
     var ctx = document.getElementById('revenueChart').getContext('2d');
     var chartData;
@@ -100,7 +104,9 @@
             data: JSON.stringify({
                 totalSumRevenue: totalSumRevenue,
                 totalSumCompareRevenue: totalSumCompareRevenue,
-                chartImage: image
+                chartImage: image,
+                mainRevenue: mainRevenue,
+                compareRevenue: compareRevenue
             }),
             xhrFields: {
                 responseType: 'blob' // nhận về dữ liệu nhị phân (binary) như file, ảnh, Excel, PDF..từ backend

@@ -14,6 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ExportRequestDTO {
     private List<RevenueByDateDto> totalRevenue;
+    private List<RevenueByDateDto> mainRevenue;
+    private List<RevenueByDateDto> compareRevenue;
     private String chartImage;
     private BigInteger totalSumRevenue;
     private BigInteger totalSumCompareRevenue;

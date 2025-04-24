@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Getter
@@ -17,4 +18,8 @@ import java.time.LocalDate;
 public class RevenueByDateDto {
     private LocalDate date;
     private BigInteger revenue;
+
+    private List<RevenueByUserDto> revenueByUser;
+    private List<RevenueByFlightDto> revenueByFlight;
+    private List<RevenueByFlightTypeDto> revenueByFlightType;
 }
