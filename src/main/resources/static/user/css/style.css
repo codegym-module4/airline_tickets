@@ -259,6 +259,7 @@ footer{
     background-color: #CA161C;
 }
 .mypage_block.user_info .user_info a,
+.mypage_block.user_ticket .user_ticket a,
 .mypage_block.user_payment .user_payment a,
 .mypage_block.user_transfer_history .user_transfer_history a,
 .mypage_block.user_change_password .user_change_password a {

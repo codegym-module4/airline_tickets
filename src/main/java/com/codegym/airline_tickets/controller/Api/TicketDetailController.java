@@ -2,12 +2,9 @@ package com.codegym.airline_tickets.controller.Api;
 
 import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.dto.TicketResponseDTO;
-import com.codegym.airline_tickets.entity.Booking;
 import com.codegym.airline_tickets.entity.Flight;
 import com.codegym.airline_tickets.entity.Ticket;
-import com.codegym.airline_tickets.response.FlightResponse;
 import com.codegym.airline_tickets.response.TicketResponse;
-import com.codegym.airline_tickets.service.impl.BookingService;
 import com.codegym.airline_tickets.service.impl.TicketService;
 import com.codegym.airline_tickets.util.FormaterCustom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +20,10 @@ import org.thymeleaf.context.Context;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/ticket")
-public class TicketController {
+public class TicketDetailController {
 
     @Autowired
     private TicketService ticketService;
@@ -35,10 +31,10 @@ public class TicketController {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @GetMapping("/{bookingId}/{flightId}")
-    public ResponseEntity<TicketResponse> getTicketByBookingId(@PathVariable("bookingId") Long bookingId,
-                                                               @PathVariable("flightId") Long flightId) {
-        Ticket ticket = ticketService.findByBookingIdAndFlightId(bookingId, flightId);
+    @GetMapping("/{ticketId}")
+    public ResponseEntity<TicketResponse> getTicketByBookingId(@PathVariable("ticketId") Long ticketId) {
+
+        Ticket ticket = ticketService.findById(ticketId);
         Flight flight = ticket.getFlight();
         FlightResponseDTO flightRes = FlightResponseDTO.builder()
                 .id(flight.getId())

@@ -39,7 +39,7 @@ public class TicketService implements ITicketService {
 
     @Override
     public Ticket findById(long id) {
-        return null;
+        return ticketRepository.findById(id).orElse(null);
     }
 
     @Override

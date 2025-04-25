@@ -111,15 +111,10 @@
     });
 
 
-    $(document).on("click", "#btnTicketDepart", function (e) {
+    $(document).on("click", "#btnTicketDetail", function (e) {
         // $("#ticketDetail").modal("show");
-        const bookingId = $(this).data("id");
-        const flightId = $(this).data("flight-id");
-        console.log(bookingId)
-        console.log(flightId)
-        const url = `/api/ticket/${bookingId}/${flightId}`;
-        console.log(url)
-
+        const ticketId = $(this).data("id");
+        const url = `/api/ticket/${ticketId}`;
         $.ajax({
             type: 'GET',
             url: url,
