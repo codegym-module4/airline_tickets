@@ -3,13 +3,17 @@ package com.codegym.airline_tickets.controller.Api;
 import com.codegym.airline_tickets.dto.BookingDTO;
 import com.codegym.airline_tickets.dto.BookingTicketDTO;
 import com.codegym.airline_tickets.entity.*;
+import com.codegym.airline_tickets.response.FlightResponse;
+import com.codegym.airline_tickets.response.ResponseObject;
 import com.codegym.airline_tickets.service.IAccountService;
 import com.codegym.airline_tickets.service.IBookingService;
 import com.codegym.airline_tickets.service.IFlightSeatService;
 import com.codegym.airline_tickets.service.ITicketService;
+import com.codegym.airline_tickets.util.PusherEvent;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +42,9 @@ public class FlightSeatRestController {
     @Autowired
     private ITicketService ticketService;
 
+    @Autowired
+    private PusherEvent pusherEvent;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     private static final Integer PRICE_FOR_A_KG = 10000;
@@ -52,6 +59,20 @@ public class FlightSeatRestController {
                 .map(Map.Entry::getValue)                            // Lấy value
                 .map(v -> v == null || v.isEmpty() ? 0 : Long.parseLong(v))  // Nếu rỗng thì thành 0
                 .collect(Collectors.toList());
+        for (Long id : ids) {
+            if (id != 0) {
+                FlightSeat flightSeat = flightSeatService.findById(id);
+                if (flightSeat.getStatus() != null && flightSeat.getStatus() == 2) {
+                    return ResponseEntity.badRequest().body(
+                            ResponseObject.builder()
+                                    .errors(true)
+                                    .status(HttpStatus.BAD_REQUEST)
+                                    .message("Ghế " + flightSeat.getSeat().getRow().getNumber() + flightSeat.getSeat().getCol().getAlphabet() + " đã được đặt chỗ quý khách. Vui lòng chọn ghế khác")
+                                    .build()
+                    );
+                }
+            }
+        }
         List<BookingTicketDTO> items = dataBooking.getItems();
         for (int i = 0; i < ids.size(); i++) {
             if (Objects.equals(requestBody.get("noFlight"), "2") && dataConfirm.get("idArrival") != null && !Objects.equals(dataConfirm.get("idArrival"), "")) {
@@ -82,7 +103,7 @@ public class FlightSeatRestController {
         return ResponseEntity.ok(result);
     }
 
-//    @Transactional
+    @Transactional
     public void save(BookingDTO data, HttpSession session) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = accountService.getAccountByEmail(email);
@@ -149,6 +170,7 @@ public class FlightSeatRestController {
             );
             Ticket result = ticketService.updateOrCreate(ticket);
             flightSeatService.updateStatusById(s.getId(), 2);
+            pusherEvent.pusherTrigger("flight." + flight.getId(), "seat-occupied", s.getId());
         }
     }
 }

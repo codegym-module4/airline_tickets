@@ -148,6 +148,7 @@ public class BookingController {
         model.addAttribute("noFlight", noFlight);
         model.addAttribute("dataBooking", dataBooking);
         model.addAttribute("textFlight", textFlight);
+        model.addAttribute("flightId", id);
 
         return "user/booking/seats";
     }
