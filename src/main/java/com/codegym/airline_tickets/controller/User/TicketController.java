@@ -38,7 +38,7 @@ public class TicketController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Account account = accountService.getAccountByEmail(email);
-        List<Booking> listBooking = bookingService.findByUserId(account.getUser().getId());
+        List<Booking> listBooking = bookingService.findByStatusAndUserId(2,account.getUser().getId());
 
         List<Ticket> tickets = new ArrayList<>();
 
