@@ -69,12 +69,14 @@ public class BookingService implements IBookingService {
             List<RevenueByUserDto> revenueByUser = new ArrayList<>();
             for (User user : users) {
                 BigInteger revenueByUserIdAndDate = bookingRepository.getRevenueByUserIdAndDate(user.getId(), date);
-                revenueByUser.add(new RevenueByUserDto(user, revenueByUserIdAndDate));
+                Integer numberOfTickets = bookingRepository.getNumberOfTicketsByUserIdAndDate(user.getId(), date);
+                revenueByUser.add(new RevenueByUserDto(user, numberOfTickets, date, revenueByUserIdAndDate));
             }
             revenueByDateDto.setRevenueByUser(revenueByUser);
 
 
             List<Object[]> flightPairs = bookingRepository.getFlightAndReturnFlightPairsByDate(date);
+
             List<RevenueByFlightDto> revenueByFlight = new ArrayList<>();
 
             for (Object[] pair : flightPairs) {

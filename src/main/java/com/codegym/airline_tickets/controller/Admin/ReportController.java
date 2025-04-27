@@ -35,7 +35,7 @@
 
         @GetMapping("report")
         public String report() {
-            return "admin/report/report_create";
+            return "admin/report/report_create_and_chart";
         }
 
         @PostMapping("create")
@@ -60,14 +60,16 @@
                         List<RevenueByDateDto> totalRevenue = bookingService.getRevenueByDay(range[0], range[1]);
                         model.addAttribute("totalRevenue", totalRevenue);
                         model.addAttribute("reportContent", reportContent);
-                        return "admin/report/report_revenue_single";
+                        model.addAttribute("reportCompareMode", reportCompareMode);
+                        return "admin/report/report_create_and_chart";
 
                     } else if (reportTimeMode.equals("custom") && reportCompareMode.equals("false")) {
                         LocalDate[] range = getCustomDateTimeRange(reportStartDate, reportEndDate);
                         List<RevenueByDateDto> totalRevenue = bookingService.getRevenueByDay(range[0], range[1]);
                         model.addAttribute("totalRevenue", totalRevenue);
                         model.addAttribute("reportContent", reportContent);
-                        return "admin/report/report_revenue_single";
+                        model.addAttribute("reportCompareMode", reportCompareMode);
+                        return "admin/report/report_create_and_chart";
 
                     } else if (reportTimeMode.equals("quick") && reportCompareMode.equals("quick")) {
                         LocalDate[] mainRange = getQuickDateTimeRange(reportTimeQuick);
@@ -94,7 +96,8 @@
                         model.addAttribute("totalSumRevenue", totalSumRevenue);
                         model.addAttribute("totalSumCompareRevenue", totalSumCompareRevenue);
                         model.addAttribute("reportContent", reportContent);
-                        return "admin/report/report_revenue_compared";
+                        model.addAttribute("reportCompareMode", reportCompareMode);
+                        return "admin/report/report_create_and_chart";
 
                     } else if (reportTimeMode.equals("custom") && reportCompareMode.equals("quick")) {
                         LocalDate[] mainRange = getCustomDateTimeRange(reportStartDate, reportEndDate);
@@ -121,7 +124,8 @@
                         model.addAttribute("totalSumRevenue", totalSumRevenue);
                         model.addAttribute("totalSumCompareRevenue", totalSumCompareRevenue);
                         model.addAttribute("reportContent", reportContent);
-                        return "admin/report/report_revenue_compared";
+                        model.addAttribute("reportCompareMode", reportCompareMode);
+                        return "admin/report/report_create_and_chart";
 
                     } else if (reportTimeMode.equals("quick") && reportCompareMode.equals("custom")) {
                         LocalDate[] mainRange = getQuickDateTimeRange(reportTimeQuick);
@@ -148,7 +152,8 @@
                         model.addAttribute("totalSumRevenue", totalSumRevenue);
                         model.addAttribute("totalSumCompareRevenue", totalSumCompareRevenue);
                         model.addAttribute("reportContent", reportContent);
-                        return "admin/report/report_revenue_compared";
+                        model.addAttribute("reportCompareMode", reportCompareMode);
+                        return "admin/report/report_create_and_chart";
 
                     } else if (reportTimeMode.equals("custom") && reportCompareMode.equals("custom")) {
                         LocalDate[] mainRange = getCustomDateTimeRange(reportStartDate, reportEndDate);
@@ -175,13 +180,14 @@
                         model.addAttribute("totalSumRevenue", totalSumRevenue);
                         model.addAttribute("totalSumCompareRevenue", totalSumCompareRevenue);
                         model.addAttribute("reportContent", reportContent);
-                        return "admin/report/report_revenue_compared";
+                        model.addAttribute("reportCompareMode", reportCompareMode);
+                        return "admin/report/report_create_and_chart";
                     }
                     break;
                 default:
                     break;
             }
-            return "admin/report/report_create";
+            return "admin/report/report_create_and_chart";
         }
 
         private LocalDate[] getQuickDateTimeRange(String quickType) {
@@ -227,9 +233,9 @@
             // Tạo workbook và sheet cho Excel
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet("Doanh Thu");
-            Sheet sheet2 = workbook.createSheet("Doanh Thu Theo Khách Hàng");
-            Sheet sheet3 = workbook.createSheet("Doanh Thu Theo Chuyến Bay");
-            Sheet sheet4 = workbook.createSheet("Doanh Thu Theo Loại Chuyến Bay");
+            Sheet sheet2 = workbook.createSheet("Doanh Thu Theo KH");
+            Sheet sheet3 = workbook.createSheet("Doanh Thu Theo Chuyến");
+            Sheet sheet4 = workbook.createSheet("Doanh Thu Theo Loại");
 
             // Tạo dòng đầu tiên (tiêu đề cột) của sheet đầu
             Row headerRow = sheet.createRow(0);
@@ -240,18 +246,24 @@
             Row headerRow2 = sheet2.createRow(0);
             headerRow2.createCell(0).setCellValue("ID Khách hàng");
             headerRow2.createCell(1).setCellValue("Tên Khách hàng");
-            headerRow2.createCell(2).setCellValue("Doanh thu (VND)");
+            headerRow2.createCell(2).setCellValue("Số lượng vé đã đặt");
+            headerRow2.createCell(3).setCellValue("Doanh thu (VND)");
+            headerRow2.createCell(4).setCellValue("Ngày thanh toán");
 
             // Tao dòng đầu tiên (tiêu đề cột) của sheet thứ ba
             Row headerRow3 = sheet3.createRow(0);
-            headerRow3.createCell(0).setCellValue("Chuyến bay");
-            headerRow3.createCell(1).setCellValue("Chuyến bay khứ hồi");
-            headerRow3.createCell(2).setCellValue("Doanh thu (VND)");
+            headerRow3.createCell(0).setCellValue("Sân bay đi");
+            headerRow3.createCell(1).setCellValue("Sân bay đến");
+            headerRow3.createCell(2).setCellValue("Sân bay đi - khứ hồi");
+            headerRow3.createCell(3).setCellValue("Sân bay đến - khứ hồi");
+            headerRow3.createCell(4).setCellValue("Doanh thu (VND)");
+            headerRow3.createCell(5).setCellValue("Ngày thanh toán");
 
             // Tao dòng đầu tiên (tiêu đề cột) của sheet thứ tư
             Row headerRow4 = sheet4.createRow(0);
             headerRow4.createCell(0).setCellValue("Loại chuyến bay");
             headerRow4.createCell(1).setCellValue("Doanh thu (VND)");
+            headerRow4.createCell(2).setCellValue("Ngày thanh toán");
 
             // Thêm dữ liệu vào sheet đầu
             int rowNum = 1;
@@ -283,17 +295,21 @@
                     Row row = sheet2.createRow(rowNum2++);
                     row.createCell(0).setCellValue(userRevenue.getUserId().getId());
                     row.createCell(1).setCellValue(userRevenue.getUserId().getFullName());
+                    row.createCell(2).setCellValue(userRevenue.getNumberOfTickets());
+
                     Object userRevenueObj = userRevenue.getRevenue();
                 //  Xét null doanh thu và khi lỗi parse thì điền Invalid
                     if (userRevenueObj != null) {
                         try {
-                            row.createCell(2).setCellValue(Double.parseDouble(userRevenueObj.toString()));
+                            row.createCell(3).setCellValue(Double.parseDouble(userRevenueObj.toString()));
                         } catch (NumberFormatException e) {
-                            row.createCell(2).setCellValue("Invalid");
+                            row.createCell(3).setCellValue("Invalid");
                         }
                     } else {
-                        row.createCell(2).setCellValue("N/A");
+                        row.createCell(3).setCellValue("N/A");
                     }
+
+                    row.createCell(4).setCellValue(userRevenue.getDate() != null ? userRevenue.getDate().toString() : "N/A");
                 }
             }
 
@@ -303,21 +319,26 @@
                 List<RevenueByFlightDto> revenueByFlight = revenueData.getRevenueByFlight();
                 for (RevenueByFlightDto flightRevenue : revenueByFlight) {
                     Row row = sheet3.createRow(rowNum3++);
-                    Object flightObj = flightRevenue.getFlightId().getId();
-                    Object returnFlightObj = flightRevenue.getReturnFlightId() != null ? flightRevenue.getReturnFlightId().getId() : null;
-                    row.createCell(0).setCellValue(flightObj != null ? flightObj.toString() : "N/A");
-                    row.createCell(1).setCellValue(returnFlightObj != null ? returnFlightObj.toString() : "N/A");
+                    Object flightDepartureObj = flightRevenue.getFlightId() != null ? flightRevenue.getFlightId().getDepartureAirport().getName() : "N/A";
+                    Object flightArrivalFlightObj = flightRevenue.getFlightId() != null ? flightRevenue.getFlightId().getArrivalAirport().getName() : "N/A";
+                    Object returnFlightDepartureObj = flightRevenue.getReturnFlightId() != null ? flightRevenue.getReturnFlightId().getDepartureAirport().getName() : "N/A";
+                    Object returnFlightArrivalObj = flightRevenue.getReturnFlightId() != null ? flightRevenue.getReturnFlightId().getArrivalAirport().getName() : "N/A";
+                    row.createCell(0).setCellValue(flightDepartureObj != null ? flightDepartureObj.toString() : "N/A");
+                    row.createCell(1).setCellValue(flightArrivalFlightObj != null ? flightArrivalFlightObj.toString() : "N/A");
+                    row.createCell(2).setCellValue(returnFlightDepartureObj != null ? returnFlightDepartureObj.toString() : "N/A");
+                    row.createCell(3).setCellValue(returnFlightArrivalObj != null ? returnFlightArrivalObj.toString() : "N/A");
                     Object flightRevenueObj = flightRevenue.getRevenue();
                 //  Xét null doanh thu và khi lỗi parse thì điền Invalid
                     if (flightRevenueObj != null) {
                         try {
-                            row.createCell(2).setCellValue(Double.parseDouble(flightRevenueObj.toString()));
+                            row.createCell(4).setCellValue(Double.parseDouble(flightRevenueObj.toString()));
                         } catch (NumberFormatException e) {
-                            row.createCell(2).setCellValue("Invalid");
+                            row.createCell(4).setCellValue("Invalid");
                         }
                     } else {
-                        row.createCell(2).setCellValue("N/A");
+                        row.createCell(4).setCellValue("N/A");
                     }
+                    row.createCell(5).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
             }
 
@@ -348,6 +369,7 @@
                     } else {
                         row.createCell(1).setCellValue("N/A");
                     }
+                    row.createCell(2).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
             }
 
@@ -396,14 +418,14 @@
 
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet("Tổng Hợp Doanh Thu");
-            Sheet sheet2 = workbook.createSheet("Doanh Thu Chính Theo Ngày");
-            Sheet sheet3 = workbook.createSheet("Doanh Thu Được So Sánh Theo Ngày");
-            Sheet sheet4 = workbook.createSheet("Doanh Thu Chính Theo Khách Hàng");
-            Sheet sheet5 = workbook.createSheet("Doanh Thu Được So Sánh Theo Khách Hàng");
-            Sheet sheet6 = workbook.createSheet("Doanh Thu Chính Theo Chuyến Bay");
-            Sheet sheet7 = workbook.createSheet("Doanh Thu Được So Sánh Theo Chuyến Bay");
-            Sheet sheet8 = workbook.createSheet("Doanh Thu Chính Theo Loại Chuyến Bay");
-            Sheet sheet9 = workbook.createSheet("Doanh Thu Được So Sánh Theo Loại Chuyến Bay");
+            Sheet sheet2 = workbook.createSheet("Doanh Thu Chính");
+            Sheet sheet3 = workbook.createSheet("Doanh Thu So Sánh");
+            Sheet sheet4 = workbook.createSheet("Doanh Thu Chính Theo KH");
+            Sheet sheet5 = workbook.createSheet("Doanh Thu So Sánh Theo KH");
+            Sheet sheet6 = workbook.createSheet("Doanh Thu Chính Theo Chuyến");
+            Sheet sheet7 = workbook.createSheet("Doanh Thu So Sánh Theo Chuyến");
+            Sheet sheet8 = workbook.createSheet("Doanh Thu Chính Theo Loại");
+            Sheet sheet9 = workbook.createSheet("Doanh Thu So Sánh Theo Loại");
 
             // Tạo dòng đầu tiên (tiêu đề cột) của sheet đầu
             Row header = sheet.createRow(0);
@@ -424,35 +446,50 @@
             Row header4 = sheet4.createRow(0);
             header4.createCell(0).setCellValue("ID Khách hàng");
             header4.createCell(1).setCellValue("Tên Khách hàng");
-            header4.createCell(2).setCellValue("Doanh thu (VND)");
+            header4.createCell(2).setCellValue("Số lượng vé đã đặt");
+            header4.createCell(3).setCellValue("Doanh thu (VND)");
+            header4.createCell(4).setCellValue("Ngày thanh toán");
+
 
             // Tạo dòng đầu tiên (tiêu đề cột) của sheet thứ năm
             Row header5 = sheet5.createRow(0);
             header5.createCell(0).setCellValue("ID Khách hàng");
             header5.createCell(1).setCellValue("Tên Khách hàng");
+            header5.createCell(2).setCellValue("Số lượng vé đã đặt");
             header5.createCell(2).setCellValue("Doanh thu (VND)");
+            header5.createCell(3).setCellValue("Ngày thanh toán");
 
             // Tạo dòng đầu tiên (tiêu đề cột) của sheet thứ sáu
             Row header6 = sheet6.createRow(0);
-            header6.createCell(0).setCellValue("Chuyến bay");
-            header6.createCell(1).setCellValue("Chuyến bay khứ hồi");
-            header6.createCell(2).setCellValue("Doanh thu (VND)");
+            header6.createCell(0).setCellValue("Sân bay đi");
+            header6.createCell(1).setCellValue("Sân bay đến");
+            header6.createCell(2).setCellValue("Sân bay đi - khứ hồi");
+            header6.createCell(3).setCellValue("Sân bay đến - khứ hồi");
+            header6.createCell(4).setCellValue("Doanh thu (VND)");
+            header6.createCell(5).setCellValue("Ngày thanh toán");
+
 
             // Tạo dòng đầu tiên (tiêu đề cột) của sheet thứ bảy
             Row header7 = sheet7.createRow(0);
-            header7.createCell(0).setCellValue("Chuyến bay");
-            header7.createCell(1).setCellValue("Chuyến bay khứ hồi");
-            header7.createCell(2).setCellValue("Doanh thu (VND)");
+            header7.createCell(0).setCellValue("Sân bay đi");
+            header7.createCell(1).setCellValue("Sân bay đến");
+            header7.createCell(2).setCellValue("Sân bay đi - khứ hồi");
+            header7.createCell(3).setCellValue("Sân bay đến - khứ hồi");
+            header7.createCell(4).setCellValue("Doanh thu (VND)");
+            header7.createCell(5).setCellValue("Ngày thanh toán");
 
             // Tạo dòng đầu tiên (tiêu đề cột) của sheet thứ tám
             Row header8 = sheet8.createRow(0);
             header8.createCell(0).setCellValue("Loại chuyến bay");
             header8.createCell(1).setCellValue("Doanh thu (VND)");
+            header8.createCell(2).setCellValue("Ngày thanh toán");
 
             // Tạo dòng đầu tiên (tiêu đề cột) của sheet thứ chín
             Row header9 = sheet9.createRow(0);
             header9.createCell(0).setCellValue("Loại chuyến bay");
             header9.createCell(1).setCellValue("Doanh thu (VND)");
+            header9.createCell(2).setCellValue("Ngày thanh toán");
+
 
 
             // Thêm dữ liệu vào sheet đầu
@@ -511,17 +548,20 @@
                     Row row4 = sheet4.createRow(rowNum4++);
                     row4.createCell(0).setCellValue(userRevenue.getUserId().getId());
                     row4.createCell(1).setCellValue(userRevenue.getUserId().getFullName());
+                    row4.createCell(2).setCellValue(userRevenue.getNumberOfTickets());
+
                     Object userRevenueObj = userRevenue.getRevenue();
                     //  Xét null doanh thu và khi lỗi parse thì điền Invalid
                     if (userRevenueObj != null) {
                         try {
-                            row4.createCell(2).setCellValue(Double.parseDouble(userRevenueObj.toString()));
+                            row4.createCell(3).setCellValue(Double.parseDouble(userRevenueObj.toString()));
                         } catch (NumberFormatException e) {
-                            row4.createCell(2).setCellValue("Invalid");
+                            row4.createCell(3).setCellValue("Invalid");
                         }
                     } else {
-                        row4.createCell(2).setCellValue("N/A");
+                        row4.createCell(3).setCellValue("N/A");
                     }
+                    row4.createCell(4).setCellValue(userRevenue.getDate() != null ? userRevenue.getDate().toString() : "N/A");
                 }
             }
 
@@ -534,17 +574,20 @@
                     Row row5 = sheet5.createRow(rowNum5++);
                     row5.createCell(0).setCellValue(userRevenue.getUserId().getId());
                     row5.createCell(1).setCellValue(userRevenue.getUserId().getFullName());
+                    row5.createCell(2).setCellValue(userRevenue.getNumberOfTickets());
+
                     Object userRevenueObj = userRevenue.getRevenue();
                     //  Xét null doanh thu và khi lỗi parse thì điền Invalid
                     if (userRevenueObj != null) {
                         try {
-                            row5.createCell(2).setCellValue(Double.parseDouble(userRevenueObj.toString()));
+                            row5.createCell(3).setCellValue(Double.parseDouble(userRevenueObj.toString()));
                         } catch (NumberFormatException e) {
-                            row5.createCell(2).setCellValue("Invalid");
+                            row5.createCell(3).setCellValue("Invalid");
                         }
                     } else {
-                        row5.createCell(2).setCellValue("N/A");
+                        row5.createCell(3).setCellValue("N/A");
                     }
+                    row5.createCell(4).setCellValue(userRevenue.getDate() != null ? userRevenue.getDate().toString() : "N/A");
                 }
             }
 
@@ -554,21 +597,27 @@
                 List<RevenueByFlightDto> revenueByFlight = revenueData.getRevenueByFlight();
                 for (RevenueByFlightDto flightRevenue : revenueByFlight) {
                     Row row6 = sheet6.createRow(rowNum6++);
-                    Object flightObj = flightRevenue.getFlightId().getId();
-                    Object returnFlightObj = flightRevenue.getReturnFlightId() != null ? flightRevenue.getReturnFlightId().getId() : null;
-                    row6.createCell(0).setCellValue(flightObj != null ? flightObj.toString() : "N/A");
-                    row6.createCell(1).setCellValue(returnFlightObj != null ? returnFlightObj.toString() : "N/A");
+                    Object flightDepartureObj = flightRevenue.getFlightId() != null ? flightRevenue.getFlightId().getDepartureAirport().getName() : "N/A";
+                    Object flightArrivalFlightObj = flightRevenue.getFlightId() != null ? flightRevenue.getFlightId().getArrivalAirport().getName() : "N/A";
+                    Object returnFlightDepartureObj = flightRevenue.getReturnFlightId() != null ? flightRevenue.getReturnFlightId().getDepartureAirport().getName() : "N/A";
+                    Object returnFlightArrivalObj = flightRevenue.getReturnFlightId() != null ? flightRevenue.getReturnFlightId().getArrivalAirport().getName() : "N/A";
+
+                    row6.createCell(0).setCellValue(flightDepartureObj != null ? flightDepartureObj.toString() : "N/A");
+                    row6.createCell(1).setCellValue(flightArrivalFlightObj != null ? flightArrivalFlightObj.toString() : "N/A");
+                    row6.createCell(2).setCellValue(returnFlightDepartureObj != null ? returnFlightDepartureObj.toString() : "N/A");
+                    row6.createCell(3).setCellValue(returnFlightArrivalObj != null ? returnFlightArrivalObj.toString() : "N/A");
                     Object flightRevenueObj = flightRevenue.getRevenue();
                     //  Xét null doanh thu và khi lỗi parse thì điền Invalid
                     if (flightRevenueObj != null) {
                         try {
-                            row6.createCell(2).setCellValue(Double.parseDouble(flightRevenueObj.toString()));
+                            row6.createCell(4).setCellValue(Double.parseDouble(flightRevenueObj.toString()));
                         } catch (NumberFormatException e) {
-                            row6.createCell(2).setCellValue("Invalid");
+                            row6.createCell(4).setCellValue("Invalid");
                         }
                     } else {
-                        row6.createCell(2).setCellValue("N/A");
+                        row6.createCell(4).setCellValue("N/A");
                     }
+                    row6.createCell(5).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
             }
 
@@ -578,21 +627,27 @@
                 List<RevenueByFlightDto> revenueByFlight = revenueData.getRevenueByFlight();
                 for (RevenueByFlightDto flightRevenue : revenueByFlight) {
                     Row row7 = sheet7.createRow(rowNum7++);
-                    Object flightObj = flightRevenue.getFlightId().getId();
-                    Object returnFlightObj = flightRevenue.getReturnFlightId() != null ? flightRevenue.getReturnFlightId().getId() : null;
-                    row7.createCell(0).setCellValue(flightObj != null ? flightObj.toString() : "N/A");
-                    row7.createCell(1).setCellValue(returnFlightObj != null ? returnFlightObj.toString() : "N/A");
+                    Object flightDepartureObj = flightRevenue.getFlightId() != null ? flightRevenue.getFlightId().getDepartureAirport().getName() : "N/A";
+                    Object flightArrivalFlightObj = flightRevenue.getFlightId() != null ? flightRevenue.getFlightId().getArrivalAirport().getName() : "N/A";
+                    Object returnFlightDepartureObj = flightRevenue.getReturnFlightId() != null ? flightRevenue.getReturnFlightId().getDepartureAirport().getName() : "N/A";
+                    Object returnFlightArrivalObj = flightRevenue.getReturnFlightId() != null ? flightRevenue.getReturnFlightId().getArrivalAirport().getName() : "N/A";
+
+                    row7.createCell(0).setCellValue(flightDepartureObj != null ? flightDepartureObj.toString() : "N/A");
+                    row7.createCell(1).setCellValue(flightArrivalFlightObj != null ? flightArrivalFlightObj.toString() : "N/A");
+                    row7.createCell(2).setCellValue(returnFlightDepartureObj != null ? returnFlightDepartureObj.toString() : "N/A");
+                    row7.createCell(3).setCellValue(returnFlightArrivalObj != null ? returnFlightArrivalObj.toString() : "N/A");
                     Object flightRevenueObj = flightRevenue.getRevenue();
                     //  Xét null doanh thu và khi lỗi parse thì điền Invalid
                     if (flightRevenueObj != null) {
                         try {
-                            row7.createCell(2).setCellValue(Double.parseDouble(flightRevenueObj.toString()));
+                            row7.createCell(4).setCellValue(Double.parseDouble(flightRevenueObj.toString()));
                         } catch (NumberFormatException e) {
-                            row7.createCell(2).setCellValue("Invalid");
+                            row7.createCell(4).setCellValue("Invalid");
                         }
                     } else {
-                        row7.createCell(2).setCellValue("N/A");
+                        row7.createCell(4).setCellValue("N/A");
                     }
+                    row7.createCell(5).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
             }
 
@@ -623,6 +678,7 @@
                     } else {
                         row8.createCell(1).setCellValue("N/A");
                     }
+                    row8.createCell(2).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
             }
 
@@ -653,6 +709,7 @@
                     } else {
                         row9.createCell(1).setCellValue("N/A");
                     }
+                    row9.createCell(2).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
             }
 

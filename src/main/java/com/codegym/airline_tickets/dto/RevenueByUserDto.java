@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -14,5 +15,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 public class RevenueByUserDto {
     private User userId;
+    private Integer numberOfTickets;
+    private LocalDate date;
     private BigInteger revenue;
 }

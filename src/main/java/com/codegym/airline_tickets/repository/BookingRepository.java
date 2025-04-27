@@ -2,7 +2,6 @@ package com.codegym.airline_tickets.repository;
 
 import com.codegym.airline_tickets.entity.Booking;
 import com.codegym.airline_tickets.entity.User;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,7 +26,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     BigInteger getTotalRevenueByDate(@Param("date") LocalDate date);
 
     @Transactional
-    @Query("SELECT b.user " +
+    @Query("SELECT DISTINCT b.user " +
             "FROM Booking b " +
             "WHERE b.deletedAt IS NULL " +
             "AND DATE(b.payment_date) = :date AND b.status = 2")
@@ -42,10 +41,20 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                          @Param("date") LocalDate date
     );
 
+    @Transactional
+    @Query("SELECT b.numTickets " +
+            "FROM Booking b " +
+            "WHERE b.deletedAt IS NULL " +
+            "AND b.user.id = :id AND DATE(b.payment_date) = :date AND b.status = 2")
+    int getNumberOfTicketsByUserIdAndDate (@Param("id") Long id,
+                                         @Param("date") LocalDate date
+    );
+
 
     @Transactional
-    @Query("SELECT b.flight, b.returnFlight " +
+    @Query("SELECT DISTINCT b.flight, b.returnFlight " +
             "FROM Booking b " +
+            "LEFT JOIN b.returnFlight " +
             "WHERE b.deletedAt IS NULL " +
             "AND DATE(b.payment_date) = :date AND b.status = 2")
     List<Object[]> getFlightAndReturnFlightPairsByDate(@Param("date") LocalDate date);
@@ -54,14 +63,17 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("SELECT SUM(b.totalPrice) " +
             "FROM Booking b " +
             "WHERE b.deletedAt IS NULL " +
-            "AND b.flight.id = :flightId AND b.returnFlight.id = :returnFlightId AND DATE(b.payment_date) = :date AND b.status = 2")
+            "AND b.flight.id = :flightId " +
+            "AND ((:returnFlightId IS NULL AND b.returnFlight IS NULL) " +
+            "OR (b.returnFlight.id = :returnFlightId)) " +
+            "AND DATE(b.payment_date) = :date AND b.status = 2")
     BigInteger getRevenueByFlightAndReturnFlightAndDate (@Param("flightId") Long flightId,
                                                          @Param("returnFlightId") Long returnFlightId,
                                                          @Param("date") LocalDate date
     );
 
     @Transactional
-    @Query("SELECT b.flightType " +
+    @Query("SELECT DISTINCT b.flightType " +
             "FROM Booking b " +
             "WHERE b.deletedAt IS NULL " +
             "AND DATE(b.payment_date) = :date AND b.status = 2")
