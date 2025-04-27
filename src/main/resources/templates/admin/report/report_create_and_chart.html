@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Báo Cáo</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .table th, button {
+            background-color: red;
+            color: white;
+        }
+        .export-button {
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Sidebar -->
+<div th:replace="admin/sidebar/sidebar :: adminSidebar"></div>
+
+<div id="mainContent" class="main-content" style="margin-left: 170px;">
+    <div class="container-fluid mt-4">
+        <h1 class="text-center fw-bold mb-4">Tạo Báo Cáo</h1>
+
+        <div class="row">
+            <!-- Form -->
+            <div class="col-lg-4 mb-4">
+                <div class="bg-body-tertiary p-4 rounded shadow">
+                    <form method="POST" action="/admin/create">
+                        <div class="border p-3 mb-4">
+                            <div class="mb-3">
+                                <label class="form-label">Chọn kiểu</label>
+                                <div class="d-flex align-items-center gap-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="reportContent" id="barChart" value="bar" checked>
+                                        <label class="form-check-label" for="barChart">
+                                            Bar
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="reportContent" id="lineChart" value="line">
+                                        <label class="form-check-label" for="lineChart">
+                                            Line
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Chọn loại</label>
+                                <select class="form-select" name="reportType">
+                                    <option value="revenue">Doanh Thu</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Thời gian</label>
+
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <input type="radio" name="reportTimeMode" value="quick" id="quickSelect" class="form-check-input">
+                                    <select id="quickSelectDropdown" class="form-select" name="reportTimeQuick" style="max-width: 200px;">
+                                        <option value="yesterday">Hôm qua</option>
+                                        <option value="this_week">Tuần này</option>
+                                        <option value="this_month">Tháng này</option>
+                                        <option value="this_year">Năm này</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2 mt-2">
+                                    <input type="radio" name="reportTimeMode" value="custom" id="customDate" class="form-check-input">
+                                    <input type="date" class="form-control" name="reportStartDate" id="startDate" disabled style="max-width: 150px;">
+                                    <span>Đến</span>
+                                    <input type="date" class="form-control" name="reportEndDate" id="endDate" disabled style="max-width: 150px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">So sánh với:</label>
+
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <input type="radio" name="reportCompareMode" value="quick" class="form-check-input" id="quickSelect2">
+                                <select id="quickSelectDropdown2" class="form-select" name="reportCompareQuick" style="max-width: 200px;">
+                                    <option value="yesterday">Hôm qua</option>
+                                    <option value="this_week">Tuần này</option>
+                                    <option value="this_month">Tháng này</option>
+                                    <option value="this_year">Năm này</option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2 mt-2">
+                                <input type="radio" name="reportCompareMode" value="custom" class="form-check-input" id="customDate2">
+                                <input type="date" class="form-control" name="reportCompareStartDate" id="startDate2" disabled style="max-width: 150px;">
+                                <span>Đến</span>
+                                <input type="date" class="form-control" name="reportCompareEndDate" id="endDate2" disabled style="max-width: 150px;">
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger">Xem</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="col-lg-8">
+                <div class="bg-body-tertiary p-4 rounded shadow">
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <button type="button" class="btn btn-danger" onclick="exportFile()">Xuất File</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Phải dùng th:inline mới áp dụng được cho thymeleaf-->
+<script th:inline="javascript">
+
+    document.getElementById("quickSelect").addEventListener("change", function () {
+        document.getElementById("quickSelectDropdown").disabled = false;
+        document.getElementById("startDate").disabled = true;
+        document.getElementById("endDate").disabled = true;
+    });
+
+    document.getElementById("customDate").addEventListener("change", function () {
+        document.getElementById("quickSelectDropdown").disabled = true;
+        document.getElementById("startDate").disabled = false;
+        document.getElementById("endDate").disabled = false;
+    });
+
+    document.getElementById("quickSelect2").addEventListener("change", function () {
+        document.getElementById("quickSelectDropdown2").disabled = false;
+        document.getElementById("startDate2").disabled = true;
+        document.getElementById("endDate2").disabled = true;
+    });
+
+    document.getElementById("customDate2").addEventListener("change", function () {
+        document.getElementById("quickSelectDropdown2").disabled = true;
+        document.getElementById("startDate2").disabled = false;
+        document.getElementById("endDate2").disabled = false;
+    });
+
+
+    // Lấy dữ liệu từ controller
+    var totalRevenue = /*[[${totalRevenue}]]*/ [];
+    var chartType = /*[[${reportContent} ?: 'bar']]*/ 'bar';
+    var reportCompareMode = /*[[${reportCompareMode}]]*/ false;
+
+    var mainRevenue = /*[[${mainRevenue}]]*/ [];
+    var compareRevenue = /*[[${compareRevenue}]]*/ [];
+
+    var dates = [];
+    var revenues = [];
+
+    if (totalRevenue) {
+        totalRevenue.forEach(function(revenue) {
+            dates.push(revenue.date);
+            revenues.push(revenue.revenue);
+        });
+    }
+
+    var ctx = document.getElementById('revenueChart').getContext('2d');
+    var revenueChart;
+
+    // Kiểm tra sẽ vẽ biểu đồ nào
+    if (reportCompareMode === 'quick' || reportCompareMode === 'custom') {
+        // biêu đồ so sánh 2 thời gian
+        var totalSumRevenue = /*[[${totalSumRevenue}]]*/ 0;
+        var totalSumCompareRevenue = /*[[${totalSumCompareRevenue}]]*/ 0;
+        var chartData; // Biến để lưu trữ dữ liệu biểu đồ
+
+        if (chartType === 'line') {
+            chartData = {
+                labels: ['Thời gian chính', 'Thời gian so sánh'],
+                datasets: [{
+                    label: 'So sánh doanh thu',
+                    data: [totalSumRevenue, totalSumCompareRevenue],
+                    borderColor: 'blue',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: ['blue', 'green'],
+                    pointBorderColor: ['blue', 'green'],
+                    pointRadius: 6
+                }]
+            };
+        } else {
+            chartData = {
+                labels: ['So sánh Doanh Thu'],
+                datasets: [
+                    {
+                        label: 'Thời gian chính',
+                        data: [totalSumRevenue],
+                        backgroundColor: 'blue'
+                    },
+                    {
+                        label: 'Thời gian so sánh',
+                        data: [totalSumCompareRevenue],
+                        backgroundColor: 'green'
+                    }
+                ]
+            };
+        }
+
+        revenueChart = new Chart(ctx, {
+            type: chartType,
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 150,
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {size: 14}
+                        }
+                    }
+                },
+                scales: (chartType !== 'pie') ? {
+                    x: {ticks: {font: {size: 12}}},
+                    y: {ticks: {font: {size: 12}}}
+                } : {}
+            }
+        });
+
+    } else {
+        // biểu đồ doanh thu 1 thời gian
+        revenueChart = new Chart(ctx, {
+            type: chartType,
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Doanh thu (VND)',
+                    data: revenues,
+                    borderColor: 'blue',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: { font: { size: 12 } }
+                    },
+                    y: {
+                        ticks: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+    }
+
+    function exportFile() {
+        const canvas = document.getElementById('revenueChart');
+        const image = canvas.toDataURL('image/png');
+
+        let exportUrl = '/admin/export-excel';
+        let requestData = {
+            totalRevenue: totalRevenue,
+            chartImage: image
+        };
+
+        if (reportCompareMode === 'quick' || reportCompareMode === 'custom') {
+            exportUrl = '/admin/export-excel2';
+            requestData = {
+                totalSumRevenue: totalSumRevenue,
+                totalSumCompareRevenue: totalSumCompareRevenue,
+                chartImage: image,
+                mainRevenue: mainRevenue,
+                compareRevenue: compareRevenue
+            };
+        }
+
+        $.ajax({
+            url: exportUrl,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData), //gửi đến backend là json
+            xhrFields: { responseType: 'blob' }, // nhận về dữ liệu nhị phân (binary) như file, ảnh, Excel, PDF..từ backend
+            success: function(blob) {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "report.xlsx";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            },
+            error: function() {
+                alert("Xuất file thất bại!");
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>
