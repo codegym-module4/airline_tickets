@@ -171,7 +171,7 @@ public class FlightController {
 
         Long idDepart = Long.valueOf(request.get("idDepart"));
         String idArrival = request.get("idArrival");
-        String type = request.get("flight_type");
+
         listFlightId.add(idDepart);
 
         List<Object[]> results;
@@ -195,7 +195,7 @@ public class FlightController {
             data.add(flight);
         }
 
-        data.stream().filter(item -> item.getSeatAvailable() < totalPassenger).toList();
+        data = data.stream().filter(item -> item.getSeatAvailable() < totalPassenger).toList();
         StringBuilder messageBuilder = new StringBuilder("Chuyến bay  ");
         if(!data.isEmpty()){
             data.stream().forEach(item -> {
@@ -204,7 +204,7 @@ public class FlightController {
             Map<String, String> res = new HashMap<>();
             res.put("errors", "true");
             res.put("url", "/");
-            session.setAttribute("errorMessage",messageBuilder + " không đủ chỗ. Vui lòng thử lại!");
+            res.put("message",messageBuilder + " không đủ chỗ. Vui lòng thử lại!");
             return ResponseEntity.badRequest().body(res);
         }
 

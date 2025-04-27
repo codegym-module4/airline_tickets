@@ -37,10 +37,13 @@ public class SecurityConfig {
                                 "/user/img/**",
                                 "/user/icon/**",
                                 "/admin/css/**",
-                                "/admin/**"
+                                "/admin/**",
+                                "/admin/news/**",
+                                "/admin/news/create",
+                                "/admin/news/edit/**"
                         ).permitAll()
 //                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
-                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**").authenticated()
+                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**", "/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

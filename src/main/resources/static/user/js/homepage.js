@@ -13,9 +13,26 @@ let searchFormData = {
         infant: 0
     },
 };
+let isConfirm = false;
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    $("#modalPolicy").modal({backdrop: "static"});
+    if(!sessionStorage.getItem("checkPolicy")){
+        $("#modalPolicy").modal("show");
+    }else{
+        $('#modalPolicy').modal('hide');
+    }
+
+    $('#acceptPolicyBtn').click(function (e) {
+        if ($('#agreeCheckbox').is(':checked')){
+            sessionStorage.setItem("checkPolicy", "true");
+            $('#modalPolicy').modal('hide');
+        } else {
+            e.preventDefault();
+        }
+    });
+
     const roundTripRadio = document.getElementById("round-trip");
     const oneWayRadio = document.getElementById("one-way");
     const oneWaySection = document.querySelector(".destination-one-way");
@@ -136,17 +153,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 const inputArrivalDate = document.getElementById("arrival-date")
                 searchFormData.arrivalTime = inputArrivalDate.value
 
-                const inputAdults = document.getElementById("adults");
-                searchFormData.quantity.adult = parseInt(inputAdults.textContent)
+    const inputAdults = document.getElementById("adults");
+    searchFormData.quantity.adult = parseInt(inputAdults.textContent)
 
-                const inputChild = document.getElementById("child");
-                searchFormData.quantity.child = parseInt(inputChild.textContent)
+    const inputChild = document.getElementById("child");
+    searchFormData.quantity.child = parseInt(inputChild.textContent)
 
                 const inputInfant = document.getElementById("infant");
                 searchFormData.quantity.infant = parseInt(inputInfant.textContent)
 
 
-                sessionStorage.setItem("data",JSON.stringify(searchFormData));
+    sessionStorage.setItem("data",JSON.stringify(searchFormData));
 
                 document.getElementById("searchForm").submit();
 
@@ -179,7 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 });
-
 
 
 
