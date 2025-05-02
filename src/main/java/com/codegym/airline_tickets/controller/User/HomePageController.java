@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j(topic = "HOMEPAGE-CONTROLLER")
@@ -32,7 +33,7 @@ public class HomePageController {
         model.addAttribute("listAirports", listAirports);
         model.addAttribute("flightReq", flightRequestDTO);
 
-        List<News> news = newsService.getAll();
+        List<News> news = newsService.getAll().stream().limit(6).collect(Collectors.toList());
         List<List<News>> newsList = new ArrayList<>();
         for (int i = 0; i < news.size(); i += 3) {
             newsList.add(news.subList(i, Math.min(i + 3, news.size())));
@@ -40,15 +41,5 @@ public class HomePageController {
 
         model.addAttribute("newsList", newsList);
         return "user/homepage/homepage";
-    }
-
-    @GetMapping("/news/detail/{id}")
-    public String getNewsDetail(@PathVariable("id") Long id, Model model) {
-        News news = newsService.findById(id);
-        String[] paragraphs = news.getContent().split("\n");
-        model.addAttribute("news", news);
-        model.addAttribute("paragraphs", paragraphs);
-
-        return "user/homepage/news_detail"; // Đường dẫn tới file Thymeleaf
     }
 }

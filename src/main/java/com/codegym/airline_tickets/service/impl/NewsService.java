@@ -16,7 +16,7 @@ public class NewsService implements INewsService {
 
     @Override
     public List<News> getAll() {
-        return newsRepository.findAll();
+        return newsRepository.findAllByOrderByCreatedAtDesc();
     }
 
     @Override

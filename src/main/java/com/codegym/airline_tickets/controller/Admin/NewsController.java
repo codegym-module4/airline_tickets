@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/admin/news")
@@ -51,6 +52,7 @@ public class NewsController {
         try {
             // Upload ảnh và lưu tin tức
             String imageUrl = firebaseStorageService.uploadFile(file, news.getTitle());
+            news.setCreatedAt(LocalDateTime.now());
             news.setImageURL(imageUrl);
             newsService.save(news);
             redirectAttributes.addFlashAttribute("message", "Thêm tin tức thành công!");
