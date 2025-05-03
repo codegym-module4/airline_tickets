@@ -169,8 +169,12 @@ public class EmployeeService implements IEmployeeService {
     }
 
 
-    public void updateEmployeeAndAccount(EmployeeAccountDTO dto) {
-        // Cập nhật thông tin Employee
+    public void updateEmployeeAndAccount(EmployeeAccountDTO dto,  boolean resetPassword) {
+        Account existingAccountWithEmail = accountRepository.findByEmail(dto.getEmail()).orElse(null);
+        if (existingAccountWithEmail != null && !existingAccountWithEmail.getId().equals(dto.getAccountId())) {
+            throw new RuntimeException("Email đã được sử dụng bởi tài khoản khác.");
+        }
+
         Employee employee = employeeRepository.findById(dto.getEmployeeId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên có id: " + dto.getEmployeeId()));
         employee.setFullName(dto.getFullName());
@@ -186,8 +190,8 @@ public class EmployeeService implements IEmployeeService {
         }
         account.setEmail(dto.getEmail());
 
-        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            account.setPassword(passwordEncoder.encode(dto.getPassword()));
+        if (resetPassword) {
+            account.setPassword(passwordEncoder.encode("123456789"));
         }
 
         accountRepository.save(account);

@@ -43,46 +43,54 @@
                 <input type="text" class="form-control" th:field="*{code}" readonly>
             </div>
 
-            <div class="col-md-6 form-group mb-3">
+            <div class="col-md-6 form-group">
                 <label>Họ tên</label>
-                <input type="text" class="form-control" th:field="*{fullName}">
+                <input type="text" class="form-control" th:field="*{fullName}" th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{fullName}"></div>
             </div>
 
-            <div class="col-md-6 form-group mb-3">
+            <div class="col-md-6 form-group">
                 <label>Ngày sinh</label>
-                <input type="date" class="form-control" th:field="*{dob}">
+                <input type="date" class="form-control" th:field="*{dob}" th:classappend="${#fields.hasErrors('dob')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{dob}"></div>
             </div>
-
-            <div class="col-md-6 form-group mb-3">
-                <label>Số điện thoại</label>
-                <input type="text" class="form-control" th:field="*{phone}">
+            <div class="col-md-6 form-group">
+                <label th:for="phone" class="form-label">Số điện thoại</label>
+                <input type="text" class="form-control" th:field="*{phone}"
+                       th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{phone}"></div>
             </div>
-
-            <div class="col-md-6 form-group mb-3">
+            <div class="col-md-6 form-group">
                 <label>Giới tính</label>
                 <select class="form-control" th:field="*{gender}">
-                    <option value="Male">Nam</option>
-                    <option value="Female">Nữ</option>
-                    <option value="Other">Khác</option>
+                    <option value="Male" th:selected="*{gender == 'Male'}">Nam</option>
+                    <option value="Female" th:selected="*{gender == 'Female'}">Nữ</option>
+                    <option value="Other" th:selected="*{gender == 'Other'}">Khác</option>
                 </select>
-            </div>
 
-            <div class="col-md-6 form-group mb-3">
-                <label>Quê quán</label>
-                <input type="text" class="form-control" th:field="*{address}">
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Quê Quán</label>
+                <input type="text" class="form-control" th:field="*{address}" th:classappend="${#fields.hasErrors('address')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{address}"></div>
             </div>
         </div>
 
         <!-- Tài khoản -->
-        <div class="row mt-3">
-            <div class="col-md-6 form-group mb-3">
+        <div class="row mt-4">
+            <div class="col-md-6 form-group">
                 <label>Email</label>
-                <input type="email" class="form-control" th:field="*{email}">
+                <input type="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{email}"></div>
+                <div class="text-danger" th:if="${errorEmailExists != null}" th:text="${errorEmailExists}"></div>
+
             </div>
 
-            <div class="col-md-6 form-group mb-3">
-                <label>Mật khẩu (nếu cần đổi)</label>
-                <input type="password" class="form-control" th:field="*{password}">
+            <div class="col-md-6 form-group">
+                <label>Mật khẩu</label>
+                <p>Nhấn "Reset mật khẩu" để đặt lại về mặc định.</p>
+                <input type="hidden" id="resetPassword" name="resetPassword" value="false">
+                <button type="button" class="btn btn-warning" onclick="resetPassword()">Reset mật khẩu</button>
             </div>
 
             <div class="col-md-6 form-group mb-3">
@@ -98,6 +106,13 @@
         </div>
     </form>
 </div>
-
+<script>
+    function resetPassword() {
+        if (confirm("Bạn có chắc muốn đặt lại mật khẩu nhân viên về mặc định?")) {
+            document.getElementById('resetPassword').value = 'true';
+            alert("Mật khẩu sẽ được đặt lại khi bạn nhấn 'Cập nhật'");
+        }
+    }
+</script>
 </body>
 </html>
