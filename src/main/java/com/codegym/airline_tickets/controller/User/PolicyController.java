@@ -9,32 +9,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/policy")
 public class PolicyController {
 
-    @GetMapping("/{id}")
-    public String policy(@PathVariable ("id") int id) {
+    @GetMapping("/{name}")
+    public String policy(@PathVariable ("name") String name) {
 
-        switch (id) {
-            case 1 -> {
+        switch (name) {
+            case "chinh-sach-bao-mat-quyen-rieng-tu" -> {
                 return "user/policy/privacy";
             }
-            case 2 -> {
+            case "chinh-sach-hanh-ly" -> {
                 return "user/policy/baggage";
             }
-            case 3 -> {
+            case "chinh-sach-dat-ve" -> {
                 return "user/policy/book_ticket";
             }
-            case 4 -> {
+            case "chinh-sach-huy-ve" -> {
                 return "user/policy/ticket_cancellation";
             }
-            case 5 -> {
+            case "chinh-sach-doi-ve" -> {
                 return "user/policy/change_ticket";
             }
-            case 6 -> {
+            case "chinh-sach-bao-ve-khach-hang" -> {
                 return "user/policy/protection";
             }
-            case 7 -> {
+            case "chinh-sach-ho-tro-dac-biet" -> {
                 return "user/policy/specialService";
             }
-            case 8 -> {
+            case "kenh-thanh-toan" -> {
                 return "user/policy/payment";
             }
         }
@@ -42,8 +42,4 @@ public class PolicyController {
 
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "/user/flight/ticket_detail";
-    }
 }
