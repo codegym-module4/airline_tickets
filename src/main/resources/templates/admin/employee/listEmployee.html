@@ -23,7 +23,6 @@
   <div class="d-flex justify-content-between mb-3">
     <div class="d-flex gap-2">
       <a th:href="@{/admin/employee/createEmployee}" class="btn btn-success"> Thêm Nhân Viên</a>
-      <a th:href="@{/admin/report}" class="btn btn-primary"> Xem Báo Cáo</a>
     </div>
 
     <form th:action="@{/admin/employee/search}" method="get" class="d-flex" style="gap: 10px;">
@@ -60,7 +59,7 @@
       <td th:text="${iStat.index + 1}"></td>
       <td th:text="${employee.code}"></td>
       <td th:text="${employee.fullName}"></td>
-      <td th:text="${employee.dob}"></td>
+      <td th:text="${#temporals.format(employee.dob, 'dd-MM-yyyy')}"></td>
       <td th:text="${employee.gender}"></td>
       <td th:text="${employee.phone}"></td>
       <td th:text="${employee.address}"></td>
@@ -68,11 +67,11 @@
       <td th:text="${employee.roleName}"></td>
       <td>
         <a th:href="@{'/admin/employee/updateEmployee'(id=${employee.employeeId})}" class="btn btn-primary btn-sm">Sửa</a>
-        <button type="button"
+        <button th:if="${employee.roleName != 'ROLE_ADMIN'}" type="button"
                 class="btn btn-danger btn-sm"
                 data-bs-toggle="modal"
                 data-bs-target="#confirmDeleteModal"
-                th:attr="data-id=${employee.employeeId}, data-code=${employee.code}">
+                th:attr="data-id=${employee.employeeId}, data-code=${employee.code}, data-name=${employee.fullName}">
           Xóa
         </button>
       </td>
@@ -91,7 +90,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
       </div>
       <div class="modal-body">
-        Bạn có chắc chắn muốn xóa nhân viên mã <strong id="employeeCodeText"></strong>?
+        Bạn có chắc chắn muốn xóa nhân viên mã <strong id="employeeCodeText"></strong>, tên <strong id="employeeNameText"></strong>?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -109,14 +108,17 @@
   document.addEventListener('DOMContentLoaded', function () {
     const deleteModal = document.getElementById('confirmDeleteModal');
     const employeeCodeText = document.getElementById('employeeCodeText');
+    const employeeNameText = document.getElementById('employeeNameText');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 
     deleteModal.addEventListener('show.bs.modal', function (event) {
       const button = event.relatedTarget;
       const id = button.getAttribute('data-id');
       const code = button.getAttribute('data-code');
+      const name = button.getAttribute('data-name');
 
       employeeCodeText.textContent = code;
+      employeeNameText.textContent = name;
       confirmDeleteBtn.setAttribute('href', `/admin/employee/delete?id=${id}`);
     });
   });

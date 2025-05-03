@@ -63,7 +63,7 @@
 </head>
 <body>
 <!--sidebar-->
-<div th:replace="admin/sidebar/sidebar :: adminSidebar"></div>
+<div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
 
 <!--mainContend-->
 <div class="main-content container" style="margin-top: 60px;" id="mainContent">
@@ -72,22 +72,30 @@
     <form th:action="@{/admin/employee/createEmployee}" th:object="${employeeAccountDTO}" method="post">
         <div class="row">
             <div class="col-md-6 form-group">
-                <label>Mã nhân viên</label>
-                <input type="text" class="form-control" th:field="*{code}">
+                <label th:for="code" class="form-label">Mã nhân viên</label>
+                <input type="text" th:field="*{code}" class="form-control"
+                       th:classappend="${#fields.hasErrors('code')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{code}"></div>
+                <div class="text-danger" th:if="${errorCodeExists != null}" th:text="${errorCodeExists}"></div>
+
             </div>
 
             <div class="col-md-6 form-group">
                 <label>Họ tên</label>
-                <input type="text" class="form-control" th:field="*{fullName}">
+                <input type="text" class="form-control" th:field="*{fullName}" th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{fullName}"></div>
             </div>
 
             <div class="col-md-6 form-group">
                 <label>Ngày sinh</label>
-                <input type="date" class="form-control" th:field="*{dob}">
+                <input type="date" class="form-control" th:field="*{dob}" th:classappend="${#fields.hasErrors('dob')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{dob}"></div>
             </div>
             <div class="col-md-6 form-group">
-                <label>Số điện thoại</label>
-                <input type="text" class="form-control" th:field="*{phone}">
+                <label th:for="phone" class="form-label">Số điện thoại</label>
+                <input type="text" class="form-control" th:field="*{phone}"
+                       th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{phone}"></div>
             </div>
             <div class="col-md-6 form-group">
                 <label>Giới tính</label>
@@ -100,7 +108,8 @@
             </div>
             <div class="col-md-6 form-group">
                 <label>Quê Quán</label>
-                <input type="text" class="form-control" th:field="*{address}">
+                <input type="text" class="form-control" th:field="*{address}" th:classappend="${#fields.hasErrors('address')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{address}"></div>
             </div>
         </div>
 
@@ -108,21 +117,25 @@
         <div class="row mt-4">
             <div class="col-md-6 form-group">
                 <label>Email</label>
-                <input type="email" class="form-control" th:field="*{email}">
+                <input type="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{email}"></div>
+                <div class="text-danger" th:if="${errorEmailExists != null}" th:text="${errorEmailExists}"></div>
+
             </div>
 
-            <div class="col-md-6 form-group password-wrapper">
-                <label>Mật khẩu</label>
-                <input type="password" class="form-control" th:field="*{password}" id="passwordField">
-                <i class="bi bi-eye toggle-password" onclick="togglePassword()"></i>
+            <div class="col-md-6 form-group">
+                <label>Mật khẩu : 123456789</label>
+                <input type="hidden" th:field="*{password}" value="123456789" />
             </div>
 
             <div class="col-md-6 form-group">
                 <label>Vai trò</label>
                 <select class="form-control" th:field="*{roleId}">
-                    <option th:each="role : ${roleList}" th:value="${role.id}" th:text="${role.roleName}"></option>
+                    <option th:each="role : ${roleList}" th:if="${role.id == 2}" th:value="${role.id}" th:text="${role.roleName} " selected></option>
                 </select>
             </div>
+
+
         </div>
 
 

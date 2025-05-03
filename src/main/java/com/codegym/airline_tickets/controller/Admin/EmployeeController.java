@@ -11,9 +11,11 @@ import com.codegym.airline_tickets.service.IAccountService;
 import com.codegym.airline_tickets.service.impl.EmployeeService;
 import com.codegym.airline_tickets.service.impl.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -40,6 +42,10 @@ public class EmployeeController {
 
     @Autowired
     private IAccountService accountService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
 
 
     // ============================ LIST ===================================
@@ -98,6 +104,7 @@ public class EmployeeController {
     // ============================ CREATE GET =============================
     @GetMapping("/createEmployee")
     public String createForm(Model model) {
+        EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
         model.addAttribute("employeeAccountDTO", new EmployeeAccountDTO());
         model.addAttribute("roleList", roleService.getAll());
         return "admin/employee/createEmployee";
@@ -105,17 +112,32 @@ public class EmployeeController {
 
     // ============================ CREATE POST ============================
     @PostMapping("/createEmployee")
-    public String create(@ModelAttribute("employeeAccountDTO") EmployeeAccountDTO dto,
+    public String create(@Validated @ModelAttribute("employeeAccountDTO") EmployeeAccountDTO dto,
+                         BindingResult bindingResult,
                          RedirectAttributes redirect,
                          Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("roleList", roleService.getAll());
+            return "admin/employee/createEmployee";
+        }
 
         // Kiểm tra mã nhân viên trùng
         Optional<Employee> existing = employeeRepository.findByCode(dto.getCode());
         if (existing.isPresent()) {
-            model.addAttribute("error", "Mã nhân viên đã tồn tại.");
+            model.addAttribute("errorCodeExists", "Mã nhân viên đã tồn tại.");
             model.addAttribute("roleList", roleService.getAll());
             return "admin/employee/createEmployee";
         }
+
+        // Kiểm tra email đã có tài khoản chưa
+        Optional<Account> existingAccount = accountRepository.findByEmail(dto.getEmail());
+        if (existingAccount.isPresent()) {
+            model.addAttribute("errorEmailExists", "Email đã được sử dụng.");
+            model.addAttribute("roleList", roleService.getAll());
+            return "admin/employee/createEmployee";
+        }
+
 
         // Kiểm tra vai trò
         Role role = roleRepository.findById(dto.getRoleId()).orElse(null);
@@ -136,77 +158,36 @@ public class EmployeeController {
 
         Account account = new Account();
         account.setEmail(dto.getEmail());
-        account.setPassword(dto.getPassword()); // chưa mã hóa 
+        account.setPassword(passwordEncoder.encode("123456789"));
         account.setRole(role);
         account.setEmployee(e);
         accountService.save(account);
 
-        // Sau khi tạo xong, cập nhật employee_id trong bảng account
-//        updateEmployeeIdInAccount(account.getId(), employee.getId());
+
 
         redirect.addFlashAttribute("message", "Thêm nhân viên thành công!");
         return "redirect:/admin/employee/listEmployee";
     }
-//    // ============================ UPDATE GET =============================
-//    @GetMapping("/updateEmployee")
-//    public String updateForm(@RequestParam("id") Long id, Model model) {
-//        EmployeeAccountDTO dto = employeeService.findDTOById(id);
-//        if (dto != null) {
-//            model.addAttribute("employeeAccountDTO", dto);
-//            model.addAttribute("roleList", roleService.getAll());
-//            return "admin/employee/updateEmployee";
-//        }
-//
-//        model.addAttribute("message", "Không tìm thấy nhân viên.");
-//        return "redirect:/admin/employee/listEmployee";
-//    }
-//
-//
-//    // ============================ UPDATE POST ============================
-//    @PostMapping("/updateEmployee")
-//    public String update(@ModelAttribute("employeeAccountDTO") EmployeeAccountDTO dto,
-//                         RedirectAttributes redirect,
-//                         Model model) {
-//
-//        // Kiểm tra mã nhân viên trùng (trừ chính nó)
-//        Optional<Employee> existing = employeeRepository.findByCode(dto.getCode());
-//        if (existing.isPresent() && !existing.get().getId().equals(dto.getEmployeeId())) {
-//            model.addAttribute("error", "Mã nhân viên đã tồn tại.");
-//            model.addAttribute("roleList", roleService.getAll());
-//            return "admin/employee/updateEmployee";
-//        }
-//
-//        // Cập nhật employee
-//        Employee employee = employeeRepository.findById(dto.getEmployeeId()).orElse(null);
-//        if (employee != null) {
-//            employee.setCode(dto.getCode());
-//            employee.setFullName(dto.getFullName());
-//            employee.setDob(dto.getDob());
-//            employee.setGender(dto.getGender());
-//            employee.setPhone(dto.getPhone());
-//            employee.setAddress(dto.getAddress());
-//            employeeRepository.save(employee);
-//        }
-//
-//        // Cập nhật account
-//        Account account = accountRepository.findById(dto.getAccountId()).orElse(null);
-//        if (account != null) {
-//            account.setEmail(dto.getEmail());
-//            account.setPassword(dto.getPassword()); // Nên mã hóa mật khẩu ở đây
-//            Role role = roleRepository.findById(dto.getRoleId()).orElse(null);
-//            account.setRole(role);
-//            accountRepository.save(account);
-//        }
-//
-//        // Cập nhật lại employee_id trong bảng accounts
-//        updateEmployeeIdInAccount(account.getId(), employee.getId());
-//
-//        redirect.addFlashAttribute("message", "Cập nhật nhân viên thành công!");
-//        return "redirect:/admin/employee/listEmployee";
-//    }
-//
+    // ============================ UPDATE GET =============================
+    @GetMapping("/updateEmployee")
+    public String showUpdateEmployeeForm(@RequestParam("id") Long employeeId, Model model) {
+        EmployeeAccountDTO dto = employeeService.getEmployeeAccountDTOById(employeeId);
+        model.addAttribute("employeeAccountDTO", dto);
+
+        return "admin/employee/updateEmployee";
+    }
 
 
-
-
+    // ============================ UPDATE POST ============================
+    @PostMapping("/updateEmployee")
+    public String updateEmployee(@ModelAttribute("employeeAccountDTO") EmployeeAccountDTO dto) {
+        employeeService.updateEmployeeAndAccount(dto);
+        return "redirect:/admin/employee/listEmployee";
+    }
 }
+
+
+
+
+
+

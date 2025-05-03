@@ -28,6 +28,7 @@
         @Column(name = "id")
         private Long id;
 
+
         @Column(name = "code")
         private String code;
 

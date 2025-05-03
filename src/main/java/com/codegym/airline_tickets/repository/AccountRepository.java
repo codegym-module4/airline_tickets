@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
 
@@ -14,13 +16,10 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Account findByNotDeleteEmail(String email);
 
 
-    Account findByEmail(String email);
+    @Query(value = "SELECT a.* FROM accounts a where a.email = :email", nativeQuery = true)
+    Optional<Account> findByEmail(String email);
 
     Account findByEmployeeId(Long id);
 
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE accounts SET employee_id = ?2 WHERE id = ?1", nativeQuery = true)
-    void updateEmployeeId(Long accountId, Long employeeId);
 
 }
