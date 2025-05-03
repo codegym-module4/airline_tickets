@@ -51,14 +51,6 @@ public class FlightsController {
     ){
 
         log.info("Get flight list");
-
-        Object errorObj = session.getAttribute("errorMessage");
-        if (errorObj != null) {
-            String errorMessage = errorObj.toString();
-            model.addAttribute("messageError", errorMessage);
-            session.removeAttribute("errorMessage");
-        }
-
         FlightRequestDTO flightReq = BuildFlightRequest.build(request,sortProperty);
 
         if(flightReq == null ){
@@ -104,10 +96,8 @@ public class FlightsController {
 
            model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
            model.addAttribute("dayOfWeekArrival",FormaterCustom.formatDayOfWeek(arrivalTime));
-           if(errorObj == null){
            model.addAttribute("message","Tìm kiếm thành công");
 
-           }
        }
 
        if(flightReq != null && flightReq.getType().equals("ONEWAY")) {
@@ -127,7 +117,9 @@ public class FlightsController {
 
             }else {
             List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime,flightReq.getSortProperty(), sort, page, size);
+                System.out.println(flightSeatService.countSingleFlightSeat(1l));
                 listDeparture = listDeparture.stream().filter(item ->
+
                         flightSeatService.countSingleFlightSeat(item.getId()) > 0
                 ).toList();
                 if(listDeparture.isEmpty()){
@@ -135,6 +127,7 @@ public class FlightsController {
                     return "redirect:/";
                 }
                 model.addAttribute("listDeparture",listDeparture);
+
             }
 
             List<Airport> listAirports = airportService.getAll();
@@ -145,10 +138,8 @@ public class FlightsController {
            model.addAttribute("arrival", arrival);
            model.addAttribute("departureTime", FormaterCustom.formatDateResponse(departureTime));
            model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
-           if(errorObj == null){
-               model.addAttribute("message","Tìm kiếm thành công");
+           model.addAttribute("message","Tìm kiếm thành công");
 
-           }
         }
         return "user/flight/flight";
     }

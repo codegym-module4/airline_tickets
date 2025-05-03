@@ -69,7 +69,9 @@
 
             // sessionStorage.clear();
         }
-
+         $("#adults").text(storage.quantity.adult)
+         $("#child").text(storage.quantity.child)
+         $("#infant").text(storage.quantity.infant)
 
         document.getElementById('passengers').value = `${storage.quantity.adult} Người lớn, ${storage.quantity.child} Trẻ em, ${storage.quantity.infant} Em bé`
 
@@ -128,10 +130,12 @@
                 window.location.href = data.url
             }
         }).fail(function (jqXhr, json, errorThrown) {
-             if (jqXhr.responseJSON.errors) {
-                 alert(jqXhr.responseJSON.message);
-                 window.location.reload();
-             }
+                if (jqXhr.responseJSON.message) {
+                    $("#flightDetailsModal").modal("hide");
+                    $("#detailModal .modal-body").html((jqXhr.responseJSON.message));
+                    $("#detailModal").modal("show");
+                }
+
         });
 
     });

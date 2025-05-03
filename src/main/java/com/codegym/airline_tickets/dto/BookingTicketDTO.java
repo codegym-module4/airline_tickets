@@ -33,18 +33,18 @@ public class BookingTicketDTO {
     @NotEmpty(message = "Giới tính không được để trống")
     private String gender;
 
-//    @NotEmpty(message = "Số điện thoại không được để trống")
+    private Integer indexSeatWith;
+
     private String phone;
     private Integer extraKgGo;
     private Integer extraKgReturn;
+    private Long idSeatGo;
+    private Long idSeatReturn;
 
-//    @NotEmpty(message = "Quốc gia không được để trống")
     private String nationality;
 
-//    @NotEmpty(message = "Email không được để trống")
     private String email;
 
-//    @NotEmpty(message = "Số Căn cước không được để trống")
     private String citizenIdentification;
     private Integer customerType;
 }

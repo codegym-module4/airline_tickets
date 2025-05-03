@@ -1,7 +1,12 @@
 package com.codegym.airline_tickets.service.impl;
 
 import com.codegym.airline_tickets.dto.RevenueByDateDto;
+import com.codegym.airline_tickets.dto.RevenueByFlightDto;
+import com.codegym.airline_tickets.dto.RevenueByFlightTypeDto;
+import com.codegym.airline_tickets.dto.RevenueByUserDto;
 import com.codegym.airline_tickets.entity.Booking;
+import com.codegym.airline_tickets.entity.Flight;
+import com.codegym.airline_tickets.entity.User;
 import com.codegym.airline_tickets.repository.BookingRepository;
 import com.codegym.airline_tickets.service.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +58,50 @@ public class BookingService implements IBookingService {
     public List<RevenueByDateDto> getRevenueByDay(LocalDate start, LocalDate end) {
         List<RevenueByDateDto> result = new ArrayList<>();
         for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
-            RevenueByDateDto revenueByDateDto = new RevenueByDateDto();
-            revenueByDateDto.setDate(date);
 
+            RevenueByDateDto revenueByDateDto = new RevenueByDateDto();
+
+            revenueByDateDto.setDate(date);
             BigInteger revenue = bookingRepository.getTotalRevenueByDate(date);
             revenueByDateDto.setRevenue(revenue);
+
+            List<User> users = bookingRepository.getUserIdByDate(date);
+            List<RevenueByUserDto> revenueByUser = new ArrayList<>();
+            for (User user : users) {
+                BigInteger revenueByUserIdAndDate = bookingRepository.getRevenueByUserIdAndDate(user.getId(), date);
+                Integer numberOfTickets = bookingRepository.getNumberOfTicketsByUserIdAndDate(user.getId(), date);
+                revenueByUser.add(new RevenueByUserDto(user, numberOfTickets, date, revenueByUserIdAndDate));
+            }
+            revenueByDateDto.setRevenueByUser(revenueByUser);
+
+
+            List<Object[]> flightPairs = bookingRepository.getFlightAndReturnFlightPairsByDate(date);
+
+            List<RevenueByFlightDto> revenueByFlight = new ArrayList<>();
+
+            for (Object[] pair : flightPairs) {
+                Flight flight = (Flight) pair[0];
+                Flight returnFlight = (Flight) pair[1];
+
+                BigInteger revenueByFlightAndReturnFlightAndDate = bookingRepository.getRevenueByFlightAndReturnFlightAndDate(
+                        flight.getId(),
+                        returnFlight != null ? returnFlight.getId() : null,
+                        date
+                );
+
+                revenueByFlight.add(new RevenueByFlightDto(flight, returnFlight, revenueByFlightAndReturnFlightAndDate));
+            }
+            revenueByDateDto.setRevenueByFlight(revenueByFlight);
+
+
+            List<Integer> flight_types = bookingRepository.getFlightTypeByDate(date);
+            List<RevenueByFlightTypeDto> revenueByFlightType = new ArrayList<>();
+            for (Integer flight_type : flight_types) {
+                BigInteger revenueByFlightTypeIdAndDate = bookingRepository.getRevenueByFlightTypeIdAndDate(flight_type, date);
+                revenueByFlightType.add(new RevenueByFlightTypeDto(flight_type, revenueByFlightTypeIdAndDate));
+            }
+            revenueByDateDto.setRevenueByFlightType(revenueByFlightType);
+
             result.add(revenueByDateDto);
         }
         return result;

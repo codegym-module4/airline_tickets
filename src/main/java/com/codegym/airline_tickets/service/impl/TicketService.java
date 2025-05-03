@@ -39,7 +39,7 @@ public class TicketService implements ITicketService {
 
     @Override
     public Ticket findById(long id) {
-        return null;
+        return ticketRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -72,6 +72,16 @@ public class TicketService implements ITicketService {
     @Override
     public void deleteAll(List<Ticket> tickets) {
         ticketRepository.deleteAll(tickets);
+    }
+
+    @Override
+    public List<Ticket> findTicketByBookingId(Long bookingId) {
+        return ticketRepository.findTicketByBookingId(bookingId);
+    }
+
+    @Override
+    public Ticket findByBookingIdAndFlightId(Long bookingId, Long flightId) {
+        return ticketRepository.findByBookingIdAndFlightId(bookingId, flightId);
     }
 
     private static String generateNextCode(long number) {
