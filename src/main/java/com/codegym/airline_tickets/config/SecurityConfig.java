@@ -40,7 +40,8 @@ public class SecurityConfig {
                                 "/admin/**",
                                 "/admin/news/**",
                                 "/admin/news/create",
-                                "/admin/news/edit/**"
+                                "/admin/news/edit/**",
+                                "/policy/**"
                         ).permitAll()
 //                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
                         .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**", "/api/**").authenticated()
