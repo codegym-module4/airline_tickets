@@ -283,7 +283,7 @@
                         row.createCell(1).setCellValue("Invalid");
                     }
                 } else {
-                    row.createCell(1).setCellValue("N/A");
+                    row.createCell(1).setCellValue(0);
                 }
             }
 
@@ -306,7 +306,7 @@
                             row.createCell(3).setCellValue("Invalid");
                         }
                     } else {
-                        row.createCell(3).setCellValue("N/A");
+                        row.createCell(3).setCellValue(0);
                     }
 
                     row.createCell(4).setCellValue(userRevenue.getDate() != null ? userRevenue.getDate().toString() : "N/A");
@@ -336,7 +336,7 @@
                             row.createCell(4).setCellValue("Invalid");
                         }
                     } else {
-                        row.createCell(4).setCellValue("N/A");
+                        row.createCell(4).setCellValue(0);
                     }
                     row.createCell(5).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
@@ -367,7 +367,7 @@
                             row.createCell(1).setCellValue("Invalid");
                         }
                     } else {
-                        row.createCell(1).setCellValue("N/A");
+                        row.createCell(1).setCellValue(0);
                     }
                     row.createCell(2).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
@@ -515,7 +515,7 @@
                         row2.createCell(1).setCellValue("Invalid");
                     }
                 } else {
-                    row2.createCell(1).setCellValue("N/A");
+                    row2.createCell(1).setCellValue(0);
                 }
             }
 
@@ -536,7 +536,7 @@
                         row3.createCell(1).setCellValue("Invalid");
                     }
                 } else {
-                    row3.createCell(1).setCellValue("N/A");
+                    row3.createCell(1).setCellValue(0);
                 }
             }
 
@@ -559,7 +559,7 @@
                             row4.createCell(3).setCellValue("Invalid");
                         }
                     } else {
-                        row4.createCell(3).setCellValue("N/A");
+                        row4.createCell(3).setCellValue(0);
                     }
                     row4.createCell(4).setCellValue(userRevenue.getDate() != null ? userRevenue.getDate().toString() : "N/A");
                 }
@@ -585,7 +585,7 @@
                             row5.createCell(3).setCellValue("Invalid");
                         }
                     } else {
-                        row5.createCell(3).setCellValue("N/A");
+                        row5.createCell(3).setCellValue(0);
                     }
                     row5.createCell(4).setCellValue(userRevenue.getDate() != null ? userRevenue.getDate().toString() : "N/A");
                 }
@@ -615,7 +615,7 @@
                             row6.createCell(4).setCellValue("Invalid");
                         }
                     } else {
-                        row6.createCell(4).setCellValue("N/A");
+                        row6.createCell(4).setCellValue(0);
                     }
                     row6.createCell(5).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
@@ -645,7 +645,7 @@
                             row7.createCell(4).setCellValue("Invalid");
                         }
                     } else {
-                        row7.createCell(4).setCellValue("N/A");
+                        row7.createCell(4).setCellValue(0);
                     }
                     row7.createCell(5).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
@@ -676,7 +676,7 @@
                             row8.createCell(1).setCellValue("Invalid");
                         }
                     } else {
-                        row8.createCell(1).setCellValue("N/A");
+                        row8.createCell(1).setCellValue(0);
                     }
                     row8.createCell(2).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
@@ -707,7 +707,7 @@
                             row9.createCell(1).setCellValue("Invalid");
                         }
                     } else {
-                        row9.createCell(1).setCellValue("N/A");
+                        row9.createCell(1).setCellValue(0);
                     }
                     row9.createCell(2).setCellValue(revenueData.getDate() != null ? revenueData.getDate().toString() : "N/A");
                 }
