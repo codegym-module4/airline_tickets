@@ -4,12 +4,16 @@ import com.codegym.airline_tickets.dto.EmployeeAccountDTO;
 import com.codegym.airline_tickets.entity.Account;
 import com.codegym.airline_tickets.entity.Booking;
 import com.codegym.airline_tickets.entity.Employee;
+import com.codegym.airline_tickets.entity.Role;
 import com.codegym.airline_tickets.repository.AccountRepository;
 import com.codegym.airline_tickets.repository.EmployeeRepository;
+import com.codegym.airline_tickets.repository.RoleRepository;
 import com.codegym.airline_tickets.service.IBookingService;
 import com.codegym.airline_tickets.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,17 +28,16 @@ public class EmployeeService implements IEmployeeService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+
     @Override
     public List<Employee> getAll() {
         return employeeRepository.findAll();
     }
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    public void updateEmployeeIdInAccount(Long accountId, Long employeeId) {
-        String sql = "UPDATE accounts SET employee_id = ? WHERE id = ?";
-        jdbcTemplate.update(sql, employeeId, accountId);
-    }
+    private RoleRepository  roleRepository;
 
     @Override
     public void save(Employee s) {
@@ -51,9 +54,10 @@ public class EmployeeService implements IEmployeeService {
         Account account = accountRepository.findById(dto.getAccountId()).orElse(null);
         if (account != null) {
             account.setEmail(dto.getEmail());
-            account.setPassword(dto.getPassword());
-            // Role role = roleRepository.findById(dto.getRoleId()).orElse(null);
-            // account.setRole(role);
+            if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+                account.setPassword(passwordEncoder.encode(dto.getPassword()));
+            }
+
             accountRepository.save(account);
         }
 
@@ -89,14 +93,7 @@ public class EmployeeService implements IEmployeeService {
 
 
 
-//    public List<Employee> findByCodeContaining(String keyword) {
-//        return employeeRepository.findByCodeContainingIgnoreCase(keyword);
-//    }
-//
-//
-//    public List<Employee> findByFullNameContaining(String keyword) {
-//        return employeeRepository.findByFullNameContainingIgnoreCase(keyword);
-//    }
+
 
     public List<EmployeeAccountDTO> searchByCodeDTO(String keyword) {
         List<Employee> employees = employeeRepository.findByCodeContainingIgnoreCase(keyword);
@@ -109,8 +106,6 @@ public class EmployeeService implements IEmployeeService {
     }
 
     private List<EmployeeAccountDTO> mapToDTOs(List<Employee> employees) {
-        List<Account> accounts = accountRepository.findAll();
-
         List<EmployeeAccountDTO> dtos = new ArrayList<>();
 
         for (Employee e : employees) {
@@ -123,15 +118,13 @@ public class EmployeeService implements IEmployeeService {
             dto.setPhone(e.getPhone());
             dto.setAddress(e.getAddress());
 
-            Account account = accounts.stream()
-                    .filter(a -> a.getEmail().equalsIgnoreCase(e.getCode() + "@yourcompany.com"))
-                    .findFirst()
-                    .orElse(null);
+            Account account = accountRepository.findByEmployeeId(e.getId());
 
             if (account != null) {
                 dto.setAccountId(account.getId());
                 dto.setEmail(account.getEmail());
                 dto.setRoleId(account.getRole() != null ? account.getRole().getId() : null);
+                dto.setRoleName(account.getRole() != null ? account.getRole().getRoleName() : null);
             }
 
             dtos.add(dto);
@@ -139,6 +132,7 @@ public class EmployeeService implements IEmployeeService {
 
         return dtos;
     }
+
 
 
     public List<EmployeeAccountDTO> getEmployeeDTOList() {
@@ -156,10 +150,9 @@ public class EmployeeService implements IEmployeeService {
                     .phone(employee.getPhone())
                     .address(employee.getAddress())
 
-                    // Gán thông tin từ account nếu có
                     .accountId(account != null ? account.getId() : null)
                     .email(account != null ? account.getEmail() : null)
-                    .password(null) // không cần trả password ra view
+                    .password(null)
                     .roleId(account != null && account.getRole() != null ? account.getRole().getId() : null)
                     .roleName(account != null && account.getRole() != null ? account.getRole().getRoleName() : null)
                     .build();
@@ -168,41 +161,18 @@ public class EmployeeService implements IEmployeeService {
 
 
 
-    public EmployeeAccountDTO findDTOById(long id) {
-        Employee employee = employeeRepository.findById(id).orElse(null);
-        if (employee == null) return null;
 
-        EmployeeAccountDTO dto = new EmployeeAccountDTO();
-        dto.setEmployeeId(employee.getId());
-        dto.setCode(employee.getCode());
-        dto.setFullName(employee.getFullName());
-        dto.setDob(employee.getDob());
-        dto.setGender(employee.getGender());
-        dto.setPhone(employee.getPhone());
-        dto.setAddress(employee.getAddress());
-
-        // Tìm account liên quan (giả định theo mã code => email)
-        String email = employee.getCode() + "@yourcompany.com";
-        Account account = accountRepository.findByEmail(email);
-
-        if (account != null) {
-            dto.setAccountId(account.getId());
-            dto.setEmail(account.getEmail());
-            dto.setRoleId(account.getRole() != null ? account.getRole().getId() : null);
-        }
-
-        return dto;
-    }
 
     @Override
     public Employee updateOrCreate(Employee e) {
         return  employeeRepository.save(e);
     }
 
-    public void saveNewEmployeeAndAccount(EmployeeAccountDTO dto) {
-        
-        Employee employee = new Employee();
-        employee.setCode(dto.getCode());
+
+    public void updateEmployeeAndAccount(EmployeeAccountDTO dto) {
+        // Cập nhật thông tin Employee
+        Employee employee = employeeRepository.findById(dto.getEmployeeId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên có id: " + dto.getEmployeeId()));
         employee.setFullName(dto.getFullName());
         employee.setDob(dto.getDob());
         employee.setGender(dto.getGender());
@@ -210,15 +180,41 @@ public class EmployeeService implements IEmployeeService {
         employee.setAddress(dto.getAddress());
         employeeRepository.save(employee);
 
-        // 2. Tạo Account
-        Account account = new Account();
+        Account account = accountRepository.findByEmployeeId(dto.getEmployeeId());
+        if (account == null) {
+            throw new RuntimeException("Không tìm thấy tài khoản có employeeId: " + dto.getEmployeeId());
+        }
         account.setEmail(dto.getEmail());
-        account.setPassword(dto.getPassword());
-        account.setRole(account.getRole()); 
-        accountRepository.save(account);
 
-        
-        updateEmployeeIdInAccount(account.getId(), employee.getId());
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            account.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        accountRepository.save(account);
+    }
+
+    public EmployeeAccountDTO getEmployeeAccountDTOById(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
+
+        Account account = accountRepository.findByEmployeeId(employeeId);
+        if (account == null) {
+            throw new RuntimeException("Không tìm thấy tài khoản");
+        }
+
+        Role role = roleRepository.findById(account.getRole().getId()).orElseThrow(() -> new RuntimeException("Không tìm thấy vai trò"));
+
+        return EmployeeAccountDTO.builder()
+                .employeeId(employee.getId())
+                .code(employee.getCode())
+                .fullName(employee.getFullName())
+                .dob(employee.getDob())
+                .gender(employee.getGender())
+                .phone(employee.getPhone())
+                .address(employee.getAddress())
+                .email(account.getEmail())
+                .roleId(role.getId())
+                .roleName(role.getRoleName())
+                .build();
     }
 
 }

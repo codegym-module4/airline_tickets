@@ -3,6 +3,7 @@ package com.codegym.airline_tickets.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,6 +19,7 @@ public class EmployeeAccountDTO {
     private Long employeeId;
 
     @NotEmpty(message = "Mã nhân viên không được để trống")
+    @Pattern(regexp = "^NV\\d{2,}$", message = "Sai định dạng mã nhân viên. Mẫu đúng: NV01, NV123, ...")
     private String code;
 
     @NotEmpty(message = "Họ tên không được để trống")
@@ -31,8 +33,10 @@ public class EmployeeAccountDTO {
     private String gender;
 
     @NotEmpty(message = "Số điện thoại không được để trống")
+    @Pattern(regexp = "^[0-9]{10,11}$", message = "Số điện thoại phải từ 10-11 số")
     private String phone;
 
+    @NotEmpty(message = "Số điện thoại không được để trống")
     private String address;
 
 
@@ -46,7 +50,6 @@ public class EmployeeAccountDTO {
     @Email(message = "Email không đúng định dạng")
     private String email;
 
-    @NotEmpty(message = "Mật khẩu không được để trống")
     private String password;
 
     @NotNull(message = "Vai trò không được để trống")
