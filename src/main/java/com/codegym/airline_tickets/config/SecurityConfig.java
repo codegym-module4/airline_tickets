@@ -38,12 +38,12 @@ public class SecurityConfig {
                                 "/user/icon/**",
                                 "/admin/css/**",
                                 "/admin/**",
-                                "/admin/news/**",
-                                "/admin/news/create",
-                                "/admin/news/edit/**",
+                                "/news",
+                                "/new/detail/**",
                                 "/policy/**"
                         ).permitAll()
 //                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
+//                                .requestMatchers("/admin/news/**").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**", "/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
