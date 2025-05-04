@@ -180,10 +180,22 @@ public class EmployeeController {
 
     // ============================ UPDATE POST ============================
     @PostMapping("/updateEmployee")
-    public String updateEmployee(@ModelAttribute("employeeAccountDTO") EmployeeAccountDTO dto) {
-        employeeService.updateEmployeeAndAccount(dto);
-        return "redirect:/admin/employee/listEmployee";
+    public String updateEmployee(@ModelAttribute("employeeAccountDTO") EmployeeAccountDTO dto,
+                                 @RequestParam(value = "resetPassword", defaultValue = "false") boolean resetPassword,
+                                 RedirectAttributes redirect,
+                                 Model model) {
+        try {
+            employeeService.updateEmployeeAndAccount(dto, resetPassword);
+            redirect.addFlashAttribute("message", "Cập nhật nhân viên thành công!");
+            return "redirect:/admin/employee/listEmployee";
+        } catch (RuntimeException e) {
+            model.addAttribute("errorEmailExists", e.getMessage());
+            model.addAttribute("employeeAccountDTO", dto);
+            model.addAttribute("roleList", roleService.getAll());
+            return "admin/employee/updateEmployee";
+        }
     }
+
 }
 
 

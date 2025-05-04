@@ -38,7 +38,8 @@ public class PolicyController {
                 return "user/policy/payment";
             }
         }
-        return "user/homepage/homepage";
+
+        return "redirect:/";
 
     }
 
