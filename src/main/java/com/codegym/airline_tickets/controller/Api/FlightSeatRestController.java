@@ -45,8 +45,6 @@ public class FlightSeatRestController {
     @Autowired
     private PusherEvent pusherEvent;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-
     private static final Integer PRICE_FOR_A_KG = 10000;
 
     @PostMapping("/select")
@@ -120,7 +118,7 @@ public class FlightSeatRestController {
                 data.getNumberOfTickets(),
                 1,
                 data.getTotalPrice(),
-                createdAt
+                LocalDateTime.now()
         );
         Booking res = bookingService.updateOrCreate(booking);
         saveTicket(data, res, res.getFlight(), 1);
