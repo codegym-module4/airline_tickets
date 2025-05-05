@@ -3,19 +3,28 @@ package com.codegym.airline_tickets.controller.User;
 import com.codegym.airline_tickets.entity.Account;
 import com.codegym.airline_tickets.entity.User;
 import com.codegym.airline_tickets.repository.UserRepository;
+import com.codegym.airline_tickets.service.impl.FirebaseStorageService;
 import com.codegym.airline_tickets.service.impl.AccountService;
 import com.codegym.airline_tickets.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -38,12 +47,19 @@ public class AuthController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // Lưu mã xác nhận tạm thời trong Map (email -> code)
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
+
     private final Map<String, String> resetCodes = new HashMap<>();
+    // Mã OTP gửi cho email
+    private final Map<String,String> verifyCodes = new HashMap<>();
+    // Account tạm thời chờ xác thực
+    private final Map<String,Account> pendingAccounts = new HashMap<>();
+
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return "auth/login";
     }
 
     @GetMapping("/register")
@@ -51,29 +67,68 @@ public class AuthController {
         Account account = new Account();
         account.setUser(new User());
         model.addAttribute("account", account);
-        return "register";
+        return "auth/register";
     }
 
     @PostMapping("/register")
     public String processRegister(@ModelAttribute("account") @Valid Account account,
                                   BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "register";
+            return "auth/register";
         }
         if (accountService.getAccountByEmail(account.getEmail()) != null) {
             model.addAttribute("error", "Email đã tồn tại!");
-            return "register";
+            return "auth/register";
         }
+
+        String otp = String.format("%06d", new Random().nextInt(999999));
+        verifyCodes.put(account.getEmail(), otp);
+
+        pendingAccounts.put(account.getEmail(), account);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(account.getEmail());
+        message.setSubject("Xác thực email đăng ký - Vietjet Air");
+        message.setText("Chào bạn,\n\nMã xác thực để hoàn tất đăng ký của bạn là: "
+                + otp + "\n\nNếu bạn không yêu cầu, vui lòng bỏ qua email này.");
+        mailSender.send(message);
+
+        model.addAttribute("email", account.getEmail());
+        return "auth/verify-registration";
+    }
+
+    @GetMapping("/verify-registration")
+    public String verifyRegistrationPage(@RequestParam("email") String email, Model model) {
+        model.addAttribute("email", email);
+        return "auth/verify-registration";
+    }
+
+
+    @PostMapping("/verify-registration")
+    public String processVerifyRegistration(@RequestParam("email") String email,
+                                            @RequestParam("otp") String otp,
+                                            Model model) {
+        String correctOtp = verifyCodes.get(email);
+        if (correctOtp == null || !correctOtp.equals(otp)) {
+            model.addAttribute("error", "Mã xác thực không đúng hoặc đã hết hạn!");
+            model.addAttribute("email", email);
+            return "auth/verify-registration";
+        }
+
+        Account account = pendingAccounts.get(email);
         accountService.register(account);
-        User user = account.getUser();
-        user.setAccount(account);
-        userRepository.save(user);
+
+        verifyCodes.remove(email);
+        pendingAccounts.remove(email);
+
         return "redirect:/login?register_success";
     }
 
+
+
     @GetMapping("/forgot-password")
     public String forgotPasswordPage() {
-        return "forgot-password";
+        return "auth/forgot-password";
     }
 
     @PostMapping("/forgot-password")
@@ -81,14 +136,12 @@ public class AuthController {
         Account account = accountService.getAccountByEmail(email);
         if (account == null) {
             model.addAttribute("error", "Email không tồn tại!");
-            return "forgot-password";
+            return "auth/forgot-password";
         }
 
-        // Tạo mã ngẫu nhiên 6 chữ số
         String resetCode = String.format("%06d", new Random().nextInt(999999));
-        resetCodes.put(email, resetCode); // Lưu mã tạm thời
+        resetCodes.put(email, resetCode);
 
-        // Gửi email
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Yêu cầu đặt lại mật khẩu - Vietjet Air");
@@ -101,13 +154,13 @@ public class AuthController {
         mailSender.send(message);
 
         model.addAttribute("message", "Mã xác nhận đã được gửi! Vui lòng kiểm tra email.");
-        model.addAttribute("email", email); // Truyền email để dùng ở bước tiếp theo
-        return "reset-password"; // Chuyển sang trang nhập mã
+        model.addAttribute("email", email);
+        return "auth/reset-password";
     }
 
     @GetMapping("/reset-password")
     public String resetPasswordPage() {
-        return "reset-password";
+        return "auth/reset-password";
     }
 
     @PostMapping("/reset-password")
@@ -119,14 +172,13 @@ public class AuthController {
         if (storedCode == null || !storedCode.equals(code)) {
             model.addAttribute("error", "Mã xác nhận không đúng!");
             model.addAttribute("email", email);
-            return "reset-password";
+            return "auth/reset-password";
         }
 
-        // Cập nhật mật khẩu mới
         Account account = accountService.getAccountByEmail(email);
         account.setPassword(passwordEncoder.encode(newPassword));
         accountService.save(account);
-        resetCodes.remove(email); // Xóa mã sau khi dùng
+        resetCodes.remove(email);
 
         model.addAttribute("message", "Mật khẩu đã được đặt lại thành công!");
         return "redirect:/login?reset_success";
@@ -138,7 +190,7 @@ public class AuthController {
         Account account = accountService.getAccountByEmail(email);
         User user = account.getUser();
         model.addAttribute("user", user);
-        return "user/profile";
+        return "user/profile/profile";
     }
 
     @GetMapping("/profile/edit")
@@ -147,32 +199,69 @@ public class AuthController {
         Account account = accountService.getAccountByEmail(email);
         User user = account.getUser();
         model.addAttribute("user", user);
-        return "user/edit-profile";
+        return "user/profile/edit-profile";
     }
 
     @PostMapping("/profile/edit")
     public String processEditProfile(@ModelAttribute("user") @Valid User user,
+                                     @RequestParam("dob") String dobString,
+                                     @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
                                      BindingResult result,
                                      Authentication authentication,
                                      Model model) {
         if (result.hasErrors()) {
-            return "user/edit-profile";
+            model.addAttribute("error", "Dữ liệu không hợp lệ!");
+            return "user/profile/edit-profile";
         }
+
         String email = authentication.getName();
         Account account = accountService.getAccountByEmail(email);
         User existingUser = account.getUser();
+
         existingUser.setFullName(user.getFullName());
-        existingUser.setPhone(user.getPhone());
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            existingUser.setDob(LocalDate.parse(dobString, formatter));
+        } catch (DateTimeParseException e) {
+            model.addAttribute("error", "Ngày sinh không đúng định dạng (dd/MM/yyyy)!");
+            return "user/profile/edit-profile";
+        }
         existingUser.setAddress(user.getAddress());
+        existingUser.setGender(user.getGender());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setCitizenIdentification(user.getCitizenIdentification());
+        existingUser.setNationality(user.getNationality());
+
+        if (profileImage != null && !profileImage.isEmpty()) {
+            try {
+                String oldImageUrl = existingUser.getImage();
+                if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
+                    firebaseStorageService.deleteFileFromUrl(oldImageUrl);
+                }
+
+                String imageUrl = firebaseStorageService.uploadFile(profileImage, existingUser.getId().toString());
+                existingUser.setImage(imageUrl);
+            } catch (IOException e) {
+                model.addAttribute("error", "Không thể upload ảnh!");
+                return "user/profile/edit-profile";
+            }
+        }
+
         userRepository.save(existingUser);
+
+        UserDetails updatedUserDetails = accountService.loadUserByUsername(email);
+        Authentication newAuth = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                updatedUserDetails, authentication.getCredentials(), authentication.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
         model.addAttribute("message", "Cập nhật hồ sơ thành công!");
-        return "user/edit-profile";
+        return "redirect:/profile";
     }
 
     @GetMapping("/profile/change-password")
     public String changePasswordPage(Model model) {
         model.addAttribute("passwordForm", new PasswordForm());
-        return "user/change-password";
+        return "user/profile/change-password";
     }
 
     @PostMapping("/profile/change-password")
@@ -182,21 +271,18 @@ public class AuthController {
         String email = authentication.getName();
         Account account = accountService.getAccountByEmail(email);
 
-        // Kiểm tra mật khẩu cũ
         if (!passwordEncoder.matches(passwordForm.getOldPassword(), account.getPassword())) {
             model.addAttribute("error", "Mật khẩu cũ không đúng!");
-            return "user/change-password";
+            return "user/profile/change-password";
         }
 
-        // Cập nhật mật khẩu mới
         account.setPassword(passwordEncoder.encode(passwordForm.getNewPassword()));
         accountService.save(account);
 
         model.addAttribute("message", "Đổi mật khẩu thành công!");
-        return "user/change-password";
+        return "user/profile/change-password";
     }
 
-    // Class để xử lý form đổi mật khẩu
     public static class PasswordForm {
         private String oldPassword;
         private String newPassword;

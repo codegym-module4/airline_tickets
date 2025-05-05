@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{user/layouts/head::head('Đăng ký - Vietjet Air')}"></head>
+<body class="auth-page">
+<main>
+    <th:block th:replace="~{user/layouts/header::header}"></th:block>
+    <div class="auth-container">
+        <h2>Đăng ký</h2>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <form th:action="@{/register}" th:object="${account}" method="post" id="registerForm">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control" required/>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Mật khẩu:</label>
+                <input type="password" id="password" th:field="*{password}" class="form-control" required minlength="6"/>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Xác nhận mật khẩu:</label>
+                <input type="password" id="confirmPassword" class="form-control" required minlength="6"/>
+            </div>
+            <div class="mb-3">
+                <label for="fullName" class="form-label">Họ và tên:</label>
+                <input type="text" id="fullName" th:field="*{user.fullName}" class="form-control" required/>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Số điện thoại:</label>
+                <input type="text" id="phone" th:field="*{user.phone}" class="form-control" required pattern="[0-9]{10}"/>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Địa chỉ:</label>
+                <input type="text" id="address" th:field="*{user.address}" class="form-control" required/>
+            </div>
+            <button type="submit" class="btn-custom">Đăng ký</button>
+        </form>
+    </div>
+    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+</main>
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Mật khẩu và xác nhận mật khẩu không khớp!');
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -5,11 +5,14 @@ import com.codegym.airline_tickets.entity.Booking;
 import com.codegym.airline_tickets.service.IAccountService;
 import com.codegym.airline_tickets.service.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -26,7 +29,8 @@ public class PaymentController {
 
     @GetMapping()
     public String payment(Model model) {
-        String email = "hoang123@gmail.com";
+//        String email = "hoang123@gmail.com";
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = accountService.getAccountByEmail(email);
         List<Booking> list = bookingService.findByStatusAndUserId(1, account.getUser().getId());
         model.addAttribute("list", list);
@@ -36,7 +40,7 @@ public class PaymentController {
 
     @GetMapping("/transfer-history")
     public String history(Model model) {
-        String email = "hoang123@gmail.com";
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = accountService.getAccountByEmail(email);
         List<Booking> list = bookingService.findByUserId(account.getUser().getId());
         model.addAttribute("list", list);
@@ -49,7 +53,8 @@ public class PaymentController {
         String status = params.get("vnp_ResponseCode");
         String vnp_TxnRef = params.get("vnp_TxnRef");
         if (Objects.equals(status, "00")) {
-            bookingService.updateStatusByVnPayId(vnp_TxnRef, 2);
+            LocalDateTime date = LocalDateTime.now();
+            bookingService.updateStatusAndPaymentDateByVnPayId(vnp_TxnRef, 2, date);
 
             return "redirect:/payment/success";
         }

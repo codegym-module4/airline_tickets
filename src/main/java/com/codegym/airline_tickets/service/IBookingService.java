@@ -5,6 +5,7 @@ import com.codegym.airline_tickets.dto.RevenueByDateDto;
 import com.codegym.airline_tickets.entity.Booking;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IBookingService extends IService<Booking> {
@@ -20,6 +21,12 @@ public interface IBookingService extends IService<Booking> {
 
     void updateStatusById(Long id, Integer status);
 
-    void updateStatusByVnPayId(String vnpayOrderId, Integer status);
+    void updateStatusAndPaymentDateByVnPayId(String vnpayOrderId, Integer status, LocalDateTime date);
+
+    Booking findLatest();
+
+    Booking updateOrCreate(Booking b);
+
+    List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time, Integer status);
 
 }

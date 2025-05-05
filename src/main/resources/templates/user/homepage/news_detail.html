@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head th:replace="~{user/layouts/head::head ('Vietjet Air | Bay là thích ngay | Website chính thức')}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+
+<!-- Main Content (Homepage) -->
+<main class="py-0">
+    <!--Header-->
+    <th:block th:replace="~{user/layouts/header::header}"></th:block>
+
+    <div>
+        <!-- Hiển thị ảnh -->
+        <img th:src="${news.imageURL}" th:alt="${news.title}" class="news_img" style="width: 100%; height: 400px; object-fit: cover; display: block;" />
+    </div>
+
+    <div style="background-image: url('../resources/static/user/img/background.jpg'); background-size: cover; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <div>
+            <h1 th:text="${news.title}" style="color: red">Title</h1>
+
+            <div>
+                <p th:each="paragraph : ${paragraphs}" th:text="${paragraph}" style="margin-bottom: 15px; line-height: 2;"></p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <th:block th:insert="~{user/layouts/modal_success::modalSuccess}"></th:block>
+    <th:block th:insert="~{user/layouts/modal_error::modalError}"></th:block>
+    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+</main>
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+
+<script src="/user/js/homepage.js"></script>
+</body>
+</html>

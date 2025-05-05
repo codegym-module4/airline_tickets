@@ -4,63 +4,85 @@ import com.codegym.airline_tickets.dto.FlightRequestDTO;
 import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.entity.Airport;
 import com.codegym.airline_tickets.service.impl.AirportService;
+import com.codegym.airline_tickets.service.impl.FlightSeatService;
 import com.codegym.airline_tickets.service.impl.FlightService;
+import com.codegym.airline_tickets.util.BuildFlightRequest;
 import com.codegym.airline_tickets.util.FormaterCustom;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Controller
 @RequestMapping("/user")
 @Slf4j(topic = "FLIGHT-CONTROLLER")
-@RequiredArgsConstructor
-@Validated
 public class FlightsController {
 
-    private final FlightService flightService;
-    private final AirportService airportService;
+    @Autowired
+    private FlightService flightService;
 
-    @PostMapping("/select-flight")
-    public String getTopCheapestTicket(@ModelAttribute("flightReq") FlightRequestDTO flightReq, BindingResult bindingResult,
+    @Autowired
+    private  AirportService airportService;
+
+    @Autowired
+    private  FlightSeatService flightSeatService;
+
+
+    @GetMapping("/select-flight")
+    public String getFlightByCondition(@RequestParam Map<String,String> request,
                                        @RequestParam(required = false, defaultValue = "ASC") String sort,
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
-                                       Model model,
-                                       HttpServletResponse response
+                                       @RequestParam(required = false, defaultValue = "price") String sortProperty,
+                                       Model model, RedirectAttributes redirectAttributes, HttpSession session
     ){
-        log.info("Get flight list");
 
-        if(flightReq.getSortProperty() == null){
-            return "redirect:/user/homepage";
+        log.info("Get flight list");
+        FlightRequestDTO flightReq = BuildFlightRequest.build(request,sortProperty);
+
+        if(flightReq == null ){
+            redirectAttributes.addFlashAttribute("messageError","Bạn chưa điền đầy đủ thông tin tìm chuyến bay");
+            return "redirect:/";
         }
 
-       if(flightReq != null && flightReq.getType().equals("ROUND-TRIP")) {
+        if(flightReq != null && flightReq.getType().equals("ROUND-TRIP")) {
+            if(flightReq.getArrivalTime() == null){
+                redirectAttributes.addFlashAttribute("messageError","Bạn chưa điền đầy đủ thông tin tìm chuyến bay");
+                return "redirect:/";
+            }
+
            String departure = flightReq.getDepartureAirport();
-           String arrival = flightReq.getArrivalAirport().replaceAll("^,|,$", "");
+           String arrival = flightReq.getArrivalAirport();
 
            LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
            LocalDate arrivalTime = LocalDate.from(flightReq.getArrivalTime());
 
 
-
            List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime, flightReq.getSortProperty(), sort, page, size);
            List<FlightResponseDTO> listArrival = flightService.findAll(arrival, departure,  arrivalTime, flightReq.getSortProperty(), sort, page, size);
-           List<Airport> listAirports = airportService.getAll();
 
-           if(listDeparture.isEmpty() || listArrival.isEmpty()){
-               return "redirect:/user/homepage";
+           if(listDeparture.isEmpty() || listArrival.isEmpty() ){
+               redirectAttributes.addFlashAttribute("messageError","Chuyến bay đã hết chỗ hoặc không tìm thấy thông tin chuyến!");
+               return "redirect:/";
            }
+           listDeparture = listDeparture.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0).toList();
+           listArrival = listArrival.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0 ).toList();
+
+            List<Airport> listAirports = airportService.getAll();
+
            model.addAttribute("flightReq",flightReq);
            model.addAttribute("listDeparture",listDeparture);
            model.addAttribute("listArrival",listArrival);
@@ -74,33 +96,53 @@ public class FlightsController {
 
            model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
            model.addAttribute("dayOfWeekArrival",FormaterCustom.formatDayOfWeek(arrivalTime));
+           model.addAttribute("message","Tìm kiếm thành công");
+
        }
 
        if(flightReq != null && flightReq.getType().equals("ONEWAY")) {
 
             String departure = flightReq.getDepartureAirport();
-            String arrival = flightReq.getArrivalAirport().replaceAll("^,|,$", "");
+            String arrival = flightReq.getArrivalAirportOneWay();
 
             LocalDate departureTime = LocalDate.from(flightReq.getDepartureTime());
+            if(flightReq.getPrice() != null){
+                List<FlightResponseDTO> listHotdeal = flightService.findFightHotDeal(departure, arrival, flightReq.getPrice(), sortProperty, sort, page, size);
+                listHotdeal =  listHotdeal.stream().filter(item ->  flightSeatService.countSingleFlightSeat(item.getId()) > 0).toList();
+                model.addAttribute("listDeparture",listHotdeal);
+                if(listHotdeal.isEmpty()){
+                    redirectAttributes.addFlashAttribute("messageError","Chuyến bay đã hết chỗ hoặc không tìm thấy thông tin chuyến!");
+                    return "redirect:/";
+                }
 
+            }else {
             List<FlightResponseDTO> listDeparture = flightService.findAll(departure, arrival, departureTime,flightReq.getSortProperty(), sort, page, size);
+                System.out.println(flightSeatService.countSingleFlightSeat(1l));
+                listDeparture = listDeparture.stream().filter(item ->
+
+                        flightSeatService.countSingleFlightSeat(item.getId()) > 0
+                ).toList();
+                if(listDeparture.isEmpty()){
+                    redirectAttributes.addFlashAttribute("messageError","Chuyến bay đã hết chỗ hoặc không tìm thấy thông tin chuyến!");
+                    return "redirect:/";
+                }
+                model.addAttribute("listDeparture",listDeparture);
+
+            }
+
             List<Airport> listAirports = airportService.getAll();
 
-            if(listDeparture.isEmpty()){
-                return "redirect:/user/homepage";
-            }
            model.addAttribute("flightReq",flightReq);
-            model.addAttribute("listDeparture",listDeparture);
-            model.addAttribute("listAirports",listAirports);
-
-            model.addAttribute("departure", departure);
-            model.addAttribute("arrival", arrival);
-            model.addAttribute("departureTime", FormaterCustom.formatDateResponse(departureTime));
+           model.addAttribute("listAirports",listAirports);
+           model.addAttribute("departure", departure);
+           model.addAttribute("arrival", arrival);
+           model.addAttribute("departureTime", FormaterCustom.formatDateResponse(departureTime));
            model.addAttribute("dayOfWeekDeparture",FormaterCustom.formatDayOfWeek(departureTime));
+           model.addAttribute("message","Tìm kiếm thành công");
+
         }
-
         return "user/flight/flight";
-
     }
+
 
 }

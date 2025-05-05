@@ -31,14 +31,20 @@ public class SecurityConfig {
                                 "/register",
                                 "/forgot-password",
                                 "/reset-password",
+                                "/verify-registration",
                                 "/user/css/**",
                                 "/user/js/**",
                                 "/user/plugins/**",
                                 "/user/img/**",
-                                "/user/icon/**"
+                                "/user/icon/**",
+                                "/admin/css/**",
+                                "/admin/**",
+                                "/admin/news/**",
+                                "/admin/news/create",
+                                "/admin/news/edit/**"
                         ).permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/profile/**").authenticated()
+//                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
+                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**", "/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

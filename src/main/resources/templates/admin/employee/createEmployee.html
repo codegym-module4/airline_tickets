@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Nhân Viên</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar .btn {
+            color: white !important;
+            background: none;
+            border: none;
+            font-size: 16px;
+        }
+        .navbar .btn:hover {
+            text-decoration: underline;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .btn-action {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-action .btn {
+            background-color: red;
+            border: none;
+            color: white;
+        }
+        .btn-action .btn:hover {
+            background-color: darkred;
+        }
+        .password-wrapper {
+            position: relative;
+        }
+        .password-wrapper .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<!--sidebar-->
+<div th:replace="admin/sidebar/sidebar :: adminSidebar"></div>
+
+<!--mainContend-->
+<div class="main-content container" style="margin-top: 60px;" id="mainContent">
+    <h2 class="text-center">QUẢN LÝ NHÂN VIÊN</h2>
+    <h4 class="text-center mb-4">THÊM NHÂN VIÊN</h4>
+    <form th:action="@{/admin/employee/createEmployee}" th:object="${employeeAccountDTO}" method="post">
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Mã nhân viên</label>
+                <input type="text" class="form-control" th:field="*{code}">
+            </div>
+
+            <div class="col-md-6 form-group">
+                <label>Họ tên</label>
+                <input type="text" class="form-control" th:field="*{fullName}">
+            </div>
+
+            <div class="col-md-6 form-group">
+                <label>Ngày sinh</label>
+                <input type="date" class="form-control" th:field="*{dob}">
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Số điện thoại</label>
+                <input type="text" class="form-control" th:field="*{phone}">
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Giới tính</label>
+                <select class="form-control" th:field="*{gender}">
+                    <option value="Male" th:selected="*{gender == 'Male'}">Nam</option>
+                    <option value="Female" th:selected="*{gender == 'Female'}">Nữ</option>
+                    <option value="Other" th:selected="*{gender == 'Other'}">Khác</option>
+                </select>
+
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Quê Quán</label>
+                <input type="text" class="form-control" th:field="*{address}">
+            </div>
+        </div>
+
+        <!-- Tài khoản -->
+        <div class="row mt-4">
+            <div class="col-md-6 form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" th:field="*{email}">
+            </div>
+
+            <div class="col-md-6 form-group password-wrapper">
+                <label>Mật khẩu</label>
+                <input type="password" class="form-control" th:field="*{password}" id="passwordField">
+                <i class="bi bi-eye toggle-password" onclick="togglePassword()"></i>
+            </div>
+
+            <div class="col-md-6 form-group">
+                <label>Vai trò</label>
+                <select class="form-control" th:field="*{roleId}">
+                    <option th:each="role : ${roleList}" th:value="${role.id}" th:text="${role.roleName}"></option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="btn-action mt-3 text-center">
+            <a th:href="@{/admin/employee/listEmployee}" class="btn">Quay lại</a>
+
+            <button type="submit" class="btn">Lưu</button>
+        </div>
+    </form>
+
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById("passwordField");
+        passwordField.type = passwordField.type === "password" ? "text" : "password";
+    }
+</script>
+
+</body>
+</html>

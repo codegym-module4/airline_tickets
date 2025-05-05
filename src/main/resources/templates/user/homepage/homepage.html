@@ -68,15 +68,15 @@
         <a style="color: inherit; text-decoration: none"  href="#">Gửi hàng nhanh</a>
       </button>
     </div>
-    <form id="searchForm" th:action="@{/user/select-flight}" th:object="${flightReq}" class="booking-form" style="padding: 8px;" method="POST">
+    <form id="searchForm" th:action="@{/user/select-flight}" th:object="${flightReq}" class="booking-form" style="padding: 8px;" method="GET">
       <!--Khứ hồi - một chiều-->
       <div id="type-flight" class="mb-3 d-flex align-items-center">
         <div class="form-check form-check-inline d-flex align-items-center">
-          <input id="round-trip" class="check-type-flight form-check-input  mr10" type="radio" name="type" value="ROUND-TRIP" checked/>
+          <input  id="round-trip" class="check-type-flight form-check-input  mr10" type="radio" name="type" value="ROUND-TRIP" checked/>
           <label  for="round-trip" class="form-check-label d-flex align-items-center gap-1 mt-1"><i class="fa-solid fa-repeat" ></i>Khứ hồi</label>
         </div>
         <div class="form-check form-check-inline d-flex align-items-center">
-          <input id="one-way" class="check-type-flight form-check-input mr10" type="radio" name="type" value="ONEWAY" />
+          <input  id="one-way" class="check-type-flight form-check-input mr10" type="radio" name="type" value="ONEWAY" />
           <label for="one-way" class="form-check-label d-flex align-items-center gap-1 mt-1"><i class="fa-solid fa-arrow-right"></i>Một chiều</label>
         </div>
         <span style="font-weight: 600; margin-left: 40px;">VND<i class="fa-solid fa-caret-down" style="margin-left: 3px;" ></i></span>
@@ -86,13 +86,13 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="input-group" style="width: 55%;">
           <span class="input-group-text"><i class="fa-solid fa-plane"></i></span>
-          <input id="departure"  class="form-control" list="departure-area" placeholder="Điểm khởi hành" name="departureAirport" th:field="*{departureAirport}"/>
+          <input required type="text" id="departure"  class="form-control" list="departure-area" placeholder="Điểm khởi hành" name="departureAirport" th:field="*{departureAirport}"/>
           <datalist id="departure-area" class="w-100">
             <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
           </datalist>
         </div>
         <div class="input-group" style="width: 45%;">
-          <input id="departure-date" name="departureTime" th:field="*{departureTime}"  type="date" class="form-control"  placeholder="Ngày đi" style="border-radius: 0 5px 5px 0;"/>
+          <input required id="departure-date" name="departureTime" th:field="*{departureTime}"  type="date" class="form-control"  placeholder="Ngày đi" style="border-radius: 0 5px 5px 0;"/>
         </div>
       </div>
 
@@ -100,20 +100,20 @@
       <div class="destination-round-trip d-flex justify-content-between align-items-center mb-3 d-block">
         <div class="input-group" style="width: 55%;">
           <span class="input-group-text"><i class="fa-solid fa-plane" style="transform: rotate(180deg);"></i></span>
-          <input class="form-control" list="destination-area" id="arrival" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
+          <input required type="text" class="form-control" list="destination-area" id="arrival" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport}"/>
           <datalist id="destination-area" class="w-100">
             <option th:each="item: ${listAirports}" th:value="${item.name}" th:text="'Sân bay ' + ${item.city}">
           </datalist>
         </div>
         <div class="input-group" style="width: 45%;">
-          <input id="arrival-date" name="arrival-date" th:field="*{arrivalTime}" type="date" class="form-control" placeholder="Ngày về" style="border-radius: 0 5px 5px 0;"/>
+          <input required id="arrival-date" name="arrival-date" th:field="*{arrivalTime}" type="date" class="form-control" placeholder="Ngày về" style="border-radius: 0 5px 5px 0;"/>
         </div>
       </div>
 
       <div class="destination-one-way d-flex justify-content-between align-items-center mb-3 d-none">
         <div class="input-group">
           <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
-          <input class="form-control" list="destination-area" id="destination-one-way" placeholder="Điểm đến" name="arrivalAirport" th:field="*{arrivalAirport} "/>
+          <input required class="des-one-way form-control" list="destination-area" placeholder="Điểm đến" name="arrivalAirportOneWay" th:field="*{arrivalAirportOneWay}"/>
           <datalist th:field="*{arrivalAirport}" id="destination-area-one-way" class="w-100">
             <option th:each="item: ${listAirports}" th:value="${item.name}" th:text=" 'Sân bay ' + ${item.city}">
           </datalist>
@@ -124,14 +124,14 @@
       <div class="mb-3">
         <div class="dropdown input-group">
           <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-          <input type="text" class="form-control dropdown-toggle" id="passengers" placeholder="Chọn số hành khách" readonly data-bs-toggle="dropdown" name="numberPassengers"/>
+          <input required type="text" class="form-control dropdown-toggle" id="passengers" placeholder="Chọn số hành khách" readonly data-bs-toggle="dropdown" name="numberPassengers" value="1 Người lớn"/>
           <ul class="dropdown-menu" id="dropdownMenu">
             <li class="mb-3 d-flex justify-content-between align-items-center">
               <span>Người lớn (12+ tuổi)</span>
               <div>
-                <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adult', -1)">-</button>
-                <span id="adult" class="count">1</span>
-                <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adult', 1)">+</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adults', -1)">-</button>
+                <span id="adults" class="count">1</span>
+                <button class="btn btn-outline-secondary btn-sm" onclick="changeCount(event, 'adults', 1)">+</button>
               </div>
             </li>
             <li class="mb-3 d-flex justify-content-between align-items-center">
@@ -169,104 +169,151 @@
 
   <!--Hot deal service-->
   <div class="hot-deal-list col-12 d-flex justify-content-center align-items-center mb-3 position-absolute">
-    <a class="hot-deal-link" href="#">
+    <a class="hot-deal-link" href="#" >
       <div class="d-flex justify-content-center align-items-center flex-column ">
         <h6 class="title-hot-deal">Từ
-          <span>Hà Nội</span>
+          <span class="departure-hotdeal">Hà Nội</span>
         </h6>
         <div class="d-flex justify-content-center align-items-center flex-column position-relative">
           <img src="/user/img/bg-fare.png" alt="bg-fare" style="display: block; width: 120px; height: auto;">
           <div class="d-flex justify-content-center align-items-center flex-column position-absolute" style="top: 10px;">
             <p class="mb-0" style="color: #EC2029;">Chỉ từ</p>
-            <p class="mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">490,000</p>
+            <p class="price-hotdeal mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">900,000</p>
             <p class="mb-0" style="color: rgb(51, 51, 51); font-style: italic">VND</p>
           </div>
         </div>
         <h6 class="title-hot-deal">Đến
-          <span>Melboure</span>
+          <span class="arrival-hotdeal">Melbourne</span>
         </h6>
       </div>
     </a>
 
-    <a class="hot-deal-link" href="#">
+    <a class="hot-deal-link" href="#" >
       <div class="d-flex justify-content-center align-items-center flex-column ">
         <h6 class="title-hot-deal">Từ
-          <span>Hà Nội</span>
+          <span class="departure-hotdeal">Hà Nội</span>
         </h6>
         <div class="d-flex justify-content-center align-items-center flex-column position-relative">
           <img src="/user/img/bg-fare.png" alt="bg-fare" style="display: block; width: 120px; height: auto;">
           <div class="d-flex justify-content-center align-items-center flex-column position-absolute" style="top: 10px;">
             <p class="mb-0" style="color: #EC2029;">Chỉ từ</p>
-            <p class="mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">490,000</p>
+            <p class="price-hotdeal mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">900,000</p>
             <p class="mb-0" style="color: rgb(51, 51, 51); font-style: italic">VND</p>
           </div>
         </div>
         <h6 class="title-hot-deal">Đến
-          <span>Sydney</span>
+          <span class="arrival-hotdeal">Sydney</span>
         </h6>
       </div>
     </a>
 
-    <a class="hot-deal-link" href="#">
+    <a class="hot-deal-link" href="#" >
       <div class="d-flex justify-content-center align-items-center flex-column ">
         <h6 class="title-hot-deal">Từ
-          <span>Đà Nẵng</span>
+          <span class="departure-hotdeal">Đà Nẵng</span>
         </h6>
         <div class="d-flex justify-content-center align-items-center flex-column position-relative">
           <img src="/user/img/bg-fare.png" alt="bg-fare" style="display: block; width: 120px; height: auto;">
           <div class="d-flex justify-content-center align-items-center flex-column position-absolute" style="top: 10px;">
             <p class="mb-0" style="color: #EC2029;">Chỉ từ</p>
-            <p class="mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">490,000</p>
+            <p class="price-hotdeal mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">490,000</p>
             <p class="mb-0" style="color: rgb(51, 51, 51); font-style: italic">VND</p>
           </div>
         </div>
         <h6 class="title-hot-deal">Đến
-          <span>Ahmedabad</span>
+          <span class="arrival-hotdeal">Ahmedabad</span>
         </h6>
       </div>
     </a>
 
-    <a class="hot-deal-link" href="#">
+    <a class="hot-deal-link" href="#" >
       <div class="d-flex justify-content-center align-items-center flex-column ">
         <h6 class="title-hot-deal">Từ
-          <span>Tp. Hồ Chí Minh</span>
+          <span class="departure-hotdeal">Tp. Hồ Chí Minh</span>
         </h6>
         <div class="d-flex justify-content-center align-items-center flex-column position-relative">
           <img src="/user/img/bg-fare.png" alt="bg-fare" style="display: block; width: 120px; height: auto;">
           <div class="d-flex justify-content-center align-items-center flex-column position-absolute" style="top: 10px;">
             <p class="mb-0" style="color: #EC2029;">Chỉ từ</p>
-            <p class="mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">490,000</p>
+            <p class="price-hotdeal mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">260,000</p>
             <p class="mb-0" style="color: rgb(51, 51, 51); font-style: italic">VND</p>
           </div>
         </div>
         <h6 class="title-hot-deal">Đến
-          <span>Bắc Kinh</span>
+          <span class="arrival-hotdeal">Bắc Kinh</span>
         </h6>
       </div>
     </a>
 
-    <a class="hot-deal-link" href="#">
+    <a class="hot-deal-link" href="#" >
       <div class="d-flex justify-content-center align-items-center flex-column ">
         <h6 class="title-hot-deal">Từ
-          <span>Hà Nội</span>
+          <span class="departure-hotdeal">Hà Nội</span>
         </h6>
         <div class="d-flex justify-content-center align-items-center flex-column position-relative">
           <img src="/user/img/bg-fare.png" alt="bg-fare" style="display: block; width: 120px; height: auto;">
           <div class="d-flex justify-content-center align-items-center flex-column position-absolute" style="top: 10px;">
             <p class="mb-0" style="color: #EC2029;">Chỉ từ</p>
-            <p class="mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">490,000</p>
+            <p class="price-hotdeal mb-0" style="color: #EC2029; font-style: italic; font-weight: 700; font-size: 20px;">120,000</p>
             <p class="mb-0" style="color: rgb(51, 51, 51); font-style: italic">VND</p>
           </div>
         </div>
         <h6 class="title-hot-deal">Đến
-          <span>Quảng Châu</span>
+          <span class="arrival-hotdeal">Quảng Châu</span>
         </h6>
       </div>
     </a>
   </div>
+
+<!--  news-->
+  <div class="news">
+
+    <!-- Background A: Nền chính cho slide -->
+    <div class="news-background p-3 position-relative">
+
+      <!-- Carousel -->
+      <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+          <!-- Lặp từng nhóm 3 tin -->
+          <div class="carousel-item"
+               th:each="group, stat : ${newsList}"
+               th:classappend="${stat.index == 0} ? 'active'">
+            <div class="row">
+              <div class="news-item col-md-4" th:each="news : ${group}" >
+                <div class="card mb-3">
+                  <img th:src="${news.imageURL}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title" th:text="${news.title}">Title</h5>
+                    <p class="card-text" th:text="${#strings.abbreviate(news.content, 100)}">Short</p>
+                    <a th:href="@{/news/detail/{id}(id=${news.id})}" class="btn btn-primary">Xem thêm</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Nút điều hướng (nằm trong background A) -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
   <!-- Footer -->
+  <th:block th:insert="~{user/layouts/modal_success::modalSuccess}"></th:block>
+  <th:block th:insert="~{user/layouts/modal_error::modalError}"></th:block>
+  <th:block th:insert="~{user/policy/popupConfirm::modalPolicyConfirm}"></th:block>
   <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
 </main>
 <th:block th:replace="~{user/layouts/script::script}"></th:block>
+<script src="/user/js/homepage.js"></script>
 </body>
 </html>

@@ -1,10 +1,10 @@
 package com.codegym.airline_tickets.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,11 +13,27 @@ import java.time.LocalDateTime;
 @Builder
 public class FlightRequestDTO {
     private String type;
+
+    @NotNull
+    @NotEmpty
     private String departureAirport;
+
+    @NotNull
+    @NotEmpty
     private String arrivalAirport;
+
+    private String arrivalAirportOneWay;
+
+    @NotNull
     private LocalDate departureTime;
+
     private LocalDate arrivalTime;
-    private String sortProperty = "price";
-    private int numberPassengers;
+
+    private String sortProperty;
+
+    private Integer price;
+
+//    @NotEmpty
+//    private int numberPassengers;
 
 }

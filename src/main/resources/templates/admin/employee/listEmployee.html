@@ -5,49 +5,27 @@
   <title>Quản lý Nhân Viên</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    .navbar { background-color: red; padding: 10px 20px; }
-    .navbar-brand, .navbar .btn, .nav-link { color: white !important; }
     .table th { background-color: red; color: white; }
     .btn-primary { background-color: red; border-color: red; }
+    .btn-success { background-color: red; border-color: red; }
     .btn-danger { background-color: darkred; border-color: darkred; }
   </style>
 </head>
 <body>
 
-<!-- Thanh điều hướng với menu -->
-<nav class="navbar navbar-expand-lg">
-  <a class="navbar-brand" href="#">Hệ Thống Quản Lý</a>
-  <div class="collapse navbar-collapse">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/employees}">Nhân Viên</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/flights}">Chuyến Bay</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/tickets}">Vé Máy Bay</a>
-      </li>
-    </ul>
-    <div class="d-flex">
-      <button class="btn">Admin</button>
-      <button class="btn">Đăng Xuất</button>
-    </div>
-  </div>
-</nav>
+<!-- Gọi sidebar -->
+<div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
 
 <!-- Nội dung chính -->
-<div class="container mt-4">
+<div class="main-content container" style="margin-top: 60px;" id="mainContent">
   <h2 class="mb-4">Quản lý Nhân Viên</h2>
 
-  <!-- Hàng nút: Thêm mới + Xem Báo Cáo -->
   <div class="d-flex justify-content-between mb-3">
     <div class="d-flex gap-2">
-      <a th:href="@{/employees/create}" class="btn btn-success">➕ Thêm Nhân Viên</a>
-      <a th:href="@{/admin/report}" class="btn btn-primary">📊 Xem Báo Cáo</a>
+      <a th:href="@{/admin/employee/createEmployee}" class="btn btn-success"> Thêm Nhân Viên</a>
+      <a th:href="@{/admin/report}" class="btn btn-primary"> Xem Báo Cáo</a>
     </div>
 
-    <!-- Form Tìm kiếm -->
     <form th:action="@{/admin/employee/search}" method="get" class="d-flex" style="gap: 10px;">
       <select name="filter" class="form-select w-auto">
         <option value="id">Mã Nhân Viên</option>
@@ -58,7 +36,10 @@
     </form>
   </div>
 
-  <!-- Bảng danh sách nhân viên -->
+  <th:block th:if="${#lists.isEmpty(employeeList)}">
+    <p>Không có sản phẩm nào!</p>
+  </th:block>
+
   <table class="table table-bordered text-center">
     <thead>
     <tr>
@@ -69,6 +50,8 @@
       <th>Giới Tính</th>
       <th>Số Điện Thoại</th>
       <th>Quê Quán</th>
+      <th>Email</th>
+      <th>Phân Quyền</th>
       <th>Thao Tác</th>
     </tr>
     </thead>
@@ -81,18 +64,63 @@
       <td th:text="${employee.gender}"></td>
       <td th:text="${employee.phone}"></td>
       <td th:text="${employee.address}"></td>
+      <td th:text="${employee.email}"></td>
+      <td th:text="${employee.roleName}"></td>
       <td>
-        <a th:href="@{'/employees/edit/' + ${employee.id}}" class="btn btn-primary btn-sm">Sửa</a>
-        <a th:href="@{'/employees/delete/' + ${employee.id}}"
-           class="btn btn-danger btn-sm"
-           onclick="return confirm('Bạn có chắc chắn muốn xóa?');">
+        <a th:href="@{'/admin/employee/updateEmployee'(id=${employee.employeeId})}" class="btn btn-primary btn-sm">Sửa</a>
+        <button type="button"
+                class="btn btn-danger btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#confirmDeleteModal"
+                th:attr="data-id=${employee.employeeId}, data-code=${employee.code}">
           Xóa
-        </a>
+        </button>
       </td>
     </tr>
+
     </tbody>
   </table>
 </div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận xóa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn muốn xóa nhân viên mã <strong id="employeeCodeText"></strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <a id="confirmDeleteBtn" class="btn btn-danger">Xóa</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS & Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script xử lý modal -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const deleteModal = document.getElementById('confirmDeleteModal');
+    const employeeCodeText = document.getElementById('employeeCodeText');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+      const button = event.relatedTarget;
+      const id = button.getAttribute('data-id');
+      const code = button.getAttribute('data-code');
+
+      employeeCodeText.textContent = code;
+      confirmDeleteBtn.setAttribute('href', `/admin/employee/delete?id=${id}`);
+    });
+  });
+</script>
 
 </body>
 </html>
