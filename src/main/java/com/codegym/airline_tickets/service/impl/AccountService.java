@@ -7,6 +7,8 @@ import com.codegym.airline_tickets.repository.RoleRepository;
 import com.codegym.airline_tickets.repository.UserRepository;
 import com.codegym.airline_tickets.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -68,6 +70,16 @@ public class AccountService implements IAccountService, UserDetailsService {
     @Override
     public Account getAccountByEmail(String email) {
         return accountRepository.findByNotDeleteEmail(email);
+    }
+
+    @Override
+    public List<Account> getAllAccounts(Long id) {
+        return accountRepository.findAllByDeletedAtIsNullAndRoleId(id);
+    }
+
+    @Override
+    public Page<Account> getAllAccounts(Long id, Pageable pageable) {
+        return accountRepository.findAllByDeletedAtIsNullAndRoleId(id, pageable);
     }
 
     @Override

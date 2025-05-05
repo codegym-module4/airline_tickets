@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý khách hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .table th {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
+
+<!-- Nội dung chính -->
+<div class="main-content container" style="margin-top: 60px;" id="mainContent">
+
+    <h2 class="mb-4">Quản lý khách hàng</h2>
+    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="d-flex justify-content-between mb-3">
+
+        <div class="d-flex justify-content-between mb-3">
+            <a th:href="@{/admin/news/create}" class="btn btn-warning" style="background-color: red; color: white"> Thêm
+                khách hàng</a>
+
+        </div>
+    </div>
+    <table class="table table-bordered text-center">
+        <tbody>
+        <tr>
+            <th>Mã khách hàng</th>
+            <th>Hình ảnh cá nhân</th>
+            <th>Họ và tên</th>
+            <th>Ngày sinh</th>
+            <th>Giới tính</th>
+            <th>Số điện thoại</th>
+            <th>Email</th>
+            <th>Địa chỉ</th>
+            <th>Quốc tịch</th>
+            <th>Số CCCD</th>
+            <th>Xếp hạng</th>
+            <th>Thao tác</th>
+
+        </tr>
+        <tr class="text-center" th:if="${accounts.isEmpty()}">
+            <td colspan="8">Không tìm thấy dữ liệu</td>
+        </tr>
+        <tr th:each="account: ${accounts}">
+            <td th:text="${account.user.code != null ? account.user.code : 'Trống' }"></td>
+            <td th:text="${account.user.image != null ? account.user.image : 'Trống' }"></td>
+            <td th:text="${account.user.fullName != null ? account.user.fullName : 'Trống'}"></td>
+            <td th:text="${account.user.dob != null ? account.user.dob : 'Trống'}"></td>
+            <td th:text="${account.user.gender != null ? account.user.gender : 'Trống'}"></td>
+            <td th:text="${account.user.phone != null ? account.user.phone : 'Trống'}"></td>
+            <td th:text="${account.email != null ? account.email : 'Trống'}"></td>
+            <td th:text="${account.user.address != null ? account.user.address : 'Trống'}"></td>
+            <td th:text="${account.user.nationality != null ? account.user.nationality : 'Trống'}"></td>
+            <td th:text="${account.user.citizenIdentification != null ? account.user.citizenIdentification : 'Trống'}"></td>
+            <td th:text="${account.user.ranking != null ? account.user.ranking : 'Trống'}"></td>
+            <td class="d-flex">
+                <a href="#" class="btn btn-sm btn-warning me-2"> <i class="bi bi-pencil-square"></i></a>
+                <a href="#" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa không?');"> <i
+                        class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only"></span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Bootstrap JS & Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
