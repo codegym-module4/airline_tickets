@@ -6,36 +6,117 @@
 <main id="content">
     <section class="section">
         <div class="mypage_block user_info">
+
+            <!-- Nav gốc giữ y nguyên -->
             <nav class="mypage_nav">
                 <ul>
-                    <li class="user_info"><a href="#">Thông tin cá nhân</a></li>
+                    <li class="user_info"><a href="/profile">Thông tin cá nhân</a></li>
                     <li class="user_ticket"><a href="/my-ticket">Đặt chỗ của tôi</a></li>
                     <li class="user_payment"><a href="/payment">Thanh toán</a></li>
                     <li class="user_transfer_history"><a href="/payment/transfer-history">Lịch sử giao dịch</a></li>
                     <li class="user_change_password"><a th:href="@{/profile/change-password}">Đổi mật khẩu</a></li>
                 </ul>
             </nav>
-            <section class="mypage_content">
-                <div class="booking-form profile-card">
-                    <h2>Hồ sơ người dùng</h2>
-                    <div sec:authorize="isAuthenticated()">
-                        <img th:if="${user.image != null}" th:src="${user.image}" alt="Ảnh đại diện" class="avatar"/>
-                        <img th:if="${user.image == null}" src="/user/img/default-avatar.png" alt="Ảnh mặc định" class="avatar"/>
-                        <ul class="info-list">
-                            <li><span class="label">Họ và tên:</span><span class="value" sec:authentication="principal.fullName"></span></li>
-                            <li><span class="label">Ngày sinh:</span><span class="value" th:text="${#temporals.format(user.dob, 'dd/MM/yyyy')}"></span></li>
-                            <li><span class="label">Địa chỉ:</span><span class="value" th:text="${user.address}"></span></li>
-                            <li><span class="label">Email:</span><span class="value" sec:authentication="name"></span></li>
-                            <li><span class="label">Giới tính:</span><span class="value" th:text="${user.gender}"></span></li>
-                            <li><span class="label">Điện thoại:</span><span class="value" th:text="${user.phone}"></span></li>
-                            <li><span class="label">Xếp hạng:</span><span class="value" th:text="${user.ranking}"></span></li>
-                            <li><span class="label">Quốc tịch:</span><span class="value" th:text="${user.getNationality()}"></span></li>
-                        </ul>
-                        <a th:href="@{/profile/edit}" class="btn btn-custom">Chỉnh sửa</a>
+
+            <!-- Content mới -->
+            <div class="col-lg-9">
+                <div class="card shadow-sm rounded-3">
+                    <div class="card-header bg-danger text-white">
+                        <h4 class="mb-0">Hồ sơ người dùng</h4>
+                    </div>
+                    <div class="card-body">
+                        <div sec:authorize="isAuthenticated()">
+
+                            <!-- Avatar -->
+                            <div class="text-center mb-4">
+                                <img th:if="${user.image != null}" th:src="${user.image}"
+                                     class="rounded-circle border"
+                                     style="width:120px; height:120px; object-fit:cover;"
+                                     alt="Ảnh đại diện"/>
+                                <img th:if="${user.image == null}" src="/user/img/default-avatar.png"
+                                     class="rounded-circle border"
+                                     style="width:120px; height:120px; object-fit:cover;"
+                                     alt="Ảnh mặc định"/>
+                            </div>
+
+                            <!-- Thông tin dưới dạng form-floating disabled -->
+                            <div class="row gx-3">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" id="fullName" class="form-control" placeholder="Họ và tên"
+                                               th:value="${#authentication.principal.fullName}" disabled/>
+                                        <label for="fullName">Họ và tên</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="email" id="email" class="form-control" placeholder="Email"
+                                               th:value="${#authentication.name}" disabled/>
+                                        <label for="email">Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" id="dob" class="form-control" placeholder="Ngày sinh"
+                                               th:value="${#temporals.format(user.dob,'dd/MM/yyyy')}" disabled/>
+                                        <label for="dob">Ngày sinh</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" id="gender" class="form-control" placeholder="Giới tính"
+                                               th:value="${user.gender}" disabled/>
+                                        <label for="gender">Giới tính</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" id="phone" class="form-control" placeholder="Số điện thoại"
+                                               th:value="${user.phone}" disabled/>
+                                        <label for="phone">Số điện thoại</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" id="citizenIdentification" class="form-control" placeholder="CCCD"
+                                               th:value="${user.citizenIdentification}" disabled/>
+                                        <label for="citizenIdentification">CCCD</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" id="address" class="form-control" placeholder="Địa chỉ"
+                                               th:value="${user.address}" disabled/>
+                                        <label for="address">Địa chỉ</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" id="nationality" class="form-control" placeholder="Quốc tịch"
+                                               th:value="${user.nationality}" disabled/>
+                                        <label for="nationality">Quốc tịch</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" id="ranking" class="form-control" placeholder="Xếp hạng"
+                                               th:value="${user.ranking}" disabled/>
+                                        <label for="ranking">Xếp hạng</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nút chỉnh sửa -->
+                            <div class="d-flex justify-content-end mt-4">
+                                <a th:href="@{/profile/edit}" class="btn btn-custom">Chỉnh sửa</a>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
+            </div>
+            <!-- End content mới -->
 
-            </section>
         </div><!-- .mypage_block END -->
     </section>
     <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
