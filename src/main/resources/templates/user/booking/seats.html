@@ -86,16 +86,37 @@
                     <!-- Seat map -->
                     <div class="seat-map-container bg-secondary">
                         <div id="seat-map" class="bg-white mx-5">
+<!--                            <div th:each="row : ${#numbers.sequence(1, maxRow)}" class="seat-row pb-3">-->
+<!--                                &lt;!&ndash; Lặp qua các ghế trong mỗi hàng &ndash;&gt;-->
+<!--                                <th:block th:each="seat : ${seats}" th:if="${seat.rowAsInt == row}">-->
+<!--                                    <div th:class="'seat ' + (${seat.status == 2} ? 'seat-booked' : 'seat-available')"-->
+<!--                                         th:id="'flight_seat_' + ${seat.id}"-->
+<!--                                         th:data-id="${seat.id}">-->
+<!--                                        <span th:text="${seat.seatRow + seat.seatCol}"></span>-->
+<!--                                    </div>-->
+<!--                                    <div th:if="${seat.seatCol == 'C'}" style="width: 85px;"></div>-->
+<!--                                </th:block>-->
+<!--                            </div>-->
                             <div th:each="row : ${#numbers.sequence(1, maxRow)}" class="seat-row pb-3">
-                                <!-- Lặp qua các ghế trong mỗi hàng -->
-                                <th:block th:each="seat : ${seats}" th:if="${seat.rowAsInt == row}">
-                                    <div th:class="'seat ' + (${seat.status == 2} ? 'seat-booked' : 'seat-available')"
-                                         th:id="'flight_seat_' + ${seat.id}"
-                                         th:data-id="${seat.id}">
-                                        <span th:text="${seat.seatRow + seat.seatCol}"></span>
-                                    </div>
-                                    <div th:if="${seat.seatCol == 'C'}" style="width: 85px;"></div>
-                                </th:block>
+                                <!-- Duyệt qua từng cột từ A đến F -->
+                                <div th:each="col : ${cols}">
+
+                                    <!-- Tìm ghế theo row và col -->
+                                    <th:block th:with="seat=${seatMap.get(row) != null ? seatMap.get(row).get(col) : null}">
+
+                                        <!-- Nếu có ghế -->
+                                        <div th:if="${seat != null}"
+                                             th:class="'seat ' + (${seat.status == 2} ? 'seat-booked' : 'seat-available')"
+                                             th:id="'flight_seat_' + ${seat.id}"
+                                             th:data-id="${seat.id}">
+                                            <span th:text="${seat.seatRow + seat.seatCol}"></span>
+                                        </div>
+
+                                        <!-- Nếu không có ghế: giữ chỗ -->
+                                        <div th:if="${seat == null}" class="seat_not_found"></div>
+                                    </th:block>
+                                    <div th:if="${col == 'C'}" style="width: 85px;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

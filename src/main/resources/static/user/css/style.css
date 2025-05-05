@@ -591,6 +591,12 @@ a{
     justify-content: center;
 }
 
+.seat_not_found {
+    width: 50px;
+    height: 60px;
+    margin: 15px;
+}
+
 /*news*/
 .news {
     background-image: url('../img/background.jpg');

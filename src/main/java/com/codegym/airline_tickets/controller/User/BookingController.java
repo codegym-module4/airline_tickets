@@ -20,14 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/booking")
@@ -149,6 +146,15 @@ public class BookingController {
         model.addAttribute("dataBooking", dataBooking);
         model.addAttribute("textFlight", textFlight);
         model.addAttribute("flightId", id);
+
+        Map<Integer, Map<String, FlightSeatDTO>> seatMap = new HashMap<>();
+
+        for (FlightSeatDTO seat : lists) {
+            seatMap
+                    .computeIfAbsent(seat.getRowAsInt(), r -> new HashMap<>())
+                    .put(seat.getSeatCol(), seat);
+        }
+        model.addAttribute("seatMap", seatMap);
 
         return "user/booking/seats";
     }
