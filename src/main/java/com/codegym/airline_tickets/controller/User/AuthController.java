@@ -51,6 +51,11 @@ public class AuthController {
     private FirebaseStorageService firebaseStorageService;
 
     private final Map<String, String> resetCodes = new HashMap<>();
+    // Mã OTP gửi cho email
+    private final Map<String,String> verifyCodes = new HashMap<>();
+    // Account tạm thời chờ xác thực
+    private final Map<String,Account> pendingAccounts = new HashMap<>();
+
 
     @GetMapping("/login")
     public String loginPage() {
@@ -75,9 +80,51 @@ public class AuthController {
             model.addAttribute("error", "Email đã tồn tại!");
             return "auth/register";
         }
+
+        String otp = String.format("%06d", new Random().nextInt(999999));
+        verifyCodes.put(account.getEmail(), otp);
+
+        pendingAccounts.put(account.getEmail(), account);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(account.getEmail());
+        message.setSubject("Xác thực email đăng ký - Vietjet Air");
+        message.setText("Chào bạn,\n\nMã xác thực để hoàn tất đăng ký của bạn là: "
+                + otp + "\n\nNếu bạn không yêu cầu, vui lòng bỏ qua email này.");
+        mailSender.send(message);
+
+        model.addAttribute("email", account.getEmail());
+        return "auth/verify-registration";
+    }
+
+    @GetMapping("/verify-registration")
+    public String verifyRegistrationPage(@RequestParam("email") String email, Model model) {
+        model.addAttribute("email", email);
+        return "auth/verify-registration";
+    }
+
+
+    @PostMapping("/verify-registration")
+    public String processVerifyRegistration(@RequestParam("email") String email,
+                                            @RequestParam("otp") String otp,
+                                            Model model) {
+        String correctOtp = verifyCodes.get(email);
+        if (correctOtp == null || !correctOtp.equals(otp)) {
+            model.addAttribute("error", "Mã xác thực không đúng hoặc đã hết hạn!");
+            model.addAttribute("email", email);
+            return "auth/verify-registration";
+        }
+
+        Account account = pendingAccounts.get(email);
         accountService.register(account);
+
+        verifyCodes.remove(email);
+        pendingAccounts.remove(email);
+
         return "redirect:/login?register_success";
     }
+
+
 
     @GetMapping("/forgot-password")
     public String forgotPasswordPage() {
