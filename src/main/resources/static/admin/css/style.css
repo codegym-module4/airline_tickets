@@ -1,0 +1,63 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar .btn {
+    color: white !important;
+    background: none;
+    border: none;
+    font-size: 16px;
+}
+
+.navbar .btn:hover {
+    text-decoration: underline;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.container {
+    max-width: 800px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-action {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-action .btn {
+    background-color: red;
+    border: none;
+    color: white;
+}
+
+.btn-action .btn:hover {
+    background-color: darkred;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+}
+

@@ -12,4 +12,5 @@ public interface IAccountService extends IService<Account> {
     List<Account> getAllAccounts(Long id);
 
     Page<Account> getAllAccounts(Long id, Pageable pageable);
+
 }

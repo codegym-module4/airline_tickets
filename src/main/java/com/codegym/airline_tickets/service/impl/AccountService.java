@@ -6,9 +6,9 @@ import com.codegym.airline_tickets.repository.AccountRepository;
 import com.codegym.airline_tickets.repository.RoleRepository;
 import com.codegym.airline_tickets.repository.UserRepository;
 import com.codegym.airline_tickets.service.IAccountService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,12 +46,14 @@ public class AccountService implements IAccountService, UserDetailsService {
         accountRepository.save(account);
     }
 
+    @Transactional
     @Override
     public void update(long id, Account s) {
         s.setId(id);
         accountRepository.save(s);
     }
 
+    @Transactional
     @Override
     public void remove(Long id) {
         accountRepository.deleteById(id);
@@ -79,7 +82,27 @@ public class AccountService implements IAccountService, UserDetailsService {
 
     @Override
     public Page<Account> getAllAccounts(Long id, Pageable pageable) {
-        return accountRepository.findAllByDeletedAtIsNullAndRoleId(id, pageable);
+
+        List<Account> accounts = accountRepository.findAllByDeletedAtIsNullAndRoleId(id);
+
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Account> list;
+
+        if (accounts.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, accounts.size());
+            list = accounts.subList(startItem, toIndex);
+        }
+        Page<Account> accountsPage = new PageImpl<>(
+                list,
+                PageRequest.of(currentPage, pageSize),
+                accounts.size()
+        );
+
+        return accountsPage;
     }
 
     @Override

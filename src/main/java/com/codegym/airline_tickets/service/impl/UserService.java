@@ -5,6 +5,7 @@ import com.codegym.airline_tickets.entity.User;
 import com.codegym.airline_tickets.repository.UserRepository;
 import com.codegym.airline_tickets.service.IRoleService;
 import com.codegym.airline_tickets.service.IUserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void save(User s) {
-
+    public void save(User user) {
+        userRepository.save(user);
     }
 
     @Override
@@ -31,9 +32,10 @@ public class UserService implements IUserService {
 
     }
 
+    @Transactional
     @Override
     public void remove(Long id) {
-
+        userRepository.deleteById(id);
     }
 
     @Override
