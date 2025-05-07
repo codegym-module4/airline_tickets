@@ -1,9 +1,11 @@
 package com.codegym.airline_tickets.service.impl;
 
-import com.codegym.airline_tickets.entity.Role;
+import com.codegym.airline_tickets.dto.SeatDTO;
 import com.codegym.airline_tickets.entity.Seat;
-import com.codegym.airline_tickets.service.IRoleService;
+import com.codegym.airline_tickets.repository.SeatRepository;
 import com.codegym.airline_tickets.service.ISeatService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +13,12 @@ import java.util.List;
 @Service
 public class SeatService implements ISeatService {
 
+    @Autowired
+    private SeatRepository seatRepository;
+
     @Override
     public List<Seat> getAll() {
-        return List.of();
+        return seatRepository.findAll();
     }
 
     @Override
@@ -39,5 +44,11 @@ public class SeatService implements ISeatService {
     @Override
     public List<Seat> findByName(String name) {
         return List.of();
+    }
+
+
+    @Override
+    public List<SeatDTO> findAllSeats() {
+        return seatRepository.findAllSeats();
     }
 }

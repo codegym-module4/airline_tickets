@@ -5,17 +5,44 @@
     <title>Quản lý ghế ngồi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="/admin/css/seat.css">
 </head>
 <body>
 <!--Header-->
 <div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
-<div class="main-content container" style="margin-top: 60px;" id="mainContent">
+<div class="main-content container" id="mainContent">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="row">
-                    <div class="col-md-3 pe-0">
+                <div class="row py-5 justify-content-center">
+                    <div class="col-sm-11 col-md-10">
+                        <div class="row">
+                            <div class="col-sm-8 col-md-6 pe-md-4" style="border-right: 1px solid #222222">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <span class="fw-bold" th:text="${flight.departureAirport.city}"></span>
+                                    <span style="border: 1px dotted #222222; height: 1px" class="w-50">&nbsp;</span>
+                                    <i class="fa-solid fa-plane"></i>
+                                    <span class="fw-bold" th:text="${flight.arrivalAirport.city}"></span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div th:text="${flight.departureAirport.name}"></div>
+                                    <div th:text="${flight.arrivalAirport.name}"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3 ps-4 fw-bold">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span th:text="${textFlight}"></span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div th:text="${#temporals.format(flight.departure_time, 'HH:mm, dd/MM/yyyy')}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-lg-3 pe-0">
                         <!-- Legend -->
                         <div class="legend">
                             <div class="bg-danger p-3 w-100 text-center" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
@@ -29,31 +56,32 @@
                                 <div class="seat seat-booked"></div>
                                 <span class="ps-2">Đã đặt</span>
                             </div>
+                            <div class="d-flex align-items-center w-100">
+                                <div class="seat seat-broken"></div>
+                                <span class="ps-2">Đã hỏng</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-9 ps-0">
+                    <div class="col-12 col-lg-9 ps-0">
                         <!-- Seat map -->
                         <div class="seat-map-container bg-secondary">
                             <div id="seat-map" class="bg-white mx-5">
-                                <div th:each="row : ${#numbers.sequence(1, maxRow)}" class="seat-row pb-3">
-                                    <!-- Duyệt qua từng cột từ A đến F -->
-                                    <div th:each="col : ${cols}">
-
-                                        <!-- Tìm ghế theo row và col -->
-                                        <th:block th:with="seat=${seatMap.get(row) != null ? seatMap.get(row).get(col) : null}">
-
-                                            <!-- Nếu có ghế -->
-                                            <div th:if="${seat != null}"
-                                                 th:class="'seat ' + (${seat.status == 2} ? 'seat-booked' : 'seat-available')"
-                                                 th:id="'flight_seat_' + ${seat.id}"
-                                                 th:data-id="${seat.id}">
-                                                <span th:text="${seat.seatRow + seat.seatCol}"></span>
-                                            </div>
-
-                                            <!-- Nếu không có ghế: giữ chỗ -->
-                                            <div th:if="${seat == null}" class="seat_not_found"></div>
+                                <div class="col-12 col-xl-8 pb-3 mx-auto">
+                                    <div class="row align-items-center">
+                                        <th:block th:each="seat, iStat : ${seats}">
+                                            <th:block th:with="flightSeat=${seatMap.get(seat.seatNumber) != null ? seatMap.get(seat.seatNumber).get(seat.seatAlphabet) : null}">
+                                                <div th:if="${flightSeat != null}"
+                                                     th:class="'col-1 seat ' + (${flightSeat.status == 2} ? 'seat-booked' : (${flightSeat.status == 3} ? 'seat-broken' : 'seat-available'))"
+                                                     th:id="'seat_' + ${seat.id}"
+                                                     th:data-id="${seat.id}">
+                                                    <span th:text="${seat.seatAlphabet + seat.seatNumber}"></span>
+                                                </div>
+                                                <div th:if="${flightSeat == null}" class="col-1 seat seat-not-found">
+                                                    <i class="fa-solid fa-circle-plus fa-2x icon-seat-not-found text-primary" th:data-id="${seat.id}" th:data-name="${seat.seatAlphabet + seat.seatNumber}"></i>
+                                                </div>
+                                            </th:block>
+                                            <div th:if="${seat.seatAlphabet == 'C'}" class="col-1"></div>
                                         </th:block>
-                                        <div th:if="${col == 'C'}" style="width: 150px;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -63,11 +91,91 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông báo</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="txt-node"></p>
+                    <form class="clearfix" action="" method="post" id="form_edit">
+                        <input type="hidden" name="id" value="">
+                        <input type="hidden" name="flight_id" th:value="${flight.id}">
+                        <div class="row align-items-center">
+                            <label class="col-12 form-label">Trạng thái</label>
+                            <div class="col-12">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input border-black" type="radio" name="status" id="status1" value="1" checked>
+                                    <label class="form-check-label" for="status1">Bình thường</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input border-black" type="radio" name="status" id="status2" value="3">
+                                    <label class="form-check-label" for="status2">Hỏng</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" id="btnEditSeat" data-form_id="#form_edit">Chỉnh sửa</button>
+                    <button type="button" class="btn btn-danger" id="btnDeleteSeat">Xóa</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" data-bs-keyboard="false" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông báo</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="text-alert"></p>
+                    <form action="" method="post" id="form_create">
+                        <input type="hidden" name="id" value="">
+                        <input type="hidden" name="flight_id" th:value="${flight.id}">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnCreateSeat" data-form_id="#form_create">Tạo mới</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="/user/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/user/plugins/jquery/jquery.min.js"></script>
 <script>
+    $(document).on("click", ".seat-broken, .seat-available", function () {
+        let id = $(this).data("id");
+        let name = $(this).find("span").text();
+        $("#txt-node").html("<h5>Ghế " + name + "</h5>");
+        $("#form_edit input[name='id']").val(id);
+        if ($(this).hasClass("seat-available")) {
+            $("#status1").prop("checked", true);
+        }
+        if ($(this).hasClass("seat-broken")) {
+            $("#status2").prop("checked", true);
+        }
+        $("#modalEdit").modal("show");
+    });
 
+    $(document).on("click", ".icon-seat-not-found", function () {
+        let id = $(this).data("id");
+        let name = $(this).data("name");
+        $("#text-alert").html("<h5>Bạn có chắc muốn tạo thêm ghế " + name + " cho chuyến bay không?</h5>");
+        $("#form_create input[name='id']").val(id);
+        $("#modalCreate").modal("show");
+    });
+
+    $(document).on('hide.bs.modal', '#modalCreate, #modalEdit', function (event) {
+        $('input[name="id"]').val('');
+        $("#text-alert").html("");
+        $("#txt-node").html("");
+    });
 </script>
 </body>
 

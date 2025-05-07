@@ -105,7 +105,7 @@
                                     <th:block th:with="seat=${seatMap.get(row) != null ? seatMap.get(row).get(col) : null}">
 
                                         <!-- Nếu có ghế -->
-                                        <div th:if="${seat != null}"
+                                        <div th:if="${seat != null && seat.status != 3}"
                                              th:class="'seat ' + (${seat.status == 2} ? 'seat-booked' : 'seat-available')"
                                              th:id="'flight_seat_' + ${seat.id}"
                                              th:data-id="${seat.id}">
@@ -113,7 +113,7 @@
                                         </div>
 
                                         <!-- Nếu không có ghế: giữ chỗ -->
-                                        <div th:if="${seat == null}" class="seat_not_found"></div>
+                                        <div th:if="${seat == null || (seat != null && seat.status == 3)}" class="seat-not-found"></div>
                                     </th:block>
                                     <div th:if="${col == 'C'}" style="width: 85px;"></div>
                                 </div>
@@ -125,7 +125,7 @@
         </div>
     </section>
 </main>
-<div class="modal fade" id="modalResult" tabindex="-1" role="dialog" data-bs-keyboard="false" data-bs-backdrop="static">
+<div class="modal fade" id="modalResult" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

@@ -1,17 +1,20 @@
 package com.codegym.airline_tickets.controller.Admin;
 
 import com.codegym.airline_tickets.dto.FlightSeatDTO;
+import com.codegym.airline_tickets.dto.SeatDTO;
 import com.codegym.airline_tickets.entity.Col;
+import com.codegym.airline_tickets.entity.Flight;
 import com.codegym.airline_tickets.entity.Row;
-import com.codegym.airline_tickets.service.IColService;
-import com.codegym.airline_tickets.service.IFlightSeatService;
-import com.codegym.airline_tickets.service.IRowService;
+import com.codegym.airline_tickets.entity.Seat;
+import com.codegym.airline_tickets.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,31 +29,32 @@ public class FlightSeatController {
     private IFlightSeatService flightSeatService;
 
     @Autowired
-    private IColService colService;
+    private ISeatService seatService;
+
+    @Autowired
+    private IFlightService flightService;
 
     @GetMapping("/flight/{id}")
-    public String seat(@PathVariable long id, Model model) {
-        List<FlightSeatDTO> lists = flightSeatService.getAllSeatByFlightId(id);
-        lists.forEach(seat -> seat.setRowAsInt(Integer.parseInt(seat.getSeatRow())));
-        int maxRow = lists.stream()
-                .mapToInt(seat -> Integer.parseInt(seat.getSeatRow()))
-                .max()
-                .orElse(40);
-
-        Map<Integer, Map<String, FlightSeatDTO>> seatMap = new HashMap<>();
-
-        for (FlightSeatDTO seat : lists) {
-            seatMap
-                    .computeIfAbsent(seat.getRowAsInt(), r -> new HashMap<>())
-                    .put(seat.getSeatCol(), seat);
+    public String seat(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
+        Flight flight = flightService.findById(id);
+        if (flight == null) {
+            redirectAttributes.addFlashAttribute("message", "Chuyến bay không tồn tại");
+            return "redirect:/admin/flight";
         }
-//        List<Col> seatCols = colService.getAll();
-        List<String> cols = colService.getAll().stream()
-                .map(Col::getAlphabet)
-                .collect(Collectors.toList());
-        model.addAttribute("cols", cols);
-        model.addAttribute("maxRow", maxRow);
-        model.addAttribute("seats", lists);
+        List<FlightSeatDTO> lists = flightSeatService.getAllSeatByFlightId(id);
+        Map<String, Map<String, FlightSeatDTO>> seatMap = new HashMap<>();
+        if (!lists.isEmpty()) {
+            lists.forEach(seat -> seat.setRowAsInt(Integer.parseInt(seat.getSeatRow())));
+
+            for (FlightSeatDTO seat : lists) {
+                seatMap
+                        .computeIfAbsent(seat.getSeatRow(), r -> new HashMap<>())
+                        .put(seat.getSeatCol(), seat);
+            }
+        }
+        List<SeatDTO> seats = seatService.findAllSeats();
+        model.addAttribute("flight", flight);
+        model.addAttribute("seats", seats);
         model.addAttribute("seatMap", seatMap);
 
         return "admin/flight_seat/seats";
