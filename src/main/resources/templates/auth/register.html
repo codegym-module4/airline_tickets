@@ -7,7 +7,7 @@
     <div class="auth-container">
         <h2>Đăng ký</h2>
         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-        <form th:action="@{/register}" th:object="${account}" method="post">
+        <form th:action="@{/register}" th:object="${account}" method="post" id="registerForm">
             <div class="mb-3">
                 <label for="email" class="form-label">Email:</label>
                 <input type="email" id="email" th:field="*{email}" class="form-control" required/>
@@ -15,6 +15,10 @@
             <div class="mb-3">
                 <label for="password" class="form-label">Mật khẩu:</label>
                 <input type="password" id="password" th:field="*{password}" class="form-control" required minlength="6"/>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Xác nhận mật khẩu:</label>
+                <input type="password" id="confirmPassword" class="form-control" required minlength="6"/>
             </div>
             <div class="mb-3">
                 <label for="fullName" class="form-label">Họ và tên:</label>

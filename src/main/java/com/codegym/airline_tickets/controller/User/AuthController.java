@@ -51,6 +51,11 @@ public class AuthController {
     private FirebaseStorageService firebaseStorageService;
 
     private final Map<String, String> resetCodes = new HashMap<>();
+    // Mã OTP gửi cho email
+    private final Map<String,String> verifyCodes = new HashMap<>();
+    // Account tạm thời chờ xác thực
+    private final Map<String,Account> pendingAccounts = new HashMap<>();
+
 
     @GetMapping("/login")
     public String loginPage() {
