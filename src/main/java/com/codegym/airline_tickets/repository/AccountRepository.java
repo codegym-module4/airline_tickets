@@ -19,7 +19,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query(value = "SELECT a.* FROM accounts a where a.email = :email", nativeQuery = true)
     Optional<Account> findByEmail(String email);
 
-    Account findByEmployeeId(Long id);
+    Optional<Account> findByEmployeeId(Long id);
 
 
 }

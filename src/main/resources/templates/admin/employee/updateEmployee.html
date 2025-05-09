@@ -9,10 +9,10 @@
         .container {
             max-width: 800px;
             background: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
         }
         .btn-action .btn {
             background-color: red;
@@ -27,7 +27,7 @@
 <body>
 
 <!-- Sidebar -->
-<div th:replace="admin/sidebar/sidebar :: adminSidebar"></div>
+<div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
 
 <!-- Main Content -->
 <div class="main-content container" id="mainContent">
@@ -35,84 +35,80 @@
     <h4 class="text-center mb-4">CẬP NHẬT NHÂN VIÊN</h4>
 
     <form th:action="@{/admin/employee/updateEmployee}" th:object="${employeeAccountDTO}" method="post">
-        <input type="hidden" th:field="*{employeeId}"/>
+        <!-- Ẩn thông tin ID -->
+        <input type="hidden" th:field="*{employeeId}" />
+        <input type="hidden" th:field="*{accountId}" />
+        <input type="hidden" th:field="*{roleId}" />
 
         <div class="row">
-            <div class="col-md-6 form-group mb-3">
-                <label>Mã nhân viên</label>
-                <input type="text" class="form-control" th:field="*{code}" readonly>
+            <!-- Mã NV -->
+            <div class="col-md-6 mb-3">
+                <label for="code">Mã nhân viên</label>
+                <input type="text" class="form-control" th:field="*{code}" id="code" readonly>
             </div>
 
-            <div class="col-md-6 form-group">
-                <label>Họ tên</label>
-                <input type="text" class="form-control" th:field="*{fullName}" th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid'">
-                <div class="invalid-feedback" th:errors="*{fullName}"></div>
+            <!-- Họ tên -->
+            <div class="col-md-6 mb-3">
+                <label for="fullName">Họ tên</label>
+                <input type="text" class="form-control" th:field="*{fullName}" id="fullName">
             </div>
 
-            <div class="col-md-6 form-group">
-                <label>Ngày sinh</label>
-                <input type="date" class="form-control" th:field="*{dob}" th:classappend="${#fields.hasErrors('dob')} ? 'is-invalid'">
-                <div class="invalid-feedback" th:errors="*{dob}"></div>
+            <!-- Ngày sinh -->
+            <div class="col-md-6 mb-3">
+                <label for="dob">Ngày sinh</label>
+                <input type="date" class="form-control" th:field="*{dob}" id="dob">
             </div>
-            <div class="col-md-6 form-group">
-                <label th:for="phone" class="form-label">Số điện thoại</label>
-                <input type="text" class="form-control" th:field="*{phone}"
-                       th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'">
-                <div class="invalid-feedback" th:errors="*{phone}"></div>
+
+            <!-- Số điện thoại -->
+            <div class="col-md-6 mb-3">
+                <label for="phone">Số điện thoại</label>
+                <input type="text" class="form-control" th:field="*{phone}" id="phone">
             </div>
-            <div class="col-md-6 form-group">
-                <label>Giới tính</label>
-                <select class="form-control" th:field="*{gender}">
-                    <option value="Male" th:selected="*{gender == 'Male'}">Nam</option>
-                    <option value="Female" th:selected="*{gender == 'Female'}">Nữ</option>
-                    <option value="Other" th:selected="*{gender == 'Other'}">Khác</option>
+
+            <!-- Giới tính -->
+            <div class="col-md-6 mb-3">
+                <label for="gender">Giới tính</label>
+                <select class="form-control" th:field="*{gender}" id="gender">
+                    <option value="Male">Nam</option>
+                    <option value="Female">Nữ</option>
+                    <option value="Other">Khác</option>
                 </select>
-
-            </div>
-            <div class="col-md-6 form-group">
-                <label>Quê Quán</label>
-                <input type="text" class="form-control" th:field="*{address}" th:classappend="${#fields.hasErrors('address')} ? 'is-invalid'">
-                <div class="invalid-feedback" th:errors="*{address}"></div>
-            </div>
-        </div>
-
-        <!-- Tài khoản -->
-        <div class="row mt-4">
-            <div class="col-md-6 form-group">
-                <label>Email</label>
-                <input type="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
-                <div class="invalid-feedback" th:errors="*{email}"></div>
-                <div class="text-danger" th:if="${errorEmailExists != null}" th:text="${errorEmailExists}"></div>
-
             </div>
 
-            <div class="col-md-6 form-group">
-                <label>Mật khẩu</label>
-                <p>Nhấn "Reset mật khẩu" để đặt lại về mặc định.</p>
-                <input type="hidden" id="resetPassword" name="resetPassword" value="false">
-                <button type="button" class="btn btn-warning" onclick="resetPassword()">Reset mật khẩu</button>
+            <!-- Địa chỉ -->
+            <div class="col-md-6 mb-3">
+                <label for="address">Địa chỉ</label>
+                <input type="text" class="form-control" th:field="*{address}" id="address">
             </div>
 
-            <div class="col-md-6 form-group mb-3">
-                <label>Vai trò</label>
-                <input type="text" class="form-control" th:value="${employeeAccountDTO.roleName}" readonly>
-                <input type="hidden" th:field="*{roleId}" />
+            <!-- Email -->
+            <div class="col-md-6 mb-3">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" th:field="*{email}" id="email">
+            </div>
+
+            <!-- Mật khẩu -->
+            <div class="col-md-6 mb-3">
+                <label for="password">Mật khẩu (nếu cần đổi)</label>
+                <input type="password" class="form-control" th:field="*{password}" id="password">
+            </div>
+
+            <!-- Vai trò -->
+            <div class="col-md-6 mb-3">
+                <label for="role">Vai trò</label>
+                <input type="text" class="form-control" th:value="${employeeAccountDTO.roleName}" id="role" readonly>
             </div>
         </div>
 
+        <!-- Nút hành động -->
         <div class="btn-action mt-4 text-center">
             <a th:href="@{/admin/employee/listEmployee}" class="btn">Quay lại</a>
             <button type="submit" class="btn">Cập nhật</button>
         </div>
     </form>
 </div>
-<script>
-    function resetPassword() {
-        if (confirm("Bạn có chắc muốn đặt lại mật khẩu nhân viên về mặc định?")) {
-            document.getElementById('resetPassword').value = 'true';
-            alert("Mật khẩu sẽ được đặt lại khi bạn nhấn 'Cập nhật'");
-        }
-    }
-</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
