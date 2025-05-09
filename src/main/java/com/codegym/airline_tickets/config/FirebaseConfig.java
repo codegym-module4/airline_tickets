@@ -15,7 +15,6 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp initializeFirebase() throws IOException {
         FileInputStream serviceAccount = new FileInputStream("src/main/resources/firebase/airline-tickets-52c6e-firebase-adminsdk-fbsvc-92a905fc8e.json");
-
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .setStorageBucket("airline-tickets-52c6e.firebasestorage.app")

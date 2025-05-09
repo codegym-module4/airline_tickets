@@ -43,7 +43,7 @@ public class AirportService implements IAirportService {
 
     @Override
     public Airport findById(long id) {
-        return null;
+        return airportRepository.findById(id).orElse(null);
     }
 
     @Override

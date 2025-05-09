@@ -47,7 +47,6 @@ public class EmployeeController {
     private BCryptPasswordEncoder passwordEncoder;
 
 
-
     // ============================ LIST ===================================
     @GetMapping("/listEmployee")
     public String listEmployees(Model model) {
@@ -83,12 +82,9 @@ public class EmployeeController {
             Employee employee = employeeOpt.get();
 
             // Tìm Account của Employee
-            Account account = accountRepository.findByEmployeeId(employee.getId());
+            Optional<Account> accountOpt = accountRepository.findByEmployeeId(employee.getId());
+            accountOpt.ifPresent(accountRepository::delete);
 
-            if (account != null) {
-                // Xóa Account tương ứng
-                accountRepository.delete(account);
-            }
 
             // Xóa Employee
             employeeRepository.delete(employee);
@@ -164,36 +160,32 @@ public class EmployeeController {
         accountService.save(account);
 
 
-
         redirect.addFlashAttribute("message", "Thêm nhân viên thành công!");
         return "redirect:/admin/employee/listEmployee";
     }
+
     // ============================ UPDATE GET =============================
     @GetMapping("/updateEmployee")
-    public String showUpdateEmployeeForm(@RequestParam("id") Long employeeId, Model model) {
-        EmployeeAccountDTO dto = employeeService.getEmployeeAccountDTOById(employeeId);
+    public String showEditForm(@RequestParam("id") Long id, Model model) {
+        EmployeeAccountDTO dto = employeeService.getEmployeeAccountDTOById(id);
         model.addAttribute("employeeAccountDTO", dto);
-
+        model.addAttribute("roles", roleRepository.findAll());
         return "admin/employee/updateEmployee";
     }
 
 
+
+
     // ============================ UPDATE POST ============================
     @PostMapping("/updateEmployee")
-    public String updateEmployee(@ModelAttribute("employeeAccountDTO") EmployeeAccountDTO dto,
-                                 @RequestParam(value = "resetPassword", defaultValue = "false") boolean resetPassword,
-                                 RedirectAttributes redirect,
-                                 Model model) {
+    public String updateEmployee(@ModelAttribute("employeeAccountDTO") EmployeeAccountDTO dto, RedirectAttributes redirectAttributes) {
         try {
-            employeeService.updateEmployeeAndAccount(dto, resetPassword);
-            redirect.addFlashAttribute("message", "Cập nhật nhân viên thành công!");
-            return "redirect:/admin/employee/listEmployee";
-        } catch (RuntimeException e) {
-            model.addAttribute("errorEmailExists", e.getMessage());
-            model.addAttribute("employeeAccountDTO", dto);
-            model.addAttribute("roleList", roleService.getAll());
-            return "admin/employee/updateEmployee";
+            employeeService.updateEmployeeAndAccount(dto);
+            redirectAttributes.addFlashAttribute("success", "Cập nhật thành công");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
+        return "redirect:/admin/employee/listEmployee";
     }
 
 }
