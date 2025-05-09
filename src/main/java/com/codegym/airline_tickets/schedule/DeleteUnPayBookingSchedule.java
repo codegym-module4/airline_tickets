@@ -38,7 +38,7 @@ public class DeleteUnPayBookingSchedule {
                 List<Ticket> tickets = ticketService.findByBooking(record);
                 tickets.forEach(ticket -> {
                     flightSeatService.updateStatusById(ticket.getSeat().getId(), 1);
-                    pusherEvent.pusherTrigger("flight." + ticket.getFlight().getId(), "seat-unoccupied", ticket.getSeat().getId());
+                    pusherEvent.pusherTrigger("flight." + ticket.getFlight().getId(), "seat-unoccupied", ticket.getSeat());
                 });
                 ticketService.deleteAll(tickets);
                 bookingService.remove(record.getId());

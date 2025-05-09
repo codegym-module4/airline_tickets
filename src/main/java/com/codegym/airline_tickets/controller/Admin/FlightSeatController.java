@@ -54,6 +54,7 @@ public class FlightSeatController {
         }
         List<SeatDTO> seats = seatService.findAllSeats();
         model.addAttribute("flight", flight);
+        model.addAttribute("flight_id", id);
         model.addAttribute("seats", seats);
         model.addAttribute("seatMap", seatMap);
 

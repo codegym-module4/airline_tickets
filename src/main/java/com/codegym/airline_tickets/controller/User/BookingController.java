@@ -1,9 +1,6 @@
 package com.codegym.airline_tickets.controller.User;
 
-import com.codegym.airline_tickets.dto.BookingDTO;
-import com.codegym.airline_tickets.dto.BookingTicketDTO;
-import com.codegym.airline_tickets.dto.CountryDTO;
-import com.codegym.airline_tickets.dto.FlightSeatDTO;
+import com.codegym.airline_tickets.dto.*;
 import com.codegym.airline_tickets.entity.*;
 import com.codegym.airline_tickets.service.*;
 import com.codegym.airline_tickets.util.GetCountries;
@@ -44,6 +41,9 @@ public class BookingController {
 
     @Autowired
     private ITicketService ticketService;
+
+    @Autowired
+    private ISeatService seatService;
 
     @GetMapping("/{key}")
     public String index(@PathVariable String key, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
@@ -121,16 +121,9 @@ public class BookingController {
             redirectAttributes.addFlashAttribute("messageError", "Chuyến bay không tồn tại");
             return "redirect:/";
         }
+        List<SeatDTO> seats = seatService.findAllSeats();
         List<FlightSeatDTO> lists = flightSeatService.getAllSeatByFlightId(id);
-        lists.forEach(seat -> seat.setRowAsInt(Integer.parseInt(seat.getSeatRow())));
-        int maxRow = lists.stream()
-                .mapToInt(seat -> Integer.parseInt(seat.getSeatRow()))
-                .max()
-                .orElse(40);
-        model.addAttribute("maxRow", maxRow);
-        model.addAttribute("seats", lists);
-        model.addAttribute("flight", flight);
-        model.addAttribute("key", key);
+
         Map<String, String> dataConfirm = (Map<String, String>) session.getAttribute("confirm-data" + key);
         BookingDTO dataBooking = (BookingDTO) session.getAttribute("BookingDTO" + key);
         String noFlight = "2";
@@ -142,19 +135,21 @@ public class BookingController {
             }
         }
 
+        Map<String, Map<String, FlightSeatDTO>> seatMap = new HashMap<>();
+
+        for (FlightSeatDTO seat : lists) {
+            seatMap
+                    .computeIfAbsent(seat.getSeatRow(), r -> new HashMap<>())
+                    .put(seat.getSeatCol(), seat);
+        }
+        model.addAttribute("seatMap", seatMap);
+        model.addAttribute("seats", seats);
+        model.addAttribute("flight", flight);
+        model.addAttribute("key", key);
         model.addAttribute("noFlight", noFlight);
         model.addAttribute("dataBooking", dataBooking);
         model.addAttribute("textFlight", textFlight);
         model.addAttribute("flightId", id);
-
-        Map<Integer, Map<String, FlightSeatDTO>> seatMap = new HashMap<>();
-
-        for (FlightSeatDTO seat : lists) {
-            seatMap
-                    .computeIfAbsent(seat.getRowAsInt(), r -> new HashMap<>())
-                    .put(seat.getSeatCol(), seat);
-        }
-        model.addAttribute("seatMap", seatMap);
 
         return "user/booking/seats";
     }

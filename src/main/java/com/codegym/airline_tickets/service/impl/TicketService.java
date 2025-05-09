@@ -84,6 +84,11 @@ public class TicketService implements ITicketService {
         return ticketRepository.findByBookingIdAndFlightId(bookingId, flightId);
     }
 
+    @Override
+    public Ticket findByFlightIdAndSeatId(Long flightId, Long seatId) {
+        return ticketRepository.findByFlightIdAndSeatId(flightId, seatId);
+    }
+
     private static String generateNextCode(long number) {
         if (number == 0) {
             return "VE001";

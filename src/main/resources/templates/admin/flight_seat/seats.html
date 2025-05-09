@@ -73,7 +73,9 @@
                                                 <div th:if="${flightSeat != null}"
                                                      th:class="'col-1 seat ' + (${flightSeat.status == 2} ? 'seat-booked' : (${flightSeat.status == 3} ? 'seat-broken' : 'seat-available'))"
                                                      th:id="'seat_' + ${seat.id}"
-                                                     th:data-id="${seat.id}">
+                                                     th:data-id="${seat.id}"
+                                                     th:data-flight_seat_id="${flightSeat.id}"
+                                                >
                                                     <span th:text="${seat.seatAlphabet + seat.seatNumber}"></span>
                                                 </div>
                                                 <div th:if="${flightSeat == null}" class="col-1 seat seat-not-found">
@@ -86,20 +88,21 @@
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" name="flight_id" th:value="${flight_id}">
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Thông báo</h4>
+                    <h4 class="modal-title">Chỉnh sửa ghế ngồi</h4>
                 </div>
                 <div class="modal-body">
                     <p id="txt-node"></p>
-                    <form class="clearfix" action="" method="post" id="form_edit">
+                    <form class="clearfix" action="/api/flight-seat/updateStatus" method="POST" id="form_edit">
                         <input type="hidden" name="id" value="">
                         <input type="hidden" name="flight_id" th:value="${flight.id}">
                         <div class="row align-items-center">
@@ -119,27 +122,42 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" id="btnEditSeat" data-form_id="#form_edit">Chỉnh sửa</button>
-                    <button type="button" class="btn btn-danger" id="btnDeleteSeat">Xóa</button>
+                    <button type="button" class="btn btn-danger" id="btnDeleteSeat" data-form_id="#form_edit">Xóa</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" data-bs-keyboard="false" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Xác nhận tạo mới</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="text-alert"></p>
+                    <form action="/api/flight-seat" method="post" id="form_create">
+                        <input type="hidden" name="seat" value="">
+                        <input type="hidden" name="flight" th:value="${flight.id}">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnCreateSeat" data-form_id="#form_create">Tạo mới</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalResult" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Thông báo</h4>
                 </div>
                 <div class="modal-body">
-                    <p id="text-alert"></p>
-                    <form action="" method="post" id="form_create">
-                        <input type="hidden" name="id" value="">
-                        <input type="hidden" name="flight_id" th:value="${flight.id}">
-                    </form>
+                    <p id="text-result"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnCreateSeat" data-form_id="#form_create">Tạo mới</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
@@ -150,7 +168,7 @@
 <script src="/user/plugins/jquery/jquery.min.js"></script>
 <script>
     $(document).on("click", ".seat-broken, .seat-available", function () {
-        let id = $(this).data("id");
+        let id = $(this).data("flight_seat_id");
         let name = $(this).find("span").text();
         $("#txt-node").html("<h5>Ghế " + name + "</h5>");
         $("#form_edit input[name='id']").val(id);
@@ -167,14 +185,96 @@
         let id = $(this).data("id");
         let name = $(this).data("name");
         $("#text-alert").html("<h5>Bạn có chắc muốn tạo thêm ghế " + name + " cho chuyến bay không?</h5>");
-        $("#form_create input[name='id']").val(id);
+        $("#form_create input[name='seat']").val(id);
         $("#modalCreate").modal("show");
     });
 
-    $(document).on('hide.bs.modal', '#modalCreate, #modalEdit', function (event) {
+    $(document).on("click", ".seat-booked", function () {
+        let id = $(this).data("id");
+        let flight_id = $('input[name="flight_id"]').val();
+        let flight_seat_id = $(this).data("flight_seat_id");
+        let name = $(this).find("span").text();
+        $.ajax({
+            method: "GET",
+            url: "/api/ticket/getTicketBySeat",
+            data: {
+                seat_id : id,
+                flight_id : flight_id,
+                flight_seat_id : flight_seat_id
+            },
+            dataType: 'json'
+        }).done(function (data) {
+            let ticket = data.object;
+            let text = "Ghế " + name + " đã được khách hàng " + ticket.name + " đặt trước." +
+                "<br>Vui lòng liên hệ với khách hàng " + ticket.name + " để thông báo về việc thay đổi ghế ngồi của khách trước khi sửa đổi.";
+            $("#text-result").html("<h5>" + text + "</h5>");
+            $("#modalResult").modal("show");
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on('hide.bs.modal', '#modalCreate, #modalEdit, #modalResult', function (event) {
         $('input[name="id"]').val('');
-        $("#text-alert").html("");
-        $("#txt-node").html("");
+        $('input[name="seat"]').val('');
+        $("#text-alert, #txt-node, #text-result").html("");
+    });
+
+    $(document).on("click", "#btnEditSeat", function () {
+        let formId = $(this).data("form_id");
+        $.ajax({
+            method: $(formId).attr('method'),
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            dataType: 'json'
+        }).done(function (data) {
+            alert(data.message);
+            location.reload();
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on("click", "#btnCreateSeat", function () {
+        let formId = $(this).data("form_id");
+        $.ajax({
+            method: $(formId).attr('method'),
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            dataType: 'json'
+        }).done(function (data) {
+            alert(data.message);
+            location.reload();
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on("click", "#btnDeleteSeat", function () {
+        let text = $("#modalEdit #txt-node h5").text();
+        let name = text.split(" ")[1];
+        let formId = $(this).data("form_id");
+        let id = $(formId + " input[name='id']").val();
+        if (confirm("Bạn có chắc là muốn xóa ghế " + name + " không?")) {
+            $.ajax({
+                method: "DELETE",
+                url: "/api/flight-seat/" + id,
+                dataType: 'json'
+            }).done(function (data) {
+                alert(data.message);
+                location.reload();
+            }).fail(function (jqXhr, json, errorThrown) {
+                if (jqXhr.responseJSON.errors) {
+                    alert(jqXhr.responseJSON.message);
+                }
+            });
+        }
     });
 </script>
 </body>

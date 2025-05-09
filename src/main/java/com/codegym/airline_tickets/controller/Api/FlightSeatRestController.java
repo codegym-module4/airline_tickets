@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -168,7 +165,70 @@ public class FlightSeatRestController {
             );
             Ticket result = ticketService.updateOrCreate(ticket);
             flightSeatService.updateStatusById(s.getId(), 2);
-            pusherEvent.pusherTrigger("flight." + flight.getId(), "seat-occupied", s.getId());
+            pusherEvent.pusherTrigger("flight." + flight.getId(), "seat-occupied", s);
         }
+    }
+
+    @PostMapping("/updateStatus")
+    public ResponseEntity<ResponseObject> updateStatus(@RequestParam Map<String, String> requestBody) {
+        Long id = Long.parseLong(requestBody.get("id"));
+
+        FlightSeat seat = flightSeatService.findById(id);
+
+        if (seat == null) {
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .errors(true)
+                            .message("Thông tin ghế ngồi không tồn tại.")
+                            .build()
+            );
+        }
+
+        if (requestBody.get("status") != null) {
+            Integer status = Integer.parseInt(requestBody.get("status"));
+            seat.setStatus(status);
+            FlightSeat res = flightSeatService.updateOrCreate(seat);
+            pusherEvent.pusherTrigger("flight." + seat.getFlight().getId(), "seat-edited", res);
+        }
+
+        return ResponseEntity.ok().body(
+                ResponseObject.builder()
+                        .message("Chỉnh sửa thông tin ghế " + seat.getSeat().getCol().getAlphabet() + seat.getSeat().getRow().getNumber() + " thành công")
+                        .build()
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> delete(@PathVariable("id") Long id) {
+        FlightSeat seat = flightSeatService.findById(id);
+        if (seat == null) {
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .errors(true)
+                            .message("Thông tin ghế ngồi không tồn tại.")
+                            .build()
+            );
+        }
+
+        flightSeatService.remove(id);
+        pusherEvent.pusherTrigger("flight." + seat.getFlight().getId(), "seat-deleted", seat);
+        return ResponseEntity.ok().body(
+                ResponseObject.builder()
+                        .message("Xóa thông tin ghế " + seat.getSeat().getCol().getAlphabet() + seat.getSeat().getRow().getNumber() + " thành công")
+                        .build()
+        );
+
+    }
+
+    @PostMapping()
+    public ResponseEntity<ResponseObject> create(@ModelAttribute FlightSeat seat) {
+        seat.setStatus(1);
+        flightSeatService.save(seat);
+        pusherEvent.pusherTrigger("flight." + seat.getFlight().getId(), "seat-created", seat);
+        return ResponseEntity.ok().body(
+                ResponseObject.builder()
+                        .message("Tạo mới ghế " + seat.getSeat().getCol().getAlphabet() + seat.getSeat().getRow().getNumber() + " thành công")
+                        .build()
+        );
     }
 }
