@@ -1,8 +1,7 @@
-
 .table th, button {
     background-color: red;
     color: white;
-    border: solid 1px red ;
+    border: solid 1px red;
     border-radius: 6px;
 }
 

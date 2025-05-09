@@ -122,7 +122,7 @@ public class UserController {
             newUser.setAddress(user.getAddress());
             newUser.setNationality(user.getNationality());
 
-            Account existAccount = accountService.getAccountByEmail(user.getEmail());
+            Account existAccount = accountService.findAccountByEmail(user.getEmail());
             if (existAccount != null) {
                 redirectAttributes.addFlashAttribute("error", "Email đã tồn tại. Vui lòng chọn email khác!");
                 return "redirect:/admin/customer";
@@ -140,9 +140,10 @@ public class UserController {
             emailRequest.setSubject("Thông tin tài khoản đăng nhập");
             emailRequest.setAccount(account);
             emailRequest.setName(user.getFullName());
+
             boolean isSuccess = sendEmail(emailRequest, redirectAttributes);
             if (isSuccess) {
-                redirectAttributes.addFlashAttribute("message", "Thêm khách hàng thành công!. Tài khoản đăng nhập đã được gửi email cho khách hàng.!");
+                redirectAttributes.addFlashAttribute("message", "Thêm thông tin thành công!. Tài khoản đăng nhập đã được gửi tới email đăng kí.!");
                 accountService.register(account);
             } else {
                 redirectAttributes.addFlashAttribute("error", "Gửi email thất bại.!");
@@ -191,10 +192,11 @@ public class UserController {
 
         Account accounts = accountService.getAccountByEmail(email);
         if (email.equals("")) {
+            redirectAttributes.addFlashAttribute("error", "Không tìm thấy email theo yêu cầu!");
             return "redirect:/admin/customer";
         }
         if (accounts == null) {
-            redirectAttributes.addFlashAttribute("error", "Không tìm thấy khách hàng theo yêu cầu!");
+            redirectAttributes.addFlashAttribute("error", "Không tìm thấy email theo yêu cầu!");
             return "redirect:/admin/customer";
         }
         list.add(accounts);
@@ -249,8 +251,6 @@ public class UserController {
     public String update(@Valid @ModelAttribute("user") UserRequestDTO userReq, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         if (bindingResult.hasErrors()) {
-//            Map<String, String> listErrorsMes = ValidationMessage.getErrorMes(bindingResult);
-//            model.addAttribute("listErrorMes", listErrorsMes);
             redirectAttributes.addFlashAttribute("error", "Đã có lỗi xảy ra. Vui lòng thử lại!");
             return "redirect:/admin/customer";
         }
