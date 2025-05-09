@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Quản lý khách hàng</title>
-    <link rel="stylesheet" type="text/css" media="all" href="/user/plugins/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<head th:replace="~{admin/layouts/head::head ('Quản lý thông tin khách hàng')}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
@@ -48,10 +42,7 @@
             <th>Giới tính</th>
             <th>Số điện thoại</th>
             <th>Email</th>
-            <!--            <th>Địa chỉ</th>-->
-            <!--            <th>Quốc tịch</th>-->
             <th>Số CCCD</th>
-            <!--            <th>Xếp hạng</th>-->
             <th>Thao tác</th>
 
         </tr>
@@ -73,16 +64,8 @@
             <td th:text="${account.user.gender != null ? account.user.gender : 'Trống'}"></td>
             <td th:text="${account.user.phone != null ? account.user.phone : 'Trống'}"></td>
             <td th:text="${account.email != null ? account.email : 'Trống'}"></td>
-            <!--            <td th:text="${account.user.address != null ? account.user.address : 'Trống'}"></td>-->
-            <!--            <td th:text="${account.user.nationality != null ? account.user.nationality : 'Trống'}"></td>-->
             <td th:text="${account.user.citizenIdentification != null ? account.user.citizenIdentification : 'Trống'}"></td>
-            <!--            <td th:text="${account.user.ranking != null ? account.user.ranking : 'Trống'}"></td>-->
-            <td class="d-flex">
-                <!--                <a th:href="@{'/admin/customer/update/' + ${account.id}}"-->
-                <!--                   class="btn btn-sm btn-warning me-2" th:data-id=" ${account.id}"> <i-->
-                <!--                        class="bi bi-pencil-square"></i></a>-->
-
-
+            <td>
                 <a id="btnUpdate" class="btn btn-sm btn-warning me-2" th:data-id=" ${account.id}">
                     <i
                             class="bi bi-pencil-square">
@@ -110,27 +93,6 @@
 
     <th:block th:replace="~{admin/customer/pagination::pagination}"></th:block>
 </div>
-<!-- Bootstrap JS & Popper -->
-<th:block th:replace="~{user/layouts/script::script}"></th:block>
-<script>
-    $(document).on("click", "#btnUpdate", function (e) {
-        const id = $(this).data("id");
-        const url = `/admin/customer/update/${id}`;
-        $.ajax({
-            type: 'GET',
-            url: url,
-            dataType: 'json'
-        }).done(function (data) {
-            if (data.html) {
-                $("#userDetail .modal-body").html(data.html);
-                $("#userDetail").modal("show");
-            }
-        }).fail(function (jqXhr, json, errorThrown) {
-            if (jqXhr.responseJSON.errors) {
-                alert(jqXhr.responseJSON.message);
-            }
-        });
-    });
-</script>
+<th:block th:replace="~{admin/layouts/script::script}"></th:block>
 </body>
 </html>

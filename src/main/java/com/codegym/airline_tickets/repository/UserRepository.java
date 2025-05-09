@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT u.code FROM User u ORDER BY u.code DESC LIMIT 1")
+    @Query(value = "SELECT code FROM users ORDER BY code DESC LIMIT 1", nativeQuery = true)
     String findMaxCode();
 
 
