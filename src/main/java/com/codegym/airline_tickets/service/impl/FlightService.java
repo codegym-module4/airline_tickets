@@ -30,22 +30,23 @@ public class FlightService implements IFlightService {
 
     @Override
     public List<Flight> getAll() {
-        return List.of();
+        return flightRepository.findAll();
     }
 
     @Override
     public void save(Flight s) {
-//
+        flightRepository.save(s);
     }
 
     @Override
     public void update(long id, Flight s) {
-    //
+        s.setId(id);
+        flightRepository.save(s);
     }
 
     @Override
     public void remove(Long id) {
-        //
+        flightRepository.deleteById(id);
     }
 
     @Override
