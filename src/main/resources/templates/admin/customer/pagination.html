@@ -1,0 +1,31 @@
+<th:block th:fragment="pagination">
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a class="page-link"
+                       aria-label="Previous"
+                       th:href="@{/admin/customer(size=${accountsPage.size}, page=${currentPage - 1})}">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only"></span>
+                    </a>
+                </li>
+                <li class="page-item" th:if="${accountsPage.totalPages > 0}" th:each="pageNumber : ${pageNumbers}">
+                    <a th:href="@{/admin/customer(size=${accountsPage.size}, page=${pageNumber})}"
+                       th:text=${pageNumber}
+                       th:classappend="${currentPage == pageNumber} ? 'active'"
+                       class="page-link"
+                    ></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == accountsPage.totalPages} ? 'disabled'">
+                    <a class="page-link"
+                       aria-label="Next"
+                       th:href="@{/admin/customer(size=${accountsPage.size}, page=${currentPage + 1})}">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</th:block>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <title th:text="${subject}">
+        Email Template
+    </title>
+    <style>
+        body {
+            line-height: 1.43 !important;
+            font-size: 16px;
+            font-family: KoHo,
+            sans-serif;
+            font-weight: 600;
+            background-color: #fafafa;
+        }
+
+        .ii a[href] {
+            text-decoration: none;
+            color: #333333;
+        }
+
+        .account-email a {
+            font-weight: bold;
+            font-size: 1rem;
+            font-style: italic;
+            text-decoration: none;
+            color: #333333;
+        }
+
+        .mail-table {
+            border: 1px solid #cdcdcd;
+            width: 700px;
+            margin: auto;
+            color: #1e2731;
+            line-height: 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #fff
+        }
+
+        .header-content {
+            background-color: #CA161C;
+            height: 30px;
+            padding: 30px 0;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .mail-container {
+            width: 100%;
+            background-color: #f4f5f6;
+            padding: 80px 20px;
+            box-sizing: border-box;
+        }
+
+        .mail-footer {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container mail-container">
+    <table class="mail-table">
+        <tbody>
+        <tr>
+            <td class="header-content" colspan="3" align="center">
+              <span style="color: white; font-size: 35px; font-style: italic;">
+                Vietjetair.com
+              </span>
+            </td>
+        </tr>
+        <tr style="height:30px">
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <div style="padding:10px;">
+                <td style="line-height:40px" class="d-flex flex-column">
+                    <div class="d-flex align-items-baseline">
+                    <span>
+                      Xin chào, &nbsp;
+                    </span>
+                        <span style="font-size:20px;" th:text="${name}">
+                    </span>
+                    </div>
+                    <span>
+                Hệ thống gửi thông tin tài khoản của cá nhân, vui lòng đăng nhập bằng tài khoản dưới đây:
+              </span>
+                    <div class="d-flex">
+                <span style="font-weight:bold;font-size:1rem;">
+                  Tên đăng nhập: &nbsp;
+                </span>
+                        <span class="account-email"
+                              th:text="${account.email}">
+                  Lexuanngoc2207@gmail.com
+                </span>
+                    </div>
+                    <div class="d-flex">
+                <span style="font-weight:bold;font-size:1rem">
+                  Mật khẩu: &nbsp;
+                </span>
+                        <span style="font-weight:bold;font-size:1rem; font-style:italic;" th:text="${account.password}">
+                  028376
+                </span>
+                    </div>
+                    <span>
+                Vui lòng không chia sẻ thông tin này với bất kì ai.
+              </span>
+                    <br>
+                </td>
+            </div>
+        </tr>
+        <tr>
+            <div style="padding:10px">
+                <td>
+                    <div class="mail-footer">
+                        <span class="mb-3">
+                        Trân trọng!
+                        </span>
+                    </div>
+                </td>
+            </div>
+        </tr>
+        <tr style="height:20px">
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>
