@@ -3,20 +3,25 @@ package com.codegym.airline_tickets.controller.Admin;
 import com.codegym.airline_tickets.dto.CountryDTO;
 import com.codegym.airline_tickets.dto.EmailRequest;
 import com.codegym.airline_tickets.dto.UserRequestDTO;
+import com.codegym.airline_tickets.dto.UserResponseDTO;
 import com.codegym.airline_tickets.entity.Account;
 import com.codegym.airline_tickets.entity.User;
 import com.codegym.airline_tickets.response.TicketResponse;
+import com.codegym.airline_tickets.response.UserResponse;
 import com.codegym.airline_tickets.service.impl.AccountService;
 import com.codegym.airline_tickets.service.impl.FirebaseStorageService;
 import com.codegym.airline_tickets.service.impl.UserService;
 import com.codegym.airline_tickets.util.EmailService;
 import com.codegym.airline_tickets.util.GetCountries;
+import com.codegym.airline_tickets.util.ValidationMessage;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -36,6 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Controller
@@ -53,22 +61,9 @@ public class UserController {
 
     @Autowired
     private EmailService emailService;
-//
-//    @PostMapping("/api/sendEmail")
-//    public ResponseEntity<?> sendEmailtest(@RequestBody EmailRequest emailRequest, RedirectAttributes redirectAttributes) {
-//        Context context = new Context();
-//        // Set variables for the template from the POST request data
-//        context.setVariable("name", emailRequest.getName());
-//        context.setVariable("account", emailRequest.getAccount());
-//        context.setVariable("subject", emailRequest.getSubject());
-//        try {
-//            emailService.sendEmail(emailRequest.getTo(), emailRequest.getSubject(), "/admin/email/email_template", context);
-//            return ResponseEntity.ok().build();
-//        } catch (Exception e) {
-//            return null;
-//        }
-//    }
 
+    @Autowired
+    private TemplateEngine templateEngine;
 
     @PostMapping("/sendEmail")
     public boolean sendEmail(EmailRequest emailRequest, RedirectAttributes redirectAttributes) {
@@ -90,27 +85,34 @@ public class UserController {
     public String showCreateForm(Model model) {
         List<CountryDTO> countries = GetCountries.getCountries();
         model.addAttribute("countries", countries);
+        model.addAttribute("listErrorMes", new LinkedHashMap<>());
         model.addAttribute("user", new UserRequestDTO());
         return "admin/customer/create";
     }
 
     @PostMapping("/create")
-    public String createCustomer(@ModelAttribute("user") UserRequestDTO user,
+    public String createCustomer(@Valid @ModelAttribute("user") UserRequestDTO user,
                                  BindingResult bindingResult,
                                  @RequestParam("imageFile") MultipartFile file,
-                                 RedirectAttributes redirectAttributes) {
+                                 RedirectAttributes redirectAttributes, Model model) {
 
-        if (file.isEmpty()) {
-            bindingResult.rejectValue("imageURL", "file.empty", "Vui lòng chọn ảnh cho khách hàng.");
-        }
 
         if (bindingResult.hasErrors()) {
+            Map<String, String> listErrorsMes = ValidationMessage.getErrorMes(bindingResult);
+            model.addAttribute("listErrorMes", listErrorsMes);
             return "admin/customer/create";
         }
 
         try {
-            String imageUrl = firebaseStorageService.uploadFile(file, user.getFullName());
             User newUser = new User();
+            String imageUrl = null;
+
+            if (file.isEmpty()) {
+                newUser.setImage(imageUrl);
+            } else {
+                imageUrl = firebaseStorageService.uploadFile(file, user.getFullName());
+            }
+
             newUser.setFullName(user.getFullName());
             newUser.setGender(user.getGender());
             newUser.setPhone(user.getPhone());
@@ -119,6 +121,12 @@ public class UserController {
             newUser.setDob(user.getDob());
             newUser.setAddress(user.getAddress());
             newUser.setNationality(user.getNationality());
+
+            Account existAccount = accountService.getAccountByEmail(user.getEmail());
+            if (existAccount != null) {
+                redirectAttributes.addFlashAttribute("error", "Email đã tồn tại. Vui lòng chọn email khác!");
+                return "redirect:/admin/customer";
+            }
 
             Account account = new Account();
 
@@ -141,7 +149,7 @@ public class UserController {
             }
 
         } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("message", "Lỗi khi tải ảnh: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Lỗi khi tải ảnh: " + e.getMessage());
         }
 
         return "redirect:/admin/customer";
@@ -171,6 +179,7 @@ public class UserController {
     @GetMapping("/search")
     public String searchCustomer(Model model, RedirectAttributes redirectAttributes,
                                  @RequestParam(value = "email") String email,
+                                 @RequestParam(required = false) String isUpdate,
                                  @RequestParam("page") Optional<Integer> page,
                                  @RequestParam("size") Optional<Integer> size
     ) {
@@ -191,13 +200,77 @@ public class UserController {
         list.add(accounts);
         Page<Account> pages = new PageImpl<>(list);
         model.addAttribute("accountsPage", pages);
-        redirectAttributes.addFlashAttribute("message", "Tìm kiếm thành công!");
+
+        if (Objects.isNull(isUpdate)) {
+            model.addAttribute("message", "Tìm kiếm thành công!");
+            return "admin/customer/list";
+        }
+
+        if (isUpdate.equals("true")) {
+            model.addAttribute("message", "Cập nhật thông tin thành công!");
+            return "admin/customer/list";
+        }
         return "admin/customer/list";
     }
 
-    @PostMapping("/update/{id}")
-    public String updateCustomer(@PathVariable int id) {
-        return null;
+    @GetMapping("/update/{id}")
+    public ResponseEntity<UserResponse> updateCustomer(@PathVariable int id) {
+        Account account = accountService.findById(id);
+        UserResponseDTO userRes = UserResponseDTO.builder()
+                .id(account.getUser().getId())
+                .fullName(account.getUser().getFullName())
+                .email(account.getEmail())
+                .gender(account.getUser().getGender())
+                .address(account.getUser().getAddress())
+                .nationality(account.getUser().getNationality())
+                .phone(account.getUser().getPhone())
+                .dob(account.getUser().getDob())
+                .citizenIdentification(account.getUser().getCitizenIdentification())
+                .build();
+
+        List<CountryDTO> countries = GetCountries.getCountries();
+
+        Context context = new Context();
+        context.setVariable("user", userRes);
+        context.setVariable("countries", countries);
+        String html = templateEngine.process("admin/customer/update", context);
+
+        return ResponseEntity.ok().body(
+                UserResponse.builder()
+                        .status(HttpStatus.OK)
+                        .html(html)
+                        .userResponse(userRes)
+                        .build()
+        );
+
+    }
+
+    @PostMapping("/update")
+    public String update(@Valid @ModelAttribute("user") UserRequestDTO userReq, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+
+        if (bindingResult.hasErrors()) {
+//            Map<String, String> listErrorsMes = ValidationMessage.getErrorMes(bindingResult);
+//            model.addAttribute("listErrorMes", listErrorsMes);
+            redirectAttributes.addFlashAttribute("error", "Đã có lỗi xảy ra. Vui lòng thử lại!");
+            return "redirect:/admin/customer";
+        }
+        Account acc = accountService.findAccountByUserId(userReq.getId());
+        acc.setEmail(userReq.getEmail());
+        accountService.update(acc.getId(), acc);
+
+        User existUser = userService.findById(userReq.getId());
+        existUser.setFullName(userReq.getFullName());
+        existUser.setGender(userReq.getGender());
+        existUser.setAddress(userReq.getAddress());
+        existUser.setNationality(userReq.getNationality());
+        existUser.setPhone(userReq.getPhone());
+        existUser.setDob(userReq.getDob());
+        existUser.setCitizenIdentification(userReq.getCitizenIdentification());
+        userService.update(userReq.getId(), existUser);
+
+        redirectAttributes.addFlashAttribute("message", "Cập nhật thông tin thành công!");
+        return "redirect:/admin/customer/search?isUpdate=true&email=" + URLEncoder.encode(userReq.getEmail(), StandardCharsets.UTF_8);
+
     }
 
     @GetMapping("/delete/{accountId}")
@@ -206,9 +279,6 @@ public class UserController {
 
         Account account = accountService.findById(accountId);
         firebaseStorageService.deleteFileFromUrl(account.getUser().getImage());
-//        account.setEmail("");
-//        account.setDeletedAt(LocalDateTime.now());
-//        accountService.update(accountId, account);
         accountService.remove(accountId);
         userService.remove(account.getUser().getId());
         redirectAttributes.addFlashAttribute("message", "Xoá thành công!");

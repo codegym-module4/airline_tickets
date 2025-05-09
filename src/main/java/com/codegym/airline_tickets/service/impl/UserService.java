@@ -22,14 +22,17 @@ public class UserService implements IUserService {
         return List.of();
     }
 
+    @Transactional
     @Override
     public void save(User user) {
         userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void update(long id, User s) {
-
+        s.setId(id);
+        userRepository.save(s);
     }
 
     @Transactional

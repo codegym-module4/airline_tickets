@@ -27,5 +27,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Page<Account> findAllByDeletedAtIsNullAndRoleId(Long id, Pageable pageable);
 
+    Account findByUserId(Long id);
 
 }

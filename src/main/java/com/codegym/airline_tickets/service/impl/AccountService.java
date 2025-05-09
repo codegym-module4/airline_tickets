@@ -106,6 +106,11 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
+    public Account findAccountByUserId(Long id) {
+        return accountRepository.findByUserId(id);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Account account = accountRepository.findByNotDeleteEmail(email);
         if (account == null) {
@@ -158,4 +163,6 @@ public class AccountService implements IAccountService, UserDetailsService {
             return fullName;
         }
     }
+
+
 }
