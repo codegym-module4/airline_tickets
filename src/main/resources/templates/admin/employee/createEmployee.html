@@ -16,14 +16,17 @@
             border: none;
             font-size: 16px;
         }
+
         .navbar .btn:hover {
             text-decoration: underline;
         }
+
         .nav-right {
             display: flex;
             align-items: center;
             gap: 15px;
         }
+
         .container {
             max-width: 800px;
             background: white;
@@ -32,25 +35,31 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .btn-action {
             display: flex;
             justify-content: center;
             gap: 10px;
         }
+
         .btn-action .btn {
             background-color: red;
             border: none;
             color: white;
         }
+
         .btn-action .btn:hover {
             background-color: darkred;
         }
+
         .password-wrapper {
             position: relative;
         }
+
         .password-wrapper .toggle-password {
             position: absolute;
             right: 10px;
@@ -66,7 +75,7 @@
 <div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
 
 <!--mainContend-->
-<div class="main-content container" style="margin-top: 60px;" id="mainContent">
+<div class="main-content container" style="margin-top: 100px;" id="mainContent">
     <h2 class="text-center">QUẢN LÝ NHÂN VIÊN</h2>
     <h4 class="text-center mb-4">THÊM NHÂN VIÊN</h4>
     <form th:action="@{/admin/employee/createEmployee}" th:object="${employeeAccountDTO}" method="post">
@@ -82,13 +91,15 @@
 
             <div class="col-md-6 form-group">
                 <label>Họ tên</label>
-                <input type="text" class="form-control" th:field="*{fullName}" th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid'">
+                <input type="text" class="form-control" th:field="*{fullName}"
+                       th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:errors="*{fullName}"></div>
             </div>
 
             <div class="col-md-6 form-group">
                 <label>Ngày sinh</label>
-                <input type="date" class="form-control" th:field="*{dob}" th:classappend="${#fields.hasErrors('dob')} ? 'is-invalid'">
+                <input type="date" class="form-control" th:field="*{dob}"
+                       th:classappend="${#fields.hasErrors('dob')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:errors="*{dob}"></div>
             </div>
             <div class="col-md-6 form-group">
@@ -108,7 +119,8 @@
             </div>
             <div class="col-md-6 form-group">
                 <label>Quê Quán</label>
-                <input type="text" class="form-control" th:field="*{address}" th:classappend="${#fields.hasErrors('address')} ? 'is-invalid'">
+                <input type="text" class="form-control" th:field="*{address}"
+                       th:classappend="${#fields.hasErrors('address')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:errors="*{address}"></div>
             </div>
         </div>
@@ -117,7 +129,8 @@
         <div class="row mt-4">
             <div class="col-md-6 form-group">
                 <label>Email</label>
-                <input type="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+                <input type="email" class="form-control" th:field="*{email}"
+                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:errors="*{email}"></div>
                 <div class="text-danger" th:if="${errorEmailExists != null}" th:text="${errorEmailExists}"></div>
 
@@ -125,13 +138,14 @@
 
             <div class="col-md-6 form-group">
                 <label>Mật khẩu : 123456789</label>
-                <input type="hidden" th:field="*{password}" value="123456789" />
+                <input type="hidden" th:field="*{password}" value="123456789"/>
             </div>
 
             <div class="col-md-6 form-group">
                 <label>Vai trò</label>
                 <select class="form-control" th:field="*{roleId}">
-                    <option th:each="role : ${roleList}" th:if="${role.id == 2}" th:value="${role.id}" th:text="${role.roleName} " selected></option>
+                    <option th:each="role : ${roleList}" th:if="${role.id == 2}" th:value="${role.id}"
+                            th:text="${role.roleName} " selected></option>
                 </select>
             </div>
 

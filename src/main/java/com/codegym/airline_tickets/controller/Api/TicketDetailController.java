@@ -60,8 +60,6 @@ public class TicketDetailController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
 
-
-
         if (ticket != null) {
             TicketResponseDTO ticketResponseDTO = TicketResponseDTO.builder()
                     .code(ticket.getCode())
@@ -74,7 +72,7 @@ public class TicketDetailController {
 
             Context context = new Context();
             context.setVariable("ticket", ticketResponseDTO);
-           String html = templateEngine.process("user/payment/ticket_detail", context);
+            String html = templateEngine.process("user/payment/ticket_detail", context);
 
             return ResponseEntity.ok().body(
                     TicketResponse.builder()
