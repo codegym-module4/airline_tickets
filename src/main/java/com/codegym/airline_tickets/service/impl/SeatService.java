@@ -38,7 +38,7 @@ public class SeatService implements ISeatService {
 
     @Override
     public Seat findById(long id) {
-        return null;
+        return seatRepository.findById(id).orElse(null);
     }
 
     @Override

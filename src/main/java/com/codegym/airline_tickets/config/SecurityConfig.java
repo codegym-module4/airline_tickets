@@ -41,11 +41,12 @@ public class SecurityConfig {
                                 "/admin/**",
                                 "/news",
                                 "/new/detail/**",
-                                "/policy/**"
+                                "/policy/**",
+                                "/api/**"
                         ).permitAll()
 //                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
 //                                .requestMatchers("/admin/news/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**", "/api/**").authenticated()
+                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

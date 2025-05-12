@@ -15,5 +15,6 @@ public class ResponseObject {
     private HttpStatus status;
     private String message;
     private String url;
+    private String html;
     private Object object;
 }

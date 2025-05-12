@@ -46,4 +46,10 @@ public class FlightSeat {
         this.id = id;
         this.status = status;
     }
+
+    public FlightSeat(Flight flight, Seat seat, Integer status) {
+        this.flight = flight;
+        this.seat = seat;
+        this.status = status;
+    }
 }

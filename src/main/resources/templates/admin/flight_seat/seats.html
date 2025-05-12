@@ -15,8 +15,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="row py-5 justify-content-center">
-                    <div class="col-sm-11 col-md-10">
+                <div class="row py-5 align-items-center">
+                    <div class="col-sm-10 col-lg-8 mb-lg-0 mb-3">
                         <div class="row">
                             <div class="col-sm-8 col-md-6 pe-md-4" style="border-right: 1px solid #222222">
                                 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -36,6 +36,23 @@
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <div th:text="${#temporals.format(flight.departure_time, 'HH:mm, dd/MM/yyyy')}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-lg-4 text-end" th:if="${lists.isEmpty()}">
+                        <div class="col-12">
+                            <div class="row" id="div_btn_batch_create">
+                                <div class="col-12">
+                                    <button role="button" class="btn btn-primary px-4" id="btnBatchCreate">Thêm hàng loạt</button>
+                                </div>
+                            </div>
+                            <div class="row d-none" id="div_btn_batch_save">
+                                <div class="col-lg-5 mb-lg-0 mb-2">
+                                    <button role="button" class="btn btn-danger px-5" id="btnCancel">Hủy</button>
+                                </div>
+                                <div class="col-lg-5">
+                                    <button role="button" class="btn btn-primary px-5" id="btnBatchSave" data-form_id="#form_create_batch_seat">Lưu</button>
                                 </div>
                             </div>
                         </div>
@@ -66,8 +83,9 @@
                         <!-- Seat map -->
                         <div class="seat-map-container bg-secondary">
                             <div id="seat-map" class="bg-white mx-5">
-                                <div class="col-12 col-xl-8 pb-3 mx-auto">
-                                    <div class="row align-items-center">
+                                <form th:action="@{'/api/flight-seat/save-batch/' + ${flight.id}}" method="post" id="form_create_batch_seat">
+                                    <div class="col-12 col-xl-8 pb-3 mx-auto">
+                                    <div class="row align-items-center" id="div-seat">
                                         <th:block th:each="seat, iStat : ${seats}">
                                             <th:block th:with="flightSeat=${seatMap.get(seat.seatNumber) != null ? seatMap.get(seat.seatNumber).get(seat.seatAlphabet) : null}">
                                                 <div th:if="${flightSeat != null}"
@@ -86,6 +104,7 @@
                                         </th:block>
                                     </div>
                                 </div>
+                                </form>
                             </div>
                         </div>
                         <input type="hidden" name="flight_id" th:value="${flight_id}">
@@ -93,6 +112,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div id="process-overlay" style="display:none;">
+        <div class="process-loading"></div>
     </div>
     <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -168,6 +190,10 @@
 <script src="/user/plugins/jquery/jquery.min.js"></script>
 <script>
     $(document).on("click", ".seat-broken, .seat-available", function () {
+        let delete_icon = $(this).find(".icon-cancel-seat");
+        if (delete_icon.length) {
+            return false;
+        }
         let id = $(this).data("flight_seat_id");
         let name = $(this).find("span").text();
         $("#txt-node").html("<h5>Ghế " + name + "</h5>");
@@ -184,9 +210,20 @@
     $(document).on("click", ".icon-seat-not-found", function () {
         let id = $(this).data("id");
         let name = $(this).data("name");
-        $("#text-alert").html("<h5>Bạn có chắc muốn tạo thêm ghế " + name + " cho chuyến bay không?</h5>");
-        $("#form_create input[name='seat']").val(id);
-        $("#modalCreate").modal("show");
+        if (!$("#div_btn_batch_save").hasClass("d-none")) {
+            let seat = $(this).closest(".seat-not-found");
+            let html = `<div class="col-1 seat seat-available" id="seat_${id}" data-id="${id}">
+                            <span>${name}</span>
+                            <i class="fa-regular fa-circle-xmark fa-xl text-danger icon-cancel-seat" data-id="${id}" data-name="${name}"></i>
+                            <input type="hidden" value="${id}" name="seatId[]">
+                        </div>`;
+            seat.replaceWith(html);
+        } else {
+            $("#text-alert").html("<h5>Bạn có chắc muốn tạo thêm ghế " + name + " cho chuyến bay không?</h5>");
+            $("#form_create input[name='seat']").val(id);
+            $("#modalCreate").modal("show");
+        }
+
     });
 
     $(document).on("click", ".seat-booked", function () {
@@ -240,6 +277,7 @@
     });
 
     $(document).on("click", "#btnCreateSeat", function () {
+        $('#process-overlay').fadeIn();
         let formId = $(this).data("form_id");
         $.ajax({
             method: $(formId).attr('method'),
@@ -250,6 +288,7 @@
             alert(data.message);
             location.reload();
         }).fail(function (jqXhr, json, errorThrown) {
+            $('#process-overlay').fadeOut();
             if (jqXhr.responseJSON.errors) {
                 alert(jqXhr.responseJSON.message);
             }
@@ -275,6 +314,88 @@
                 }
             });
         }
+    });
+
+    $(document).on("click", "#btnBatchCreate", function () {
+        let flightId = $("input[name='flight_id']").val();
+        $.ajax({
+            method: "GET",
+            url: "/api/flight-seat/data-seat/" + flightId,
+            data: {},
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.html) {
+                $("#div-seat").html(data.html);
+                if (!$("#div_btn_batch_create").hasClass("d-none")) {
+                    $("#div_btn_batch_create").addClass("d-none")
+                }
+
+                if ($("#div_btn_batch_save").hasClass("d-none")) {
+                    $("#div_btn_batch_save").removeClass("d-none");
+                }
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on("click", ".icon-cancel-seat", function () {
+        let seatId = $(this).data("id");
+        let seatName = $(this).data("name");
+        let seat = $("#seat_" + seatId);
+        let html = `<div class="col-1 seat seat-not-found">
+                        <i class="fa-solid fa-circle-plus fa-2x icon-seat-not-found text-primary" data-id="${seatId}" data-name="${seatName}"></i>
+                    </div>`;
+        seat.replaceWith(html);
+    });
+
+    $(document).on("click", "#btnCancel", function () {
+        let flightId = $("input[name='flight_id']").val();
+        $.ajax({
+            method: "GET",
+            url: "/api/flight-seat/data-seat/" + flightId,
+            data: {
+                cancel : "true"
+            },
+            dataType: 'json'
+        }).done(function (data) {
+            console.log(data);
+            if (data.html) {
+                $("#div-seat").html(data.html);
+                if ($("#div_btn_batch_create").hasClass("d-none")) {
+                    $("#div_btn_batch_create").removeClass("d-none")
+                }
+
+                if (!$("#div_btn_batch_save").hasClass("d-none")) {
+                    $("#div_btn_batch_save").addClass("d-none");
+                }
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on("click", "#btnBatchSave", function () {
+        $('#process-overlay').fadeIn();
+        let formId = $(this).data("form_id");
+        $.ajax({
+            method: $(formId).attr('method'),
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            dataType: 'json'
+        }).done(function (data) {
+            alert(data.message);
+            location.reload();
+        }).fail(function (jqXhr, json, errorThrown) {
+            $('#process-overlay').fadeOut();
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
     });
 </script>
 </body>

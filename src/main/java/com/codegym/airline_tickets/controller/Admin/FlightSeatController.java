@@ -57,6 +57,7 @@ public class FlightSeatController {
         model.addAttribute("flight_id", id);
         model.addAttribute("seats", seats);
         model.addAttribute("seatMap", seatMap);
+        model.addAttribute("lists", lists);
 
         return "admin/flight_seat/seats";
     }
