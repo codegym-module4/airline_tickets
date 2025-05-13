@@ -361,7 +361,6 @@
             },
             dataType: 'json'
         }).done(function (data) {
-            console.log(data);
             if (data.html) {
                 $("#div-seat").html(data.html);
                 if ($("#div_btn_batch_create").hasClass("d-none")) {
