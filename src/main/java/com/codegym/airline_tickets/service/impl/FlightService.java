@@ -3,6 +3,7 @@ package com.codegym.airline_tickets.service.impl;
 import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.entity.Flight;
 import com.codegym.airline_tickets.repository.FlightRepository;
+import com.codegym.airline_tickets.repository.FlightSeatRepository;
 import com.codegym.airline_tickets.service.IFlightService;
 import com.codegym.airline_tickets.util.FormaterCustom;
 import com.codegym.airline_tickets.util.SortOrderHelper;
@@ -18,6 +19,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +29,9 @@ public class FlightService implements IFlightService {
 
     @Autowired
     private FlightRepository flightRepository;
+
+    @Autowired
+    private FlightSeatRepository flightSeatRepository;
 
     @Override
     public List<Flight> getAll() {
@@ -64,7 +69,7 @@ public class FlightService implements IFlightService {
     public List<FlightResponseDTO> findAll(String departure, String arrival, LocalDate departureTime, String sortProperty, String sort, int page, int size) {
         log.info("findAll flight start");
 
-        Sort.Order order = SortOrderHelper.createOrder(sort,sortProperty);
+        Sort.Order order = SortOrderHelper.createOrder(sort, sortProperty);
 
         // handle start page = 1
         int pageNo = 0;
@@ -77,7 +82,7 @@ public class FlightService implements IFlightService {
 
         Page<Flight> flightPage;
 
-        if (StringUtils.hasLength(departure) && StringUtils.hasLength(arrival) ) {
+        if (StringUtils.hasLength(departure) && StringUtils.hasLength(arrival)) {
             flightPage = flightRepository.searchByKeyword(departure, arrival, departureTime, pageable);
         } else {
             flightPage = flightRepository.findAll(pageable);
@@ -88,7 +93,7 @@ public class FlightService implements IFlightService {
     }
 
 
-    public  List<FlightResponseDTO> findFightHotDeal (String departure, String arrival, int price, String sortProperty, String sort, int page, int size){
+    public List<FlightResponseDTO> findFightHotDeal(String departure, String arrival, int price, String sortProperty, String sort, int page, int size) {
 
         Sort.Order order = SortOrderHelper.createOrder(sort, sortProperty);
 
@@ -104,13 +109,13 @@ public class FlightService implements IFlightService {
         if (StringUtils.hasLength(departure) && StringUtils.hasLength(arrival)) {
             flightPage = flightRepository.searchFightHotDeal(departure, arrival, price, pageable);
             System.out.println(flightPage);
-        }else {
+        } else {
             flightPage = flightRepository.findAll(pageable);
         }
         return getFlightPageResponse(page, size, flightPage);
     }
 
-    public static List<FlightResponseDTO> getFlightPageResponse(int page, int size, Page<Flight> flightPage){
+    public static List<FlightResponseDTO> getFlightPageResponse(int page, int size, Page<Flight> flightPage) {
         log.info("Convert Flight Entity Page");
 
         return flightPage.stream().map(flight -> FlightResponseDTO.builder()
@@ -128,7 +133,33 @@ public class FlightService implements IFlightService {
         ).toList();
     }
 
+    public List<Flight> searchByCode(String keyword) {
+        return flightRepository.findByCodeContainingIgnoreCase(keyword);
+    }
+//    public boolean isExist(String code) {
+//            boolean exists = flightRepository.existsByCodeIgnoreCase(code);
+//            System.out.println("Checking if flight exists with code: " + code + " => " + exists);
+//            return exists;
+//    }
+
+    public Optional<Flight> findByCodeIgnoreCase(String code){
+        return flightRepository.findByCodeIgnoreCase(code);
+    }
+
+    public Integer countTotalSeatsByFlight(Long flightId) {
+        return flightSeatRepository.countTotalSeatsByFlight(flightId);
+    }
 
 
+    public List<Flight> searchByDeparture(String keyword) {
+        return flightRepository.searchByDepartureAirportName(keyword);
+    }
 
+    public List<Flight> searchByArrival(String keyword) {
+        return flightRepository.searchByArrivalAirportName(keyword);
+    }
+
+//    public List<Flight> searchByDepartureAndArrival(String departure, String arrival) {
+//        return flightRepository.searchByDepartureAndArrival(departure, arrival);
+//    }
 }
