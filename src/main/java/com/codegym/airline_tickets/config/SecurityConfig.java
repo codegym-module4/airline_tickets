@@ -38,9 +38,10 @@ public class SecurityConfig {
                                 "/user/img/**",
                                 "/user/icon/**",
                                 "/admin/css/**",
+                                "admin/flight-seat/flight/**",
                                 "/admin/**",
                                 "/news",
-                                "/new/detail/**",
+                                "/news/detail/**",
                                 "/policy/**",
                                 "/api/**"
                         ).permitAll()

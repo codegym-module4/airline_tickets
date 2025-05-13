@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
@@ -41,7 +42,28 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     Page<Flight> searchFightHotDeal(@Param("departure") String departure,
                                     @Param("arrival") String arrival,
                                     @Param("price") int price,
-                                     Pageable pageable);
+                                    Pageable pageable);
+
+//trả về 1 bản ghi duy nhất hoặc trống
+    Optional<Flight> findByCodeIgnoreCase(String code);
+//    boolean existsByCodeIgnoreCase(String code);
+
+    List<Flight> findByCodeContainingIgnoreCase(String code);
+
+    @Query("SELECT f FROM Flight f " +
+            "WHERE LOWER(f.arrivalAirport.name) LIKE LOWER(CONCAT('%', :arrival, '%'))")
+    List<Flight> searchByArrivalAirportName(@Param("arrival") String arrival);
+
+    @Query("SELECT f FROM Flight f " +
+            "WHERE LOWER(f.departureAirport.name) LIKE LOWER(CONCAT('%', :departure, '%'))")
+    List<Flight> searchByDepartureAirportName(@Param("departure") String departure);
+
+
+//    @Query("SELECT f FROM Flight f " +
+//            "WHERE (:departure IS NULL OR LOWER(f.departureAirport.city) LIKE LOWER(CONCAT('%', :departure, '%'))) " +
+//            "AND (:arrival IS NULL OR LOWER(f.arrivalAirport.city) LIKE LOWER(CONCAT('%', :arrival, '%')))")
+//    List<Flight> searchByDepartureAndArrival(@Param("departure") String departure,
+//                                             @Param("arrival") String arrival);
 
 
 }

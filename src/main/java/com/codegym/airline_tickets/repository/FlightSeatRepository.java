@@ -48,4 +48,8 @@ public interface FlightSeatRepository extends JpaRepository<FlightSeat, Long> {
     @Query(value = "select * from flight_seat fs where fs.status = 1 and fs.flight_id = :flightId and fs.id NOT IN (:ids) ORDER BY RAND() LIMIT 1", nativeQuery = true)
     FlightSeat getRandomAvailableSeat(List<Long> ids, Long flightId);
 
+
+    @Query("SELECT COUNT(fs) FROM FlightSeat fs WHERE fs.flight.id = :flightId")
+    Integer countTotalSeatsByFlight(@Param("flightId") Long flightId);
+
 }
