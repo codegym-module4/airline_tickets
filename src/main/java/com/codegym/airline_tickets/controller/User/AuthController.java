@@ -18,6 +18,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import com.codegym.airline_tickets.repository.RoleRepository;
+
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+
 
 import jakarta.validation.Valid;
 
@@ -28,6 +42,8 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AuthController {
@@ -303,4 +319,51 @@ public class AuthController {
             this.newPassword = newPassword;
         }
     }
+
+    @PostMapping("/login/google")
+    public void loginWithGoogle(@RequestParam("idToken") String idToken,
+                                HttpServletRequest request,
+                                HttpServletResponse response) throws IOException {
+        try {
+            FirebaseToken decoded = FirebaseAuth.getInstance().verifyIdToken(idToken);
+            String email = decoded.getEmail();
+
+            Account account = accountService.getAccountByEmail(email);
+            if (account == null) {
+                account = new Account();
+                account.setEmail(email);
+                account.setPassword("google");
+
+
+                User u = new User();
+                u.setFullName(decoded.getName());
+                u.setImage(decoded.getPicture());
+                account.setUser(u);
+
+                accountService.register(account);
+            }
+
+            // Lấy thông tin người dùng
+            UserDetails ud = accountService.loadUserByUsername(email);
+            
+            // Tạo authentication token
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(ud, null, ud.getAuthorities());
+            
+            // Lưu vào context
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            
+            // Lưu authentication vào session
+            HttpSession session = request.getSession(true);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+            response.sendRedirect("/");
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid ID token");
+        }
+    }
+
+
+
 }
