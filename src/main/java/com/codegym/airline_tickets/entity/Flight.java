@@ -51,13 +51,13 @@ public class Flight {
 
     @Column(name = "departure_time")
     @NotNull(message = "Thời gian khởi hành không được để trống")
-    @FutureOrPresent(message = "Thời gian khởi hành phải là thời gian hiện tại hoặc trong tương lai")
+//    @FutureOrPresent(message = "Thời gian khởi hành phải là thời gian hiện tại hoặc trong tương lai")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime departure_time;
 
     @Column(name = "arrival_time")
     @NotNull(message = "Thời gian đến không được để trống")
-    @FutureOrPresent(message = "Thời gian đến phải là thời gian hiện tại hoặc trong tương lai")
+//    @FutureOrPresent(message = "Thời gian đến phải là thời gian hiện tại hoặc trong tương lai")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime arrival_time;
 

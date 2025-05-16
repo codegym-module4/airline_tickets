@@ -88,6 +88,9 @@ public class FlightControlller {
         if (flights.getDeparture_time().isBefore(LocalDateTime.now())) {
             errors.add("Thời gian đi phải lớn hơn hoặc bằng thời gian hiện tại");
         }
+        if (flights.getArrival_time().isBefore(LocalDateTime.now())) {
+            errors.add("Thời gian đến phải lớn hơn hoặc bằng thời gian hiện tại");
+        }
 
         if (flights.getDepartureAirport().getId().equals(flights.getArrivalAirport().getId())) {
             errors.add("Sân bay đi và đến không được giống nhau");
@@ -120,7 +123,7 @@ public class FlightControlller {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
         Flight flight = flightService.findById(id);
-        model.addAttribute("flight", flight);
+        model.addAttribute("flights", flight);
         model.addAttribute("airlines", airlineService.getAll());
         model.addAttribute("airports", airportService.getAll());
         return "admin/flights/update";
@@ -128,7 +131,7 @@ public class FlightControlller {
 
     @PostMapping("/edit/{id}")
     public String update(@PathVariable Long id,
-                         @Valid @ModelAttribute("flight") Flight flights,
+                         @Valid @ModelAttribute("flights") Flight flight,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes,
                          Model model) {
@@ -139,32 +142,43 @@ public class FlightControlller {
             bindingResult.getAllErrors().forEach(e -> errors.add(e.getDefaultMessage()));
         }
 
-        if (flights.getArrival_time().isBefore(flights.getDeparture_time())) {
-            errors.add("Thời gian đến phải sau thời gian đi");
+        if (flight.getDepartureAirport().getId().equals(flight.getArrivalAirport().getId())) {
+            errors.add("Sân bay đi và đến không được giống nhau");
         }
 
-        if (flights.getDepartureAirport().getId().equals(flights.getArrivalAirport().getId())) {
-            errors.add("Sân bay đi và đến không được giống nhau");
+        Flight oldFlight = flightService.findById(id);
+        boolean isStarted = oldFlight.getDeparture_time().isBefore(LocalDateTime.now());
+
+// Nếu chuyến bay đã bắt đầu -> Không cho chỉnh thời gian
+        if (isStarted){
+            flight.setDeparture_time(oldFlight.getDeparture_time());
+            flight.setArrival_time(oldFlight.getArrival_time());
+        } else {
+            if (flight.getArrival_time().isBefore(flight.getDeparture_time())) {
+                errors.add("Thời gian đến phải sau thời gian đi");
+            }
+            if (flight.getDeparture_time().isBefore(LocalDateTime.now())) {
+                errors.add("Thời gian đi phải lớn hơn hoặc bằng thời gian hiện tại");
+            }
+            if (flight.getArrival_time().isBefore(LocalDateTime.now())) {
+                errors.add("Thời gian đến phải lớn hơn hoặc bằng thời gian hiện tại");
+            }
         }
 
         if (!errors.isEmpty()) {
             model.addAttribute("errors", errors);
             System.out.println(errors);
-            addCommonAttributes(model, flights);
+            addCommonAttributes(model, flight);
             return "/admin/flights/update";
         }
-//        thời gian bay không được thay đổi
-        flights.setArrival_time(flightService.findById(id).getArrival_time());
-        flights.setDeparture_time(flightService.findById(id).getDeparture_time());
-
-        flightService.update(id, flights);
+        flightService.update(id, flight);
         redirectAttributes.addFlashAttribute("message", "Chỉnh sửa thành công");
         return "redirect:/admin/flights";
     }
 
 
     private void addCommonAttributes(Model model, Flight flight) {
-        model.addAttribute("flight", flight);
+        model.addAttribute("flights", flight);
         model.addAttribute("airlines", airlineService.getAll());
         model.addAttribute("airports", airportService.getAll());
     }
