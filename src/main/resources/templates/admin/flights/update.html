@@ -9,6 +9,7 @@
         body {
             background-color: #f8f9fa;
         }
+
         .container {
             max-width: 800px;
             background: white;
@@ -24,75 +25,77 @@
 
 <div class="main-content container" style="margin-top: 60px;" id="mainContent">
     <h4 class="text-center mb-4">Thay đổi Chuyến bay</h4>
-    <form th:action="@{/admin/flights/edit/{id}(id=${flight.id})}" th:object="${flight}" method="post" enctype="multipart/form-data">
-            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+    <form th:action="@{/admin/flights/edit/{id}(id=${flight.id})}" th:object="${flight}" method="post"
+          enctype="multipart/form-data">
+
+        <div th:if="${errors != null}">
+            <div class="alert alert-danger">
+                <ul>
+                    <li th:each="error : ${errors}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
 
 
-            <div class="row">
-                <div class="mb-3">
-                    <label for="code">Mã chuyến bay</label>
-                    <input type="text" th:field="*{code}" class="form-control" id="code" readonly>
-                </div>
-
-                <div class="mb-3">
-                    <label for="airline" class="form-label">Hãng hàng không</label>
-                    <select th:field="*{airline}" class="form-select" id="airline" required>
-                        <!--        <option value="null">&#45;&#45; Chọn hãng &#45;&#45;</option>-->
-                        <option th:each="airline : ${airlines}"
-                                th:value="${airline.id}"
-                                th:text="${airline.name}"></option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="departureAirport" class="form-label">Nơi đi</label>
-                    <select th:field="*{departureAirport}" class="form-select" id="departureAirport" required>
-                        <!--        <option value="null" selected>&#45;&#45; Chọn sân bay đi &#45;&#45;</option>-->
-                        <option th:each="airport : ${airports}"
-                                th:value="${airport.id}"
-                                th:text="${airport.name}"></option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="arrivalAirport" class="form-label">Nơi đến</label>
-                    <select th:field="*{arrivalAirport}" class="form-select" id="arrivalAirport" required>
-                        <!--        <option value="null">&#45;&#45; Chọn sân bay đến &#45;&#45;</option>-->
-                        <option th:each="airport : ${airports}"
-                                th:value="${airport.id}"
-                                th:text="${airport.name}"></option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="departureTime" class="form-label">Thời gian đi</label>
-                    <input type="datetime-local" id="departureTime" name="departure_time"
-                           th:value="${#temporals.format(flight.departure_time, 'yyyy-MM-dd''T''HH:mm')}"
-                           class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="arrivalTime" class="form-label">Thời gian đến</label>
-                    <input type="datetime-local" id="arrivalTime" name="arrival_time"
-                           th:value="${#temporals.format(flight.arrival_time, 'yyyy-MM-dd''T''HH:mm')}"
-                           class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="availableSeats" class="form-label">Số ghế sẵn có</label>
-                    <input type="number" th:field="*{availableSeats}" class="form-control" id="availableSeats" min="0"
-                           required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="price" class="form-label">Giá vé (VNĐ)</label>
-                    <input type="number" th:field="*{price}" class="form-control" id="price" min="0" required>
-                </div>
+        <div class="row">
+            <div class="mb-3">
+                <label for="code">Mã chuyến bay</label>
+                <input type="text" th:field="*{code}" class="form-control" id="code" readonly>
             </div>
 
-            <button type="submit" class="btn btn-primary">Thêm chuyến bay</button>
-            <a th:href="@{/admin/flights}" class="btn btn-secondary">Quay lại</a>
-        </form>
+            <div class="mb-3">
+                <label for="airline" class="form-label">Hãng hàng không</label>
+                <select th:field="*{airline}" class="form-select" id="airline" required>
+                    <!--        <option value="null">&#45;&#45; Chọn hãng &#45;&#45;</option>-->
+                    <option th:each="airline : ${airlines}"
+                            th:value="${airline.id}"
+                            th:text="${airline.name}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="departureAirport" class="form-label">Nơi đi</label>
+                <select th:field="*{departureAirport}" class="form-select" id="departureAirport" required>
+                    <!--        <option value="null" selected>&#45;&#45; Chọn sân bay đi &#45;&#45;</option>-->
+                    <option th:each="airport : ${airports}"
+                            th:value="${airport.id}"
+                            th:text="${airport.name}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="arrivalAirport" class="form-label">Nơi đến</label>
+                <select th:field="*{arrivalAirport}" class="form-select" id="arrivalAirport" required>
+                    <!--        <option value="null">&#45;&#45; Chọn sân bay đến &#45;&#45;</option>-->
+                    <option th:each="airport : ${airports}"
+                            th:value="${airport.id}"
+                            th:text="${airport.name}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="departureTime" class="form-label">Thời gian đi</label>
+                <input type="datetime-local" id="departureTime" name="departure_time"
+                       th:value="${#temporals.format(flight.departure_time, 'yyyy-MM-dd''T''HH:mm')}"
+                       class="form-control" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="arrivalTime" class="form-label">Thời gian đến</label>
+                <input type="datetime-local" id="arrivalTime" name="arrival_time"
+                       th:value="${#temporals.format(flight.arrival_time, 'yyyy-MM-dd''T''HH:mm')}"
+                       class="form-control" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="price" class="form-label">Giá vé (VNĐ)</label>
+                <input type="number" th:field="*{price}" class="form-control" id="price" min="0" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Thêm chuyến bay</button>
+        <a th:href="@{/admin/flights}" class="btn btn-secondary">Quay lại</a>
+    </form>
 </div>
 
 <script>
@@ -101,6 +104,7 @@
         img.src = URL.createObjectURL(event.target.files[0]);
         img.style.display = 'block';
     }
+
     document.querySelector('input[name="imageFile"]').addEventListener('change', previewImage);
 </script>
 

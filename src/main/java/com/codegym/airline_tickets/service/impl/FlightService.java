@@ -35,7 +35,7 @@ public class FlightService implements IFlightService {
 
     @Override
     public List<Flight> getAll() {
-        return flightRepository.findAll();
+        return flightRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     @Override
