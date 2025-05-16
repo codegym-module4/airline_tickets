@@ -35,5 +35,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query(value = "SELECT * FROM accounts WHERE email = :email", nativeQuery = true)
     Account checkAccountEmailExist(@Param("email") String email);
 
+    List<Account> findByEmailContains(String email, Pageable pageable);
 
 }
