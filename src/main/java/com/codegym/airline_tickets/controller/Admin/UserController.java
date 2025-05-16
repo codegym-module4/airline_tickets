@@ -205,7 +205,7 @@ public class UserController {
             return "redirect:/admin/customer";
         }
 
-        if (email.equals("")) {
+        if ("".equals(email)) {
             redirectAttributes.addFlashAttribute("error", "Không tìm thấy email theo yêu cầu!");
             return "redirect:/admin/customer";
         }
@@ -221,7 +221,7 @@ public class UserController {
             return "admin/customer/list";
         }
 
-        if (isUpdate.equals("true")) {
+        if ("true".equals(isUpdate)) {
             model.addAttribute("message", "Cập nhật thông tin thành công!");
             return "admin/customer/list";
         }
