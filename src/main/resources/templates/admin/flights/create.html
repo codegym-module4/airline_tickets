@@ -26,13 +26,7 @@
 <div class="main-content container" style="margin-top: 60px;" id="mainContent">
     <h4 class="text-center mb-4">THÊM CHUYẾN BAY</h4>
     <form th:action="@{/admin/flights/create}" th:object="${flights}" method="post" enctype="multipart/form-data">
-<!--        <div th:if="${errorMessage != null}">-->
-<!--            <div class="alert alert-danger">-->
-<!--                <ul>-->
-<!--                    <li th:each="error : ${errorMessage}" th:text="${error}"></li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </div>-->
+
         <div th:if="${errors != null}">
             <div class="alert alert-danger">
                 <ul>
@@ -45,7 +39,7 @@
         <div class="row">
             <div class="mb-3">
                 <label>Mã chuyến bay</label>
-                <input type="text" th:field="*{code}" class="form-control" id="code">
+                <input type="text" th:field="*{code}" class="form-control" id="code" required>
                 <div class="text-danger" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></div>
                 <!-- Hiển thị lỗi trùng mã chuyến bay nếu có -->
                 <div class="text-danger" th:if="${errorCodeExists != null}" th:text="${errorCodeExists}"></div>
