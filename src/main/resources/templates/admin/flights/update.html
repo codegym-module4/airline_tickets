@@ -9,7 +9,6 @@
         body {
             background-color: #f8f9fa;
         }
-
         .container {
             max-width: 800px;
             background: white;
@@ -25,9 +24,7 @@
 
 <div class="main-content container" style="margin-top: 60px;" id="mainContent">
     <h4 class="text-center mb-4">Thay đổi Chuyến bay</h4>
-    <form th:action="@{/admin/flights/edit/{id}(id=${flight.id})}" th:object="${flight}" method="post"
-          enctype="multipart/form-data">
-
+    <form th:action="@{/admin/flights/edit/{id}(id=${flights.id})}" th:object="${flights}" method="post" enctype="multipart/form-data">
         <div th:if="${errors != null}">
             <div class="alert alert-danger">
                 <ul>
@@ -35,8 +32,6 @@
                 </ul>
             </div>
         </div>
-
-
         <div class="row">
             <div class="mb-3">
                 <label for="code">Mã chuyến bay</label>
@@ -76,15 +71,19 @@
             <div class="mb-3">
                 <label for="departureTime" class="form-label">Thời gian đi</label>
                 <input type="datetime-local" id="departureTime" name="departure_time"
-                       th:value="${#temporals.format(flight.departure_time, 'yyyy-MM-dd''T''HH:mm')}"
-                       class="form-control" readonly>
+                       th:value="${#temporals.format(flights.departure_time, 'yyyy-MM-dd''T''HH:mm')}"
+                       class="form-control"
+                       th:readonly="${flights.departure_time.isBefore(T(java.time.LocalDateTime).now())}">
+
             </div>
 
             <div class="mb-3">
                 <label for="arrivalTime" class="form-label">Thời gian đến</label>
                 <input type="datetime-local" id="arrivalTime" name="arrival_time"
-                       th:value="${#temporals.format(flight.arrival_time, 'yyyy-MM-dd''T''HH:mm')}"
-                       class="form-control" readonly>
+                       th:value="${#temporals.format(flights.arrival_time, 'yyyy-MM-dd''T''HH:mm')}"
+                       class="form-control"
+                       th:readonly="${flights.departure_time.isBefore(T(java.time.LocalDateTime).now())}">
+
             </div>
 
             <div class="mb-3">
@@ -104,7 +103,6 @@
         img.src = URL.createObjectURL(event.target.files[0]);
         img.style.display = 'block';
     }
-
     document.querySelector('input[name="imageFile"]').addEventListener('change', previewImage);
 </script>
 
