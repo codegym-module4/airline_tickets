@@ -143,7 +143,7 @@ public class UserController {
 
             boolean isSuccess = sendEmail(emailRequest, redirectAttributes);
             if (isSuccess) {
-                redirectAttributes.addFlashAttribute("message", "Thêm thông tin thành công!. Tài khoản đăng nhập đã được gửi tới email đăng kí.!");
+                redirectAttributes.addFlashAttribute("message", "Thêm thông tin thành công. Tài khoản đăng nhập đã được gửi tới email!");
                 accountService.register(account);
             } else {
                 redirectAttributes.addFlashAttribute("error", "Gửi email thất bại.!");
@@ -190,18 +190,31 @@ public class UserController {
         model.addAttribute("currentPage", currentPage);
         List<Account> list = new ArrayList<>();
 
-        Account accounts = accountService.getAccountByEmail(email);
+        Page<Account> accountsPage = accountService.findByEmailContaining(email, PageRequest.of(currentPage - 1, pageSize));
+
+        int totalPages = accountsPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        if (accountsPage.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Không tìm thấy email theo yêu cầu!");
+            return "redirect:/admin/customer";
+        }
+
         if (email.equals("")) {
             redirectAttributes.addFlashAttribute("error", "Không tìm thấy email theo yêu cầu!");
             return "redirect:/admin/customer";
         }
-        if (accounts == null) {
+        if (accountsPage == null) {
             redirectAttributes.addFlashAttribute("error", "Không tìm thấy email theo yêu cầu!");
             return "redirect:/admin/customer";
         }
-        list.add(accounts);
-        Page<Account> pages = new PageImpl<>(list);
-        model.addAttribute("accountsPage", pages);
+
+        model.addAttribute("accountsPage", accountsPage);
 
         if (Objects.isNull(isUpdate)) {
             model.addAttribute("message", "Tìm kiếm thành công!");

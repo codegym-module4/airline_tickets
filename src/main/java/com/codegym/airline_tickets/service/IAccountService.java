@@ -16,4 +16,6 @@ public interface IAccountService extends IService<Account> {
     Account findAccountByUserId(Long id);
 
     Account findAccountByEmail(String email);
+
+    Page<Account> findByEmailContaining(String email, Pageable pageable);
 }

@@ -116,6 +116,31 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
+    public Page<Account> findByEmailContaining(String email, Pageable pageable) {
+
+        List<Account> accounts = accountRepository.findByEmailContains(email, pageable);
+
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Account> list;
+
+        if (accounts.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, accounts.size());
+            list = accounts.subList(startItem, toIndex);
+        }
+        Page<Account> accountsPage = new PageImpl<>(
+                list,
+                PageRequest.of(currentPage, pageSize),
+                accounts.size()
+        );
+
+        return accountsPage;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Account account = accountRepository.findByNotDeleteEmail(email);
         if (account == null) {
