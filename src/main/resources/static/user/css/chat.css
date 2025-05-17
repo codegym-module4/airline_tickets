@@ -1,0 +1,25 @@
+#chat-toggle {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 1060;
+}
+
+/* Hộp chat */
+#chat-box {
+    position: fixed;
+    bottom: 6rem;
+    right: 1.5rem;
+    width: 320px;
+    height: 400px;
+    z-index: 1050;
+    display: none;
+    flex-direction: column;
+}
+
+#chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f8f9fa;
+}

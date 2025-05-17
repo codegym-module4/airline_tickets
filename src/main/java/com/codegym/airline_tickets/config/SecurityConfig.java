@@ -38,14 +38,15 @@ public class SecurityConfig {
                                 "/user/img/**",
                                 "/user/icon/**",
                                 "/admin/css/**",
-                                "/admin/**",
+                                "/admin/js/**",
                                 "/news",
                                 "/new/detail/**",
-                                "/policy/**"
+                                "/policy/**",
+                                "/ws-chat/**"
                         ).permitAll()
 //                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
 //                                .requestMatchers("/admin/news/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**", "/api/**").authenticated()
+                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**", "/api/**","/admin/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -60,4 +61,5 @@ public class SecurityConfig {
                 );
         return http.build();
     }
+
 }
