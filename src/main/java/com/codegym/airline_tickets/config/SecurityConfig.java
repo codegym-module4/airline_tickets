@@ -52,16 +52,17 @@ public class SecurityConfig {
                                 "/user/img/**",
                                 "/user/icon/**",
                                 "/admin/css/**",
+                                "/admin/js/**",
                                 "admin/flight-seat/flight/**",
-                                "/admin/**",
                                 "/news",
                                 "/news/detail/**",
                                 "/policy/**",
+                                "/ws-chat/**",
                                 "/api/**"
                         ).permitAll()
 //                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
 //                                .requestMatchers("/admin/news/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**").authenticated()
+                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**", "/admin/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -79,4 +80,5 @@ public class SecurityConfig {
                 );
         return http.build();
     }
+
 }

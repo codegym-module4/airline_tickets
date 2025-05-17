@@ -3,13 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Quản lý Nhân Viên</title>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css">
+  <link rel="stylesheet" href="/admin/css/chat.css">
   <style>
     .table th { background-color: red; color: white; }
     .btn-primary { background-color: red; border-color: red; }
     .btn-success { background-color: red; border-color: red; }
     .btn-danger { background-color: darkred; border-color: darkred; }
   </style>
+
 </head>
 <body>
 
@@ -100,6 +106,8 @@
   </div>
 </div>
 
+<th:block th:replace="~{admin/chat/employeeChat::chatBoxEmployee}"></th:block>
+
 <!-- Bootstrap JS & Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -123,6 +131,8 @@
     });
   });
 </script>
+
+<script src="/admin/js/employeeChat.js"></script>
 
 </body>
 </html>

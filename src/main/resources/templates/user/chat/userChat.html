@@ -1,0 +1,44 @@
+
+<th:block th:fragment="chatBoxCustomer">
+    <!-- Nút Hỗ Trợ -->
+    <button id="chat-toggle" class="btn bg-danger text-white d-flex align-items-center gap-2 rounded-pill shadow">
+        <i class="fas fa-comment-alt"></i>
+        <span>Hỗ trợ</span>
+    </button>
+
+    <!-- Khung Hỗ Trợ -->
+    <div id="chat-box" class="card shadow">
+        <!-- Header -->
+        <div class="card-header bg-danger text-white d-flex align-items-center">
+            <img th:src="@{/user/icon/favicon.ico}" alt="Logo" width="24" height="24" class="me-2">
+            <div class="flex-grow-1">
+                <strong>Vietjet Air Hỗ Trợ</strong><br>
+                <small>Trả lời trong vòng 5 phút</small>
+            </div>
+            <button id="chat-close" type="button" class="btn-close btn-close-white ms-2" aria-label="Đóng"></button>
+        </div>
+
+        <!-- Nội dung tin nhắn -->
+        <div class="card-body p-2" id="chat-messages">
+            <p class="fw-bold mb-1">Nhân Viên Hỗ Trợ</p>
+            <p class="mb-0">Xin Chào!<br>Mời anh/chị đăng nhập để được hỗ trợ ạ!</p>
+        </div>
+
+        <!-- Nhập liệu -->
+        <div class="card-footer p-2" id="chat-controls" style="display: none;">
+            <div class="input-group">
+                <input type="text" class="form-control" id="message-input" placeholder="Nhập tin nhắn của bạn">
+                <button class="btn btn-danger" id="send-button">Gửi</button>
+            </div>
+        </div>
+
+        <!-- Nút bắt đầu -->
+        <div class="card-footer p-0" id="start-chat-button-container">
+            <button class="btn btn-danger w-100 rounded-0 d-flex align-items-center justify-content-center gap-2"
+                    id="start-chat-button">
+                <i class="fas fa-comment-alt"></i>
+                <span>Bắt Đầu</span>
+            </button>
+        </div>
+    </div>
+</th:block>
