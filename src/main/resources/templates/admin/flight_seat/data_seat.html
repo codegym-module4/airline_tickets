@@ -1,0 +1,17 @@
+<th:block th:fragment="data-flight-seat">
+    <th:block th:each="seat, iStat : ${seats}">
+        <div th:if="${cancel == null}"
+            class="col-1 seat seat-available"
+             th:id="'seat_' + ${seat.id}"
+             th:data-id="${seat.id}"
+        >
+            <span th:text="${seat.seatAlphabet + seat.seatNumber}"></span>
+            <i class="fa-regular fa-circle-xmark fa-xl text-danger icon-cancel-seat" th:data-id="${seat.id}" th:data-name="${seat.seatAlphabet + seat.seatNumber}"></i>
+            <input type="hidden" th:value="${seat.id}" name="seatId[]">
+        </div>
+        <div th:if="${cancel != null}" class="col-1 seat seat-not-found">
+            <i class="fa-solid fa-circle-plus fa-2x icon-seat-not-found text-primary" th:data-id="${seat.id}" th:data-name="${seat.seatAlphabet + seat.seatNumber}"></i>
+        </div>
+        <div th:if="${seat.seatAlphabet == 'C'}" class="col-1"></div>
+    </th:block>
+</th:block>

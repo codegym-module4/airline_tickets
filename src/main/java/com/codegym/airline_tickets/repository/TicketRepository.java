@@ -21,4 +21,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findTicketByBookingId(Long bookingId);
 
     Ticket findByBookingIdAndFlightId(Long bookingId, Long flightId);
+
+    @Query("SELECT t from Ticket t where t.flight.id = :flightId AND t.seat.id = :flightSeatId AND t.type = 1 ORDER BY t.id LIMIT 1")
+    Ticket findByFlightIdAndSeatId(Long flightId, Long flightSeatId);
 }

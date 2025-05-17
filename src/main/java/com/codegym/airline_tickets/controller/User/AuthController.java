@@ -18,6 +18,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import com.codegym.airline_tickets.repository.RoleRepository;
+
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+
 
 import jakarta.validation.Valid;
 
@@ -28,6 +42,8 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AuthController {
@@ -80,9 +96,51 @@ public class AuthController {
             model.addAttribute("error", "Email đã tồn tại!");
             return "auth/register";
         }
+
+        String otp = String.format("%06d", new Random().nextInt(999999));
+        verifyCodes.put(account.getEmail(), otp);
+
+        pendingAccounts.put(account.getEmail(), account);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(account.getEmail());
+        message.setSubject("Xác thực email đăng ký - Vietjet Air");
+        message.setText("Chào bạn,\n\nMã xác thực để hoàn tất đăng ký của bạn là: "
+                + otp + "\n\nNếu bạn không yêu cầu, vui lòng bỏ qua email này.");
+        mailSender.send(message);
+
+        model.addAttribute("email", account.getEmail());
+        return "auth/verify-registration";
+    }
+
+    @GetMapping("/verify-registration")
+    public String verifyRegistrationPage(@RequestParam("email") String email, Model model) {
+        model.addAttribute("email", email);
+        return "auth/verify-registration";
+    }
+
+
+    @PostMapping("/verify-registration")
+    public String processVerifyRegistration(@RequestParam("email") String email,
+                                            @RequestParam("otp") String otp,
+                                            Model model) {
+        String correctOtp = verifyCodes.get(email);
+        if (correctOtp == null || !correctOtp.equals(otp)) {
+            model.addAttribute("error", "Mã xác thực không đúng hoặc đã hết hạn!");
+            model.addAttribute("email", email);
+            return "auth/verify-registration";
+        }
+
+        Account account = pendingAccounts.get(email);
         accountService.register(account);
+
+        verifyCodes.remove(email);
+        pendingAccounts.remove(email);
+
         return "redirect:/login?register_success";
     }
+
+
 
     @GetMapping("/forgot-password")
     public String forgotPasswordPage() {
@@ -261,4 +319,51 @@ public class AuthController {
             this.newPassword = newPassword;
         }
     }
+
+    @PostMapping("/login/google")
+    public void loginWithGoogle(@RequestParam("idToken") String idToken,
+                                HttpServletRequest request,
+                                HttpServletResponse response) throws IOException {
+        try {
+            FirebaseToken decoded = FirebaseAuth.getInstance().verifyIdToken(idToken);
+            String email = decoded.getEmail();
+
+            Account account = accountService.getAccountByEmail(email);
+            if (account == null) {
+                account = new Account();
+                account.setEmail(email);
+                account.setPassword("google");
+
+
+                User u = new User();
+                u.setFullName(decoded.getName());
+                u.setImage(decoded.getPicture());
+                account.setUser(u);
+
+                accountService.register(account);
+            }
+
+            // Lấy thông tin người dùng
+            UserDetails ud = accountService.loadUserByUsername(email);
+            
+            // Tạo authentication token
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(ud, null, ud.getAuthorities());
+            
+            // Lưu vào context
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            
+            // Lưu authentication vào session
+            HttpSession session = request.getSession(true);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+            response.sendRedirect("/");
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid ID token");
+        }
+    }
+
+
+
 }

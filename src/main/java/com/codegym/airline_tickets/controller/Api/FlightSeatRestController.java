@@ -2,13 +2,11 @@ package com.codegym.airline_tickets.controller.Api;
 
 import com.codegym.airline_tickets.dto.BookingDTO;
 import com.codegym.airline_tickets.dto.BookingTicketDTO;
+import com.codegym.airline_tickets.dto.SeatDTO;
 import com.codegym.airline_tickets.entity.*;
 import com.codegym.airline_tickets.response.FlightResponse;
 import com.codegym.airline_tickets.response.ResponseObject;
-import com.codegym.airline_tickets.service.IAccountService;
-import com.codegym.airline_tickets.service.IBookingService;
-import com.codegym.airline_tickets.service.IFlightSeatService;
-import com.codegym.airline_tickets.service.ITicketService;
+import com.codegym.airline_tickets.service.*;
 import com.codegym.airline_tickets.util.PusherEvent;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -16,10 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -45,7 +42,14 @@ public class FlightSeatRestController {
     @Autowired
     private PusherEvent pusherEvent;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Autowired
+    private ISeatService seatService;
+
+    @Autowired
+    private TemplateEngine templateEngine;
+
+    @Autowired
+    private IFlightService flightService;
 
     private static final Integer PRICE_FOR_A_KG = 10000;
 
@@ -120,7 +124,7 @@ public class FlightSeatRestController {
                 data.getNumberOfTickets(),
                 1,
                 data.getTotalPrice(),
-                createdAt
+                LocalDateTime.now()
         );
         Booking res = bookingService.updateOrCreate(booking);
         saveTicket(data, res, res.getFlight(), 1);
@@ -170,7 +174,122 @@ public class FlightSeatRestController {
             );
             Ticket result = ticketService.updateOrCreate(ticket);
             flightSeatService.updateStatusById(s.getId(), 2);
-            pusherEvent.pusherTrigger("flight." + flight.getId(), "seat-occupied", s.getId());
+            pusherEvent.pusherTrigger("flight." + flight.getId(), "seat-occupied", s);
         }
+    }
+
+    @PostMapping("/updateStatus")
+    public ResponseEntity<ResponseObject> updateStatus(@RequestParam Map<String, String> requestBody) {
+        Long id = Long.parseLong(requestBody.get("id"));
+
+        FlightSeat seat = flightSeatService.findById(id);
+
+        if (seat == null) {
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .errors(true)
+                            .message("Thông tin ghế ngồi không tồn tại.")
+                            .build()
+            );
+        }
+
+        if (requestBody.get("status") != null) {
+            Integer status = Integer.parseInt(requestBody.get("status"));
+            seat.setStatus(status);
+            FlightSeat res = flightSeatService.updateOrCreate(seat);
+            pusherEvent.pusherTrigger("flight." + seat.getFlight().getId(), "seat-edited", res);
+        }
+
+        return ResponseEntity.ok().body(
+                ResponseObject.builder()
+                        .message("Chỉnh sửa thông tin ghế " + seat.getSeat().getCol().getAlphabet() + seat.getSeat().getRow().getNumber() + " thành công")
+                        .build()
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> delete(@PathVariable("id") Long id) {
+        FlightSeat seat = flightSeatService.findById(id);
+        if (seat == null) {
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .errors(true)
+                            .message("Thông tin ghế ngồi không tồn tại.")
+                            .build()
+            );
+        }
+
+        flightSeatService.remove(id);
+        pusherEvent.pusherTrigger("flight." + seat.getFlight().getId(), "seat-deleted", seat);
+        return ResponseEntity.ok().body(
+                ResponseObject.builder()
+                        .message("Xóa thông tin ghế " + seat.getSeat().getCol().getAlphabet() + seat.getSeat().getRow().getNumber() + " thành công")
+                        .build()
+        );
+
+    }
+
+    @PostMapping()
+    public ResponseEntity<ResponseObject> create(@ModelAttribute FlightSeat seat) {
+        seat.setStatus(1);
+        flightSeatService.save(seat);
+        pusherEvent.pusherTrigger("flight." + seat.getFlight().getId(), "seat-created", seat);
+        return ResponseEntity.ok().body(
+                ResponseObject.builder()
+                        .message("Tạo mới ghế " + seat.getSeat().getCol().getAlphabet() + seat.getSeat().getRow().getNumber() + " thành công")
+                        .build()
+        );
+    }
+
+    @GetMapping("/data-seat/{flightId}")
+    public ResponseEntity<ResponseObject> dataSeat(@PathVariable Long flightId, @RequestParam Map<String, String> request,HttpSession session) {
+        List<SeatDTO> seats = seatService.findAllSeats();
+
+        Context context = new Context();
+        context.setVariable("seats", seats);
+        if (request.get("cancel") != null) {
+            context.setVariable("cancel", "true");
+        }
+        String html = templateEngine.process("admin/flight_seat/data_seat", context);
+
+        return ResponseEntity.ok().body(
+                ResponseObject.builder()
+                        .html(html)
+                        .build()
+        );
+    }
+
+    @PostMapping("/save-batch/{flightId}")
+    public ResponseEntity<ResponseObject> saveBatch(@PathVariable Long flightId, @RequestParam(name = "seatId") List<Long> seatIds) {
+        if (seatIds == null || seatIds.isEmpty()) {
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .errors(true)
+                            .message("Vui lòng sẽ để chọn ít nhất 1 ghế")
+                            .build()
+            );
+        }
+        Flight flight = flightService.findById(flightId);
+        if (flight ==  null) {
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .errors(true)
+                            .message("Chuyến bay không tồn tại")
+                            .build()
+            );
+        }
+        FlightSeat flightSeat;
+        Seat seat;
+        for (Long seatId : seatIds) {
+            seat = seatService.findById(seatId);
+            flightSeat  = new FlightSeat(flight, seat, 1);
+            flightSeatService.save(flightSeat);
+        }
+
+        return ResponseEntity.ok().body(
+                ResponseObject.builder()
+                        .message("Tạo mới hàng loạt ghế thành công")
+                        .build()
+        );
     }
 }

@@ -2,8 +2,10 @@ package com.codegym.airline_tickets.service.impl;
 
 import com.codegym.airline_tickets.entity.Booking;
 import com.codegym.airline_tickets.entity.Col;
+import com.codegym.airline_tickets.repository.ColRepository;
 import com.codegym.airline_tickets.service.IBookingService;
 import com.codegym.airline_tickets.service.IColService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +13,12 @@ import java.util.List;
 @Service
 public class ColService implements IColService {
 
+    @Autowired
+    private ColRepository colRepository;
+
     @Override
     public List<Col> getAll() {
-        return List.of();
+        return colRepository.findAll();
     }
 
     @Override

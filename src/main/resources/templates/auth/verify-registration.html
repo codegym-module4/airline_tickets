@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{user/layouts/head::head('Xác thực đăng ký')}"></head>
+<body class="auth-page">
+<main>
+    <th:block th:replace="~{user/layouts/header::header}"></th:block>
+    <div class="auth-container">
+        <h2>Xác thực email</h2>
+        <p>Chúng tôi đã gửi mã xác thực đến <strong th:text="${email}"></strong>.</p>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <form th:action="@{/verify-registration}" method="post">
+            <input type="hidden" name="email" th:value="${email}" />
+            <div class="mb-3">
+                <label for="otp" class="form-label">Mã xác thực:</label>
+                <input type="text" id="otp" name="otp" class="form-control" required maxlength="6"/>
+            </div>
+            <button type="submit" class="btn-custom">Xác thực</button>
+        </form>
+    </div>
+    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+</main>
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+</body>
+</html>

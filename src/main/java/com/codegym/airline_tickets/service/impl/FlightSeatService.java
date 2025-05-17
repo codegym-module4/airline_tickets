@@ -35,7 +35,7 @@ public class FlightSeatService implements IFlightSeatService {
 
     @Override
     public void remove(Long id) {
-
+        flightSeatRepository.deleteById(id);
     }
 
     @Override

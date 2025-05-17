@@ -2,8 +2,10 @@ package com.codegym.airline_tickets.service.impl;
 
 import com.codegym.airline_tickets.entity.Role;
 import com.codegym.airline_tickets.entity.Row;
+import com.codegym.airline_tickets.repository.RowRepository;
 import com.codegym.airline_tickets.service.IRoleService;
 import com.codegym.airline_tickets.service.IRowService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +13,12 @@ import java.util.List;
 @Service
 public class RowService implements IRowService {
 
+    @Autowired
+    private RowRepository rowRepository;
+
     @Override
     public List<Row> getAll() {
-        return List.of();
+        return rowRepository.findAll();
     }
 
     @Override

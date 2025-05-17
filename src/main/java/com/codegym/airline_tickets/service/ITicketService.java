@@ -18,4 +18,6 @@ public interface ITicketService extends IService<Ticket> {
     List<Ticket> findTicketByBookingId(Long bookingId);
 
     Ticket findByBookingIdAndFlightId(Long bookingId, Long flightId);
+
+    Ticket findByFlightIdAndSeatId(Long flightId, Long seatId);
 }

@@ -23,7 +23,7 @@
 <body>
 <div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
 
-<div class="main-content container" style="margin-top: 60px;" id="mainContent">
+<div class="main-content container" style="margin-top: 100px;" id="mainContent">
     <h4 class="text-center mb-4">THÊM TIN TỨC</h4>
     <form th:action="@{/admin/news/create}" th:object="${news}" method="post" enctype="multipart/form-data">
         <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>

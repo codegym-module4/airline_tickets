@@ -1,0 +1,180 @@
+.seat {
+    position: relative;
+    width: 50px;
+    height: 60px;
+    margin: 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    color: #28a745;
+    /* màu sẽ bị ghi đè theo trạng thái */
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+/* Lưng ghế */
+.seat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    border-radius: 15px 15px 0 0;
+    background-color: currentColor;
+}
+
+/* Đệm ghế */
+.seat::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15%;
+    width: 70%;
+    height: 40%;
+    border-radius: 0 0 6px 6px;
+    background-color: currentColor;
+    z-index: 1;
+}
+
+.seat-broken {
+    color: #6c757d;
+    opacity: 0.7;
+}
+
+.seat-not-found {
+    color: #fff;
+    opacity: 0.7;
+}
+
+.seat-not-found.seat:before {
+    border: 1px solid #6c757d;
+}
+
+.seat-not-found.seat:after {
+    border: 1px solid #6c757d;
+}
+
+/* Text nằm trên đệm ghế */
+.seat span {
+    position: absolute;
+    bottom: 8px;
+    z-index: 2;
+    color: white;
+    font-size: 13px;
+}
+
+/* Trạng thái ghế */
+.seat-available {
+    color: #28a745;
+}
+
+.seat-booked {
+    color: #dc3545;
+    opacity: 0.7;
+}
+
+.seat-selected {
+    color: #ffc107;
+}
+
+.seat:hover:not(.seat-booked) {
+    transform: scale(1.1);
+}
+
+.seat-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.legend .seat {
+    box-shadow: none;
+    pointer-events: none;
+}
+
+.seat-map-container {
+    background: white;
+    /*border-radius: 12px;*/
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.gap-between {
+    width: 40px;
+}
+
+@media (max-width: 768px) {
+    .seat {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+    }
+}
+.customer-seat {
+    border: 1px solid #222222;
+    text-align: center;
+    padding: 20px;
+    background-color: #FFFFFF;
+}
+
+.selected-seat {
+    background-color: #ffc107;
+}
+
+.icon-seat-not-found {
+    z-index: 5;
+    position: absolute;
+    top: 15px;
+    cursor: pointer;
+}
+
+.icon-cancel-seat {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 45px;
+}
+
+#process-overlay {
+    background: #ffffff;
+    color: #666666;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 5000;
+    top: 0;
+    left: 0;
+    float: left;
+    text-align: center;
+    padding-top: 25%;
+    opacity: .80;
+}
+
+.process-loading {
+    margin: 0 auto;
+    height: 64px;
+    width: 64px;
+    animation: rotate-process 0.8s infinite linear;
+    border: 5px solid #666666;
+    border-right-color: transparent;
+    border-radius: 50%;
+}
+
+@keyframes rotate-process {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

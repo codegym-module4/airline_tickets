@@ -1,0 +1,65 @@
+<th:block th:fragment="update">
+    <div class="container">
+        <h2>Cập nhật thông tin khách hàng</h2>
+        <form action="/admin/customer/update"
+              th:object="${user}" method="post">
+            <div class="row">
+                <input hidden type="text" class="form-control" th:value="*{id}" name="id">
+                <div class="col-md-6 form-group mb-3">
+                    <label class="form-label">Họ và tên</label>
+                    <input required type="text" class="form-control" th:value="*{fullName}" name="fullName">
+                </div>
+
+                <div class="col-md-6 form-group mb-3">
+                    <label class="form-label">Giới tính</label>
+                    <select class="form-control" name="gender" th:value="*{gender}">
+                        <option value="Male" th:selected="*{gender == 'Female'}">Nữ</option>
+                        <option value="Female" th:selected="*{gender == 'Male'}">Nam</option>
+                        <option value="Other" th:selected="*{gender == 'Other'}">Khác</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 form-group mb-3">
+                    <label class="form-label">Email</label>
+                    <input required type="text" class="form-control" th:value="*{email}" name="email">
+                </div>
+
+                <div class="col-md-6 form-group mb-3">
+                    <label class="form-label">Ngày sinh</label>
+                    <input type="date" class="form-control" th:value="*{dob}" name="dob">
+                </div>
+
+
+                <div class="col-md-6 form-group mb-3">
+                    <label class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" th:value="*{address}" name="address">
+                </div>
+
+                <div class="col-md-6 form-group mb-3">
+                    <label class="form-label">Quốc tịch</label>
+                    <select class="form-select" name="nationality">
+                        <option selected th:text="*{nationality}" th:value="*{nationality}"></option>
+                        <th:block th:each="country : ${countries}">
+                            <option th:value="${country.niceName}" th:text="${country.niceName}"></option>
+                        </th:block>
+                    </select>
+                </div>
+
+                <div class="col-md-6 form-group mb-3">
+                    <label th:for="phone" class="form-label">Điện thoại</label>
+                    <input type="text" class="form-control" th:value="*{phone}" name="phone">
+                </div>
+
+                <div class="col-md-6 form-group mb-3">
+                    <label th:for="phone" class="form-label">CCCD - Passport</label>
+                    <input type="text" class="form-control" th:value="*{citizenIdentification}"
+                           name="citizenIdentification">
+                </div>
+                <div class="modal-footer mt-2">
+                    <button type="submit" class="btn btn-danger" th:data-id="${user.id}">Cập nhật</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</th:block>

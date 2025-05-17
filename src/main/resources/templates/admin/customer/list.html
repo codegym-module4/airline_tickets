@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/layouts/head::head ('Quản lý thông tin khách hàng')}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
+
+<!-- Nội dung chính -->
+<div class="main-content container" style="margin-top: 60px;" id="mainContent">
+
+    <h2 class="mb-4">Quản lý khách hàng</h2>
+    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="d-flex justify-content-between mb-3">
+        <a th:href="@{/admin/customer/create}" class="btn btn-warning" style="background-color: red; color: white">
+            Thêm khách hàng</a>
+        <form th:action="@{/admin/customer/search}" method="get" class="d-flex" style="gap: 10px;">
+            <select name="type" class="form-select w-auto">
+                <option value="email">Email</option>
+            </select>
+            <input type="text" name="email" class="form-control w-50" placeholder="Tìm kiếm...">
+            <button type="submit" class="btn btn-danger">Tìm</button>
+        </form>
+
+    </div>
+    <table class="table table-bordered text-center">
+        <tbody>
+        <tr>
+            <th>Mã khách hàng</th>
+            <th>Hình ảnh cá nhân</th>
+            <th>Họ và tên</th>
+            <th>Ngày sinh</th>
+            <th>Giới tính</th>
+            <th>Số điện thoại</th>
+            <th>Email</th>
+            <th>Số CCCD</th>
+            <th>Thao tác</th>
+
+        </tr>
+        <tr class="text-center" th:if="${accountsPage.isEmpty()}">
+            <td colspan="8">Không tìm thấy dữ liệu</td>
+        </tr>
+        <tr th:each="account: ${accountsPage}">
+            <td th:text="${account.user.code}"></td>
+            <td th:if="${account.user.image != null}">
+                <img th:src="${account.user.image}"
+                     th:alt="${account.user.image}"
+                     style="width: 130px;height: 100px; object-fit: cover">
+            </td>
+            <td th:if="${account.user.image == null}">
+                <span>Trống</span>
+            </td>
+            <td th:text="${account.user.fullName != null ? account.user.fullName : 'Trống'}"></td>
+            <td th:text="${account.user.dob != null ? account.user.dob : 'Trống'}"></td>
+            <td th:text="${account.user.gender != null ? account.user.gender : 'Trống'}"></td>
+            <td th:text="${account.user.phone != null ? account.user.phone : 'Trống'}"></td>
+            <td th:text="${account.email != null ? account.email : 'Trống'}"></td>
+            <td th:text="${account.user.citizenIdentification != null ? account.user.citizenIdentification : 'Trống'}"></td>
+            <td>
+                <a id="btnUpdate" class="btn btn-sm btn-warning me-2" th:data-id=" ${account.id}">
+                    <i
+                            class="bi bi-pencil-square">
+                    </i>
+                </a>
+
+                <a th:href="@{'/admin/customer/delete/' + ${account.id}}"
+                   class="btn btn-sm btn-danger"
+                   onclick="return confirm('Bạn có chắc muốn xóa không?');"> <i
+                        class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="userDetail" tabindex="-1" aria-labelledby="userDetail" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{admin/customer/pagination::pagination}"></th:block>
+</div>
+<th:block th:replace="~{admin/layouts/script::script}"></th:block>
+</body>
+</html>

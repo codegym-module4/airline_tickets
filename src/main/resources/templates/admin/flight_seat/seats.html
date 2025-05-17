@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý ghế ngồi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/admin/css/seat.css">
+</head>
+<body>
+<!--Header-->
+<div th:replace="~{admin/sidebar/sidebar :: adminSidebar}"></div>
+<div class="main-content container" id="mainContent">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="row py-5 align-items-center">
+                    <div class="col-sm-10 col-lg-8 mb-lg-0 mb-3">
+                        <div class="row">
+                            <div class="col-sm-8 col-md-6 pe-md-4" style="border-right: 1px solid #222222">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <span class="fw-bold" th:text="${flight.departureAirport.city}"></span>
+                                    <span style="border: 1px dotted #222222; height: 1px" class="w-50">&nbsp;</span>
+                                    <i class="fa-solid fa-plane"></i>
+                                    <span class="fw-bold" th:text="${flight.arrivalAirport.city}"></span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div th:text="${flight.departureAirport.name}"></div>
+                                    <div th:text="${flight.arrivalAirport.name}"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3 ps-4 fw-bold">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span th:text="${textFlight}"></span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div th:text="${#temporals.format(flight.departure_time, 'HH:mm, dd/MM/yyyy')}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-lg-4 text-end" th:if="${lists.isEmpty()}">
+                        <div class="col-12">
+                            <div class="row" id="div_btn_batch_create">
+                                <div class="col-12">
+                                    <button role="button" class="btn btn-primary px-4" id="btnBatchCreate">Thêm hàng loạt</button>
+                                </div>
+                            </div>
+                            <div class="row d-none" id="div_btn_batch_save">
+                                <div class="col-lg-5 mb-lg-0 mb-2">
+                                    <button role="button" class="btn btn-danger px-5" id="btnCancel">Hủy</button>
+                                </div>
+                                <div class="col-lg-5">
+                                    <button role="button" class="btn btn-primary px-5" id="btnBatchSave" data-form_id="#form_create_batch_seat">Lưu</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-lg-3 pe-0">
+                        <!-- Legend -->
+                        <div class="legend">
+                            <div class="bg-danger p-3 w-100 text-center" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                                <h5 class="text-white">Chú thích sơ đồ chỗ ngồi</h5>
+                            </div>
+                            <div class="d-flex align-items-center w-100">
+                                <div class="seat seat-available"></div>
+                                <span class="ps-2">Ghế trống</span>
+                            </div>
+                            <div class="d-flex align-items-center w-100">
+                                <div class="seat seat-booked"></div>
+                                <span class="ps-2">Đã đặt</span>
+                            </div>
+                            <div class="d-flex align-items-center w-100">
+                                <div class="seat seat-broken"></div>
+                                <span class="ps-2">Đã hỏng</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-9 ps-0">
+                        <!-- Seat map -->
+                        <div class="seat-map-container bg-secondary">
+                            <div id="seat-map" class="bg-white mx-5">
+                                <form th:action="@{'/api/flight-seat/save-batch/' + ${flight.id}}" method="post" id="form_create_batch_seat">
+                                    <div class="col-12 col-xl-8 pb-3 mx-auto">
+                                    <div class="row align-items-center" id="div-seat">
+                                        <th:block th:each="seat, iStat : ${seats}">
+                                            <th:block th:with="flightSeat=${seatMap.get(seat.seatNumber) != null ? seatMap.get(seat.seatNumber).get(seat.seatAlphabet) : null}">
+                                                <div th:if="${flightSeat != null}"
+                                                     th:class="'col-1 seat ' + (${flightSeat.status == 2} ? 'seat-booked' : (${flightSeat.status == 3} ? 'seat-broken' : 'seat-available'))"
+                                                     th:id="'seat_' + ${seat.id}"
+                                                     th:data-id="${seat.id}"
+                                                     th:data-flight_seat_id="${flightSeat.id}"
+                                                >
+                                                    <span th:text="${seat.seatAlphabet + seat.seatNumber}"></span>
+                                                </div>
+                                                <div th:if="${flightSeat == null}" class="col-1 seat seat-not-found">
+                                                    <i class="fa-solid fa-circle-plus fa-2x icon-seat-not-found text-primary" th:data-id="${seat.id}" th:data-name="${seat.seatAlphabet + seat.seatNumber}"></i>
+                                                </div>
+                                            </th:block>
+                                            <div th:if="${seat.seatAlphabet == 'C'}" class="col-1"></div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                        <input type="hidden" name="flight_id" th:value="${flight_id}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="process-overlay" style="display:none;">
+        <div class="process-loading"></div>
+    </div>
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Chỉnh sửa ghế ngồi</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="txt-node"></p>
+                    <form class="clearfix" action="/api/flight-seat/updateStatus" method="POST" id="form_edit">
+                        <input type="hidden" name="id" value="">
+                        <input type="hidden" name="flight_id" th:value="${flight.id}">
+                        <div class="row align-items-center">
+                            <label class="col-12 form-label">Trạng thái</label>
+                            <div class="col-12">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input border-black" type="radio" name="status" id="status1" value="1" checked>
+                                    <label class="form-check-label" for="status1">Bình thường</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input border-black" type="radio" name="status" id="status2" value="3">
+                                    <label class="form-check-label" for="status2">Hỏng</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" id="btnEditSeat" data-form_id="#form_edit">Chỉnh sửa</button>
+                    <button type="button" class="btn btn-danger" id="btnDeleteSeat" data-form_id="#form_edit">Xóa</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Xác nhận tạo mới</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="text-alert"></p>
+                    <form action="/api/flight-seat" method="post" id="form_create">
+                        <input type="hidden" name="seat" value="">
+                        <input type="hidden" name="flight" th:value="${flight.id}">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnCreateSeat" data-form_id="#form_create">Tạo mới</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalResult" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông báo</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="text-result"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/user/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/user/plugins/jquery/jquery.min.js"></script>
+<script>
+    $(document).on("click", ".seat-broken, .seat-available", function () {
+        let delete_icon = $(this).find(".icon-cancel-seat");
+        if (delete_icon.length) {
+            return false;
+        }
+        let id = $(this).data("flight_seat_id");
+        let name = $(this).find("span").text();
+        $("#txt-node").html("<h5>Ghế " + name + "</h5>");
+        $("#form_edit input[name='id']").val(id);
+        if ($(this).hasClass("seat-available")) {
+            $("#status1").prop("checked", true);
+        }
+        if ($(this).hasClass("seat-broken")) {
+            $("#status2").prop("checked", true);
+        }
+        $("#modalEdit").modal("show");
+    });
+
+    $(document).on("click", ".icon-seat-not-found", function () {
+        let id = $(this).data("id");
+        let name = $(this).data("name");
+        if (!$("#div_btn_batch_save").hasClass("d-none")) {
+            let seat = $(this).closest(".seat-not-found");
+            let html = `<div class="col-1 seat seat-available" id="seat_${id}" data-id="${id}">
+                            <span>${name}</span>
+                            <i class="fa-regular fa-circle-xmark fa-xl text-danger icon-cancel-seat" data-id="${id}" data-name="${name}"></i>
+                            <input type="hidden" value="${id}" name="seatId[]">
+                        </div>`;
+            seat.replaceWith(html);
+        } else {
+            $("#text-alert").html("<h5>Bạn có chắc muốn tạo thêm ghế " + name + " cho chuyến bay không?</h5>");
+            $("#form_create input[name='seat']").val(id);
+            $("#modalCreate").modal("show");
+        }
+
+    });
+
+    $(document).on("click", ".seat-booked", function () {
+        let id = $(this).data("id");
+        let flight_id = $('input[name="flight_id"]').val();
+        let flight_seat_id = $(this).data("flight_seat_id");
+        let name = $(this).find("span").text();
+        $.ajax({
+            method: "GET",
+            url: "/api/ticket/getTicketBySeat",
+            data: {
+                seat_id : id,
+                flight_id : flight_id,
+                flight_seat_id : flight_seat_id
+            },
+            dataType: 'json'
+        }).done(function (data) {
+            let ticket = data.object;
+            let text = "Ghế " + name + " đã được khách hàng " + ticket.name + " đặt trước." +
+                "<br>Vui lòng liên hệ với khách hàng " + ticket.name + " để thông báo về việc thay đổi ghế ngồi của khách trước khi sửa đổi.";
+            $("#text-result").html("<h5>" + text + "</h5>");
+            $("#modalResult").modal("show");
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on('hide.bs.modal', '#modalCreate, #modalEdit, #modalResult', function (event) {
+        $('input[name="id"]').val('');
+        $('input[name="seat"]').val('');
+        $("#text-alert, #txt-node, #text-result").html("");
+    });
+
+    $(document).on("click", "#btnEditSeat", function () {
+        let formId = $(this).data("form_id");
+        $.ajax({
+            method: $(formId).attr('method'),
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            dataType: 'json'
+        }).done(function (data) {
+            alert(data.message);
+            location.reload();
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on("click", "#btnCreateSeat", function () {
+        $('#process-overlay').fadeIn();
+        let formId = $(this).data("form_id");
+        $.ajax({
+            method: $(formId).attr('method'),
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            dataType: 'json'
+        }).done(function (data) {
+            alert(data.message);
+            location.reload();
+        }).fail(function (jqXhr, json, errorThrown) {
+            $('#process-overlay').fadeOut();
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on("click", "#btnDeleteSeat", function () {
+        let text = $("#modalEdit #txt-node h5").text();
+        let name = text.split(" ")[1];
+        let formId = $(this).data("form_id");
+        let id = $(formId + " input[name='id']").val();
+        if (confirm("Bạn có chắc là muốn xóa ghế " + name + " không?")) {
+            $.ajax({
+                method: "DELETE",
+                url: "/api/flight-seat/" + id,
+                dataType: 'json'
+            }).done(function (data) {
+                alert(data.message);
+                location.reload();
+            }).fail(function (jqXhr, json, errorThrown) {
+                if (jqXhr.responseJSON.errors) {
+                    alert(jqXhr.responseJSON.message);
+                }
+            });
+        }
+    });
+
+    $(document).on("click", "#btnBatchCreate", function () {
+        let flightId = $("input[name='flight_id']").val();
+        $.ajax({
+            method: "GET",
+            url: "/api/flight-seat/data-seat/" + flightId,
+            data: {},
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.html) {
+                $("#div-seat").html(data.html);
+                if (!$("#div_btn_batch_create").hasClass("d-none")) {
+                    $("#div_btn_batch_create").addClass("d-none")
+                }
+
+                if ($("#div_btn_batch_save").hasClass("d-none")) {
+                    $("#div_btn_batch_save").removeClass("d-none");
+                }
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on("click", ".icon-cancel-seat", function () {
+        let seatId = $(this).data("id");
+        let seatName = $(this).data("name");
+        let seat = $("#seat_" + seatId);
+        let html = `<div class="col-1 seat seat-not-found">
+                        <i class="fa-solid fa-circle-plus fa-2x icon-seat-not-found text-primary" data-id="${seatId}" data-name="${seatName}"></i>
+                    </div>`;
+        seat.replaceWith(html);
+    });
+
+    $(document).on("click", "#btnCancel", function () {
+        let flightId = $("input[name='flight_id']").val();
+        $.ajax({
+            method: "GET",
+            url: "/api/flight-seat/data-seat/" + flightId,
+            data: {
+                cancel : "true"
+            },
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.html) {
+                $("#div-seat").html(data.html);
+                if ($("#div_btn_batch_create").hasClass("d-none")) {
+                    $("#div_btn_batch_create").removeClass("d-none")
+                }
+
+                if (!$("#div_btn_batch_save").hasClass("d-none")) {
+                    $("#div_btn_batch_save").addClass("d-none");
+                }
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+    $(document).on("click", "#btnBatchSave", function () {
+        $('#process-overlay').fadeIn();
+        let formId = $(this).data("form_id");
+        $.ajax({
+            method: $(formId).attr('method'),
+            url: $(formId).attr('action'),
+            data: $(formId).serialize(),
+            dataType: 'json'
+        }).done(function (data) {
+            alert(data.message);
+            location.reload();
+        }).fail(function (jqXhr, json, errorThrown) {
+            $('#process-overlay').fadeOut();
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -4,22 +4,22 @@ import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.dto.TicketResponseDTO;
 import com.codegym.airline_tickets.entity.Flight;
 import com.codegym.airline_tickets.entity.Ticket;
+import com.codegym.airline_tickets.response.ResponseObject;
 import com.codegym.airline_tickets.response.TicketResponse;
 import com.codegym.airline_tickets.service.impl.TicketService;
 import com.codegym.airline_tickets.util.FormaterCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ticket")
@@ -60,8 +60,6 @@ public class TicketDetailController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
 
-
-
         if (ticket != null) {
             TicketResponseDTO ticketResponseDTO = TicketResponseDTO.builder()
                     .code(ticket.getCode())
@@ -74,7 +72,7 @@ public class TicketDetailController {
 
             Context context = new Context();
             context.setVariable("ticket", ticketResponseDTO);
-           String html = templateEngine.process("user/payment/ticket_detail", context);
+            String html = templateEngine.process("user/payment/ticket_detail", context);
 
             return ResponseEntity.ok().body(
                     TicketResponse.builder()
@@ -86,6 +84,27 @@ public class TicketDetailController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/getTicketBySeat")
+    public ResponseEntity<ResponseObject> getTicketBySeat(@RequestParam Map<String, String> request) {
+        Long flightId = Long.parseLong(request.get("flight_id"));
+        Long flightSeatId = Long.parseLong(request.get("flight_seat_id"));
+        Ticket ticket = ticketService.findByFlightIdAndSeatId(flightId, flightSeatId);
+        if (ticket == null) {
+            return ResponseEntity.badRequest().body(
+                    ResponseObject.builder()
+                            .errors(true)
+                            .message("Không tìm thấy thông tin vé cho ghế ngồi")
+                            .build()
+            );
+        }
+
+        return ResponseEntity.ok().body(
+                ResponseObject.builder()
+                        .object(ticket)
+                        .build()
+        );
     }
 
 }
