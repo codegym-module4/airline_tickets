@@ -39,6 +39,14 @@ public class ChatController {
         String sender = principal.getName();
         message.setSenderName(sender);
         String recipient = chatService.assignEmployeeToSession(sender);
+        if (recipient == null) {
+            messagingTemplate.convertAndSend(
+                    "/topic/errors/" + headerAccessor.getSessionId(),
+                    "Không có nhân viên nào khả dụng. Vui lòng thử lại sau."
+            );
+            return;
+        }
+
         message.setRecipientName(recipient);
         message.setTimestamp(LocalDateTime.now());
 
