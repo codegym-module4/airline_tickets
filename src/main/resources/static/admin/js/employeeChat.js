@@ -1,5 +1,5 @@
 
-let stompClient = null; // Đưa biến stompClient ra ngoài để dùng lại
+let stompClient = null;
 let handleSendClick = null;
 let handleEnterKeydown = null;
 

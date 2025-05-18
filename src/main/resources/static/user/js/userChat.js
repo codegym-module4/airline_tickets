@@ -1,5 +1,4 @@
-
-let stompClient = null; // Đưa ra ngoài để tái sử dụng
+let stompClient = null;
 let handleSendClick = null;
 let handleEnterKeydown = null;
 
@@ -97,7 +96,7 @@ window.onload = function () {
             const message = messageInput.value;
             showSenderMessage();
             if (message && stompClient && stompClient.connected) {
-                stompClient.send('/app/chat', {}, JSON.stringify({ 'content': message }));
+                stompClient.send('/app/chat', {}, JSON.stringify({'content': message}));
                 messageInput.value = '';
             }
         };
@@ -114,7 +113,7 @@ window.onload = function () {
                 event.preventDefault(); // Ngăn xuống dòng
                 showSenderMessage();
                 if (message && stompClient && stompClient.connected) {
-                    stompClient.send('/app/chat', {}, JSON.stringify({ 'content': message }));
+                    stompClient.send('/app/chat', {}, JSON.stringify({'content': message}));
                     messageInput.value = '';
                 }
             }

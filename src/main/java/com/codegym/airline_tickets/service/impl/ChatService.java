@@ -14,7 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class ChatService implements IChatService {
 
-    private final Map<String,String> chatSessions = new ConcurrentHashMap<>();
+    private final Map<String,String> customerToEmployee = new ConcurrentHashMap<>();
+    private final Map<String,String> employeeToCustomer = new ConcurrentHashMap<>();
 
     @Autowired
     private ChatRepository chatRepository;
@@ -34,23 +35,31 @@ public class ChatService implements IChatService {
                 "admin1@example.com"
         };
 
-        int randomIndex = (int) (Math.random() * EMPLOYEE_NAMES.length);
+        for (String employee : EMPLOYEE_NAMES) {
+            if (!employeeToCustomer.containsKey(employee)) {
+                return employee;
+            }
+        }
 
-        return EMPLOYEE_NAMES[randomIndex];
+        return null;
+
     }
 
     public String assignEmployeeToSession(String customerName) {
-        if (chatSessions.containsKey(customerName)) {
-            return chatSessions.get(customerName);
+        if (customerToEmployee.containsKey(customerName)) {
+            return customerToEmployee.get(customerName);
         } else {
             String employeeName = getRandomEmployeeName();
-            chatSessions.put(customerName, employeeName);
+            if (employeeName != null) {
+                customerToEmployee.put(customerName, employeeName);
+                employeeToCustomer.put(employeeName, customerName);
+            }
             return employeeName;
         }
     }
 
     public String findCustomerBySession(String employeeName) {
-        for (Map.Entry<String, String> entry : chatSessions.entrySet()) {
+        for (Map.Entry<String, String> entry : customerToEmployee.entrySet()) {
             if (entry.getValue().equals(employeeName)) {
                 return entry.getKey();
             }
@@ -60,7 +69,10 @@ public class ChatService implements IChatService {
 
 
     public void removeSession(String customerName) {
-        chatSessions.remove(customerName);
+        String employeeName = customerToEmployee.remove(customerName);
+        if (employeeName != null) {
+            employeeToCustomer.remove(employeeName);
+        }
     }
 
     public List<ChatMessage> getAllMessageByUserName(String userName) {
