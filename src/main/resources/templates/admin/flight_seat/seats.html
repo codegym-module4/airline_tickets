@@ -210,7 +210,7 @@
     $(document).on("click", ".icon-seat-not-found", function () {
         let id = $(this).data("id");
         let name = $(this).data("name");
-        if (!$("#div_btn_batch_save").hasClass("d-none")) {
+        if ($("#div_btn_batch_save").length > 0) {
             let seat = $(this).closest(".seat-not-found");
             let html = `<div class="col-1 seat seat-available" id="seat_${id}" data-id="${id}">
                             <span>${name}</span>
