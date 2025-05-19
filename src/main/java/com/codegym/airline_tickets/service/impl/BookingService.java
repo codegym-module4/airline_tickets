@@ -159,6 +159,11 @@ public class BookingService implements IBookingService {
         return bookingRepository.findByCreatedAtLessThanEqualAndStatus(time, status);
     }
 
+    @Override
+    public List<Booking> getBookingByFlightDate(LocalDate date) {
+        return bookingRepository.getBookingByFlightDate(date);
+    }
+
     private static String generateNextCode(long number) {
         if (number == 0) {
             return "BK001";

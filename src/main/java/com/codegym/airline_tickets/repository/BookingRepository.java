@@ -46,8 +46,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "FROM Booking b " +
             "WHERE b.deletedAt IS NULL " +
             "AND b.user.id = :id AND DATE(b.payment_date) = :date AND b.status = 2")
-    int getNumberOfTicketsByUserIdAndDate (@Param("id") Long id,
-                                         @Param("date") LocalDate date
+    int getNumberOfTicketsByUserIdAndDate(@Param("id") Long id,
+                                          @Param("date") LocalDate date
     );
 
 
@@ -67,9 +67,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "AND ((:returnFlightId IS NULL AND b.returnFlight IS NULL) " +
             "OR (b.returnFlight.id = :returnFlightId)) " +
             "AND DATE(b.payment_date) = :date AND b.status = 2")
-    BigInteger getRevenueByFlightAndReturnFlightAndDate (@Param("flightId") Long flightId,
-                                                         @Param("returnFlightId") Long returnFlightId,
-                                                         @Param("date") LocalDate date
+    BigInteger getRevenueByFlightAndReturnFlightAndDate(@Param("flightId") Long flightId,
+                                                        @Param("returnFlightId") Long returnFlightId,
+                                                        @Param("date") LocalDate date
     );
 
     @Transactional
@@ -112,8 +112,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("update Booking b set b.status = ?2, b.payment_date = :date where b.vnpayOrderId = ?1")
     void updateStatusAndPaymentDateByVnPayId(String vnpayOrderId, Integer status, LocalDateTime date);
 
-    @Query(value = "SELECT * FROM booking b ORDER BY b.id DESC LIMIT 1" , nativeQuery = true)
+    @Query(value = "SELECT * FROM booking b ORDER BY b.id DESC LIMIT 1", nativeQuery = true)
     Booking findLatest();
 
     List<Booking> findByCreatedAtLessThanEqualAndStatus(LocalDateTime time, Integer status);
+
+    @Query(value =  "SELECT b from Booking b " +
+                    "LEFT JOIN Flight f ON f.id = b.flight.id " +
+                    "LEFT JOIN Flight as rf ON rf.id = b.returnFlight.id " +
+                    "where DATE(f.arrival_time) = :date OR DATE(rf.arrival_time) = :date")
+    List<Booking> getBookingByFlightDate(LocalDate date);
 }

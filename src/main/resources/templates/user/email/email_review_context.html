@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Notification</title>
+</head>
+<body>
+<h2 th:text="'Xin chào, ' + ${booking.user.fullName} + '!'"></h2><br/>
+<p th:if="${booking.flight.arrival_time.toLocalDate().equals(yesterday)}">Cảm ơn bạn đã tham gia chuyến bay đến <span th:text="${booking.flight.arrivalAirport.city}"></span></p>
+<p th:if="${booking.returnFlight.arrival_time.toLocalDate().equals(yesterday)}">Cảm ơn bạn đã tham gia chuyến bay đến <span th:text="${booking.returnFlight.arrivalAirport.city}"></span></p>
+<p>
+  Bạn có thể cho chúng tôi biết mức độ hài lòng của bạn về chất lượng chuyến bay, dịch vụ theo link: <a href="/" target="_blank">Đánh giá chuyến bay</a><br/><br/>
+  Chúng tôi hi vọng có thể đồng hành cùng bạn trong những chuyến bay tiếp theo.
+</p>
+<div>
+  Nếu có bất kỳ thắc mắc hay vấn đề gì thì đừng ngần ngại cho chúng tôi biết thông qua<br/>
+  Email: info@airline.com<br/>
+  ĐT: 0123456789
+</div>
+<p>Trân trọng,<br>Đội ngũ phát triển</p>
+</body>
+</html>
