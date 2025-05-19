@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{user/layouts/head::head('Xóa tài khoản - Vietjet Air')}"></head>
+<body style="background: white; background-size: cover;">
+<th:block th:replace="~{user/layouts/header::header}"></th:block>
+<main id="content">
+    <section class="section">
+        <div class="mypage_block user_info">
+
+            <!-- Nav gốc giữ y nguyên -->
+            <nav class="mypage_nav">
+                <ul>
+                    <li class="user_info"><a href="/profile">Thông tin cá nhân</a></li>
+                    <li class="user_ticket"><a href="/my-ticket">Đặt chỗ của tôi</a></li>
+                    <li class="user_payment"><a href="/payment">Thanh toán</a></li>
+                    <li class="user_transfer_history"><a href="/payment/transfer-history">Lịch sử giao dịch</a></li>
+                    <li class="user_change_password"><a th:href="@{/profile/change-password}">Đổi mật khẩu</a></li>
+                </ul>
+            </nav>
+
+            <!-- Content mới -->
+            <div class="col-lg-9">
+                <div class="card shadow-sm rounded-3">
+                    <div class="card-header bg-danger text-white">
+                        <h4 class="mb-0">Xóa tài khoản</h4>
+                    </div>
+                    <div class="card-body">
+                        <div sec:authorize="isAuthenticated()">
+                            <div class="alert alert-warning">
+                                <strong>Cảnh báo!</strong> Thao tác này sẽ xóa tài khoản của bạn. Bạn sẽ không thể đăng nhập sau khi xóa.
+                            </div>
+
+                            <div class="mb-4">
+                                <p>Vui lòng xác nhận:</p>
+                                <ul>
+                                    <li>Tất cả thông tin cá nhân của bạn sẽ không còn hiển thị trên hệ thống</li>
+                                    <li>Bạn sẽ không thể đăng nhập sau khi xóa tài khoản</li>
+                                    <li>Để sử dụng lại dịch vụ, bạn cần đăng ký tài khoản mới</li>
+                                </ul>
+                            </div>
+
+                            <form th:action="@{/profile/delete-account}" method="post">
+                                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                                
+                                <div class="form-floating mb-3">
+                                    <input type="password" id="password" name="password" class="form-control" 
+                                           placeholder="Mật khẩu" required />
+                                    <label for="password">Nhập mật khẩu để xác nhận</label>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mt-4">
+                                    <a th:href="@{/profile}" class="btn btn-secondary">Hủy</a>
+                                    <button type="submit" class="btn btn-danger">Xác nhận xóa tài khoản</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End content mới -->
+
+        </div><!-- .mypage_block END -->
+    </section>
+    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+</main>
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
+</body>
+</html> 
