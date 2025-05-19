@@ -146,6 +146,12 @@ public class AccountService implements IAccountService, UserDetailsService {
         if (account == null) {
             throw new UsernameNotFoundException("Email không tồn tại");
         }
+        
+        // Kiểm tra tài khoản đã bị xóa chưa
+        if (account.getDeletedAt() != null) {
+            throw new UsernameNotFoundException("Tài khoản đã bị vô hiệu hóa");
+        }
+        
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + account.getRole().getRoleName());
 
         org.springframework.security.core.userdetails.User userDetails =
@@ -174,8 +180,8 @@ public class AccountService implements IAccountService, UserDetailsService {
             }
             String newCode = String.format("KH%03d", nextNumber);
             user.setCode(newCode);
-            userRepository.save(user); // Lưu User trước
-            account.setUser(user); // Gán User cho Account
+            userRepository.save(user);
+            account.setUser(user);
         }
 
         accountRepository.save(account);
