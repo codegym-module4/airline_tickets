@@ -59,8 +59,8 @@ public class SecurityConfig {
                                 "/policy/**",
                                 "/api/**"
                         ).permitAll()
-//                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
-//                                .requestMatchers("/admin/news/**").hasAnyRole("ADMIN", "EMPLOYEE")
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
+                                .requestMatchers("/admin/news/**").hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**").authenticated()
                         .anyRequest().authenticated()
                 )
