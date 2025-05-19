@@ -9,6 +9,7 @@ import com.codegym.airline_tickets.service.ITicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,11 +20,12 @@ public class TicketService implements ITicketService {
 
     @Override
     public List<Ticket> getAll() {
-        return List.of();
+        return ticketRepository.findAll();
     }
 
     @Override
     public void save(Ticket s) {
+        ticketRepository.save(s);
 
     }
 
@@ -34,6 +36,7 @@ public class TicketService implements ITicketService {
 
     @Override
     public void remove(Long id) {
+        ticketRepository.deleteById(id);
 
     }
 
@@ -96,4 +99,21 @@ public class TicketService implements ITicketService {
         number++;
         return String.format("VE%03d", number);
     }
+
+
+    public List<Ticket> searchTicketsByField(String field, String keyword) {
+        switch (field) {
+            case "name":
+                return ticketRepository.findByNameContainingIgnoreCase(keyword);
+            case "bookingCode":
+                return ticketRepository.findByBooking_Code(keyword);
+            case "airport":
+                return ticketRepository.searchByAirportName(keyword);
+            default:
+                return new ArrayList<>();
+        }
+    }
+
+
 }
+

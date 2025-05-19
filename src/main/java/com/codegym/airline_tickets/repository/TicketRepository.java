@@ -24,4 +24,21 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("SELECT t from Ticket t where t.flight.id = :flightId AND t.seat.id = :flightSeatId AND t.type = 1 ORDER BY t.id LIMIT 1")
     Ticket findByFlightIdAndSeatId(Long flightId, Long flightSeatId);
+
+    // 1. Tìm vé theo mã đặt chỗ (booking code)
+    List<Ticket> findByBooking_Code(String code);
+
+    // 2. Tìm vé theo tên hành khách (không phân biệt hoa thường)
+    List<Ticket> findByNameContainingIgnoreCase(String name);
+
+    // 3. Tìm vé theo tên sân bay đi
+    List<Ticket> findByFlight_DepartureAirport_NameContainingIgnoreCase(String keyword);
+
+    // 4. Tìm vé theo tên sân bay đến
+    List<Ticket> findByFlight_ArrivalAirport_NameContainingIgnoreCase(String keyword);
+
+    // (Tùy chọn) Tìm theo cả sân bay đi hoặc đến chứa keyword
+    @Query("SELECT t FROM Ticket t WHERE LOWER(t.flight.departureAirport.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(t.flight.arrivalAirport.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<Ticket> searchByAirportName(@Param("keyword") String keyword);
+
 }
