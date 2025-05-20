@@ -7,6 +7,7 @@ import com.codegym.airline_tickets.entity.Ticket;
 import com.codegym.airline_tickets.response.ResponseObject;
 import com.codegym.airline_tickets.response.TicketResponse;
 import com.codegym.airline_tickets.service.impl.TicketService;
+import com.codegym.airline_tickets.util.CalFlightTime;
 import com.codegym.airline_tickets.util.FormaterCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,10 +52,7 @@ public class TicketDetailController {
                 .arrivalIATA(flight.getArrivalAirport().getIATA())
                 .build();
 
-        Duration duration = Duration.between(flightRes.getDepartureTime(), flightRes.getArrivalTime());
-        long hours = duration.toHours();
-        long minutes = duration.toMinutes() % 60;
-        String result = String.format("%d giờ %d phút", hours, minutes);
+        String result = CalFlightTime.cal(flightRes.getDepartureTime(), flightRes.getArrivalTime());
 
         LocalDateTime timeToBoard = flightRes.getDepartureTime().minusMinutes(50);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");

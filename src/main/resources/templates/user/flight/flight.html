@@ -49,8 +49,11 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="radio" th:id="'departure-' + ${flight.flightCode}" class="radio-depart"
-                                           name="flightChoiceDeparture" th:value="${flight.id}">
+                                    <input type="radio" th:id="'departure-' + ${flight.flightCode}"
+                                           class="radio-depart"
+                                           name="flightChoiceDeparture" th:value="${flight.id}"
+                                           th:data-id="${flight.id}"
+                                           onchange="generateCompareURL()">
                                 </td>
                             </tr>
                             </tbody>
@@ -89,8 +92,10 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="radio" th:id="'arrival-' + ${flight.flightCode}" class="radio-arrival"
-                                           name="flightChoice" th:value="${flight.id}">
+                                    <input type="radio" th:id="'arrival-' + ${flight.flightCode}"
+                                           class="radio-arrival"
+                                           name="flightChoice" th:value="${flight.id}" th:data-id="${flight.id}"
+                                           onchange="generateCompareURL()">
                                 </td>
                             </tr>
                             </tbody>
@@ -140,8 +145,8 @@
                         </table>
                     </div>
                     <div class="col-12">
-                        <button type="button" class="btn btn-detail" id="btnConfirm">Xác nhận</button>
-                        <button type="button" class="btn btn-detail me-3" id="btnSelectCompare">So sánh</button>
+                        <button type="button" class="btn btn-detail me-3" id="btnConfirm">Xác nhận</button>
+                        <button type="button" class="btn btn-detail" id="btnSelectCompare">So sánh</button>
                     </div>
                 </div>
                 <div class="col-lg-3 h-50 p-1">
@@ -329,7 +334,7 @@
 
 <!--modal chọn so sánh chuyến bay-->
 <div class="modal fade" id="selecDetailModal" tabindex="-1" aria-labelledby="detailModal" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="selecDetailModalLabel">Bay hiệu quả – So sánh để tìm lựa chọn tốt nhất</h5>
@@ -340,7 +345,23 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-secondary">Xác nhận</button>
+                <button type="button" class="btn btn-secondary" id="btnConfirmCompare">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notifyErrorCompare" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng chọn từ 2 chuyến bay trở lên để so sánh!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

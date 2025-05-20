@@ -140,29 +140,48 @@
 
     });
 
-    // $(document).on("click", "#btnSelectCompare", function () {
-    //     let data = getDataRequired();
-    //     $.ajax({
-    //         type: 'GET',
-    //         url: '/api/flight/confirm',
-    //         data: data,
-    //         dataType: 'json'
-    //     }).done(function (data) {
-    //         if (data.html) {
-    //             $("#flightDetailsModal .modal-body").html(data.html);
-    //             $("#flightDetailsModal").modal("show");
-    //         }
-    //     }).fail(function (jqXhr, json, errorThrown) {
-    //         if (jqXhr.responseJSON.errors) {
-    //             alert(jqXhr.responseJSON.message);
-    //         }
-    //     });
-    // });
-
-
     $(document).on("click", "#btnSelectCompare", function () {
-        // $("#selecDetailModal .modal-body").html(data.html);
-        $("#selecDetailModal").modal("show");
+        let data = generateCompareURL();
+        if (data.selectedIds.length <= 1) {
+            $("#notifyErrorCompare").modal("show");
+            return
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: data.url,
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.html) {
+                $("#selecDetailModal .modal-body").html(data.html);
+                $("#selecDetailModal").modal("show");
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+
+    $(document).on("click", "#btnConfirmCompare", function () {
+        let data = getDataRequired();
+        $.ajax({
+            type: 'GET',
+            url: '/api/flight/confirm',
+            data: data,
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.html) {
+                $("#selecDetailModal").modal("hide");
+                $("#flightDetailsModal .modal-body").html(data.html);
+                $("#flightDetailsModal").modal("show");
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
     });
 
 
@@ -190,6 +209,22 @@ function getDataRequired() {
 
     return object;
 }
+
+function generateCompareURL() {
+    let object;
+    let selectedIds = $("input[type='radio']:checked").map(function () {
+        return $(this).data("id");
+    }).get();
+
+    let url = "/api/flight/compare/" + selectedIds.join(",");
+    object = {
+        selectedIds: selectedIds,
+        url: url
+    }
+    return object;
+
+}
+
 
 
 
