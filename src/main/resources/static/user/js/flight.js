@@ -98,6 +98,22 @@
     });
 
     $(document).on("click", "#btnConfirm", function () {
+        let condition = generateCompareURL();
+        let flight_type = $("input[name='flight_type']").val();
+
+        if (flight_type === "ONEWAY" && condition.selectedIds.length > 1) {
+            $("#flightDetailsModal").modal("hide");
+            $("#notifyErrorOneWay").modal("show");
+            $("#selecDetailModal").modal("hide");
+            return
+        }
+        if (flight_type === "ROUND-TRIP" && condition.selectedIds.length > 2) {
+            $("#flightDetailsModal").modal("hide");
+            $("#notifyErrorRoundTrip").modal("show");
+            $("#selecDetailModal").modal("hide");
+            return
+        }
+
         let data = getDataRequired();
         $.ajax({
             type: 'GET',
@@ -140,29 +156,69 @@
 
     });
 
-    // $(document).on("click", "#btnSelectCompare", function () {
-    //     let data = getDataRequired();
-    //     $.ajax({
-    //         type: 'GET',
-    //         url: '/api/flight/confirm',
-    //         data: data,
-    //         dataType: 'json'
-    //     }).done(function (data) {
-    //         if (data.html) {
-    //             $("#flightDetailsModal .modal-body").html(data.html);
-    //             $("#flightDetailsModal").modal("show");
-    //         }
-    //     }).fail(function (jqXhr, json, errorThrown) {
-    //         if (jqXhr.responseJSON.errors) {
-    //             alert(jqXhr.responseJSON.message);
-    //         }
-    //     });
-    // });
-
-
     $(document).on("click", "#btnSelectCompare", function () {
-        // $("#selecDetailModal .modal-body").html(data.html);
-        $("#selecDetailModal").modal("show");
+        let data = generateCompareURL();
+
+        if (data.selectedIds.length <= 1) {
+            $("#notifyErrorCompare").modal("show");
+            return
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: data.url,
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.html) {
+                $("#selecDetailModal .modal-body").html(data.html);
+                $("#selecDetailModal").modal("show");
+
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
+    });
+
+
+    $(document).on("click", "#btnConfirmCompare", function () {
+
+        const condition = JSON.parse(sessionStorage.getItem("checkedFlight"));
+        let flight_type = $("input[name='flight_type']").val();
+
+        if (flight_type === "ONEWAY" && condition.selectedIds.length > 1) {
+            $("#flightDetailsModal").modal("hide");
+            $("#notifyErrorOneWay").modal("show");
+            $("#selecDetailModal").modal("hide");
+            return
+        }
+
+        if (flight_type === "ROUND-TRIP" && condition.selectedIds.length > 2) {
+            $("#flightDetailsModal").modal("hide");
+            $("#notifyErrorRoundTrip").modal("show");
+            $("#selecDetailModal").modal("hide");
+            return
+        }
+
+        let data = getDataRequired();
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/flight/confirm',
+            data: data,
+            dataType: 'json'
+        }).done(function (data) {
+            if (data.html) {
+                $("#selecDetailModal").modal("hide");
+                $("#flightDetailsModal .modal-body").html(data.html);
+                $("#flightDetailsModal").modal("show");
+            }
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXhr.responseJSON.errors) {
+                alert(jqXhr.responseJSON.message);
+            }
+        });
     });
 
 
@@ -189,7 +245,41 @@ function getDataRequired() {
     }
 
     return object;
+
 }
+
+function generateCompareURL() {
+    let object
+    let selectedDepart = $(".radio-depart:checked").map(function () {
+        return $(this).data("id");
+    }).get();
+    let selectedArrival = $(".radio-arrival:checked").map(function () {
+        return $(this).data("id");
+    }).get();
+    let selectedIds = [...selectedDepart, ...selectedArrival];
+    console.log("selectedIds", selectedIds);
+    let url = "/api/flight/compare/" + selectedIds.join(",");
+    object = {
+        selectedIds: selectedIds,
+        url: url
+    };
+    sessionStorage.setItem("checkedFlight", JSON.stringify(object));
+    return object;
+}
+
+$(document).ready(function () {
+    $("input[type='checkbox']").on("change", function () {
+        generateCompareURL();
+    });
+});
+
+$('#selecDetailModal').on('hidden.bs.modal', function () {
+    $("input[type='checkbox']").prop("checked", false);
+    sessionStorage.removeItem("checkedFlight");
+});
+
+
+
 
 
 

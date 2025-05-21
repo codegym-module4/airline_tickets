@@ -41,4 +41,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("SELECT t FROM Ticket t WHERE LOWER(t.flight.departureAirport.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(t.flight.arrivalAirport.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Ticket> searchByAirportName(@Param("keyword") String keyword);
 
+    Ticket findByCode(String code);
 }
