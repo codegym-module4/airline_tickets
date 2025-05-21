@@ -5,28 +5,28 @@
 <main>
     <th:block th:replace="~{user/layouts/header::header}"></th:block>
     <div class="auth-container">
-        <h2>Đăng nhập</h2>
-        <div th:if="${param.error}" class="alert alert-danger">Email hoặc mật khẩu không đúng!</div>
-        <div th:if="${param.logout}" class="alert alert-success">Bạn đã đăng xuất thành công!</div>
-        <div th:if="${param.register_success}" class="alert alert-success">Đăng ký thành công! Vui lòng đăng nhập.</div>
-        <div th:if="${param.account_deleted}" class="alert alert-success">Tài khoản của bạn đã được xóa thành công!</div>
+        <h2 th:text="#{login}">Đăng nhập</h2>
+        <div th:if="${param.error}" class="alert alert-danger" th:text="#{login_deny}">Email hoặc mật khẩu không đúng!</div>
+        <div th:if="${param.logout}" class="alert alert-success" th:text="#{logout_success}">Bạn đã đăng xuất thành công!</div>
+        <div th:if="${param.register_success}" class="alert alert-success" th:text="#{register_success}">Đăng ký thành công! Vui lòng đăng nhập.</div>
+        <div th:if="${param.account_deleted}" class="alert alert-success" th:text="#{delete_success}">Tài khoản của bạn đã được xóa thành công!</div>
         <form th:action="@{/login}" method="post">
             <div class="mb-3">
-                <label for="username" class="form-label">Email:</label>
+                <label for="username" class="form-label" th:text="#{email}">Email:</label>
                 <input type="text" id="username" name="username" class="form-control" required/>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Mật khẩu:</label>
+                <label for="password" class="form-label" th:text="#{password}">Mật khẩu:</label>
                 <input type="password" id="password" name="password" class="form-control" required/>
             </div>
-            <button type="submit" class="btn-custom">Đăng nhập</button>
+            <button type="submit" class="btn-custom" th:text="#{login}">Đăng nhập</button>
             <button type="button" id="googleSignIn" class="btn btn-outline-warning w-100 mt-2">
-                <i class="bi bi-google me-2"></i>Đăng nhập với Google
+                <i class="bi bi-google me-2" th:text="#{login_with_Google}"></i>Đăng nhập với Google
             </button>
 
             <p class="mt-3 text-center">
-                <a th:href="@{/register}">Đăng ký</a> |
-                <a th:href="@{/forgot-password}">Quên mật khẩu?</a>
+                <a th:href="@{/register}" th:text="#{register}">Đăng ký</a> |
+                <a th:href="@{/forgot-password}" th:text="#{forgot_password}">Quên mật khẩu?</a>
             </p>
         </form>
     </div>
