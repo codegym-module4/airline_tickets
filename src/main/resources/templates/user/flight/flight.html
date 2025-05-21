@@ -49,7 +49,7 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="radio" th:id="'departure-' + ${flight.flightCode}"
+                                    <input type="checkbox" th:id="'departure-' + ${flight.flightCode}"
                                            class="radio-depart"
                                            name="flightChoiceDeparture" th:value="${flight.id}"
                                            th:data-id="${flight.id}"
@@ -92,7 +92,7 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="radio" th:id="'arrival-' + ${flight.flightCode}"
+                                    <input type="checkbox" th:id="'arrival-' + ${flight.flightCode}"
                                            class="radio-arrival"
                                            name="flightChoice" th:value="${flight.id}" th:data-id="${flight.id}"
                                            onchange="generateCompareURL()">
@@ -137,8 +137,9 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="radio" th:id="'departure-' + ${flight.flightCode}" class="radio-depart"
-                                           name="flightChoiceArrival" th:value="${flight.id}">
+                                    <input type="checkbox" th:id="'departure-' + ${flight.flightCode}"
+                                           class="radio-depart"
+                                           name="flightChoiceArrival" th:value="${flight.id}" th:data-id="${flight.id}">
                                 </td>
                             </tr>
                             </tbody>
@@ -359,6 +360,38 @@
             </div>
             <div class="modal-body">
                 <p>Vui lòng chọn từ 2 chuyến bay trở lên để so sánh!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notifyErrorOneWay" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng chỉ được chọn 01 CHUYẾN BAY để đặt vé!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notifyErrorRoundTrip" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Vui lòng chỉ được chọn 02 CHUYẾN BAY (01 CHIỀU ĐI - 01 CHIỀU VỀ) để đặt vé!</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
