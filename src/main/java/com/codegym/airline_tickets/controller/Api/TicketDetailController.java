@@ -112,10 +112,10 @@ public class TicketDetailController {
         );
     }
 
-    @GetMapping("/send-email/{ticketId}")
-    public ResponseEntity<?> sendEmail(@PathVariable("ticketId") Long ticketId) {
+    @GetMapping("/send-email/{code}")
+    public ResponseEntity<?> sendEmail(@PathVariable("code") String code) {
 
-        Ticket ticket = ticketService.findById(ticketId);
+        Ticket ticket = ticketService.findByCode(code);
 
         Flight flight = ticket.getFlight();
         FlightResponseDTO flightRes = FlightResponseDTO.builder()
@@ -164,9 +164,9 @@ public class TicketDetailController {
                 throw new RuntimeException(e);
             }
 
-            return ResponseEntity.ok().body("Send email success");
+            return ResponseEntity.status(HttpStatus.OK).body("Send email success");
         } else {
-            return ResponseEntity.badRequest().body("Send email failed");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Send email failed");
         }
 
     }

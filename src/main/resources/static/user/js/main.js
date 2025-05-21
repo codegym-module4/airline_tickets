@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    $(function() {
+    $(function () {
         $('.flash_message').fadeOut(5000);
     });
 
@@ -26,7 +26,7 @@
     $(document).on("click", "#btnPayment", function (e) {
         let booking_id = [];
         let total = 0;
-        $(".payment-checkbox:checked").map(function() {
+        $(".payment-checkbox:checked").map(function () {
             let id = $(this).attr('data-id')
             booking_id.push(id);
             let price = parseInt($('#price_' + id).text().replace(/[.,]/g, ''));
@@ -40,7 +40,7 @@
             type: 'POST',
             url: '/api/payment',
             data: {
-                bookingId : booking_id,
+                bookingId: booking_id,
                 total: total
             },
             dataType: 'json'
@@ -99,7 +99,7 @@
     });
     $(document).on("change", ".luggage-select", function (e) {
         let total = parseInt($("input[name='ticket_total']").val());
-        $(".luggage-select").each(function(index, element) {
+        $(".luggage-select").each(function (index, element) {
             let $element = $(element);
             let kg = $element.val();
             if (kg != "" && kg != 0) {
@@ -156,10 +156,32 @@
     });
 
 
+    $(document).on("click", "#btnSendEmailTicket", function (e) {
+        const code = $(this).data("id");
+        const url = `/api/ticket/send-email/${code}`;
+        $("#loadingSendEmail").removeClass("d-none").addClass("d-flex");
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+        }).done(function (data, textStatus, jqXHR) {
+            if (jqXHR.status === 200) {
+                $("#loadingSendEmail").removeClass("d-flex").addClass("d-none");
+                $("#ticketDetail").modal("hide");
+                $("#sendEmailSuccess").modal("show");
+            }
+
+        }).fail(function (jqXhr, json, errorThrown) {
+            if (jqXHR.status !== 200) {
+                $("#sendEmailError").modal("show");
+            }
+        });
+    });
+
 
 })();
-function setDataInitialize()
-{
+
+function setDataInitialize() {
     $('.invalid-feedback strong').text('');
     $('div.invalid-feedback').text('');
     $('.text-danger strong').text('');

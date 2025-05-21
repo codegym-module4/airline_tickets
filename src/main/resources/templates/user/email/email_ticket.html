@@ -178,14 +178,13 @@
                                                         <table border="0" cellpadding="0" cellspacing="0">
                                                             <tbody>
                                                             <tr>
+                                                                <img src="https://ci3.googleusercontent.com/meips/ADKq_NaJ0EOZUFjVksRLf2Z3Q1bmh2Zyuq2-U_PF7SLuoQiea056Vg4RZJslH-TU6qjyx7ciEJJiExk0YbtY0xqpTDFku94XOmZngo25svdNtRTv7CZ-rBI-CwS4LuyhZRa6NwOaH82R1LgoFXtueKJ03IHlnajvvrYNdJwOhex_egcMwu_uc9-RVQ=s0-d-e1-ft#https://d1gnmtcb0vp69g.cloudfront.net/imageResource/2021/01/28/1611827393518-206370ff769dff23e3454c0a753ce7ee.png" alt="Flight Logo" style="width:24px;height:24px;margin-right:16px;vertical-align:middle" class="CToWUd" data-bit="iit">
                                                                 <td style="vertical-align:middle">
                                                                 </td>
-                                                                <td style="vertical-align:middle">
-                                                <span th:text="${ticket.flight.airlineName}" style="margin:0px;padding:0px;font-size:15px;color:#444444;font-weight:bold">
-                                                  VietJet Air
-                                                </span>
+                                                                <td style="vertical-align:middle;">
+                                                                        <span th:text="${ticket.flight.airlineName}" style="margin:0px;padding:0px;font-size:15px;color:#444444;font-weight:bold"></span>
                                                                     <br>
-                                                                    </span>
+                                                                    <span th:text="${ticket.flight.flightCode}"></span>
                                                                 </td>
                                                             </tr>
                                                             </tbody>
@@ -281,13 +280,18 @@
                                             Tên hành khách:
                                         </p>
                                         <ol style="margin:0px;padding-left:20px;color:#444444;font-size:16px">
-                                            <li>
-                                                Ông LE XUAN NGOC (Người lớn)
+                                            <li th:text="${ticket.name}">
                                             </li>
                                             <div style="display:block;margin-top:4px">
                                                 <div style="display:inline-block;vertical-align:top;width:80px;text-align:center">
                                                     <div style="padding:4px 8px;background-color:white;border:1px solid #cdd0d1;border-radius:12px;font-size:11px">
-                                                        HUI - SGN
+                                                        <span th:text="${ticket.flight.departureIATA}">
+                                                        </span>
+                                                        <span>
+                                                            -
+                                                        </span>
+                                                        <span th:text="${ticket.flight.arrivalIATA}">
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <div style="display:inline-block;vertical-align:top;margin-bottom:8px">
@@ -333,17 +337,19 @@
                                             <br>
                                         </p>
                                         <br>
-                                        <div style="margin-top:20px;clear:both">
-                                <span style="font-size:16px;line-height:24px;font-weight:bold;display:inline-block;vertical-align:middle; margin-top:10px;">
-                                  <a href="mailto:cs@traveloka.com" target="_blank">
-                                    vietjetaircskh@gmail.com
-                                  </a>
-                                </span>
+                                        <div style="margin-top:30px;clear:both;">
+                                            <img style="width:24px;height:24px;margin-right:8px;display:inline-block;vertical-align:middle" src="https://ci3.googleusercontent.com/meips/ADKq_Nb8-N4-NAUnNlqm4AMhX001PpYYScDDxaRpgLZYZHLDXiose547VBxs5PPFm7l7Q5GEIKRVekcWBFIPwPNZWLZHwnBDbiVq9yCzhRhdNtNE3SqkAshH-DwEKtcc4GSUES_eb9iaZltQ0rgx9uTaRBLdrzW2hB06RX8CoeN_QL6DpDNcmK0Vgw=s0-d-e1-ft#https://d1gnmtcb0vp69g.cloudfront.net/imageResource/2023/10/18/1697613869675-93ceb77ecff437a05160504458f4c5b6.png" class="CToWUd" data-bit="iit">
+                                            <span style="font-size:16px;line-height:24px;font-weight:bold;display:inline-block;vertical-align:middle;">
+                                                  <a style="color:#CA161C;" href="#" target="_blank">
+                                                    vietjetaircskh@gmail.com
+                                                  </a>
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
+
                         </td>
                     </tr>
                     </tbody>
