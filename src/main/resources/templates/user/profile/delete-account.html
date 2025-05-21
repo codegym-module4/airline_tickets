@@ -10,11 +10,11 @@
             <!-- Nav gốc giữ y nguyên -->
             <nav class="mypage_nav">
                 <ul>
-                    <li class="user_info"><a href="/profile">Thông tin cá nhân</a></li>
-                    <li class="user_ticket"><a href="/my-ticket">Đặt chỗ của tôi</a></li>
-                    <li class="user_payment"><a href="/payment">Thanh toán</a></li>
-                    <li class="user_transfer_history"><a href="/payment/transfer-history">Lịch sử giao dịch</a></li>
-                    <li class="user_change_password"><a th:href="@{/profile/change-password}">Đổi mật khẩu</a></li>
+                    <li class="user_info"><a href="/profile" th:text="#{user_infor}">Thông tin cá nhân</a></li>
+                    <li class="user_ticket"><a href="/my-ticket" th:text="#{my_ticket}">Đặt chỗ của tôi</a></li>
+                    <li class="user_payment"><a href="/payment" th:text="#{payment}">Thanh toán</a></li>
+                    <li class="user_transfer_history"><a href="/payment/transfer-history" th:text="#{transaction_history}">Lịch sử giao dịch</a></li>
+                    <li class="user_change_password"><a th:href="@{/profile/change-password}" th:text="#{change_password}">Đổi mật khẩu</a></li>
                 </ul>
             </nav>
 
@@ -22,20 +22,21 @@
             <div class="col-lg-9">
                 <div class="card shadow-sm rounded-3">
                     <div class="card-header bg-danger text-white">
-                        <h4 class="mb-0">Xóa tài khoản</h4>
+                        <h4 class="mb-0" th:text="#{delete_account}">Xóa tài khoản</h4>
                     </div>
                     <div class="card-body">
                         <div sec:authorize="isAuthenticated()">
                             <div class="alert alert-warning">
-                                <strong>Cảnh báo!</strong> Thao tác này sẽ xóa tài khoản của bạn. Bạn sẽ không thể đăng nhập sau khi xóa.
+                                <strong th:text="#{warning}">Cảnh báo!</strong >
+                                <strong th:text="#{warning_delete_account}"> Thao tác này sẽ xóa tài khoản của bạn. Bạn sẽ không thể đăng nhập sau khi xóa.</strong>
                             </div>
 
                             <div class="mb-4">
-                                <p>Vui lòng xác nhận:</p>
+                                <p th:text="#{please_confirm}">Vui lòng xác nhận:</p>
                                 <ul>
-                                    <li>Tất cả thông tin cá nhân của bạn sẽ không còn hiển thị trên hệ thống</li>
-                                    <li>Bạn sẽ không thể đăng nhập sau khi xóa tài khoản</li>
-                                    <li>Để sử dụng lại dịch vụ, bạn cần đăng ký tài khoản mới</li>
+                                    <li th:text="#{confirm_delete1}">Tất cả thông tin cá nhân của bạn sẽ không còn hiển thị trên hệ thống</li>
+                                    <li th:text="#{confirm_delete2}">Bạn sẽ không thể đăng nhập sau khi xóa tài khoản</li>
+                                    <li th:text="#{confirm_delete3}">Để sử dụng lại dịch vụ, bạn cần đăng ký tài khoản mới</li>
                                 </ul>
                             </div>
 
@@ -45,12 +46,12 @@
                                 <div class="form-floating mb-3">
                                     <input type="password" id="password" name="password" class="form-control" 
                                            placeholder="Mật khẩu" required />
-                                    <label for="password">Nhập mật khẩu để xác nhận</label>
+                                    <label for="password" th:text="#{enter_password}">Nhập mật khẩu để xác nhận</label>
                                 </div>
                                 
                                 <div class="d-flex justify-content-between mt-4">
-                                    <a th:href="@{/profile}" class="btn btn-secondary">Hủy</a>
-                                    <button type="submit" class="btn btn-danger">Xác nhận xóa tài khoản</button>
+                                    <a th:href="@{/profile}" class="btn btn-secondary" th:text="#{cancel}">Hủy</a>
+                                    <button type="submit" class="btn btn-danger" th:text="#{confirm}">Xác nhận xóa tài khoản</button>
                                 </div>
                             </form>
                         </div>

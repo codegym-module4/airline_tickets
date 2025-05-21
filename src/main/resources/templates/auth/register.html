@@ -5,34 +5,34 @@
 <main>
     <th:block th:replace="~{user/layouts/header::header}"></th:block>
     <div class="auth-container">
-        <h2>Đăng ký</h2>
+        <h2 th:text="#{register}">Đăng ký</h2>
         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
         <form th:action="@{/register}" th:object="${account}" method="post" id="registerForm">
             <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
+                <label for="email" class="form-label" th:text="#{email}">Email:</label>
                 <input type="email" id="email" th:field="*{email}" class="form-control" required/>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Mật khẩu:</label>
+                <label for="password" class="form-label" th:text="#{password}">Mật khẩu:</label>
                 <input type="password" id="password" th:field="*{password}" class="form-control" required minlength="6"/>
             </div>
             <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Xác nhận mật khẩu:</label>
+                <label for="confirmPassword" class="form-label" th:text="#{confirm_password}">Xác nhận mật khẩu:</label>
                 <input type="password" id="confirmPassword" class="form-control" required minlength="6"/>
             </div>
             <div class="mb-3">
-                <label for="fullName" class="form-label">Họ và tên:</label>
+                <label for="fullName" class="form-label" th:text="#{full_name}">Họ và tên:</label>
                 <input type="text" id="fullName" th:field="*{user.fullName}" class="form-control" required/>
             </div>
             <div class="mb-3">
-                <label for="phone" class="form-label">Số điện thoại:</label>
+                <label for="phone" class="form-label" th:text="#{phone_number}">Số điện thoại:</label>
                 <input type="text" id="phone" th:field="*{user.phone}" class="form-control" required pattern="[0-9]{10}"/>
             </div>
             <div class="mb-3">
-                <label for="address" class="form-label">Địa chỉ:</label>
+                <label for="address" class="form-label" th:text="#{address_cus}">Địa chỉ:</label>
                 <input type="text" id="address" th:field="*{user.address}" class="form-control" required/>
             </div>
-            <button type="submit" class="btn-custom">Đăng ký</button>
+            <button type="submit" class="btn-custom" th:text="#{register}">Đăng ký</button>
         </form>
     </div>
     <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
