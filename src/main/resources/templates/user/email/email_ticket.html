@@ -24,7 +24,7 @@
             text-decoration: none;
             color: #333333; }
         .mail-table { border: 1px solid #cdcdcd;
-            width: 700px;
+            width: 600px;
             margin: auto;
             color: #1e2731;
             line-height: 20px;
@@ -120,15 +120,15 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                <span style="font-size:13px;line-height:25px;color:#444444">
-                                  Mã đặt vé (PNR):
-                                </span>
+                                            <span style="font-size:13px;line-height:25px;color:#444444">
+                                              Mã đặt vé (PNR):
+                                            </span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                <span th:text="${ticket.code}" style="font-size:24px;line-height:18px;font-weight:bold;color:#CA161C;padding-top:8px">
-                                </span>
+                                            <span th:text="${ticket.code}" style="font-size:24px;line-height:18px;font-weight:bold;color:#CA161C;padding-top:8px">
+                                            </span>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -177,14 +177,26 @@
                                                     <td>
                                                         <table border="0" cellpadding="0" cellspacing="0">
                                                             <tbody>
+                                                                <tr>
+                                                                    <img src="https://ci3.googleusercontent.com/meips/ADKq_NaJ0EOZUFjVksRLf2Z3Q1bmh2Zyuq2-U_PF7SLuoQiea056Vg4RZJslH-TU6qjyx7ciEJJiExk0YbtY0xqpTDFku94XOmZngo25svdNtRTv7CZ-rBI-CwS4LuyhZRa6NwOaH82R1LgoFXtueKJ03IHlnajvvrYNdJwOhex_egcMwu_uc9-RVQ=s0-d-e1-ft#https://d1gnmtcb0vp69g.cloudfront.net/imageResource/2021/01/28/1611827393518-206370ff769dff23e3454c0a753ce7ee.png" alt="Flight Logo" style="width:24px;height:24px;margin-right:16px;vertical-align:middle" class="CToWUd" data-bit="iit">
+                                                                    <td style="vertical-align:middle">
+                                                                    </td>
+                                                                    <td style="vertical-align:middle;">
+                                                                        <span th:text="${ticket.flight.airlineName}" style="margin:0px;padding:0px;font-size:15px;color:#444444;font-weight:bold"></span>
+                                                                        <br>
+                                                                        <span th:text="${ticket.flight.flightCode}"></span>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <table style="margin-top:30px;">
+                                                            <tbody>
                                                             <tr>
-                                                                <img src="https://ci3.googleusercontent.com/meips/ADKq_NaJ0EOZUFjVksRLf2Z3Q1bmh2Zyuq2-U_PF7SLuoQiea056Vg4RZJslH-TU6qjyx7ciEJJiExk0YbtY0xqpTDFku94XOmZngo25svdNtRTv7CZ-rBI-CwS4LuyhZRa6NwOaH82R1LgoFXtueKJ03IHlnajvvrYNdJwOhex_egcMwu_uc9-RVQ=s0-d-e1-ft#https://d1gnmtcb0vp69g.cloudfront.net/imageResource/2021/01/28/1611827393518-206370ff769dff23e3454c0a753ce7ee.png" alt="Flight Logo" style="width:24px;height:24px;margin-right:16px;vertical-align:middle" class="CToWUd" data-bit="iit">
-                                                                <td style="vertical-align:middle">
+                                                                <td style="vertical-align:middle;">
+                                                                    <span>Số ghế: </span>
                                                                 </td>
                                                                 <td style="vertical-align:middle;">
-                                                                        <span th:text="${ticket.flight.airlineName}" style="margin:0px;padding:0px;font-size:15px;color:#444444;font-weight:bold"></span>
-                                                                    <br>
-                                                                    <span th:text="${ticket.flight.flightCode}"></span>
+                                                                    <span th:text="${ticket.seat.seat.row.number} + ${ticket.seat.seat.col.alphabet}" style="margin:0px;padding:0px;font-size:20px;color:#444444;font-weight:bold"></span>
                                                                 </td>
                                                             </tr>
                                                             </tbody>

@@ -178,6 +178,42 @@
         });
     });
 
+    $(document).on("click", "#exportTicket", function (e) {
+        const code = $(this).data("id");
+        const url = `/api/ticket/export-ticket/${code}`;
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (data, textStatus, jqXHR) {
+                const blob = new Blob([data], {type: 'application/pdf'});
+
+                const disposition = jqXHR.getResponseHeader('Content-Disposition');
+                let fileName = "ticket.pdf";
+                if (disposition && disposition.indexOf("filename=") !== -1) {
+                    fileName = disposition.split("filename=")[1].replace(/"/g, "");
+                }
+
+                const downloadUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                URL.revokeObjectURL(downloadUrl);
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                alert("Không thể tải file PDF.");
+                console.error(errorThrown);
+            }
+        });
+    });
+
 
 })();
 
