@@ -120,6 +120,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query(value =  "SELECT b from Booking b " +
                     "LEFT JOIN Flight f ON f.id = b.flight.id " +
                     "LEFT JOIN Flight as rf ON rf.id = b.returnFlight.id " +
-                    "where DATE(f.arrival_time) = :date OR DATE(rf.arrival_time) = :date")
+                    "where (DATE(f.arrival_time) = :date OR DATE(rf.arrival_time) = :date) AND b.isSendMailReview = 0")
     List<Booking> getBookingByFlightDate(LocalDate date);
 }

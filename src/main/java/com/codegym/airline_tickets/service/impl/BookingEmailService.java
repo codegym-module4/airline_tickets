@@ -14,7 +14,7 @@ import org.thymeleaf.context.Context;
 import java.time.LocalDate;
 
 @Service
-public class EmailService implements IEmailService {
+public class BookingEmailService implements IEmailService {
 
     @Autowired
     private JavaMailSender mailSender;
@@ -29,6 +29,7 @@ public class EmailService implements IEmailService {
         LocalDate yesterday = LocalDate.now().minusDays(1);
         context.setVariable("booking", booking);
         context.setVariable("yesterday", yesterday);
+        context.setVariable("link", "http://localhost:8080/review/" + booking.getId());
 
         // Render HTML từ template
         String htmlContent = templateEngine.process("user/email/email_review_context", context);

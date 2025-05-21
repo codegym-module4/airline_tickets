@@ -31,7 +31,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public void save(Booking s) {
-
+        bookingRepository.save(s);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public Booking findById(long id) {
-        return null;
+        return bookingRepository.findById(id).orElse(null);
     }
 
     @Override

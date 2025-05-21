@@ -9,7 +9,7 @@
 <p th:if="${booking.flight.arrival_time.toLocalDate().equals(yesterday)}">Cảm ơn bạn đã tham gia chuyến bay đến <span th:text="${booking.flight.arrivalAirport.city}"></span></p>
 <p th:if="${booking.returnFlight.arrival_time.toLocalDate().equals(yesterday)}">Cảm ơn bạn đã tham gia chuyến bay đến <span th:text="${booking.returnFlight.arrivalAirport.city}"></span></p>
 <p>
-  Bạn có thể cho chúng tôi biết mức độ hài lòng của bạn về chất lượng chuyến bay, dịch vụ theo link: <a href="/" target="_blank">Đánh giá chuyến bay</a><br/><br/>
+  Bạn có thể cho chúng tôi biết mức độ hài lòng của bạn về chất lượng chuyến bay, dịch vụ theo link: <a th:href="${link}" target="_blank">Đánh giá chuyến bay</a><br/><br/>
   Chúng tôi hi vọng có thể đồng hành cùng bạn trong những chuyến bay tiếp theo.
 </p>
 <div>
