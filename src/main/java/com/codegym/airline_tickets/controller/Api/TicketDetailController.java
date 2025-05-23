@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -156,9 +157,11 @@ public class TicketDetailController {
                     .timeToBoard(timeToBoard.format(formatter))
                     .build();
 
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
             Context context = new Context();
             EmailRequestTicket emailRequest = new EmailRequestTicket();
-            emailRequest.setTo(ticket.getEmail());
+            emailRequest.setTo(email);
             emailRequest.setSubject("[Vietjetair.com] Vé điện tử Vietjetair của quý khách");
             emailRequest.setTicket(ticketResponseDTO);
 
