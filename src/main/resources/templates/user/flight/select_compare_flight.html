@@ -1,0 +1,90 @@
+<th:block th:fragment="selectCompareFlight">
+    <div class="container select-flight">
+        <div class="row flex-nowrap scroll-row">
+            <div class="col-md-6" th:each="flight : ${flights}">
+                <div class="card border border-dark">
+                    <div class="mx-2 card-body">
+                        <div class="d-flex justify-content-center my-2 ">
+
+                            <img style="height: 96px;" th:if="${'Vietnam Airline'.equals(flight.airlineName)}"
+                                 src="/user/icon/vietnam-airline-logo.jpg">
+                            <img style="height: 96px;" th:if="${'Jetstar Pacific Airlines'.equals(flight.airlineName)}"
+                                 src="/user/icon/jetstar-logo-inkythuatso-14-10-44-31.jpg">
+                            <img style="height: 96px;" th:if="${'Vietjet Air'.equals(flight.airlineName)}"
+                                 src="/user/icon/VietJet_Air-Logo.wine.png">
+                            <img style="height: 96px;" th:if="${'Bamboo Airways'.equals(flight.airlineName)}"
+                                 src="/user/icon/logo-bamboo-airways-inkythuatso-13-16-26-24.jpg">
+
+                        </div>
+                        <div class="flight-info">
+                            <div class="d-flex flex-column">
+                                <h3 th:text="${flight.departureIATA}">
+                                </h3>
+                                <h6 th:text="${flight.departureAirportCity}">
+                                </h6>
+                                <h6 th:text="${#temporals.format(flight.departureTime, 'HH:mm')}">
+                                </h6>
+                                <h6 th:text="${#temporals.format(flight.departureTime, 'dd/MM/yyyy')}">
+                                </h6>
+                            </div>
+
+                            <div>
+                                <img src="/user/icon/icon_flight.c92d4c69.png">
+                            </div>
+
+
+                            <div class="d-flex justify-content-center flex-column">
+                                <h3 th:text="${flight.arrivalIATA}">
+                                </h3>
+                                <h6 th:text="${flight.arrivalAirportCity}">
+                                </h6>
+                                <h6 th:text="${#temporals.format(flight.arrivalTime, 'HH:mm')}">
+                                </h6>
+                                <h6 th:text="${#temporals.format(flight.arrivalTime, 'dd/MM/yyyy')}">
+                                </h6>
+                            </div>
+
+                        </div>
+                        <div class="d-flex">
+                            <p class="me-3">Mã chuyến bay: </p>
+                            <p th:text="${flight.flightCode}"></p>
+                        </div>
+                        <div class="d-flex">
+                            <p class="me-3">Thời gian bay: </p>
+                            <p th:text="${flight.flightTime}"></p>
+                        </div>
+                        <div class="info-select-flight">
+                            <div class="d-flex">
+                                <p class="me-3">Giá vé người lớn:</p>
+                                <p th:text="${flight.price} + 'VNĐ'"></p>
+                            </div>
+                            <p>Giá vé em bé: 100,000 VNĐ</p>
+                            <p>Thuế: O VNĐ</p>
+                            <p>Dịch vụ: 0 VNĐ</p>
+                            <p>Hành lý: Hành lý xách tay 10kg.</p>
+                        </div>
+
+                        <th:block th:if="${'Bamboo Airways'.equals(flight.airlineName)}"
+                                  th:insert="~{user/service/bamboo::bamboo}"></th:block>
+                        <th:block th:if="${'Jetstar Pacific Airlines'.equals(flight.airlineName)}"
+                                  th:insert="~{user/service/jestart::jestart}"></th:block>
+                        <th:block th:if="${'Vietjet Air'.equals(flight.airlineName)}"
+                                  th:insert="~{user/service/vietjet_air::vietjet}"></th:block>
+                        <th:block th:if="${'Vietnam Airline'.equals(flight.airlineName)}"
+                                  th:insert="~{user/service/vietnam_airline::vietnam_airline}"></th:block>
+
+                    </div>
+                    <div class="card-footer">
+                        <!--                        <div class="d-flex align-items-center gap-2 flex-column">-->
+                        <!--                            <label>Đã chọn</label>-->
+                        <!--                            <input type="checkbox" checked th:id="'departure-' + ${flight.flightCode}"-->
+                        <!--                                   class="radio-depart"-->
+                        <!--                                   name="flightChoiceArrival" th:value="${flight.id}" th:data-id="${flight.id}">-->
+                        <!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</th:block>

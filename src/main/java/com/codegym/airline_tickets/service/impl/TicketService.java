@@ -92,6 +92,11 @@ public class TicketService implements ITicketService {
         return ticketRepository.findByFlightIdAndSeatId(flightId, seatId);
     }
 
+    @Override
+    public Ticket findByCode(String code) {
+        return ticketRepository.findByCode(code);
+    }
+
     private static String generateNextCode(long number) {
         if (number == 0) {
             return "VE001";

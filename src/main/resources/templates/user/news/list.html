@@ -23,7 +23,7 @@
 
     <div class="news">
         <div class="news-list container" style="background-color: white">
-            <h1 class=" mb-4" style=" font-weight: bold;">Tin tức mới nhất</h1>
+            <h1 class=" mb-4" style=" font-weight: bold;" th:text="#{latest_news}">Tin tức mới nhất</h1>
 
             <!-- Lặp qua danh sách tin tức -->
             <div th:each="news : ${newsList}" class="card mb-4">
@@ -52,7 +52,7 @@
 
                             <!-- Phần 3: Nút Xem thêm -->
                             <div class="text-end">
-                                <a th:href="@{/news/detail/{id}(id=${news.id})}" class="btn btn-primary">Xem thêm</a>
+                                <a th:href="@{/news/detail/{id}(id=${news.id})}" class="btn btn-primary" th:text="#{show_more}">Xem thêm</a>
                             </div>
                         </div>
                     </div>

@@ -3,7 +3,7 @@
         <div class="footer-container">
             <div class="row d-flex justify-content-between">
                 <div class="col-2 d-flex justify-content-start flex-column gap-1">
-                    <span>Kết nối với Vietjet</span>
+                    <span th:text="#{connect_with_us}">Kết nối với Vietjet</span>
                     <div class="social-links d-flex justify-content-start align-items-center gap-1">
                         <div class="icon">
                             <a href="#">
@@ -42,17 +42,17 @@
                         </div>
                     </div>
                     <div class="info-flight d-flex justify-content-start align-items-center gap-2">
-                        <span>Cập nhật thông tin chuyến bay Flightradar</span>
+                        <span th:text="#{update_flight_infor}">Cập nhật thông tin chuyến bay Flightradar</span>
                         <img src="/user/icon/flight-rada.38e79fd2.png" alt="flightradar">
                     </div>
                 </div>
                 <div class="col-2 d-flex justify-content-start flex-column gap-2">
                     <div class="d-flex justify-content-start align-items-center gap-1">
                         <img src="/user/icon/intro.png" alt="logo" style="width: 30px; height: 30px;">
-                        <span style="margin-top: 8px;">Hướng dẫn đặt chuyến bay</span>
+                        <span style="margin-top: 8px;" th:text="#{flight_guide}">Hướng dẫn đặt chuyến bay</span>
 
                     </div>
-                    <span>Tải ứng dụng Vietjet Air</span>
+                    <span th:text="#{download_app}">Tải ứng dụng Vietjet Air</span>
                     <div class="d-flex justify-content-start align-items-center gap-2">
                         <img src="/user/icon/apple%20store.png" alt="ios" style="width: 100px; height: 30px;">
                         <img src="/user/icon/google%20play.png" alt="android" style="width: 100px; height: 30px;">
@@ -60,22 +60,22 @@
                 </div>
                 <div class="col-2 d-flex justify-content-start gap-2 ">
                     <img src="/user/icon/pay.png" alt="pay" style="width: 30px; height: 30px;">
-                    <span>Hướng dẫn thanh toán</span>
+                    <span th:text="#{payment_guide}">Hướng dẫn thanh toán</span>
                 </div>
                 <div class="col-2 d-flex justify-content-start gap-2 flex-column policy-footer">
-                    <h5>
+                    <h5 th:text="#{transaction_policy}">
                             Chính sách giao dịch
                     </h5>
                     <a href="/policy/chinh-sach-bao-mat-quyen-rieng-tu">
                         <div class="jss801 jss382" style="cursor: pointer;">
-                            <div>
+                            <div th:text="#{privacy_policy}">
                                 Chính sách bảo mật quyền riêng tư
                             </div>
                         </div>
                     </a>
                     <a href="/policy/chinh-sach-hanh-ly">
                         <div class="jss801 jss382" style="cursor: pointer;">
-                            <div>
+                            <div th:text="#{baggage_policy}">
                                 Chính sách hành lý
                             </div>
                         </div>
@@ -88,42 +88,42 @@
                     </a>
                     <a href="/policy/chinh-sach-huy-ve" target="_blank" class="jss802"
                        rel="noopener noreferrer">
-                        <div class="MuiTypography-root jss795 MuiTypography-h5">
+                        <div class="MuiTypography-root jss795 MuiTypography-h5" th:text="#{booking_policy}">>
                             Chính sách hủy vé
                         </div>
                     </a>
                     <a href="/policy/chinh-sach-doi-ve">
                         <div class="jss801 jss382" style="cursor: pointer;">
-                            <div>
+                            <div th:text="#{change_policy}">
                                 Chính sách đổi vé
                             </div>
                         </div>
                     </a>
                     <a href="/policy/chinh-sach-bao-ve-khach-hang">
                         <div class="jss801 jss382" style="cursor: pointer;">
-                            <div>
+                            <div th:text="#{customer_protection_policy}">
                                 Chính sách bảo vệ khách hàng
                             </div>
                         </div>
                     </a>
                     <a href="/policy/chinh-sach-ho-tro-dac-biet">
                         <div class="jss801 jss382" style="cursor: pointer;">
-                            <div>
+                            <div th:text="#{special_support_policy}">
                                 Chính sách hỗ trợ đặc biệt
                             </div>
                         </div>
                     </a>
                     <a href="/policy/kenh-thanh-toan">
                         <div class="jss801 jss382" style="cursor: pointer;">
-                            <div>
+                            <div th:text="#{payment_channels}">
                                 Kênh thanh toán
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-2 d-flex flex-column justify-content-start gap-2">
-                    <span style="margin-right: 15px;">CÔNG TY CỔ PHẦN HÀNG KHÔNG VIETJET</span>
-                    <span>302/3 Phố Kim Mã, Phường Ngọc Khánh, Quận Ba Đình, TP. Hà Nội, Việt Nam.</span>
+                    <span style="margin-right: 15px;" th:text="#{company}">CÔNG TY CỔ PHẦN HÀNG KHÔNG VIETJET</span>
+                    <span th:text="#{address}">302/3 Phố Kim Mã, Phường Ngọc Khánh, Quận Ba Đình, TP. Hà Nội, Việt Nam.</span>
                     <img src="/user/icon/confirm.webp" alt="confirm" style="width: 100px; height: 30px;">
                 </div>
             </div>

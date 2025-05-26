@@ -13,19 +13,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class FlightResponseDTO implements Serializable {
-   private Long id;
-   private String airlineName;
-   private String flightCode;
-   private LocalDateTime departureTime;
-   private LocalDateTime arrivalTime;
-   private String price;
-   private String departureAirportCity;
-   private String arrivalAirportCity;
-   private String departureAirportName;
-   private String arrivalAirportName;
-   private String priceVATTotal;
-   private String priceVAT;
-   private Integer seatAvailability;
-   private String departureIATA;
-   private String arrivalIATA;
+    private Long id;
+    private String airlineName;
+    private String flightCode;
+    private LocalDateTime departureTime;
+    private LocalDateTime arrivalTime;
+    private String price;
+    private String departureAirportCity;
+    private String arrivalAirportCity;
+    private String departureAirportName;
+    private String arrivalAirportName;
+    private String priceVATTotal;
+    private String priceVAT;
+    private Integer seatAvailability;
+    private String departureIATA;
+    private String arrivalIATA;
+    private String flightTime;
 }

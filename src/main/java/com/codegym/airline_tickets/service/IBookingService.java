@@ -29,4 +29,6 @@ public interface IBookingService extends IService<Booking> {
 
     List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time, Integer status);
 
+    List<Booking> getBookingByFlightDate(LocalDate date);
+
 }
