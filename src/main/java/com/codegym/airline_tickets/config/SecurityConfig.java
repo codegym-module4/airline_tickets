@@ -53,12 +53,13 @@ public class SecurityConfig {
                                 "/user/icon/**",
                                 "/admin/css/**",
                                 "/admin/js/**",
-                                "admin/flight-seat/flight/**",
+                                "/admin/flight-seat/flight/**",
                                 "/news",
                                 "/news/detail/**",
                                 "/policy/**",
                                 "/ws-chat/**",
-                                "/api/**"
+                                "/api/**",
+                                "/admin/**"
                         ).permitAll()
 //                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
 //                                .requestMatchers("/admin/news/**").hasAnyRole("ADMIN", "EMPLOYEE")
