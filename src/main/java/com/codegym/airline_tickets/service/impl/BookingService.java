@@ -31,7 +31,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public void save(Booking s) {
-
+        bookingRepository.save(s);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public Booking findById(long id) {
-        return null;
+        return bookingRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -157,6 +157,11 @@ public class BookingService implements IBookingService {
     @Override
     public List<Booking> findByCreatedAtLessThanEqual(LocalDateTime time, Integer status) {
         return bookingRepository.findByCreatedAtLessThanEqualAndStatus(time, status);
+    }
+
+    @Override
+    public List<Booking> getBookingByFlightDate(LocalDate date) {
+        return bookingRepository.getBookingByFlightDate(date);
     }
 
     private static String generateNextCode(long number) {

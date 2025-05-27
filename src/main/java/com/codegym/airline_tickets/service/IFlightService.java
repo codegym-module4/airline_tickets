@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface IFlightService extends IService<Flight> {
     List<FlightResponseDTO> findAll(String departure, String arrival, LocalDate departureTime, String sortProperty, String sort, int page, int size);
+
+    List<Flight> findByIdCompare(List<Long> ids);
 }

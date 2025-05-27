@@ -62,6 +62,9 @@ public class Booking {
     @Column(name = "vnpay_order_id")
     private String vnpayOrderId;
 
+    @Column(name = "is_send_mail_review")
+    private Integer isSendMailReview;
+
     @Column(name = "created_at")
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createdAt;

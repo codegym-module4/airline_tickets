@@ -44,7 +44,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
                                     @Param("price") int price,
                                     Pageable pageable);
 
-//trả về 1 bản ghi duy nhất hoặc trống
+    //trả về 1 bản ghi duy nhất hoặc trống
     Optional<Flight> findByCodeIgnoreCase(String code);
 //    boolean existsByCodeIgnoreCase(String code);
 
@@ -58,6 +58,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             "WHERE LOWER(f.departureAirport.name) LIKE LOWER(CONCAT('%', :departure, '%'))")
     List<Flight> searchByDepartureAirportName(@Param("departure") String departure);
 
+    List<Flight> findByIdIn(List<Long> ids);
 
 //    @Query("SELECT f FROM Flight f " +
 //            "WHERE (:departure IS NULL OR LOWER(f.departureAirport.city) LIKE LOWER(CONCAT('%', :departure, '%'))) " +

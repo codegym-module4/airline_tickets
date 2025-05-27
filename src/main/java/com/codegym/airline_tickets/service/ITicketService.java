@@ -20,4 +20,6 @@ public interface ITicketService extends IService<Ticket> {
     Ticket findByBookingIdAndFlightId(Long bookingId, Long flightId);
 
     Ticket findByFlightIdAndSeatId(Long flightId, Long seatId);
+
+    Ticket findByCode(String code);
 }

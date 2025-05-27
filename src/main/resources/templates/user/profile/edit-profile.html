@@ -8,18 +8,18 @@
         <div class="mypage_block user_info">
             <nav class="mypage_nav">
                 <ul>
-                    <li class="user_info"><a href="/profile">Thông tin cá nhân</a></li>
-                    <li class="user_ticket"><a href="/my-ticket">Đặt chỗ của tôi</a></li>
-                    <li class="user_payment"><a href="/payment">Thanh toán</a></li>
-                    <li class="user_transfer_history"><a href="/payment/transfer-history">Lịch sử giao dịch</a></li>
-                    <li class="user_change_password"><a href="/profile/change-password">Đổi mật khẩu</a></li>
+                    <li class="user_info"><a href="/profile" th:text="#{user_infor}">Thông tin cá nhân</a></li>
+                    <li class="user_ticket"><a href="/my-ticket" th:text="#{my_ticket}">Đặt chỗ của tôi</a></li>
+                    <li class="user_payment"><a href="/payment" th:text="#{payment}">Thanh toán</a></li>
+                    <li class="user_transfer_history"><a href="/payment/transfer-history" th:text="#{transaction_history}">Lịch sử giao dịch</a></li>
+                    <li class="user_change_password"><a href="/profile/change-password" th:text="#{change_password}">Đổi mật khẩu</a></li>
                 </ul>
             </nav>
             <!-- Edit profile form -->
             <div class="col-lg-9">
                 <div class="card shadow-sm rounded-3">
                     <div class="card-header bg-danger text-white">
-                        <h4 class="mb-0">Chỉnh sửa hồ sơ</h4>
+                        <h4 class="mb-0" th:text="#{change_profile}">Chỉnh sửa hồ sơ</h4>
                     </div>
                     <div class="card-body">
                         <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
@@ -51,7 +51,7 @@
                                     <div class="form-floating">
                                         <input type="text" id="fullName" th:field="*{fullName}"
                                                class="form-control" placeholder="Họ và tên" required/>
-                                        <label for="fullName">Họ và tên</label>
+                                        <label for="fullName" th:text="#{full_name}">Họ và tên</label>
                                     </div>
                                 </div>
 
@@ -60,7 +60,7 @@
                                     <div class="form-floating">
                                         <input type="email" id="email" th:value="${#authentication.name}"
                                                class="form-control" placeholder="Email" readonly/>
-                                        <label for="email">Email</label>
+                                        <label for="email" th:text="#{email}">Email</label>
                                     </div>
                                 </div>
 
@@ -71,7 +71,7 @@
                                                th:value="${#temporals.format(user.dob, 'dd/MM/yyyy')}"
                                                class="form-control" placeholder="dd/MM/yyyy"
                                                pattern="\d{2}/\d{2}/\d{4}" required/>
-                                        <label for="dob">Ngày sinh</label>
+                                        <label for="dob" th:text="#{dob}">Ngày sinh</label>
                                     </div>
                                 </div>
 
@@ -80,11 +80,11 @@
                                     <div class="form-floating">
                                         <select id="gender" th:field="*{gender}"
                                                 class="form-select" placeholder="Giới tính" required>
-                                            <option value="Male">Nam</option>
-                                            <option value="Female">Nữ</option>
+                                            <option value="Male" th:text="#{male}">Nam</option>
+                                            <option value="Female" th:text="#{female}">Nữ</option>
                                             <option value="Other">Khác</option>
                                         </select>
-                                        <label for="gender">Giới tính</label>
+                                        <label for="gender" th:text="#{gender}">Giới tính</label>
                                     </div>
                                 </div>
 
@@ -92,9 +92,9 @@
                                 <div class="col-md-6 mb-3">
                                     <div class="form-floating">
                                         <input type="text" id="phone" th:field="*{phone}"
-                                               class="form-control" placeholder="Số điện thoại"
+                                               class="form-control" th:attr="placeholder=${phone_number}"
                                                pattern="[0-9]{10}" required/>
-                                        <label for="phone">Số điện thoại</label>
+                                        <label for="phone" th:text="#{phone_number}"> Số điện thoại</label>
                                     </div>
                                 </div>
 
@@ -105,7 +105,7 @@
                                                th:field="*{citizenIdentification}"
                                                class="form-control" placeholder="CCCD"
                                                pattern="[0-9]{12}" required/>
-                                        <label for="citizenIdentification">CCCD</label>
+                                        <label for="citizenIdentification" th:text="#{id_card}">CCCD</label>
                                     </div>
                                 </div>
 
@@ -114,7 +114,7 @@
                                     <div class="form-floating">
                                         <input type="text" id="address" th:field="*{address}"
                                                class="form-control" placeholder="Địa chỉ" required/>
-                                        <label for="address">Địa chỉ</label>
+                                        <label for="address" th:text="#{address_cus}">Địa chỉ</label>
                                     </div>
                                 </div>
 
@@ -123,7 +123,7 @@
                                     <div class="form-floating">
                                         <input type="text" id="nationality" th:field="*{nationality}"
                                                class="form-control" placeholder="Quốc tịch" required/>
-                                        <label for="nationality">Quốc tịch</label>
+                                        <label for="nationality" th:text="#{nationality}">Quốc tịch</label>
                                     </div>
                                 </div>
 
@@ -132,7 +132,7 @@
                                     <div class="form-floating">
                                         <input type="text" id="ranking" th:field="*{ranking}"
                                                class="form-control" placeholder="Xếp hạng" readonly/>
-                                        <label for="ranking">Xếp hạng</label>
+                                        <label for="ranking" th:text="#{ranking}">Xếp hạng</label>
                                     </div>
                                 </div>
 
@@ -140,8 +140,8 @@
 
                             <!-- Buttons -->
                             <div class="d-flex justify-content-end mt-4">
-                                <a href="/profile" class="btn btn-outline-secondary me-2">Hủy</a>
-                                <button type="submit" class="btn btn-custom">Lưu thay đổi</button>
+                                <a href="/profile" class="btn btn-outline-secondary me-2" th:text="#{cancel}">Hủy</a>
+                                <button type="submit" class="btn btn-custom" th:text="#{save}">Lưu thay đổi</button>
                             </div>
                         </form>
 

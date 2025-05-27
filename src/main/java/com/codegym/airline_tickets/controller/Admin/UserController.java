@@ -66,7 +66,7 @@ public class UserController {
     private TemplateEngine templateEngine;
 
     @PostMapping("/sendEmail")
-    public boolean sendEmail(EmailRequest emailRequest, RedirectAttributes redirectAttributes) {
+    public boolean sendEmail(EmailRequest emailRequest) {
         Context context = new Context();
         // Set variables for the template from the POST request data
         context.setVariable("name", emailRequest.getName());
@@ -135,13 +135,14 @@ public class UserController {
             String randomNum = String.format("%06d", (int) (Math.random() * 1000000));
             account.setPassword(randomNum);
             account.setUser(newUser);
+
             EmailRequest emailRequest = new EmailRequest();
             emailRequest.setTo(user.getEmail());
             emailRequest.setSubject("Thông tin tài khoản đăng nhập");
             emailRequest.setAccount(account);
             emailRequest.setName(user.getFullName());
 
-            boolean isSuccess = sendEmail(emailRequest, redirectAttributes);
+            boolean isSuccess = sendEmail(emailRequest);
             if (isSuccess) {
                 redirectAttributes.addFlashAttribute("message", "Thêm thông tin thành công. Tài khoản đăng nhập đã được gửi tới email!");
                 accountService.register(account);
@@ -205,7 +206,7 @@ public class UserController {
             return "redirect:/admin/customer";
         }
 
-        if (email.equals("")) {
+        if ("".equals(email)) {
             redirectAttributes.addFlashAttribute("error", "Không tìm thấy email theo yêu cầu!");
             return "redirect:/admin/customer";
         }
@@ -221,7 +222,7 @@ public class UserController {
             return "admin/customer/list";
         }
 
-        if (isUpdate.equals("true")) {
+        if ("true".equals(isUpdate)) {
             model.addAttribute("message", "Cập nhật thông tin thành công!");
             return "admin/customer/list";
         }

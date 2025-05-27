@@ -37,6 +37,7 @@ import jakarta.validation.Valid;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -297,6 +298,37 @@ public class AuthController {
 
         model.addAttribute("message", "Đổi mật khẩu thành công!");
         return "user/profile/change-password";
+    }
+
+    @GetMapping("/profile/delete-account")
+    public String showDeleteAccountPage(Model model) {
+        model.addAttribute("passwordForm", new PasswordForm());
+        return "user/profile/delete-account";
+    }
+
+    @PostMapping("/profile/delete-account")
+    public void processDeleteAccount(@RequestParam("password") String password,
+                                    Authentication authentication,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) throws IOException {
+        String email = authentication.getName();
+        Account account = accountService.getAccountByEmail(email);
+
+        if (!passwordEncoder.matches(password, account.getPassword())) {
+            response.sendRedirect("/profile/delete-account?error=true");
+            return;
+        }
+
+        // Thực hiện soft delete (cập nhật trường deletedAt)
+        account.setDeletedAt(LocalDateTime.now());
+        accountService.save(account);
+
+        // Đăng xuất người dùng thông qua Spring Security
+        request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
+        
+        // Chuyển hướng về trang login
+        response.sendRedirect("/login?account_deleted=true");
     }
 
     public static class PasswordForm {
