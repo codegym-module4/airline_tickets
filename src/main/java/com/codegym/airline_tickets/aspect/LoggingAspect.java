@@ -142,7 +142,7 @@ public class LoggingAspect {
     public void createUser() {
     }
 
-    @After("createUser()")
+    @Around("createUser()")
     public void logAfterCreateUser(ProceedingJoinPoint joinPoint) throws Throwable {
         Account account = (Account) joinPoint.getArgs()[0];
         User user = account.getUser();
