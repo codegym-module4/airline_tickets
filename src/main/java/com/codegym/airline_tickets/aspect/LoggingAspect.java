@@ -98,24 +98,24 @@ public class LoggingAspect {
 
 
     // Ghi log khi có lỗi xảy ra trong hệ thống
-    @Pointcut("execution(* com.codegym.airline_tickets.service.impl.*.*(..))")
-    public void serviceErrors() {
-    }
-
-    @AfterThrowing(pointcut = "serviceErrors()", throwing = "error")
-    public void logAfterThrowing(JoinPoint joinPoint, Throwable error) {
-        Log errorLog = new Log();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = "Hệ thống";
-        if (authentication != null ) {
-            username = authentication.getName();
-        }
-        errorLog.setUsername(username);
-        errorLog.setAction("Lỗi trong phương thức: " + joinPoint.getSignature().getName() + " - " + error.getMessage());
-        errorLog.setIdAffected("N/A");
-        errorLog.setTimestamp(LocalDateTime.now());
-        logService.save(errorLog);
-    }
+//    @Pointcut("execution(* com.codegym.airline_tickets.service.impl.*.*(..))")
+//    public void serviceErrors() {
+//    }
+//
+//    @AfterThrowing(pointcut = "serviceErrors()", throwing = "error")
+//    public void logAfterThrowing(JoinPoint joinPoint, Throwable error) {
+//        Log errorLog = new Log();
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = "Hệ thống";
+//        if (authentication != null ) {
+//            username = authentication.getName();
+//        }
+//        errorLog.setUsername(username);
+//        errorLog.setAction("Lỗi trong phương thức: " + joinPoint.getSignature().getName() + " - " + error.getMessage());
+//        errorLog.setIdAffected("N/A");
+//        errorLog.setTimestamp(LocalDateTime.now());
+//        logService.save(errorLog);
+//    }
 
     // Ghi log khi thêm mới nhân viên, thêm mới khách hàng
     @Pointcut("execution(* com.codegym.airline_tickets.service.impl.EmployeeService.updateOrCreate(..))")
