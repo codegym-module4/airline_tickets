@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="~{user/layouts/head::head ('Thanh toán thành công')}"></head>
+<head th:replace="~{user/layouts/head::head (#{payment_success})}"></head>
 <body>
 <th:block th:replace="~{user/layouts/header::header}"></th:block>
 <main id="content">
@@ -8,15 +8,15 @@
         <div class="">
             <div class="card shadow p-4 text-center">
                 <i class="fa-solid fa-circle-xmark text-danger display-3 mb-3"></i>
-                <h2 class="text-danger fw-bold">Thanh toán thất bại!</h2>
-                <p class="mt-3">
+                <h2 class="text-danger fw-bold" th:text="#{payment_fail}">Thanh toán thất bại!</h2>
+                <p class="mt-3" th:text="#{payment_fail_message}">
                     Vui lòng hãy kiểm tra lại thông tin thanh toán của bạn và thử lại
                 </p>
 
                 <!-- Nút hành động -->
                 <div class="row justify-content-center mt-5">
                     <div class="col-md-4">
-                        <a href="/payment" class="btn btn-danger w-100 py-2">
+                        <a href="/payment" class="btn btn-danger w-100 py-2" th:text="#{back_to_payment_page}">
                             <i class="fa-solid fa-house me-2"></i> Quay về trang thanh toán
                         </a>
                     </div>

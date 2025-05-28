@@ -129,8 +129,8 @@
             <div class="destination-one-way d-flex justify-content-between align-items-center mb-3 d-none">
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
-                    <input required class="des-one-way form-control" list="destination-area" placeholder="Điểm đến"
-                           name="arrivalAirportOneWay" th:field="*{arrivalAirportOneWay}"/>
+                    <input required class="des-one-way form-control" list="destination-area"
+                           th:attr="placeholder=#{arrival_airport}" name="arrivalAirportOneWay" th:field="*{arrivalAirportOneWay}"/>
                     <datalist th:field="*{arrivalAirport}" id="destination-area-one-way" class="w-100">
                         <option th:each="item: ${listAirports}" th:value="${item.name}"
                                 th:text=" 'Sân bay ' + ${item.city}">
@@ -144,10 +144,13 @@
                     <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                     <input required type="text" class="form-control dropdown-toggle" id="passengers"
                            placeholder="Chọn số hành khách" readonly data-bs-toggle="dropdown" name="numberPassengers"
-                           value="1 Người lớn"/>
+                           th:value="1 + ' ' + #{adult}"
+                           th:attr="data-adult-text=#{adult},
+                           data-child-text=#{child},
+                           data-baby-text=#{baby}"/>
                     <ul class="dropdown-menu" id="dropdownMenu">
                         <li class="mb-3 d-flex justify-content-between align-items-center">
-                            <span th:text="#{adult}">Người lớn (12+ tuổi)</span>
+                            <span th:text="#{adult} + ' ' + #{adult_age}">Người lớn (12+ tuổi)</span>
                             <div>
                                 <button class="btn btn-outline-secondary btn-sm"
                                         onclick="changeCount(event, 'adults', -1)">-
@@ -159,7 +162,7 @@
                             </div>
                         </li>
                         <li class="mb-3 d-flex justify-content-between align-items-center">
-                            <span th:text="#{child}">Trẻ em (2-11 tuổi)</span>
+                            <span th:text="#{child} + ' ' + #{child_age}">Trẻ em (2-11 tuổi)</span>
                             <div>
                                 <button class="btn btn-outline-secondary btn-sm"
                                         onclick="changeCount(event, 'child', -1)">-
@@ -171,7 +174,7 @@
                             </div>
                         </li>
                         <li class="mb-3 d-flex justify-content-between align-items-center">
-                            <span th:text="#{baby}">Em bé (<2 tuổi)</span>
+                            <span th:text="#{baby} + ' ' + #{baby_age}">Em bé (&lt; 2 tuổi)</span>
                             <div>
                                 <button class="btn btn-outline-secondary btn-sm"
                                         onclick="changeCount(event, 'infant', -1)">-
