@@ -2,7 +2,7 @@
     <div class="container container-ticket py-4">
         <div class="row">
             <div class="col-lg-8">
-                <h2>Thông tin chuyến bay</h2>
+                <h2 th:text="#{flight_infor}">Thông tin chuyến bay</h2>
                 <hr>
                 <div class="d-flex justify-content-around align-items-center">
                     <div class="d-flex align-items-center flex-column">
@@ -12,10 +12,9 @@
                     </div>
                     <div class="d-flex flex-column align-items-center flex-column">
                         <span th:text="${ticket.flightTime}" class="text-danger ml10"></span>
-                        <img src="/user/icon/icon_flight.c92d4c69.png" alt="Airplane" class="img-fluid" width="15px"
-                             height="24px">
+                        <img src="/user/icon/icon_flight.c92d4c69.png" alt="Airplane" class="img-fluid" width="15px" height="24px">
                         <!--                                <span class="mx-2 fs-5 m-0">✈</span>-->
-                        <span>Bay thẳng</span>
+                        <span th:text="#{flight_direct}">Bay thẳng</span>
                     </div>
                     <div class="d-flex align-items-center flex-column">
                         <span class="fw-bold fs-4 " th:text="${ticket.flight.arrivalIATA}"></span>
@@ -26,16 +25,16 @@
                 <div class="d-flex align-items-center mt-3">
                     <img src="/user/icon/icon_flight.c92d4c69.png" alt="Airplane" class="img-fluid" width="15px"
                          height="24px">
-                    <span class="ml10">Số hiệu chuyến bay:</span>
+                    <span class="ml10" th:text="#{flight_code}">Số hiệu chuyến bay:</span>
                     <span th:text="${ticket.flight.flightCode}" class="text-danger fw-bold ml10"></span>
                 </div>
                 <div class="d-flex align-items-center">
                     <img src="/user/icon/departure-icon.25d3557e.png" alt="Airplane" class="img-fluid" width="12px"
                          height="24px">
-                    <span class="ml10">Khởi hành: </span>
+                    <span class="ml10" th:text="#{departure}">Khởi hành: </span>
                     <span class="ml10"
                           th:text="${#temporals.format(ticket.flight.departureTime, 'HH:mm, dd/MM/yyyy')}"></span>
-                    <span class="ml10">(Giờ địa phương)</span>
+                    <span class="ml10" th:text="#{local_time}">(Giờ địa phương)</span>
                 </div>
                 <div class="d-flex align-items-center">
                     <span th:text="${ticket.flight.departureAirportCity}"></span>
@@ -45,49 +44,49 @@
                 <div class="d-flex align-items-center mt-2">
                     <img src="/user/icon/arrival-icon.a05c5d78.png" alt="Airplane" class="img-fluid" width="12px"
                          height="24px">
-                    <span class="ml10">Đến:</span>
+                    <span class="ml10" th:text="#{arrival}">Đến:</span>
                     <span class="ml10"
                           th:text="${#temporals.format(ticket.flight.arrivalTime, 'HH:mm, dd/MM/yyyy')}"></span>
-                    <span class="ml10">(Giờ địa phương)</span>
+                    <span class="ml10" th:text="#{local_time}">(Giờ địa phương)</span>
                 </div>
                 <div class="d-flex align-items-center">
                     <span th:text="${ticket.flight.arrivalAirportCity}"> </span>
                     <span class="mx-2 fw-bold">-</span>
-                    <span th:text="'Sân bay ' + ${ticket.flight.arrivalAirportName}"></span>
+                    <span th:text="#{airport} + ${ticket.flight.arrivalAirportName}"></span>
                 </div>
                 <div class="d-flex align-items-center mt-2">
-                    <span>Thời gian bay: </span>
+                    <span th:text="#{flight_time}">Thời gian bay: </span>
                     <span th:text="${ticket.flightTime}" class="text-danger ml10"></span>
                     <span class="mx-2">-</span>
                     <span>A320B</span>
                     <span class="mx-2">-</span>
-                    <span th:text="'Khai thác bởi: ' + ${ticket.flight.airlineName}" class="text-danger"></span>
+                    <span th:text="#{operated_by} + ${ticket.flight.airlineName}" class="text-danger"></span>
                 </div>
                 <hr>
-                <h4>HƯỚNG DẪN DI CHUYỂN TIẾP THEO</h4>
+                <h4 th:text="#{guide_title}">HƯỚNG DẪN DI CHUYỂN TIẾP THEO</h4>
                 <div class="d-flex justify-content-between text-center mt-4">
                     <div class="flex-fill mx-2 col-4">
-                        <p class="mb-4 fw-bold">BƯỚC 1</p>
+                        <p class="mb-4 fw-bold" th:text="#{step1}">BƯỚC 1</p>
                         <div class="icon-circle"><i class="fa-solid fa-suitcase-rolling"></i></div>
                         <div class="d-flex flex-column">
-                            <small>Ký gửi hành lý (nếu có) tại quầy check-in Vietjet.</small>
-                            <small>Tối thiểu 60 phút trước giờ bay</small>
+                            <small th:text="#{step1_line1}">Ký gửi hành lý (nếu có) tại quầy check-in Vietjet.</small>
+                            <small th:text="#{step1_line2}">Tối thiểu 60 phút trước giờ bay</small>
                         </div>
                     </div>
                     <div class="arrow px-2 d-flex align-items-center"><i class="fa-solid fa-right-long"></i></div>
                     <div class="flex-fill mx-2 col-4">
-                        <p class="mb-4 fw-bold">BƯỚC 2</p>
+                        <p class="mb-4 fw-bold" th:text="#{step2}">BƯỚC 2</p>
                         <div class="icon-circle"><i class="fa-solid fa-user-shield"></i></div>
-                        <small>Kiểm tra an ninh</small>
+                        <small th:text="#{step2_text}">Kiểm tra an ninh</small>
                     </div>
                     <div class="arrow px-2 d-flex align-items-center"><i class="fa-solid fa-right-long"></i></div>
                     <div class="flex-fill mx-2 col-4">
-                        <p class="mb-4 fw-bold">BƯỚC 3</p>
+                        <p class="mb-4 fw-bold" th:text="#{step3}">BƯỚC 3</p>
                         <div class="d-flex align-items-center icon-circle"><i class="fa-solid fa-plane-departure"></i>
                         </div>
                         <div class="d-flex flex-column">
-                            <small>Đến đúng cửa khởi hành.</small>
-                            <small>Tối thiểu 30 phút trước giờ bay</small>
+                            <small th:text="#{step3_line1}">Đến đúng cửa khởi hành.</small>
+                            <small th:text="#{step3_line2}">Tối thiểu 30 phút trước giờ bay</small>
                         </div>
                     </div>
                 </div>
@@ -96,7 +95,7 @@
             <div class="col-lg-4 mt-4 mt-lg-0">
                 <div class="header-root text-white p-2 fw-bold text-center">Vietjetair.com</div>
                 <div class="border p-3">
-                    <h4>THẺ LÊN TÀU BAY</h4>
+                    <h4 th:text="#{boarding_pass}">THẺ LÊN TÀU BAY</h4>
                     <hr>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-start flex-column">
@@ -111,37 +110,37 @@
                     </div>
                     <hr>
                     <div class="d-flex align-items-center">
-                        <span>Hành khách:</span>
+                        <span th:text="#{passenger}">Hành khách:</span>
                         <span class="ml10 m-0 fs-4" th:text="${ticket.name}"></span>
                     </div>
                     <div class="d-flex justify-content-between mt-3">
                         <div class="d-flex align-items-start flex-column">
-                            <span>Ngày:</span>
+                            <span th:text="#{date}">Ngày:</span>
                             <span class="m-0"
                                   th:text="${#temporals.format(ticket.flight.departureTime, 'dd/MM/yyyy')}"></span>
                         </div>
                         <div class="d-flex align-items-center flex-column">
-                            <span>Chuyến bay:</span>
+                            <span th:text="#{flight_code}">Chuyến bay:</span>
                             <span class="ml10 fs-4 m-0 fw-bold" th:text="${ticket.flight.flightCode}"></span>
 
                         </div>
                         <div class="d-flex align-items-end flex-column">
-                            <span>Mã đặt chỗ:</span>
+                            <span th:text="#{booking_code}">Mã đặt chỗ:</span>
                             <span class="ml10 m-0 fw-bold" th:text="${ticket.code}"></span>
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-between mt-3">
                         <div class="d-flex align-items-start flex-column">
-                            <span>Cửa</span>
+                            <span th:text="#{gate}">Cửa</span>
                             <span class="m-0">4</span>
                         </div>
                         <div class="d-flex align-items-center flex-column">
-                            <span>Giờ ra tàu bay:</span>
+                            <span th:text="#{boarding_time}">Giờ ra tàu bay:</span>
                             <span th:text="${ticket.timeToBoard}" class="ml10 fs-4 fw-bold m-0"></span>
                         </div>
                         <div class="d-flex align-items-center flex-column">
-                            <span>Ghế:</span>
+                            <span th:text="#{seat}">Ghế:</span>
                             <span class="ml10 fs-4 fw-bold m-0"
                                   th:text="${ticket.seat.seat.row.number} + ${ticket.seat.seat.col.alphabet}"></span>
                         </div>
@@ -151,11 +150,11 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-start flex-column mt-3">
-                        <span>Hạng vé:</span>
+                        <span th:text="#{ticket_class}">Hạng vé:</span>
                         <span class="m-0">Y</span>
                     </div>
                     <hr>
-                    <span class="small text-danger">Lưu ý: Cửa khởi hành sẽ đóng 15 phút trước giờ khởi hành.<br>Hành khách sẽ không được phép lên tàu bay khi cửa khởi hành đã đóng.</span>
+                    <span class="small text-danger" th:text="#{note_label}">Lưu ý: Cửa khởi hành sẽ đóng 15 phút trước giờ khởi hành.<br th:text="#{note_detail}">Hành khách sẽ không được phép lên tàu bay khi cửa khởi hành đã đóng.</span>
                     <!--                            <div class="text-center">-->
                     <!--                                &lt;!&ndash;                    <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=VJ316-LE-XUAN-NGOC" alt="QR Code" class="img-fluid">&ndash;&gt;-->
                     <!--                                <p><a style="text-decoration: none" href="#"> <i class="fa-solid fa-download"></i> Tải vé</a></p>-->
@@ -166,10 +165,10 @@
                                 <span id="loadingSendEmail" class="spinner-border spinner-border-sm m-0 d-none"
                                       role="status"
                                       aria-hidden="true"></span>
-                                <span class="m-0"> Gửi Email</span>
+                                <span class="m-0" th:text="#{send_email}"> Gửi Email</span>
                             </div>
                         </button>
-                        <button id="exportTicket" th:data-id="${ticket.code}" class="btn-detail btn "><i
+                        <button id="exportTicket" th:data-id="${ticket.code}" class="btn-detail btn " th:text="#{download_ticket}"><i
                                 class="fa-solid fa-download"></i> Tải vé
                         </button>
                     </div>

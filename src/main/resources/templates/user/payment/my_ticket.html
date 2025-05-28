@@ -1,105 +1,105 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/html">
-<head th:replace="~{user/layouts/head::head ('Đặt chỗ của tôi')}"></head>
+<head th:replace="~{user/layouts/head::head(#{my_ticket})}"></head>
 <body>
 <!--Header-->
 <th:block th:replace="~{user/layouts/header::header}"></th:block>
 <main id="content">
-    <section class="section">
-        <div class="mypage_block user_ticket">
-            <nav class="mypage_nav">
-                <ul>
-                    <li class="user_info"><a href="/profile">Thông tin cá nhân</a></li>
-                    <li class="user_ticket"><a href="/my-ticket">Đặt chỗ của tôi</a></li>
-                    <li class="user_payment"><a href="/payment">Thanh toán</a></li>
-                    <li class="user_transfer_history"><a href="/payment/transfer-history">Lịch sử giao dịch</a></li>
-                    <li class="user_change_password"><a href="/profile/change-password">Đổi mật khẩu</a></li>
-                </ul>
-            </nav>
-            <section class="mypage_content">
-                <div class="table_scroll w-100">
-                    <table class="table_style text-nowrap">
-                        <tbody>
-                        <tr>
-                            <th>Mã đặt chỗ</th>
-                            <th>Hành khách</th>
-                            <th>Nơi đi</th>
-                            <th>Nơi đến</th>
-                            <th>Ngày bay</th>
-                            <th>Ngày đến</th>
-                            <th>Loại vé</th>
-                            <th>Chi tiết vé</th>
-                        </tr>
-                        <tr class="text-center" th:if="${tickets.isEmpty()}">
-                            <td colspan="8">Không tìm thấy dữ liệu</td>
-                        </tr>
-                        <tr th:each="ticket : ${tickets}">
-                            <td th:text="${ticket.code}"></td>
-                            <td th:text="${ticket.name}"></td>
-                            <td th:text="${ticket.flight.departureAirport.city}"></td>
-                            <td th:text="${ticket.flight.arrivalAirport.city}"></td>
-                            <td th:text="${#temporals.format(ticket.flight.departure_time, 'HH:mm, dd/MM/yyyy')}"></td>
-                            <td th:text="${#temporals.format(ticket.flight.arrival_time, 'HH:mm, dd/MM/yyyy')}"></td>
-                            <!--              <td th:text="${ticket.booking.flightType === 1 ? 'Một chiều' : 'Khứ hồi'}"></td>-->
-                            <td th:if="${ticket.booking.flightType == 1}">Một chiều</td>
-                            <td th:if="${ticket.booking.flightType == 2 && ticket.flight.id == ticket.booking.flight.id }">
-                                Khứ hồi <span style="font-style: italic; color:#CA161C;">(chiều đi)</span></td>
-                            <td th:if="${ticket.booking.flightType == 2 && ticket.flight.id == ticket.booking.returnFlight.id }">
-                                Khứ hồi <span style="font-style: italic; color:#CA161C;">(chiều về)</span></td>
-                            <td>
-                                <button th:data-id="${ticket.id}"
-                                        id="btnTicketDetail" type="button" class="btn btn-sm btn-custom px-3">Xem chi
-                                    tiết
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </div><!-- .mypage_block END -->
-    </section>
-    <div class="modal fade" id="ticketDetail" tabindex="-1" aria-labelledby="ticketDetail" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-body">
-
-                </div>
-            </div>
+  <section class="section">
+    <div class="mypage_block user_ticket">
+      <nav class="mypage_nav">
+        <ul>
+          <li class="user_info"><a href="/profile" th:text="#{user_infor}">Thông tin cá nhân</a></li>
+          <li class="user_ticket"><a href="/my-ticket" th:text="#{my_ticket}">Đặt chỗ của tôi</a></li>
+          <li class="user_payment"><a href="/payment" th:text="#{payment}">Thanh toán</a></li>
+          <li class="user_transfer_history"><a href="/payment/transfer-history" th:text="#{transaction_history}">Lịch sử giao dịch</a></li>
+          <li class="user_change_password"><a href="/profile/change-password" th:text="#{change_password}">Đổi mật khẩu</a></li>
+        </ul>
+      </nav>
+      <section class="mypage_content">
+        <div class="table_scroll w-100">
+          <table class="table_style text-nowrap">
+            <tbody>
+            <tr>
+              <th th:text="#{ticket_code}">Mã đặt chỗ</th>
+              <th th:text="#{passenger}">Hành khách</th>
+              <th th:text="#{departure}">Nơi đi</th>
+              <th th:text="#{arrival}">Nơi đến</th>
+              <th th:text="#{departure_date}">Ngày bay</th>
+              <th th:text="#{arrival_date}">Ngày đến</th>
+              <th th:text="#{ticket_type}">Loại vé</th>
+              <th th:text="#{ticket_detail}">Chi tiết vé</th>
+            </tr>
+            <tr class="text-center" th:if="${tickets.isEmpty()}">
+              <td colspan="8" th:text="#{no_data}">Không tìm thấy dữ liệu</td>
+            </tr>
+            <tr th:each="ticket : ${tickets}">
+              <td th:text="${ticket.code}"></td>
+              <td th:text="${ticket.name}"></td>
+              <td th:text="${ticket.flight.departureAirport.city}"></td>
+              <td th:text="${ticket.flight.arrivalAirport.city}"></td>
+              <td th:text="${#temporals.format(ticket.flight.departure_time, 'HH:mm, dd/MM/yyyy')}"></td>
+              <td th:text="${#temporals.format(ticket.flight.arrival_time, 'HH:mm, dd/MM/yyyy')}"></td>
+              <!--              <td th:text="${ticket.booking.flightType === 1 ? 'Một chiều' : 'Khứ hồi'}"></td>-->
+              <td th:if="${ticket.booking.flightType == 1}" th:text="#{one_way}">Một chiều</td>
+              <td th:if="${ticket.booking.flightType == 2 && ticket.flight.id == ticket.booking.flight.id }" th:text="#{round_trip}">
+                Khứ hồi <span style="font-style: italic; color:#CA161C;" th:text="#{outbond}">(chiều đi)</span></td>
+              <td th:if="${ticket.booking.flightType == 2 && ticket.flight.id == ticket.booking.returnFlight.id }" th:text="#{round_trip}">
+                Khứ hồi <span style="font-style: italic; color:#CA161C;" th:text="#{return}">(chiều về)</span></td>
+              <td>
+                <button th:data-id="${ticket.id}"
+                        id="btnTicketDetail" type="button" class="btn btn-sm btn-custom px-3" th:text="#{detail}">Xem chi
+                  tiết
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
-    </div>
+      </section>
+    </div><!-- .mypage_block END -->
+  </section>
+  <div class="modal fade" id="ticketDetail" tabindex="-1" aria-labelledby="ticketDetail" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-body">
 
-    <div class="modal fade show" id="sendEmailSuccess" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Thông báo</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Email đã được gửi thành công, bạn vui lòng kiểm tra hộp thư email nhé!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
-                </div>
-            </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <div class="modal fade show" id="sendEmailError" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Thông báo</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Email thất bại!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
-                </div>
-            </div>
+  <div class="modal fade show" id="sendEmailSuccess" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" th:text="#{notification}">Thông báo</h4>
         </div>
+        <div class="modal-body">
+          <p th:text="#{email_send_success}">Email đã được gửi thành công, bạn vui lòng kiểm tra hộp thư email nhé!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal" th:text="#{close}">Đóng</button>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="modal fade show" id="sendEmailError" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" th:text="#{notification}">Thông báo</h4>
+        </div>
+        <div class="modal-body">
+          <p th:text="#{email_send_fail}">Email thất bại!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal" th:text="#{close}">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
 <th:block th:replace="~{user/layouts/script::script}"></th:block>
