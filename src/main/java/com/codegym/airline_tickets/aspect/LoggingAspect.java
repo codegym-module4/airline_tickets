@@ -55,15 +55,19 @@ public class LoggingAspect {
 
     @Around("updateUser()")
     public void LogAroundUpdateUser (ProceedingJoinPoint joinPoint) throws Throwable {
-        User result = (User) joinPoint.proceed();
+        User user = (User) joinPoint.getArgs()[1];
+
+        joinPoint.proceed();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Log userUpdatedLog = new Log();
         userUpdatedLog.setUsername(username);
-        userUpdatedLog.setAction("Cập nhật thông tin người dùng: " + result.getId());
-        if (result.getId() != null) {
-            userUpdatedLog.setIdAffected(result.getId().toString());
+        userUpdatedLog.setAction("Cập nhật thông tin người dùng: " + user.getId());
+        if (user.getId() != null) {
+            userUpdatedLog.setIdAffected(user.getId().toString());
+        } else {
+            userUpdatedLog.setIdAffected("N/A");
         }
         userUpdatedLog.setTimestamp(LocalDateTime.now());
         logService.save(userUpdatedLog);
