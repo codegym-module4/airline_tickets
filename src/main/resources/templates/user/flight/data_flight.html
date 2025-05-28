@@ -16,27 +16,27 @@
         <tr>
         <td class="fw-bold" th:text="${#temporals.format(flight.departureTime, 'HH:mm, dd/MM/yyyy')}"></td>
         <td class="fw-bold" th:text="${#temporals.format(flight.arrivalTime, 'HH:mm, dd/MM/yyyy')}"></td>
-        <td colspan="2" th:text="'Chuyến bay: ' + ${flight.flightCode}"></td>
+        <td colspan="2" th:text="#{flight} + ${flight.flightCode}"></td>
         </tr>
         <tr>
         <td th:text="${flight.departureAirportCity}"></td>
         <td th:text="${flight.arrivalAirportCity}"></td>
-        <td colspan="2">Loại vé: Phổ thông</td>
+        <td colspan="2" th:text="#{ticket_type}+ ': ' +#{economy} ">Loại vé: Phổ thông</td>
         </tr>
         </tbody>
         </table>
         <table class="table table-bordered border-black table-nowrap mt-3">
         <thead class="fw-bold">
         <tr class="text-center">
-            <td>Loại khách hàng</td>
-            <td>Giá mỗi vé</td>
-            <td>Thuế & Phí</td>
-            <td>Tổng giá</td>
+            <td th:text="#{customer_type}">Loại khách hàng</td>
+            <td th:text="#{price_per_ticket}">Giá mỗi vé</td>
+            <td th:text="#{tax_and_fee}">Thuế & Phí</td>
+            <td th:text="#{total_price}">Tổng giá</td>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>Người lớn, trẻ em</td>
+            <td th:text="#{adult} +','+ #{child}">Người lớn, trẻ em</td>
             <td class="text-end" th:text="${flight.price} + ' VNĐ'"></td>
             <td class="text-end">0 VNĐ</td>
             <td class="text-end" th:text="${flight.price} + ' VNĐ'" ></td>
@@ -52,12 +52,12 @@
         <table class="table table-bordered border-black mt-3">
         <thead class="fw-bold">
         <tr>
-            <td colspan="2">Điều kiện hành lý</td>
+            <td colspan="2" th:text="#{baggage_condition}">Điều kiện hành lý</td>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>Hành lý xách tay</td>
+            <td th:text="#{cabin_baggage}">Hành lý xách tay</td>
             <td>10 kg</td>
         </tr>
         </tbody>

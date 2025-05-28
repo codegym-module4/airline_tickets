@@ -66,19 +66,19 @@
                     <!-- Legend -->
                     <div class="legend">
                         <div class="bg-danger p-3 w-100 text-center" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
-                            <h5 class="text-white">Chú thích sơ đồ chỗ ngồi</h5>
+                            <h5 class="text-white" th:text="#{seat_map_legend}">Chú thích sơ đồ chỗ ngồi</h5>
                         </div>
                         <div class="d-flex align-items-center">
                             <div class="seat seat-available"></div>
-                            <span class="ps-2">Ghế trống</span>
+                            <span class="ps-2" th:text="#{seat_available}">Ghế trống</span>
                         </div>
                         <div class="d-flex align-items-center">
                             <div class="seat seat-booked"></div>
-                            <span class="ps-2">Đã đặt</span>
+                            <span class="ps-2" th:text="#{seat_reserved}">Đã đặt</span>
                         </div>
                         <div class="d-flex align-items-center">
                             <div class="seat seat-selected"></div>
-                            <span class="ps-2">Đang chọn</span>
+                            <span class="ps-2" th:text="#{seat_selecting}">Đang chọn</span>
                         </div>
                     </div>
                 </div>
@@ -113,16 +113,16 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Thông báo</h4>
+                <h4 class="modal-title" th:text="#{notification}">Thông báo</h4>
             </div>
             <div class="modal-body">
-                <p>Vui lòng thực hiện thanh toán để hoàn tất việc đặt vé.</p>
+                <p th:text="#{payment_reminder}">Vui lòng thực hiện thanh toán để hoàn tất việc đặt vé.</p>
                 <p>
-                    <b>Lưu ý: Nếu bạn không thực hiện thanh toán trong vòng 30 phút thì hệ thống sẽ tự động hủy bỏ đặt vé của quý khách</b>
+                    <b th:text="#{payment_note}">Lưu ý: Nếu bạn không thực hiện thanh toán trong vòng 30 phút thì hệ thống sẽ tự động hủy bỏ đặt vé của quý khách</b>
                 </p>
             </div>
             <div class="modal-footer">
-                <a role="button" class="btn btn-primary link-seat-select" href="#">Tiếp tục</a>
+                <a role="button" class="btn btn-primary link-seat-select" href="#" th:text="#{continue}">Tiếp tục</a>
             </div>
         </div>
     </div>
