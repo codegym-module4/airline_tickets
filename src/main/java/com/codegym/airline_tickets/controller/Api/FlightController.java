@@ -2,11 +2,13 @@ package com.codegym.airline_tickets.controller.Api;
 
 import com.codegym.airline_tickets.dto.FlightResponseDTO;
 import com.codegym.airline_tickets.entity.Flight;
+import com.codegym.airline_tickets.response.CompareFlightResponse;
 import com.codegym.airline_tickets.response.FlightResponse;
 import com.codegym.airline_tickets.response.SeatAvailable;
 import com.codegym.airline_tickets.service.IFlightService;
 import com.codegym.airline_tickets.service.impl.FlightSeatService;
 import com.codegym.airline_tickets.service.impl.FlightService;
+import com.codegym.airline_tickets.util.CalFlightTime;
 import com.codegym.airline_tickets.util.FormaterCustom;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -20,10 +22,13 @@ import org.thymeleaf.context.Context;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api/flight")
@@ -85,7 +90,7 @@ public class FlightController {
     public ResponseEntity<FlightResponse> getDataFlightConfirm(@RequestParam Map<String, String> request) {
         int num_of_adult = Integer.parseInt(request.get("num_of_adult"));
         int num_of_child = Integer.parseInt(request.get("num_of_child"));
-        int num_of_ticket =  num_of_adult + num_of_child;
+        int num_of_ticket = num_of_adult + num_of_child;
         int num_of_baby = Integer.parseInt(request.get("num_of_baby"));
         BigInteger total = BigInteger.valueOf(0);
         Flight flightDepart = flightService.findById(Long.parseLong(request.get("idDepart")));
@@ -101,19 +106,19 @@ public class FlightController {
         BigInteger totalDepart = new BigDecimal(flightDepart.getPrice()).multiply(BigDecimal.valueOf(num_of_ticket)).toBigInteger();
         total = total.add(totalDepart).add(BigInteger.valueOf(num_of_baby * 100000));
         FlightResponseDTO flightDepartDTO = FlightResponseDTO.builder()
-                    .id(flightDepart.getId())
-                    .flightCode(flightDepart.getCode())
-                    .airlineName(flightDepart.getAirline().getName())
-                    .departureTime(flightDepart.getDeparture_time())
-                    .arrivalTime(flightDepart.getArrival_time())
-                    .price(FormaterCustom.withLargeIntegers(flightDepart.getPrice()))
-                    .departureAirportCity(flightDepart.getDepartureAirport().getCity())
-                    .arrivalAirportCity(flightDepart.getArrivalAirport().getCity())
-                    .departureAirportName(flightDepart.getDepartureAirport().getName())
-                    .arrivalAirportName(flightDepart.getArrivalAirport().getName())
-                    .priceVATTotal(FormaterCustom.withLargeIntegers(totalDepart))
-                    .priceVAT("0")
-                    .build();
+                .id(flightDepart.getId())
+                .flightCode(flightDepart.getCode())
+                .airlineName(flightDepart.getAirline().getName())
+                .departureTime(flightDepart.getDeparture_time())
+                .arrivalTime(flightDepart.getArrival_time())
+                .price(FormaterCustom.withLargeIntegers(flightDepart.getPrice()))
+                .departureAirportCity(flightDepart.getDepartureAirport().getCity())
+                .arrivalAirportCity(flightDepart.getArrivalAirport().getCity())
+                .departureAirportName(flightDepart.getDepartureAirport().getName())
+                .arrivalAirportName(flightDepart.getArrivalAirport().getName())
+                .priceVATTotal(FormaterCustom.withLargeIntegers(totalDepart))
+                .priceVAT("0")
+                .build();
         FlightResponseDTO flightArrivalDTO = new FlightResponseDTO();
         if (request.get("idArrival") != null && !request.get("idArrival").isEmpty()) {
             Flight flightArrival = flightService.findById(Long.parseLong(request.get("idArrival")));
@@ -175,12 +180,11 @@ public class FlightController {
         listFlightId.add(idDepart);
 
         List<Object[]> results;
-        if(idArrival.equals("")){
+        if (idArrival.equals("")) {
             listFlightId.add(null);
             results = flightSeatService.countSeatAvailable(listFlightId);
-        }
-        else {
-            listFlightId.add( Long.valueOf(idArrival));
+        } else {
+            listFlightId.add(Long.valueOf(idArrival));
             results = flightSeatService.countSeatAvailable(listFlightId);
         }
 
@@ -197,14 +201,14 @@ public class FlightController {
 
         data = data.stream().filter(item -> item.getSeatAvailable() < totalPassenger).toList();
         StringBuilder messageBuilder = new StringBuilder("Chuyến bay  ");
-        if(!data.isEmpty()){
+        if (!data.isEmpty()) {
             data.stream().forEach(item -> {
                 messageBuilder.append(item.getFlightCode()).append(", ");
             });
             Map<String, String> res = new HashMap<>();
             res.put("errors", "true");
             res.put("url", "/");
-            res.put("message",messageBuilder + " không đủ chỗ. Vui lòng thử lại!");
+            res.put("message", messageBuilder + " không đủ chỗ. Vui lòng thử lại!");
             return ResponseEntity.badRequest().body(res);
         }
 
@@ -213,6 +217,52 @@ public class FlightController {
         res.put("url", "/booking/" + key);
 
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/compare/{ids}")
+    public ResponseEntity<?> getFlightCompare(@PathVariable List<Long> ids) {
+        Context context = new Context();
+        if (ids.isEmpty()) {
+            return ResponseEntity.badRequest().body(
+                    CompareFlightResponse.builder()
+                            .errors(true)
+                            .status(HttpStatus.NOT_FOUND)
+                            .message("Vui lòng chọn chuyến bay để so sánh!")
+                            .build()
+            );
+        }
+        List<Flight> list = flightService.findByIdCompare(ids);
+
+        List<FlightResponseDTO> responseList = list.stream().map(flight ->
+                FlightResponseDTO
+                        .builder()
+                        .id(flight.getId())
+                        .flightCode(flight.getCode())
+                        .airlineName(flight.getAirline().getName())
+                        .departureTime(flight.getDeparture_time())
+                        .arrivalTime(flight.getArrival_time())
+                        .price(FormaterCustom.withLargeIntegers(flight.getPrice()))
+                        .departureAirportCity(flight.getDepartureAirport().getCity())
+                        .arrivalAirportCity(flight.getArrivalAirport().getCity())
+                        .departureAirportName(flight.getDepartureAirport().getName())
+                        .arrivalAirportName(flight.getArrivalAirport().getName())
+                        .departureIATA(flight.getDepartureAirport().getIATA())
+                        .arrivalIATA(flight.getArrivalAirport().getIATA())
+                        .flightTime(CalFlightTime.cal(flight.getDeparture_time(), flight.getArrival_time()))
+                        .priceVATTotal(FormaterCustom.formatPriceVAT(flight.getPrice()))
+                        .priceVAT("0")
+                        .build()).collect(Collectors.toList());
+
+
+        context.setVariable("flights", responseList);
+        String html = templateEngine.process("user/flight/select_compare_flight", context);
+
+        return ResponseEntity.ok().body(
+                CompareFlightResponse.builder()
+                        .status(HttpStatus.OK)
+                        .html(html)
+                        .build()
+        );
     }
 
 }

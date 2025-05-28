@@ -1,5 +1,7 @@
 package com.codegym.airline_tickets.repository;
 
+import com.codegym.airline_tickets.dto.UserAccountDTO;
+import com.codegym.airline_tickets.dto.UserResponseDTO;
 import com.codegym.airline_tickets.entity.Account;
 import com.codegym.airline_tickets.entity.User;
 import org.springframework.data.domain.Page;
@@ -16,5 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.id = :id AND u.deletedAt IS NULL")
     User findNotDeletedById(long id);
+
+    @Query(value = "SELECT new com.codegym.airline_tickets.dto.UserAccountDTO(u.id, u.fullName, u.dob, u.gender, u.phone, a.email, u.address, u.nationality, u.citizenIdentification) from User u JOIN Account a ON u.id = a.user.id where u.id = :id")
+    UserAccountDTO findUserAccountById(long id);
 
 }

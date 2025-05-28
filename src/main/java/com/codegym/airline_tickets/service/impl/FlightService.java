@@ -92,6 +92,11 @@ public class FlightService implements IFlightService {
 
     }
 
+    @Override
+    public List<Flight> findByIdCompare(List<Long> ids) {
+        return flightRepository.findByIdIn(ids);
+    }
+
 
     public List<FlightResponseDTO> findFightHotDeal(String departure, String arrival, int price, String sortProperty, String sort, int page, int size) {
 
@@ -142,7 +147,7 @@ public class FlightService implements IFlightService {
 //            return exists;
 //    }
 
-    public Optional<Flight> findByCodeIgnoreCase(String code){
+    public Optional<Flight> findByCodeIgnoreCase(String code) {
         return flightRepository.findByCodeIgnoreCase(code);
     }
 

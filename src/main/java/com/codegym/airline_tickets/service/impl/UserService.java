@@ -1,5 +1,7 @@
 package com.codegym.airline_tickets.service.impl;
 
+import com.codegym.airline_tickets.dto.UserAccountDTO;
+import com.codegym.airline_tickets.dto.UserResponseDTO;
 import com.codegym.airline_tickets.entity.Role;
 import com.codegym.airline_tickets.entity.User;
 import com.codegym.airline_tickets.repository.UserRepository;
@@ -49,5 +51,10 @@ public class UserService implements IUserService {
     @Override
     public List<User> findByName(String name) {
         return List.of();
+    }
+
+    @Override
+    public UserAccountDTO findUserAccountById(long id) {
+        return userRepository.findUserAccountById(id);
     }
 }
