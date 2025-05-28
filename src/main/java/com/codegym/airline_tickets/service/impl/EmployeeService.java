@@ -151,18 +151,34 @@ public class EmployeeService implements IEmployeeService {
 
     @Transactional
     public void updateEmployeeAndAccount(EmployeeAccountDTO dto) {
+        System.out.println("====== BẮT ĐẦU CẬP NHẬT ======");
+        System.out.println("DTO nhận được: " + dto);
+        System.out.println("employeeId: " + dto.getEmployeeId());
+        System.out.println("accountId: " + dto.getAccountId());
+        System.out.println("email: " + dto.getEmail());
+        System.out.println("roleId: " + dto.getRoleId());
+        System.out.println("password: " + dto.getPassword());
+
         // 1. Lấy thông tin nhân viên
         Employee employee = employeeRepository.findById(dto.getEmployeeId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
+
+        System.out.println("Tìm thấy nhân viên: " + employee.getFullName());
+
 
         // 2. Lấy thông tin tài khoản
         Account account = accountRepository.findById(dto.getAccountId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
 
+        System.out.println("Tìm thấy tài khoản: " + account.getEmail());
+
         // 3. Kiểm tra email đã tồn tại chưa (trừ khi giữ nguyên email cũ)
         Optional<Account> emailExistedOpt = accountRepository.findByEmail(dto.getEmail());
         if (emailExistedOpt.isPresent()) {
             Account emailExisted = emailExistedOpt.get();
+
+            System.out.println("Email đã tồn tại trong DB: " + emailExisted.getEmail());
+
             if (!emailExisted.getId().equals(account.getId())) {
                 throw new RuntimeException("Email đã được sử dụng.");
             }
@@ -187,9 +203,15 @@ public class EmployeeService implements IEmployeeService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy vai trò"));
         account.setRole(role);
 
+        System.out.println("Gán vai trò: " + role.getRoleName());
+
+
         // 6. Lưu lại
         employeeRepository.save(employee);
         accountRepository.save(account);
+
+        System.out.println("✅ Cập nhật thành công nhân viên và tài khoản.");
+        System.out.println("====== KẾT THÚC CẬP NHẬT ======");
     }
 
 
@@ -206,6 +228,7 @@ public class EmployeeService implements IEmployeeService {
 
         return EmployeeAccountDTO.builder()
                 .employeeId(employee.getId())
+                .accountId(account.getId())
                 .code(employee.getCode())
                 .fullName(employee.getFullName())
                 .dob(employee.getDob())
