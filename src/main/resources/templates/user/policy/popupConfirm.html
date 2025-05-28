@@ -3,20 +3,20 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Thông báo</h4>
+                    <h4 class="modal-title" th:text="#{notification}">Thông báo</h4>
                 </div>
                 <div class="modal-body">
-                    <h5 class="mb-2" style="font-size: 18px; font-weight: 600;">Chấp Nhận Điều Khoản Sử Dụng</h5>
-                    <p class="mb-2">Bằng việc tiếp tục sử dụng dịch vụ của chúng tôi, bạn xác nhận rằng đã đọc, hiểu và đồng ý với tất cả các điều khoản và điều kiện sử dụng được quy định – vì một trải nghiệm an toàn, minh bạch và tối ưu nhất dành cho bạn.</p>
-                    <a style="color: #555555" href="/policy/1">Tìm hiểu thêm tại đây</a>
+                    <h5 class="mb-2" style="font-size: 18px; font-weight: 600;" th:text="#{terms_accept_title}">Chấp Nhận Điều Khoản Sử Dụng</h5>
+                    <p class="mb-2" th:text="#{terms_accept_desc}">Bằng việc tiếp tục sử dụng dịch vụ của chúng tôi, bạn xác nhận rằng đã đọc, hiểu và đồng ý với tất cả các điều khoản và điều kiện sử dụng được quy định – vì một trải nghiệm an toàn, minh bạch và tối ưu nhất dành cho bạn.</p>
+                    <a style="color: #555555" th:href="@{/policy/chinh-sach-bao-mat-quyen-rieng-tu}"><span th:text="#{learn_more}">Tìm hiểu thêm tại đây</span></a>
                     <label class="mt-2">
                         <input type="checkbox" id="agreeCheckbox">
-                        Tôi đã đọc và đồng ý với Điều khoản sử dụng và Chính sách quyền riêng tư.
+                        <span th:text="#{terms_agree_text}">Tôi đã đọc và đồng ý với Điều khoản sử dụng và Chính sách quyền riêng tư.</span>
                     </label>
                     <br>
                 </div>
                 <div class="modal-footer">
-                    <button id="acceptPolicyBtn" type="button" class="btn btn-default" >Chấp nhận</button>
+                    <button id="acceptPolicyBtn" type="button" class="btn btn-default" th:text="#{accept}">Chấp nhận</button>
                 </div>
             </div>
         </div>

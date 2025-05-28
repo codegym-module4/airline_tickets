@@ -1,58 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="~{user/layouts/head::head ('Lịch sử thanh toán')}"></head>
+<head th:replace="~{user/layouts/head::head(#{transaction_history})}"></head>
 <body>
-    <th:block th:replace="~{user/layouts/header::header}"></th:block>
-    <main id="content">
-        <section class="section">
-            <div class="mypage_block user_transfer_history">
-                <nav class="mypage_nav">
-                    <ul>
-                        <li class="user_info"><a href="/profile">Thông tin cá nhân</a></li>
-                        <li class="user_ticket"><a href="/my-ticket">Đặt chỗ của tôi</a></li>
-                        <li class="user_payment"><a href="/payment">Thanh toán</a></li>
-                        <li class="user_transfer_history"><a href="#">Lịch sử giao dịch</a></li>
-                        <li class="user_change_password"><a href="/profile/change-password">Đổi mật khẩu</a></li>
-                    </ul>
-                </nav>
-                <section class="mypage_content">
-                    <div class="table_scroll w-100">
-                        <table class="table_style text-nowrap">
-                            <tbody>
-                                <tr>
-                                    <th>Nơi đi</th>
-                                    <th>Nơi đến</th>
-                                    <th>Ngày đặt</th>
-                                    <th>Ngày bay</th>
-                                    <th>Giá</th>
-                                    <th>Tình trạng</th>
-                                </tr>
-                                <tr class="text-center" th:if="${list.isEmpty()}">
-                                    <td colspan="6">Không tìm thấy dữ liệu</td>
-                                </tr>
-                                <tr th:each="booking : ${list}">
-                                    <td th:text="${booking.flight.departureAirport.city}"></td>
-                                    <td th:text="${booking.returnFlight != null ? booking.returnFlight.departureAirport.city : 'Không'}"></td>
-                                    <td th:text="${#temporals.format(booking.createdAt, 'dd/MM/yyyy')}">15/05/2025</td>
-                                    <td th:text="${#temporals.format(booking.flight.departure_time, 'dd/MM/yyyy')}">25/05/2025</td>
-                                    <td th:text="${booking.totalPrice}"></td>
-                                    <td th:switch="${booking.status}">
-                                        <span th:case="1">Chờ thanh toán</span>
-                                        <span th:case="2">Đã thanh toán</span>
-                                        <span th:case="3">Đã hủy</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-            </div><!-- .mypage_block END -->
-        </section>
-    </main>
+<th:block th:replace="~{user/layouts/header::header}"></th:block>
+<main id="content">
+    <section class="section">
+        <div class="mypage_block user_transfer_history">
+            <nav class="mypage_nav">
+                <ul>
+                    <li class="user_info"><a href="/profile" th:text="#{user_infor}">Thông tin cá nhân</a></li>
+                    <li class="user_ticket"><a href="/my-ticket" th:text="#{my_ticket}">Đặt chỗ của tôi</a></li>
+                    <li class="user_payment"><a href="/payment" th:text="#{payment}">Thanh toán</a></li>
+                    <li class="user_transfer_history"><a href="/payment/transfer-history" th:text="#{transaction_history}">Lịch sử giao dịch</a></li>
+                    <li class="user_change_password"><a href="/profile/change-password" th:text="#{change_password}">Đổi mật khẩu</a></li>
+                </ul>
+            </nav>
+            <section class="mypage_content">
+                <div class="table_scroll w-100">
+                    <table class="table_style text-nowrap">
+                        <tbody>
+                        <tr>
+                            <th th:text="#{departure_city}">Nơi đi</th>
+                            <th th:text="#{arrival_city}">Nơi đến</th>
+                            <th th:text="#{date}">Ngày đặt</th>
+                            <th th:text="#{departure_date}">Ngày bay</th>
+                            <th th:text="#{price}">Giá</th>
+                            <th th:text="#{status}">Tình trạng</th>
+                        </tr>
+                        <tr class="text-center" th:if="${list.isEmpty()}">
+                            <td colspan="6" th:text="#{no_data}">Không tìm thấy dữ liệu</td>
+                        </tr>
+                        <tr th:each="booking : ${list}">
+                            <td th:text="${booking.flight.departureAirport.city}"></td>
+                            <td th:text="${booking.returnFlight != null ? booking.returnFlight.departureAirport.city : 'Không'}"></td>
+                            <td th:text="${#temporals.format(booking.createdAt, 'dd/MM/yyyy')}">15/05/2025</td>
+                            <td th:text="${#temporals.format(booking.flight.departure_time, 'dd/MM/yyyy')}">25/05/2025</td>
+                            <td th:text="${booking.totalPrice}"></td>
+                            <td th:switch="${booking.status}">
+                                <span th:case="1" th:text="#{booking_status_1}">Chờ thanh toán</span>
+                                <span th:case="2" th:text="#{booking_status_2}">Đã thanh toán</span>
+                                <span th:case="3" th:text="#{booking_status_3}">Đã hủy</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div><!-- .mypage_block END -->
+    </section>
+</main>
 
 
-    <th:block th:replace="~{user/layouts/footer::footer}"></th:block>
-    <th:block th:replace="~{user/layouts/script::script}"></th:block>
+<th:block th:replace="~{user/layouts/footer::footer}"></th:block>
+<th:block th:replace="~{user/layouts/script::script}"></th:block>
 </body>
 
 </html>

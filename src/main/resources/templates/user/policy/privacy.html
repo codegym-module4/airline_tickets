@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vietjet Air | Bay là thích ngay | Website chính thức</title>
+    <title th:text="#{title}">Vietjet Air | Bay là thích ngay | Website chính thức</title>
     <link rel="stylesheet" type="text/css" media="all" href="/user/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css">
     <link href="https://fonts.googleapis.com/css2?family=KoHo&display=swap" rel="stylesheet">
     <link rel="icon" href="/user/icon/favicon.ico">
     <link rel="stylesheet" href="/user/css/style.css">
@@ -16,207 +17,433 @@
     <th:block th:replace="~{user/layouts/header::header}"></th:block>
     <div class="container container-policy privacy mt-5">
         <div>
-            <h1 class="title" >Chính sách về quyền riêng tư</h1>
+            <h1 class="title" th:text="#{privacy_title}">Chính sách về quyền riêng tư</h1>
         </div>
         <div>
             <p>
-                <strong>Chính sách Bảo mật Vietjet Air</strong>
+                <strong th:text="#{privacy_vietjet}">Chính sách Bảo mật Vietjet Air</strong>
             </p>
             <p>
-                <em>Cập nhật lần cuối ngày 14/14/2025</em>
+                <em th:text="#{privacy_lastUpdated}">Cập nhật lần cuối ngày 14/14/2025</em>
             </p>
-            <p>Cảm ơn quý khách đã tin tưởng và sử dụng các dịch vụ của Vietjet Air thông qua website
+            <p th:text="#{privacy_thankYou_1}">Cảm ơn quý khách đã tin tưởng và sử dụng các dịch vụ của Vietjet Air thông qua website
                 <a href="http://www.vietjetair.com">&nbsp;</a><a href="http://www.vietjetair.com">
                     <u>www.vietjetair.com</u>
-                </a>, ứng dụng di động, chương trình hội viên Vietjet Skyjoy, trung tâm hỗ trợ khách hàng hoặc các đại lý phòng vé. Chúng tôi cam kết tôn trọng và bảo vệ quyền riêng tư của quý khách, đảm bảo rằng mọi thông tin cá nhân được thu thập sẽ được xử lý an toàn và minh bạch theo quy định pháp luật. Chính sách Bảo mật này giải thích cách chúng tôi thu thập, sử dụng, lưu trữ, chia sẻ và bảo vệ dữ liệu cá nhân của quý khách, đồng thời nêu rõ các quyền của quý khách liên quan đến dữ liệu cá nhân của mình,&nbsp;bao gồm các cập nhật liên quan đến dữ liệu cá nhân được tích hợp trên hệ thống VNeID và Galaxy Pay (GPay).</p><p>Chính sách này áp dụng cho mọi dữ liệu&nbsp;cá nhân mà quý khách đồng ý cung cấp, chia sẻ&nbsp;cho chúng tôi trong quá trình sử dụng dịch vụ của Vietjet Air. Chúng tôi khuyến nghị quý khách đọc kỹ chính sách này để hiểu rõ cách chúng tôi xử lý dữ liệu cá nhân của quý khách.</p><h3><strong>1. Diễn giải và Định nghĩa</strong>
-        </h3>
+                </a><span th:text="#{privacy_thankYou_2}">, ứng dụng di động, chương trình hội viên Vietjet Skyjoy, trung tâm hỗ trợ khách hàng hoặc các đại
+                lý phòng vé. Chúng tôi cam kết tôn trọng và bảo vệ quyền riêng tư của quý khách, đảm bảo rằng mọi thông
+                tin cá nhân được thu thập sẽ được xử lý an toàn và minh bạch theo quy định pháp luật. Chính sách Bảo mật
+                này giải thích cách chúng tôi thu thập, sử dụng, lưu trữ, chia sẻ và bảo vệ dữ liệu cá nhân của quý
+                khách, đồng thời nêu rõ các quyền của quý khách liên quan đến dữ liệu cá nhân của mình,&nbsp;bao gồm các
+                    cập nhật liên quan đến dữ liệu cá nhân được tích hợp trên hệ thống VNeID và Galaxy Pay (GPay).</span></p>
+            <p th:text="#{privacy_scope}">Chính sách này áp dụng cho mọi dữ liệu&nbsp;cá nhân mà quý khách đồng ý cung cấp, chia sẻ&nbsp;cho chúng
+                tôi trong quá trình sử dụng dịch vụ của Vietjet Air. Chúng tôi khuyến nghị quý khách đọc kỹ chính sách
+                này để hiểu rõ cách chúng tôi xử lý dữ liệu cá nhân của quý khách.</p>
+            <h3><strong th:text="#{privacy_I}">1. Diễn giải và Định nghĩa</strong>
+            </h3>
             <h4>
-                <strong>1.1 Diễn giải</strong>
+                <strong th:text="#{privacy_I_1}">1.1 Diễn giải</strong>
             </h4>
-            <p>Các thuật ngữ được viết hoa trong chính sách này có ý nghĩa như được định nghĩa trong Mục 1.2 dưới đây.&nbsp;</p>
-            <h4><strong>1.2 Định nghĩa</strong></h4>
+            <p th:text="#{privacy_I_1.1}">Các thuật ngữ được viết hoa trong chính sách này có ý nghĩa như được định nghĩa trong Mục 1.2 dưới đây.&nbsp;</p>
+            <h4><strong th:text="#{privacy_I_2}">1.2 Định nghĩa</strong></h4>
             <ul>
-                <li><strong>Tài khoản</strong>: Tài khoản duy nhất được tạo để quý khách truy cập vào các dịch vụ của Vietjet Air, bao gồm website, ứng dụng di động hoặc các nền tảng khác.</li><li><strong>Đối tác</strong>: Một tổ chức cung cấp dịch vụ hoặc công ty liên kết với Vietjet Aircho mục đích cung cấp Dịch vụ cho Quý khách.</li>
-                <li><strong>‘</strong><strong>Ứng dụng</strong><strong>Vietjet Air’</strong><strong>&nbsp;hoặc ‘Ứng dụng’</strong>: Ứng dụng di động Vietjet Air do Công ty Cổ phần Hàng không Vietjet cung cấp.</li>
-                <li><strong>Công ty</strong>: Công ty Cổ phần Hàng không Vietjet, có trụ sở tại 302/3 Đường Kim Mã, Phường Ngọc Khánh, Quận Ba Đình, Hà Nội, Việt Nam (có thể được gọi tắt là “Vietjet Air”, “Chúng tôi”, “Công ty”).</li>
-                <li><strong>Cookies</strong>: Các tệp dữ liệu nhỏ được lưu trữ trên thiết bị của quý khách (máy tính, điện thoại, máy tính bảng) để ghi nhận thông tin về lịch sử truy cập hoặc hoạt động trực tuyến.</li><li><strong>Quốc gia</strong>: Việt Nam.</li>
-                <li><strong>Thiết bị</strong>: Bất kỳ thiết bị nào có khả năng truy cập dịch vụ của Vietjet Air, chẳng hạn như máy tính, điện thoại di động hoặc máy tính bảng.</li><li><strong>Dữ liệu </strong><strong>c</strong><strong>á nhân</strong>: Là thông tin dưới dạng ký hiệu, chữ viết, chữ số, hình ảnh, âm thanh hoặc dạng tương tự trên môi trường điện tử gắn liền với một con người cụ thể hoặc giúp xác định một con người cụ thể. Dữ liệu cá nhân bao gồm dữ liệu cá nhân cơ bản và dữ liệu cá nhân nhạy cảm.</li>
-                <li><strong>Dịch vụ</strong>: Bao gồm website, ứng dụng di động, chương trình Vietjet Skyjoy, dịch vụ vận chuyển hành khách, dịch vụ hỗ trợ khách hàng và các dịch vụ khác do Vietjet Air cung cấphoặc liên kết với Đối tác, Nhà cung cấp dịch vụ để cung cấp cho Quý khách.</li><li><strong>Nhà cung cấp </strong><strong>d</strong><strong>ịch vụ</strong>: Các cá nhân hoặc tổ chức được Vietjet Air thuê để xử lý dữ liệucá nhân, hỗ trợ cung cấp Dịch vụ hoặc phân tích cách thức Dịch vụ&nbsp;được sử dụng.</li>
-                <li><strong>Dữ liệu </strong><strong>s</strong><strong>ử dụng</strong>: Dữ liệu được thu thập tự động khi quý khách sử dụng Dịch vụ, ví dụ: thời gian truy cập, địa chỉ IP hoặc thông tin thiết bị.</li><li><strong>Trang web</strong>: Website chính thức của Vietjet Air tại<a href="http://www.vietjetair.com"><u>vietjetair.com</u></a>.</li><li><strong>Quý khách</strong>: Là chủ thể Dữ liệu cá nhân, tổ chức hoặc đại diện pháp lý của tổ chức sử dụng Dịch vụ.</li>
+                <li><strong th:text="#{account}">Tài khoản</strong>: <span th:text="#{privacy_I_2.1}">Tài khoản duy nhất được tạo để quý khách truy cập vào các dịch vụ của
+                    Vietjet Air, bao gồm website, ứng dụng di động hoặc các nền tảng khác.</span>
+                </li>
+                <li><strong th:text="#{partner}">Đối tác</strong>: <span th:text="#{privacy_I_2.2}">Một tổ chức cung cấp dịch vụ hoặc công ty liên kết với Vietjet Aircho mục
+                    đích cung cấp Dịch vụ cho Quý khách.</span>
+                </li>
+                <li><strong>‘</strong><strong th:text="#{app}">Ứng dụng</strong><strong>Vietjet Air’</strong><strong th:text="#{or_app}">&nbsp;hoặc ‘Ứng
+                    dụng’</strong>: <span th:text="#{privacy_I_2.3}">Ứng dụng di động Vietjet Air do Công ty Cổ phần Hàng không Vietjet cung cấp.</span>
+                </li>
+                <li><strong th:text="#{privacy_company}">Công ty</strong>: <span th:text="#{privacy_I_2.4}">Công ty Cổ phần Hàng không Vietjet, có trụ sở tại 302/3 Đường Kim Mã,
+                    Phường Ngọc Khánh, Quận Ba Đình, Hà Nội, Việt Nam (có thể được gọi tắt là “Vietjet Air”, “Chúng
+                    tôi”, “Công ty”).</span>
+                </li>
+                <li><strong>Cookies</strong>: <span th:text="#{privacy_I_2.5}">Các tệp dữ liệu nhỏ được lưu trữ trên thiết bị của quý khách (máy tính,
+                    điện thoại, máy tính bảng) để ghi nhận thông tin về lịch sử truy cập hoặc hoạt động trực tuyến.</span>
+                </li>
+                <li><strong th:text="#{nation}">Quốc gia</strong>: Việt Nam.</li>
+                <li><strong th:text="#{device}">Thiết bị</strong>: <span th:text="#{privacy_I_2.6}">Bất kỳ thiết bị nào có khả năng truy cập dịch vụ của Vietjet Air, chẳng
+                    hạn như máy tính, điện thoại di động hoặc máy tính bảng.</span>
+                </li>
+                <li><strong th:text="#{personal_data}">Dữ liệu cá nhân</strong>: <span th:text="#{privacy_I_2.7}">Là thông tin dưới dạng ký hiệu,
+                    chữ viết, chữ số, hình ảnh, âm thanh hoặc dạng tương tự trên môi trường điện tử gắn liền với một con
+                    người cụ thể hoặc giúp xác định một con người cụ thể. Dữ liệu cá nhân bao gồm dữ liệu cá nhân cơ bản
+                    và dữ liệu cá nhân nhạy cảm.</span>
+                </li>
+                <li><strong th:text="#{service}">Dịch vụ</strong>: <span th:text="#{privacy_I_2.8}">Bao gồm website, ứng dụng di động, chương trình Vietjet Skyjoy, dịch vụ
+                    vận chuyển hành khách, dịch vụ hỗ trợ khách hàng và các dịch vụ khác do Vietjet Air cung cấphoặc
+                    liên kết với Đối tác, Nhà cung cấp dịch vụ để cung cấp cho Quý khách.</span>
+                </li>
+                <li><strong th:text="#{supplier}">Nhà cung cấp dịch vụ</strong>: <span th:text="#{privacy_I_2.9}">Các cá nhân hoặc tổ chức
+                    được Vietjet Air thuê để xử lý dữ liệucá nhân, hỗ trợ cung cấp Dịch vụ hoặc phân tích cách thức Dịch
+                    vụ&nbsp;được sử dụng.</span>
+                </li>
+                <li><strong th:text="#{data_used}">Dữ liệu sử dụng</strong>: <span th:text="#{privacy_I_2.10}">Dữ liệu được thu thập tự động
+                    khi quý khách sử dụng Dịch vụ, ví dụ: thời gian truy cập, địa chỉ IP hoặc thông tin thiết bị.</span>
+                </li>
+                <li><strong th:text="#{web_site}">Trang web</strong>: <span th:text="#{privacy_I_2.11}">Website chính thức của Vietjet Air tại</span><a
+                        href="http://www.vietjetair.com"><u>vietjetair.com</u></a>.
+                </li>
+                <li><strong th:text="#{customer}">Quý khách</strong>: <span th:text="#{privacy_I_2.12}">Là chủ thể Dữ liệu cá nhân, tổ chức hoặc đại diện pháp lý của tổ chức sử
+                    dụng Dịch vụ.</span>
+                </li>
             </ul>
-            <h3><strong>2. Thu thập và Sử dụng Dữ liệu Cá nhân</strong></h3>
-            <h4><strong>2.1 Các Loại Dữ liệu Cá nhân Được Thu thập</strong></h4>
-            <p>Khi quý khách sử dụng Dịch vụ, chúng tôi có thể thu thập các loại dữ liệu cá nhân sau:</p>
-            <ul><li><strong>Thông tin định danh</strong>: Họ tên, ngày tháng năm sinh, giới tính, quốc tịch, ảnh chụp giấy tờ tuỳ thân, số chứng minh nhân dân/căn cước công dân/Số hộ chiếu. Những thông tin này giúp xác định chính xác danh tính của quý khách hoặc tổ chức mà quý khách đại diện</li>
-                <li><strong>Thông tin sinh trắc học</strong>: Ảnh chân dung, video selfie, dữ liệu nhận diện khuôn mặt (nếu được sự đồng ý), vân tay (nếu áp dụng), dữ liệu từ ứng dụng định danh VNeID (nếu được chia sẻ).</li>
-                <li><strong>Thông tin liên lạc</strong>: Địa chỉ email, số điện thoại, địa chỉ nhà, hoặc các thông tin khác liên quan đến yêu cầu đặc biệt của quý khách (ví dụ: yêu cầu hỗ trợ y tế hoặc dịch vụ đặc biệt).</li>
-                <li><strong>Thông tin thanh toán</strong>: Thông tin thẻ tín dụng/thẻ ghi nợ, bao gồm tên chủ thẻ, số thẻ, ngày hết hạn, mã xác thực (CVV).</li><li><strong>Thông tin đặt vé và giữ chỗ</strong>: Chi tiết về chuyến bay, giá vé, ngày đặt vé, hành trình, thông tin giữ chỗ hoặc các dịch vụ bổ sung (như hành lý, suất ăn).</li><li><strong>Thông tin chương trình Vietjet Skyjoy</strong>: Số thẻ hội viên, hạng thẻ, số dư dặm thưởng, lịch sử giao dịch, ưu đãi và các thông tin liên quan đến tài khoản hội viên.</li><li><strong>Thông tin tự động thu thập</strong>: Dữ liệu được thu thập khi quý khách sử dụng website hoặc ứng dụng, bao gồm địa chỉ IP, loại trình duyệt, cookies, mã đăng nhập, lịch sử tìm kiếm hoặc các tương tác trực tuyến khác.</li>
-                <li><strong>Thông tin từ trao đổi</strong>: Nội dung giao tiếp giữa quý khách và Vietjet Air, bao gồm email, tin nhắn, cuộc gọi, khiếu nại, khảo sát, hoặc yêu cầu hủy đăng ký nhận bản tin.</li>
-                <li><strong>Thông tin từ mạng xã hội</strong>: Nếu quý khách đăng ký dịch vụ bằng tài khoản mạng xã hội, chúng tôi có thể nhận được thông tin như tên, email, sở thích, danh sách bạn bè, hoặc thông tin chuyến bay mà quý khách đã tìm kiếm, tùy thuộc vào cài đặt quyền riêng tư của tài khoản mạng xã hội.</li>
-                <li><strong>Thông tin từ nền tảng thứ ba</strong>: Dữ liệu định danh điện tử từ VNeID (nếu người dùng đồng ý), dữ liệu eKYC từ SDK của Galaxy Pay phục vụ thanh toán và xác thực.</li>
-            </ul>
-            <h4><strong>2.2 Dữ liệu </strong><strong>s</strong><strong>ử dụng</strong></h4>
-            <p>Chúng tôi thu thập dữ liệu sử dụng tự động khi quý khách tương tác với Dịch vụ, bao gồm:</p>
-            <ul><li>Địa chỉ IP, loại trình duyệt, phiên bản trình duyệt.</li><li>Các trang quý khách truy cập, thời gian truy cập, thời gian lưu lại trên trang.</li>
-                <li>Định danh thiết bị, dữ liệu chẩn đoán hoặc các thông tin khác liên quan đến hoạt động trực tuyến.</li>
-                <li>Sinh trắc học: Vân tay/Khuôn mặt (Khi sử dụng VNeID hoặc GPAY nếu được đồng ý)</li>
-            </ul>
-            <h4><strong>2.3 Thông tin </strong><strong>t</strong><strong>hu thập từ Ứng dụng</strong></h4>
-            <p>Khi sử dụng Ứng dụng Vietjet Air, với sự cho phép của quý khách, chúng tôi có thể thu thập:</p>
+            <h3><strong th:text="#{privacy_II}">2. Thu thập và Sử dụng Dữ liệu Cá nhân</strong></h3>
+            <h4><strong th:text="#{privacy_II_1}">2.1 Các Loại Dữ liệu Cá nhân Được Thu thập</strong></h4>
+            <p th:text="#{privacy_II_1.desc}">Khi quý khách sử dụng Dịch vụ, chúng tôi có thể thu thập các loại dữ liệu cá nhân sau:</p>
             <ul>
-                <li><strong>Dữ liệu vị trí</strong>: Để cung cấp các dịch vụ liên quan đến địa điểm, như thông tin sân bay gần nhất.</li>
-                <li><strong>Quyền truy cập thư viện ảnh</strong>: Để hỗ trợ thay đổi ảnh hồ sơ hoặc các tính năng liên quan đến hình ảnh.</li>
-                <li><strong>Quyền truy cập ví điện tử (SDK)</strong>: Bao gồm quyền truy cập Internet, camera (để quét mã QR), danh bạ (để xác định liên hệ sử dụng ví SkyPay), hoặc sinh trắc học (để thanh toán bằng vân tay). Quý khách có thể bật/tắt các quyền này bất kỳ lúc nào thông qua cài đặt thiết bị.</li>
+                <li><strong th:text="#{privacy_II_1.1}">Thông tin định danh</strong>: <span th:text="#{privacy_II_1.1_desc}">Họ tên, ngày tháng năm sinh, giới tính, quốc tịch, ảnh chụp
+                    giấy tờ tuỳ thân, số chứng minh nhân dân/căn cước công dân/Số hộ chiếu. Những thông tin này giúp xác
+                    định chính xác danh tính của quý khách hoặc tổ chức mà quý khách đại diện</span>
+                </li>
+                <li><strong th:text="#{privacy_II_1.2}">Thông tin sinh trắc học</strong>: <span th:text="#{privacy_II_1.2_desc}">Ảnh chân dung, video selfie, dữ liệu nhận diện khuôn mặt
+                    (nếu được sự đồng ý), vân tay (nếu áp dụng), dữ liệu từ ứng dụng định danh VNeID (nếu được chia sẻ).</span>
+                </li>
+                <li><strong th:text="#{privacy_II_1.3}">Thông tin liên lạc</strong>: <span th:text="#{privacy_II_1.3_desc}">Địa chỉ email, số điện thoại, địa chỉ nhà, hoặc các thông tin
+                    khác liên quan đến yêu cầu đặc biệt của quý khách (ví dụ: yêu cầu hỗ trợ y tế hoặc dịch vụ đặc
+                    biệt).</span>
+                </li>
+                <li><strong th:text="#{privacy_II_1.4}">Thông tin thanh toán</strong>: <span th:text="#{privacy_II_1.4_desc}">Thông tin thẻ tín dụng/thẻ ghi nợ, bao gồm tên chủ thẻ, số
+                    thẻ, ngày hết hạn, mã xác thực (CVV).</span>
+                </li>
+                <li><strong th:text="#{privacy_II_1.5}">Thông tin đặt vé và giữ chỗ</strong>: <span th:text="#{privacy_II_1.5_desc}">Chi tiết về chuyến bay, giá vé, ngày đặt vé, hành
+                    trình, thông tin giữ chỗ hoặc các dịch vụ bổ sung (như hành lý, suất ăn).</span>
+                </li>
+                <li><strong th:text="#{privacy_II_1.6}">Thông tin chương trình Vietjet Skyjoy</strong>: <span th:text="#{privacy_II_1.6_desc}">Số thẻ hội viên, hạng thẻ, số dư dặm thưởng,
+                    lịch sử giao dịch, ưu đãi và các thông tin liên quan đến tài khoản hội viên.</span>
+                </li>
+                <li><strong th:text="#{privacy_II_1.7}">Thông tin tự động thu thập</strong>: <span th:text="#{privacy_II_1.7_desc}">Dữ liệu được thu thập khi quý khách sử dụng website
+                    hoặc ứng dụng, bao gồm địa chỉ IP, loại trình duyệt, cookies, mã đăng nhập, lịch sử tìm kiếm hoặc
+                    các tương tác trực tuyến khác.</span>
+                </li>
+                <li><strong th:text="#{privacy_II_1.8}">Thông tin từ trao đổi</strong>:  <span th:text="#{privacy_II_1.8_desc}">Nội dung giao tiếp giữa quý khách và Vietjet Air, bao gồm
+                    email, tin nhắn, cuộc gọi, khiếu nại, khảo sát, hoặc yêu cầu hủy đăng ký nhận bản tin.</span>
+                </li>
+                <li><strong th:text="#{privacy_II_1.9}">Thông tin từ mạng xã hội</strong>:  <span th:text="#{privacy_II_1.9_desc}">Nếu quý khách đăng ký dịch vụ bằng tài khoản mạng xã hội,
+                    chúng tôi có thể nhận được thông tin như tên, email, sở thích, danh sách bạn bè, hoặc thông tin
+                    chuyến bay mà quý khách đã tìm kiếm, tùy thuộc vào cài đặt quyền riêng tư của tài khoản mạng xã hội.</span>
+                </li>
+                <li><strong th:text="#{privacy_II_1.10}">Thông tin từ nền tảng thứ ba</strong>: <span th:text="#{privacy_II_1.10_desc}">Dữ liệu định danh điện tử từ VNeID (nếu người dùng
+                    đồng ý), dữ liệu eKYC từ SDK của Galaxy Pay phục vụ thanh toán và xác thực.</span>
+                </li>
             </ul>
-            <h4><strong>2.4 Công nghệ </strong><strong>t</strong><strong>heo dõi và Cookies</strong></h4>
-            <p>Chúng tôi sử dụng cookies và các công nghệ theo dõi tương tự (như web beacons) để:</p>
+            <h4><strong th:text="#{privacy_II_2_title}">2.2 Dữ liệu sử dụng</strong></h4>
+            <p th:text="#{privacy_II_2_desc}">Chúng tôi thu thập dữ liệu sử dụng tự động khi quý khách tương tác với Dịch vụ, bao gồm:</p>
             <ul>
-                <li>Theo dõi hoạt động của quý khách trên website và ứng dụng.</li>
-                <li>Lưu trữ thông tin như tùy chọn ngôn ngữ, lịch sử tìm kiếm hoặc dữ liệu phiên đăng nhập.</li>
-                <li>Phân tích hành vi người dùng để cải thiện dịch vụ.</li>
+                <li th:text="#{privacy_II_2_1}">Địa chỉ IP, loại trình duyệt, phiên bản trình duyệt.</li>
+                <li th:text="#{privacy_II_2_2}">Các trang quý khách truy cập, thời gian truy cập, thời gian lưu lại trên trang.</li>
+                <li th:text="#{privacy_II_2_3}">Định danh thiết bị, dữ liệu chẩn đoán hoặc các thông tin khác liên quan đến hoạt động trực tuyến.
+                </li>
+                <li th:text="#{privacy_II_2_4}">Sinh trắc học: Vân tay/Khuôn mặt (Khi sử dụng VNeID hoặc GPAY nếu được đồng ý)</li>
             </ul>
-            <p>Cookies có thể là:</p>
+            <h4><strong th:text="#{privacy_II_3_title}">2.3 Thông tin </strong><strong>t</strong><strong>hu thập từ Ứng dụng</strong></h4>
+            <p th:text="#{privacy_II_3_desc}">Khi sử dụng Ứng dụng Vietjet Air, với sự cho phép của quý khách, chúng tôi có thể thu thập:</p>
             <ul>
-                <li><strong>Cookies phiên</strong>(xóa sau khi đóng trình duyệt).</li>
-                <li><strong>Cookies cố định</strong>(lưu trữ lâu dài trên thiết bị). Quý khách có thể quản lý cookies qua cài đặt trình duyệt hoặc tham khảo Chính sách Cookies của chúng tôi để biết thêm chi tiết.</li>
+                <li><strong th:text="#{location_data}">Dữ liệu vị trí</strong>: <span th:text="#{privacy_II_3_1}">Để cung cấp các dịch vụ liên quan đến địa điểm, như thông tin sân
+                    bay gần nhất.</span>
+                </li>
+                <li><strong th:text="#{access_photo_library}">Quyền truy cập thư viện ảnh</strong>: <span th:text="#{privacy_II_3_2}">Để hỗ trợ thay đổi ảnh hồ sơ hoặc các tính năng liên
+                    quan đến hình ảnh.</span>
+                </li>
+                <li><strong th:text="#{access_ewallet_sdk}">Quyền truy cập ví điện tử (SDK)</strong>: <span th:text="#{privacy_II_3_3}"> Bao gồm quyền truy cập Internet, camera (để quét
+                    mã QR), danh bạ (để xác định liên hệ sử dụng ví SkyPay), hoặc sinh trắc học (để thanh toán bằng vân
+                    tay). Quý khách có thể bật/tắt các quyền này bất kỳ lúc nào thông qua cài đặt thiết bị.</span>
+                </li>
             </ul>
-            <h3><strong>3. Mục đích </strong><strong>t</strong><strong>hu thập Dữ liệu </strong><strong>c</strong><strong>á nhân</strong></h3>
-            <p>Vietjet Air thu thập và xử lý dữ liệu cá nhân của Quý khách nhằm cung cấp dịch vụ tốt nhất, đảm bảo an toàn, tuân thủ pháp luật và nâng cao trải nghiệm khách hàng. Dưới đây là các mục đích cụ thể:</p>
-            <h4><strong>3.1 Thực hiện Hợp đồng và </strong><strong>c</strong><strong>ung cấp Dịch vụ</strong></h4>
+            <h4><strong th:text="#{privacy_II_4_title}">2.4 Công nghệ theo dõi và Cookies</strong></h4>
+            <p th:text="#{privacy_II_4_desc}">Chúng tôi sử dụng cookies và các công nghệ theo dõi tương tự (như web beacons) để:</p>
             <ul>
-                <li><strong>Xuất vé và vận chuyển</strong>: Sử dụng thông tin định danh (họ tên, số hộ chiếu/số căn cước, ngày sinh) và thông tin liên lạc để hoàn tất quá trình đặt vé, xuất vé, checkin, xác thực danh tính, tự động kiểm tra tại sân bay (auto-gate), thông báo thay đổi lịch bay hoặc cung cấp các dịch vụ liên quan đến hành trình của Quý khách.</li>
-                <li><strong>Xác minh danh tính và phòng chống gian lận:</strong>Tích hợp dữ liệu từ VNeID và Galaxy Pay để thực hiện xác thực eKYC an toàn. Đối với tính năng check-in trực tuyến, chúng tôi sử dụng dữ liệu sinh trắc học (như ảnh chân dung, dữ liệu nhận diện khuôn mặt) để xác minh danh tính hành khách, giúp giảm thiểu thời gian làm thủ tục và nâng cao độ chính xác.</li>
-                <li><strong>Dịch vụ đặc biệt</strong>: Thu thập thông tin nhạy cảm (như yêu cầu chăm sóc y tế, suất ăn đặc biệt) với sự đồng ý của quý khách để cung cấp dịch vụ phù hợp, chẳng hạn hỗ trợ hành khách có nhu cầu y tế hoặc chế độ ăn riêng.</li><li><strong>Tối ưu hóa trải nghiệm người dùng:</strong>Phân tích dữ liệu sử dụng để cải thiện giao diện, nội dung, hiệu năng ứng dụng.</li><li><strong>Tiếp thị và thông báo khuyến mãi (nếu được đồng ý):</strong>Gửi các thông báo tiếp thị, ưu đãi phù hợp với hành vi sử dụng.</li><li><strong>Tuân thủ nghĩa vụ pháp lý: </strong>Bao gồm cung cấp thông tin cho cơ quan chức năng nếu có yêu cầu hợp pháp.</li>
+                <li th:text="#{privacy_II_4_1}">Theo dõi hoạt động của quý khách trên website và ứng dụng.</li>
+                <li th:text="#{privacy_II_4_2}">Lưu trữ thông tin như tùy chọn ngôn ngữ, lịch sử tìm kiếm hoặc dữ liệu phiên đăng nhập.</li>
+                <li th:text="#{privacy_II_4_3}">Phân tích hành vi người dùng để cải thiện dịch vụ.</li>
             </ul>
-            <h4><strong>3.2 Quản lý Chương trình Vietjet Skyjoy</strong></h4>
+            <p th:text="#{privacy_II_4_cookie_types}">Cookies có thể là:</p>
             <ul>
-                <li><strong>Cập nhật thông tin hội viên</strong>: Gửi thông báo về chính sách mới, ưu đãi, khuyến mãi hoặc thay đổi điều khoản chương trình.</li>
-                <li><strong>Quản lý đặt vé và dịch vụ</strong>: Sử dụng thông tin tài khoản hội viên để hỗ trợ đặt vé, xuất vé, tích lũy dặm thưởng hoặc đổi quà.</li>
-                <li><strong>Phân tích dữ liệu</strong>: Đánh giá lịch sử bay và sở thích của hội viên để cung cấp giá vé, dịch vụ hoặc ưu đãi phù hợp.</li>
-                <li><strong>Hỗ trợ khách hàng</strong>: Giải quyết thắc mắc, khiếu nại hoặc yêu cầu từ hội viên để nâng cao chất lượng dịch vụ.</li>
+                <li th:text="#{privacy_II_4_session}"><strong>Cookies phiên</strong>(xóa sau khi đóng trình duyệt).</li>
+                <li th:text="#{privacy_II_4_persistent}"><strong>Cookies cố định</strong>(lưu trữ lâu dài trên thiết bị). Quý khách có thể quản lý cookies
+                    qua cài đặt trình duyệt hoặc tham khảo Chính sách Cookies của chúng tôi để biết thêm chi tiết.
+                </li>
             </ul>
-            <h4><strong>3.3 </strong><strong>Hỗ trợ Thanh toán qua Cổng Galaxy Pay</strong></h4>
+            <h3><strong th:text="#{privacy_III_3_title}">3. Mục đích thu thập Dữ liệu cá nhân</strong></h3>
+            <p th:text="#{privacy_III_3_desc}">Vietjet Air thu thập và xử lý dữ liệu cá nhân của Quý khách nhằm cung cấp dịch vụ tốt nhất, đảm bảo an
+                toàn, tuân thủ pháp luật và nâng cao trải nghiệm khách hàng. Dưới đây là các mục đích cụ thể:</p>
+            <h4><strong th:text="#{privacy_III_3_1_title}">3.1 Thực hiện Hợp đồng và cung cấp Dịch vụ</strong></h4>
             <ul>
-                <li><strong>Xác thực giao dịch</strong>: Sử dụng thông tin cá nhân (họ tên, số thẻ, dữ liệu định danh) để xác minh danh tính chủ tài khoản, đảm bảo giao dịch hợp pháp và an toàn.</li>
-                <li><strong>Phòng ngừa gian lận</strong>: Lưu trữ dữ liệu theo quy trình EKYC để phát hiện và ngăn chặn các hành vi giả mạo hoặc gian lận.</li>
-                <li><strong>Tuân thủ pháp luật</strong>: Cung cấp thông tin thanh toán khi có yêu cầu từ Ngân hàng Nhà nước Việt Nam hoặc cơ quan chức năng để phục vụ kiểm tra, thanh tra hoặc kiểm toán.</li>
+                <li th:text="#{privacy_III_3_1_1}"><strong>Xuất vé và vận chuyển</strong>: Sử dụng thông tin định danh (họ tên, số hộ chiếu/số căn
+                    cước, ngày sinh) và thông tin liên lạc để hoàn tất quá trình đặt vé, xuất vé, checkin, xác thực danh
+                    tính, tự động kiểm tra tại sân bay (auto-gate), thông báo thay đổi lịch bay hoặc cung cấp các dịch
+                    vụ liên quan đến hành trình của Quý khách.
+                </li>
+                <li th:text="#{privacy_III_3_1_2}"><strong>Xác minh danh tính và phòng chống gian lận:</strong>Tích hợp dữ liệu từ VNeID và Galaxy Pay
+                    để thực hiện xác thực eKYC an toàn. Đối với tính năng check-in trực tuyến, chúng tôi sử dụng dữ liệu
+                    sinh trắc học (như ảnh chân dung, dữ liệu nhận diện khuôn mặt) để xác minh danh tính hành khách,
+                    giúp giảm thiểu thời gian làm thủ tục và nâng cao độ chính xác.
+                </li>
+                <li th:text="#{privacy_III_3_1_3}"><strong>Dịch vụ đặc biệt</strong>: Thu thập thông tin nhạy cảm (như yêu cầu chăm sóc y tế, suất ăn
+                    đặc biệt) với sự đồng ý của quý khách để cung cấp dịch vụ phù hợp, chẳng hạn hỗ trợ hành khách có
+                    nhu cầu y tế hoặc chế độ ăn riêng.
+                </li>
+                <li th:text="#{privacy_III_3_1_4}"><strong>Tối ưu hóa trải nghiệm người dùng:</strong>Phân tích dữ liệu sử dụng để cải thiện giao diện,
+                    nội dung, hiệu năng ứng dụng.
+                </li>
+                <li th:text="#{privacy_III_3_1_5}"><strong>Tiếp thị và thông báo khuyến mãi (nếu được đồng ý):</strong>Gửi các thông báo tiếp thị, ưu
+                    đãi phù hợp với hành vi sử dụng.
+                </li>
+                <li th:text="#{privacy_III_3_1_6}"><strong>Tuân thủ nghĩa vụ pháp lý: </strong>Bao gồm cung cấp thông tin cho cơ quan chức năng nếu có
+                    yêu cầu hợp pháp.
+                </li>
             </ul>
-            <h4><strong>3.4 Đảm bảo An ninh và An toàn Hàng không</strong></h4>
+            <h4><strong th:text="#{privacy_III_3_2_title}">3.2 Quản lý Chương trình Vietjet Skyjoy</strong></h4>
             <ul>
-                <li><strong>Kiểm tra hành khách</strong>: Xác minh danh tính trước khi lên tàu bay để đảm bảo an toàn cho chuyến bay.</li>
-                <li><strong>Danh sách hạn chế</strong>: Duy trì danh sách hành khách bị từ chối vận chuyển để bảo vệ cộng đồng.</li>
-                <li><strong>Chia sẻ thông tin với cơ quan chức năng</strong>: Cung cấp Dữ liệu cá nhân, thông tin đặt vé hoặc hành trình cho các cơ quan quản lý biên giới, hải quan, nhập cư hoặc an ninh để tuân thủ quy định pháp luật và ngăn chặn các hoạt động bất hợp pháp.</li>
+                <li th:text="#{privacy_III_3_2_1}"><strong>Cập nhật thông tin hội viên</strong>: Gửi thông báo về chính sách mới, ưu đãi, khuyến mãi
+                    hoặc thay đổi điều khoản chương trình.
+                </li>
+                <li th:text="#{privacy_III_3_2_2}"><strong>Quản lý đặt vé và dịch vụ</strong>: Sử dụng thông tin tài khoản hội viên để hỗ trợ đặt vé,
+                    xuất vé, tích lũy dặm thưởng hoặc đổi quà.
+                </li>
+                <li th:text="#{privacy_III_3_2_3}"><strong>Phân tích dữ liệu</strong>: Đánh giá lịch sử bay và sở thích của hội viên để cung cấp giá
+                    vé, dịch vụ hoặc ưu đãi phù hợp.
+                </li>
+                <li th:text="#{privacy_III_3_2_4}"><strong>Hỗ trợ khách hàng</strong>: Giải quyết thắc mắc, khiếu nại hoặc yêu cầu từ hội viên để nâng
+                    cao chất lượng dịch vụ.
+                </li>
             </ul>
-            <h4><strong>3.5 Thực hiện Nghĩa vụ Kế toán và Tài chính</strong></h4>
+            <h4><strong th:text="#{privacy_III_3_3_title}">3.3 Hỗ trợ Thanh toán qua Cổng Galaxy Pay</strong></h4>
             <ul>
-                <li><strong>Lưu trữ hồ sơ</strong>: Thu thập và lưu trữ thông tin giao dịch để phục vụ các mục đích kế toán, báo cáo tài chính hoặc kiểm toán.</li>
-                <li><strong>Tuân thủ pháp luật</strong>: Đáp ứng các yêu cầu về thuế, kiểm tra tài chính hoặc các nghĩa vụ pháp lý khác theo quy định.</li>
+                <li th:text="#{privacy_III_3_3_1}"><strong>Xác thực giao dịch</strong>: Sử dụng thông tin cá nhân (họ tên, số thẻ, dữ liệu định danh)
+                    để xác minh danh tính chủ tài khoản, đảm bảo giao dịch hợp pháp và an toàn.
+                </li>
+                <li th:text="#{privacy_III_3_3_2}"><strong>Phòng ngừa gian lận</strong>: Lưu trữ dữ liệu theo quy trình EKYC để phát hiện và ngăn chặn
+                    các hành vi giả mạo hoặc gian lận.
+                </li>
+                <li th:text="#{privacy_III_3_3_3}"><strong>Tuân thủ pháp luật</strong>: Cung cấp thông tin thanh toán khi có yêu cầu từ Ngân hàng Nhà
+                    nước Việt Nam hoặc cơ quan chức năng để phục vụ kiểm tra, thanh tra hoặc kiểm toán.
+                </li>
             </ul>
-            <h4><strong>3.6 Chăm sóc Khách hàng</strong></h4>
+            <h4><strong th:text="#{privacy_III_3_4_title}">3.4 Đảm bảo An ninh và An toàn Hàng không</strong></h4>
             <ul>
-                <li><strong>Giải quyết thắc mắc và khiếu nại</strong>: Sử dụng thông tin liên lạc để trả lời câu hỏi, xử lý khiếu nại hoặc hỗ trợ yêu cầu từ Quý khách.</li>
-                <li><strong>Cải thiện dịch vụ</strong>: Phân tích Dữ liệu cá nhân và phản hồi để nâng cấp website, ứng dụng, quy trình phục vụ hoặc thiết kế ưu đãi phù hợp.</li>
-                <li><strong>Khảo sát ý kiến</strong>: Thực hiện các cuộc khảo sát để hiểu rõ nhu cầu và mức độ hài lòng của quý khách, từ đó cải thiện trải nghiệm dịch vụ.</li>
-                <li><strong>Hỗ trợ nhanh chóng</strong>: Sử dụng thông tin định danh và lịch sử giao dịch để cung cấp hỗ trợ cá nhân hóa, giúp giải quyết vấn đề nhanh hơn.</li>
+                <li th:text="#{privacy_III_3_4_1}"><strong>Kiểm tra hành khách</strong>: Xác minh danh tính trước khi lên tàu bay để đảm bảo an toàn
+                    cho chuyến bay.
+                </li>
+                <li th:text="#{privacy_III_3_4_2}"><strong>Danh sách hạn chế</strong>: Duy trì danh sách hành khách bị từ chối vận chuyển để bảo vệ
+                    cộng đồng.
+                </li>
+                <li th:text="#{privacy_III_3_4_3}"><strong>Chia sẻ thông tin với cơ quan chức năng</strong>: Cung cấp Dữ liệu cá nhân, thông tin đặt vé
+                    hoặc hành trình cho các cơ quan quản lý biên giới, hải quan, nhập cư hoặc an ninh để tuân thủ quy
+                    định pháp luật và ngăn chặn các hoạt động bất hợp pháp.
+                </li>
             </ul>
-            <h4><strong>3.7 Liên hệ với Quý khách</strong></h4>
+            <h4><strong th:text="#{privacy_III_3_5_title}">3.5 Thực hiện Nghĩa vụ Kế toán và Tài chính</strong></h4>
             <ul>
-                <li><strong>Thông báo dịch vụ</strong>: Gửi thông tin về chuyến bay, thay đổi lịch trình, hoặc các cập nhật quan trọng liên quan đến hành trình của Quý khách.</li>
-                <li><strong>Hỗ trợ chương trình khách hàng thường xuyên</strong>: Liên hệ để giải đáp thắc mắc, cung cấp thông tin về dặm thưởng hoặc ưu đãi dành riêng cho hội viên Vietjet Skyjoy.</li>
+                <li th:text="#{privacy_III_3_5_1}"><strong>Lưu trữ hồ sơ</strong>: Thu thập và lưu trữ thông tin giao dịch để phục vụ các mục đích kế
+                    toán, báo cáo tài chính hoặc kiểm toán.
+                </li>
+                <li th:text="#{privacy_III_3_5_2}"><strong>Tuân thủ pháp luật</strong>: Đáp ứng các yêu cầu về thuế, kiểm tra tài chính hoặc các nghĩa
+                    vụ pháp lý khác theo quy định.
+                </li>
             </ul>
-            <h4><strong>3.8 Tiếp thị Trực tiếp (với Sự Đồng ý của Quý khách)</strong></h4>
+            <h4><strong th:text="#{privacy_III_3_6_title}">3.6 Chăm sóc Khách hàng</strong></h4>
             <ul>
-                <li><strong>Gửi khuyến mãi</strong>: Cung cấp thông tin về ưu đãi, giá vé đặc biệt, dịch vụ bổ sung hoặc sản phẩm liên quan đến hàng không qua email, tin nhắn hoặc bản tin.</li>
-                <li><strong>Cá nhân hóa quảng cáo</strong>: Phân tích sở thích và lịch sử sử dụng để gửi các ưu đãi phù hợp với nhu cầu của Quý khách.</li>
-                <li><strong>Quản lý chiến dịch tiếp thị</strong>: Liên hệ để thông báo về các chương trình khuyến mãi hoặc khảo sát nhằm nâng cao trải nghiệm khách hàng.</li>
-                <li><strong>Hủy nhận thông báo</strong>: Quý khách có thể từ chối nhận thông tin quảng cáo, tiếp thị bất kỳ lúc nào bằng cách nhấp vào liên kết hủy đăng ký trong email hoặc liên hệ trực tiếp với chúng tôi.</li>
+                <li th:text="#{privacy_III_3_6_1}"><strong>Giải quyết thắc mắc và khiếu nại</strong>: Sử dụng thông tin liên lạc để trả lời câu hỏi, xử
+                    lý khiếu nại hoặc hỗ trợ yêu cầu từ Quý khách.
+                </li>
+                <li th:text="#{privacy_III_3_6_2}"><strong>Cải thiện dịch vụ</strong>: Phân tích Dữ liệu cá nhân và phản hồi để nâng cấp website, ứng
+                    dụng, quy trình phục vụ hoặc thiết kế ưu đãi phù hợp.
+                </li>
+                <li th:text="#{privacy_III_3_6_3}"><strong>Khảo sát ý kiến</strong>: Thực hiện các cuộc khảo sát để hiểu rõ nhu cầu và mức độ hài lòng
+                    của quý khách, từ đó cải thiện trải nghiệm dịch vụ.
+                </li>
+                <li th:text="#{privacy_III_3_6_4}"><strong>Hỗ trợ nhanh chóng</strong>: Sử dụng thông tin định danh và lịch sử giao dịch để cung cấp hỗ
+                    trợ cá nhân hóa, giúp giải quyết vấn đề nhanh hơn.
+                </li>
             </ul>
-            <p>Chúng tôi chỉ sử dụng Dữ liệu cá nhân cho mục đích tiếp thị khi có sự đồng ý rõ ràng từ quý khách. Quý khách có quyền rút lại sự đồng ý này bất kỳ lúc nào mà không ảnh hưởng đến các dịch vụ khác.</p>
-            <h3><strong>4. Lưu trữ và </strong><strong>c</strong><strong>huyển giao Dữ liệu </strong><strong>c</strong><strong>á nhân</strong></h3>
-            <h4><strong>4.1 Lưu trữ Dữ liệu</strong><strong>&nbsp;cá nhân</strong></h4>
+            <h4><strong th:text="#{privacy_III_3_7_title}">3.7 Liên hệ với Quý khách</strong></h4>
             <ul>
-                <li>Dữ liệu cá nhân của Quý khách được lưu trữ trên hệ thống nội bộ của Vietjet Air trong suốt thời gian cung cấp Dịch vụ, cho đến khi hoàn thành mục đích thu thập hoặc khi pháp luật cho phép.</li>
-                <li>Chúng tôi sẽ xóa dữ liệu khi không còn cần thiết, trừ trường hợp phải lưu giữ để tuân thủ nghĩa vụ pháp lý hoặc giải quyết tranh chấp.</li><li>Thời gian lưu trữ dữ liệu sinh trắc học sẽ chỉ được lưu trữ trong thời hạn cần thiết để phục vụ việc check-in trực tuyến và xác thực tại sân bay, trừ khi pháp luật có quy định khác hoặc theo yêu cầu từ cơ quan có thẩm quyền. Sau thời hạn đó, dữ liệu sẽ được xóa hoặc hủy bỏ theo quy trình bảo mật nội bộ của Vietjet Air.</li>
+                <li th:text="#{privacy_III_3_7_1}"><strong>Thông báo dịch vụ</strong>: Gửi thông tin về chuyến bay, thay đổi lịch trình, hoặc các cập
+                    nhật quan trọng liên quan đến hành trình của Quý khách.
+                </li>
+                <li th:text="#{privacy_III_3_7_2}"><strong>Hỗ trợ chương trình khách hàng thường xuyên</strong>: Liên hệ để giải đáp thắc mắc, cung cấp
+                    thông tin về dặm thưởng hoặc ưu đãi dành riêng cho hội viên Vietjet Skyjoy.
+                </li>
             </ul>
-            <h4><strong>4.2 Chuyển giao Dữ liệu</strong><strong>&nbsp;cá nhân</strong></h4>
+            <h4><strong th:text="#{privacy_III_3_8_title}">3.8 Tiếp thị Trực tiếp (với Sự Đồng ý của Quý khách)</strong></h4>
             <ul>
-                <li>Dữ liệu cá nhân có thể được xử lý tại các văn phòng của Vietjet Air hoặc bởi các Đối tác, Nhà cung cấp dịch vụ ở các quốc gia khác, nơi luật bảo vệ dữ liệu có thể khác với Việt Nam.</li>
-                <li>Chúng tôi đảm bảo mọi hoạt động chuyển giao dữ liệu được thực hiện an toàn, tuân thủ chính sách này và các quy định pháp luật hiện hành.</li>
-                <li>Vietjet Air cam kết kiểm tra chính sách bảo mật của các bên nhận dữ liệu để đảm bảo họ áp dụng các tiêu chuẩn bảo mật tương đương.</li>
+                <li th:text="#{privacy_III_3_8_1}"><strong>Gửi khuyến mãi</strong>: Cung cấp thông tin về ưu đãi, giá vé đặc biệt, dịch vụ bổ sung hoặc
+                    sản phẩm liên quan đến hàng không qua email, tin nhắn hoặc bản tin.
+                </li>
+                <li th:text="#{privacy_III_3_8_2}"><strong>Cá nhân hóa quảng cáo</strong>: Phân tích sở thích và lịch sử sử dụng để gửi các ưu đãi phù
+                    hợp với nhu cầu của Quý khách.
+                </li>
+                <li th:text="#{privacy_III_3_8_3}"><strong>Quản lý chiến dịch tiếp thị</strong>: Liên hệ để thông báo về các chương trình khuyến mãi
+                    hoặc khảo sát nhằm nâng cao trải nghiệm khách hàng.
+                </li>
+                <li th:text="#{privacy_III_3_8_4}"><strong>Hủy nhận thông báo</strong>: Quý khách có thể từ chối nhận thông tin quảng cáo, tiếp thị bất
+                    kỳ lúc nào bằng cách nhấp vào liên kết hủy đăng ký trong email hoặc liên hệ trực tiếp với chúng tôi.
+                </li>
             </ul>
-            <h4><strong>4.3 Chia sẻ Dữ liệu </strong><strong>cá nhân </strong><strong>với Đối tác</strong></h4>
+            <p th:text="#{privacy_III_3_final_note}">Chúng tôi chỉ sử dụng Dữ liệu cá nhân cho mục đích tiếp thị khi có sự đồng ý rõ ràng từ quý khách. Quý
+                khách có quyền rút lại sự đồng ý này bất kỳ lúc nào mà không ảnh hưởng đến các dịch vụ khác.</p>
+            <h3><strong th:text="#{privacy_IV_title}">4. Lưu trữ và chuyển giao Dữ liệu cá nhân</strong></h3>
+            <h4><strong th:text="#{privacy_IV_4_1_title}">4.1 Lưu trữ Dữ liệu cá nhân</strong></h4>
             <ul>
-                <li><strong>Đơn vị thuộc Chính phủ/Cơ quan quản lý:</strong>Trung tâm dữ liệu quốc gia về dân cư, cơ quan an ninh, hải quan, nhập cư (khi được yêu cầu).</li>
-                <li><strong>Đối tác công nghệ:</strong>Galaxy Pay (SDK tích hợp xác thực thanh toán), đơn vị cung cấp dịch vụ eKYC, ACV (quản lý cổng kiểm tra tự động).</li>
-                <li><strong>Đối tác trong tập đoàn Vietjet:</strong>Nhằm hỗ trợ hoạt động chương trình hội viên, thanh toán, và xử lý dịch vụ hành khách.</li>
+                <li th:text="#{privacy_IV_4_1_1}">Dữ liệu cá nhân của Quý khách được lưu trữ trên hệ thống nội bộ của Vietjet Air trong suốt thời gian
+                    cung cấp Dịch vụ, cho đến khi hoàn thành mục đích thu thập hoặc khi pháp luật cho phép.
+                </li>
+                <li th:text="#{privacy_IV_4_1_2}">Chúng tôi sẽ xóa dữ liệu khi không còn cần thiết, trừ trường hợp phải lưu giữ để tuân thủ nghĩa vụ
+                    pháp lý hoặc giải quyết tranh chấp.
+                </li>
+                <li th:text="#{privacy_IV_4_1_3}">Thời gian lưu trữ dữ liệu sinh trắc học sẽ chỉ được lưu trữ trong thời hạn cần thiết để phục vụ việc
+                    check-in trực tuyến và xác thực tại sân bay, trừ khi pháp luật có quy định khác hoặc theo yêu cầu từ
+                    cơ quan có thẩm quyền. Sau thời hạn đó, dữ liệu sẽ được xóa hoặc hủy bỏ theo quy trình bảo mật nội
+                    bộ của Vietjet Air.
+                </li>
             </ul>
-            <p>Mọi đối tác nhận dữ liệu đều bị ràng buộc bởi hợp đồng bảo mật, chỉ được sử dụng dữ liệu cho các mục đích được chỉ định bởi Vietjet Air.</p>
-            <h3><strong>5. Quyền của Quý khách đối với Dữ liệu </strong><strong>c</strong><strong>á nhân</strong></h3>
-            <p>Quý khách có các quyền sau đây liên quan đến dữ liệu cá nhân của mình:</p>
+            <h4><strong th:text="#{privacy_IV_4_2_title}">4.2 Chuyển giao Dữ liệu cá nhân</strong></h4>
             <ul>
-                <li><strong>Quyền truy cập</strong>: Yêu cầu Vietjet Air xác nhận dữ liệu đang được xử lý, cung cấp chi tiết về loại dữ liệu, mục đích xử lý và danh sách bên nhận dữ liệu.</li>
-                <li><strong>Quyền chỉnh sửa</strong>: Yêu cầu sửa đổi thông tin không chính xác hoặc bổ sung thông tin còn thiếu.</li>
-                <li><strong>Quyền xóa dữ liệu</strong>: Yêu cầu xóa Dữ liệu cá nhân khi không còn cần thiết, bị xử lý bất hợp pháp hoặc theo quy định pháp luật.</li>
-                <li><strong>Quyền hạn chế xử lý</strong>: Yêu cầu giới hạn cách thức xử lý dữ liệu mà không cần xóa hoàn toàn.</li>
-                <li><strong>Quyền chuyển dữ liệu</strong>: Nhận lại Dữ liệu cá nhân hoặc chuyển Dữ liệu sang tổ chức khác theo định dạng phù hợp.</li>
-                <li><strong>Quyền phản đối</strong>: Phản đối việc sử dụng Dữ liệu cá nhân cho mục đích tiếp thị hoặc các mục đích không cần thiết.</li>
-                <li><strong>Quyền rút lại sự đồng ý</strong>: Rút lại sự đồng ý cho phép xử lý Dữ liệu, tuy nhiên điều này không ảnh hưởng đến tính hợp pháp của dữ liệu đã xử lý trước đó.</li>
-                <li><strong>Quyền khiếu nại</strong>: Nộp đơn khiếu nại với cơ quan chức năng nếu Vietjet Air vi phạm quy định bảo vệ dữ liệu.</li>
-                <li><strong>Quyền rút lại sự đồng ý chia sẻ dữ liệu:</strong>Khách hàng có thể yêu cầu rút lại sự đồng ý chia sẻ Dữ liệu cá nhân trên ứng dụng VNeID hoặc GPay bất kì lúc nào.</li>
+                <li th:text="#{privacy_IV_4_2_1}">Dữ liệu cá nhân có thể được xử lý tại các văn phòng của Vietjet Air hoặc bởi các Đối tác, Nhà cung
+                    cấp dịch vụ ở các quốc gia khác, nơi luật bảo vệ dữ liệu có thể khác với Việt Nam.
+                </li>
+                <li th:text="#{privacy_IV_4_2_2}">Chúng tôi đảm bảo mọi hoạt động chuyển giao dữ liệu được thực hiện an toàn, tuân thủ chính sách này
+                    và các quy định pháp luật hiện hành.
+                </li>
+                <li th:text="#{privacy_IV_4_2_3}">Vietjet Air cam kết kiểm tra chính sách bảo mật của các bên nhận dữ liệu để đảm bảo họ áp dụng các
+                    tiêu chuẩn bảo mật tương đương.
+                </li>
             </ul>
-            <p>Lưu ý: Một số dữ liệu có thể được giữ lại nếu Vietjet Air có nghĩa vụ pháp lý hoặc cơ sở pháp lý để duy trì.</p>
-            <h3><strong>6. Tiết lộ Dữ liệu </strong><strong>c</strong><strong>á nhân</strong></h3>
-            <h4><strong>6.1 Giao dịch Kinh doanh</strong></h4>
+            <h4><strong th:text="#{privacy_IV_4_3_title}">4.3 Chia sẻ Dữ liệu </strong><strong>cá nhân </strong><strong>với Đối tác</strong></h4>
             <ul>
-                <li>Trong trường hợp Vietjet Air tham gia sáp nhập, mua bán tài sản hoặc tái cấu trúc, Dữ liệu cá nhân có thể được chuyển giao. Chúng tôi sẽ thông báo trước để quý khách nắm rõ.</li>
+                <li th:text="#{privacy_IV_4_3_1}"><strong>Đơn vị thuộc Chính phủ/Cơ quan quản lý:</strong>Trung tâm dữ liệu quốc gia về dân cư, cơ
+                    quan an ninh, hải quan, nhập cư (khi được yêu cầu).
+                </li>
+                <li th:text="#{privacy_IV_4_3_2}"><strong>Đối tác công nghệ:</strong>Galaxy Pay (SDK tích hợp xác thực thanh toán), đơn vị cung cấp
+                    dịch vụ eKYC, ACV (quản lý cổng kiểm tra tự động).
+                </li>
+                <li th:text="#{privacy_IV_4_3_3}"><strong>Đối tác trong tập đoàn Vietjet:</strong>Nhằm hỗ trợ hoạt động chương trình hội viên, thanh
+                    toán, và xử lý dịch vụ hành khách.
+                </li>
             </ul>
-            <h4><strong>6.2 Đối tác và Nhà cung cấp Dịch vụ</strong></h4>
+            <p th:text="#{privacy_IV_4_3_note}">Mọi đối tác nhận dữ liệu đều bị ràng buộc bởi hợp đồng bảo mật, chỉ được sử dụng dữ liệu cho các mục đích
+                được chỉ định bởi Vietjet Air.</p>
+            <h3><strong th:text="#{privacy_V_title}">5. Quyền của Quý khách đối với Dữ liệu </strong><strong>c</strong><strong>á nhân</strong></h3>
+            <p th:text="#{privacy_V_intro}">Quý khách có các quyền sau đây liên quan đến dữ liệu cá nhân của mình:</p>
             <ul>
-                <li>Dữ liệucá nhân&nbsp;có thể được chia sẻ với các nhà thầu hoặc đối tác (như hãng hàng không khác, công ty xử lý thanh toán, nhà cung cấp dịch vụ mặt đất) để hoàn thành giao dịch hoặc cung cấp Dịch vụ theo yêu cầu.</li>
-                <li>Các đối tác này bị cấm sử dụng dữ liệu ngoài mục đích đã thỏa thuận với Vietjet Air.</li>
+                <li th:text="#{privacy_V_1}"><strong>Quyền truy cập</strong>: Yêu cầu Vietjet Air xác nhận dữ liệu đang được xử lý, cung cấp chi
+                    tiết về loại dữ liệu, mục đích xử lý và danh sách bên nhận dữ liệu.
+                </li>
+                <li th:text="#{privacy_V_2}"><strong>Quyền chỉnh sửa</strong>: Yêu cầu sửa đổi thông tin không chính xác hoặc bổ sung thông tin
+                    còn thiếu.
+                </li>
+                <li th:text="#{privacy_V_3}"><strong>Quyền xóa dữ liệu</strong>: Yêu cầu xóa Dữ liệu cá nhân khi không còn cần thiết, bị xử lý
+                    bất hợp pháp hoặc theo quy định pháp luật.
+                </li>
+                <li th:text="#{privacy_V_4}"><strong>Quyền hạn chế xử lý</strong>: Yêu cầu giới hạn cách thức xử lý dữ liệu mà không cần xóa hoàn
+                    toàn.
+                </li>
+                <li th:text="#{privacy_V_5}"><strong>Quyền chuyển dữ liệu</strong>: Nhận lại Dữ liệu cá nhân hoặc chuyển Dữ liệu sang tổ chức
+                    khác theo định dạng phù hợp.
+                </li>
+                <li th:text="#{privacy_V_6}"><strong>Quyền phản đối</strong>: Phản đối việc sử dụng Dữ liệu cá nhân cho mục đích tiếp thị hoặc
+                    các mục đích không cần thiết.
+                </li>
+                <li th:text="#{privacy_V_7}"><strong>Quyền rút lại sự đồng ý</strong>: Rút lại sự đồng ý cho phép xử lý Dữ liệu, tuy nhiên điều
+                    này không ảnh hưởng đến tính hợp pháp của dữ liệu đã xử lý trước đó.
+                </li>
+                <li th:text="#{privacy_V_8}"><strong>Quyền khiếu nại</strong>: Nộp đơn khiếu nại với cơ quan chức năng nếu Vietjet Air vi phạm
+                    quy định bảo vệ dữ liệu.
+                </li>
+                <li th:text="#{privacy_V_9}"><strong>Quyền rút lại sự đồng ý chia sẻ dữ liệu:</strong>Khách hàng có thể yêu cầu rút lại sự đồng ý
+                    chia sẻ Dữ liệu cá nhân trên ứng dụng VNeID hoặc GPay bất kì lúc nào.
+                </li>
             </ul>
-            <h4><strong>6.3 Cơ quan Thực thi Pháp luật</strong></h4>
+            <p th:text="#{privacy_V_note}">Lưu ý: Một số dữ liệu có thể được giữ lại nếu Vietjet Air có nghĩa vụ pháp lý hoặc cơ sở pháp lý để duy
+                trì.</p>
+            <h3><strong th:text="#{privacy_VI_title}">6. Tiết lộ Dữ liệu </strong><strong>c</strong><strong>á nhân</strong></h3>
+            <h4><strong th:text="#{privacy_VI_1_title}">6.1 Giao dịch Kinh doanh</strong></h4>
             <ul>
-                <li>Vietjet Air có thể tiết lộ Dữ liệu cá nhân nếu được yêu cầu bởi cơ quan chức năng, tòa án hoặc để tuân thủ các quy định về an ninh, hải quan, nhập cư hoặc chống khủng bố.</li>
-                <li>Dữ liệu cá nhân cũng có thể được chia sẻ để ngăn chặn mối đe dọa đến an toàn, bảo vệ quyền lợi của Vietjet Air hoặc điều tra hành vi bất hợp pháp.</li>
+                <li th:text="#{privacy_VI_1_1}">Trong trường hợp Vietjet Air tham gia sáp nhập, mua bán tài sản hoặc tái cấu trúc, Dữ liệu cá nhân
+                    có thể được chuyển giao. Chúng tôi sẽ thông báo trước để quý khách nắm rõ.
+                </li>
             </ul>
-            <h3><strong>7. Bảo mật Dữ liệu Cá nhân</strong></h3>
-            <p>Chúng tôi áp dụng các biện pháp kỹ thuật, tổ chức và vật lý để bảo vệ Dữ liệu cá nhân khỏi truy cập trái phép, mất mát hoặc hư hại:</p>
+            <h4><strong th:text="#{privacy_VI_2_title}">6.2 Đối tác và Nhà cung cấp Dịch vụ</strong></h4>
             <ul>
-                <li><strong>Mã hóa và bảo mật</strong>: Dữ liệu nhạy cảm được mã hóa và lưu trữ trong hệ thống có mật khẩu, giới hạn truy cập chỉ dành cho nhân viên được ủy quyền.</li>
-                <li><strong>Tường lửa và phần mềm bảo mật</strong>: Sử dụng tường lửa, phần mềm diệt virus và hệ thống phát hiện xâm nhập để ngăn chặn tấn công mạng.</li>
-                <li><strong>Quản lý nội bộ</strong>: Đào tạo nhân viên về bảo mật, giám sát thường xuyên và áp dụng chính sách bảo mật nghiêm ngặt.</li>
-                <li><strong>Bảo mật vật lý</strong>: Sử dụng khóa an ninh, camera giám sát và kiểm soát truy cập vào các khu vực lưu trữ Dữ liệucá nhân.</li>
+                <li th:text="#{privacy_VI_2_1}">Dữ liệu cá nhân&nbsp;có thể được chia sẻ với các nhà thầu hoặc đối tác (như hãng hàng không khác,
+                    công ty xử lý thanh toán, nhà cung cấp dịch vụ mặt đất) để hoàn thành giao dịch hoặc cung cấp Dịch
+                    vụ theo yêu cầu.
+                </li>
+                <li th:text="#{privacy_VI_2_2}">Các đối tác này bị cấm sử dụng dữ liệu ngoài mục đích đã thỏa thuận với Vietjet Air.</li>
             </ul>
-            <p>Mặc dù chúng tôi nỗ lực hết sức, không phương thức truyền tải hoặc lưu trữ nào đảm bảo an toàn tuyệt đối. Vietjet Air cam kết xử lý kịp thời mọi sự cố bảo mật nếu xảy ra.</p>
-            <h3><strong>8. Tính minh bạch và kiểm soát từ phía người dùng</strong></h3>
-            <p>Ứng dụng của Vietjet sẽ yêu cầu rõ ràng sự cho phép truy cập vào các quyền như:</p>
+            <h4><strong th:text="#{privacy_VI_3_title}">6.3 Cơ quan Thực thi Pháp luật</strong></h4>
             <ul>
-                <li>Vị trí, camera, bộ nhớ thiết bị (nếu có liên quan đến chức năng).</li>
-                <li>Các yêu cầu truy cập này sẽ được thông báo rõ ràng theo tiêu chuẩn của Google và Apple.</li>
+                <li th:text="#{privacy_VI_3_1}">Vietjet Air có thể tiết lộ Dữ liệu cá nhân nếu được yêu cầu bởi cơ quan chức năng, tòa án hoặc để
+                    tuân thủ các quy định về an ninh, hải quan, nhập cư hoặc chống khủng bố.
+                </li>
+                <li th:text="#{privacy_VI_3_2}">Dữ liệu cá nhân cũng có thể được chia sẻ để ngăn chặn mối đe dọa đến an toàn, bảo vệ quyền lợi của
+                    Vietjet Air hoặc điều tra hành vi bất hợp pháp.
+                </li>
             </ul>
-            <h3><strong>9. Quyền Riêng tư của Trẻ em</strong></h3>
+            <h3><strong th:text="#{privacy_VII_title}">7. Bảo mật Dữ liệu Cá nhân</strong></h3>
+            <p th:text="#{privacy_VII_intro}">Chúng tôi áp dụng các biện pháp kỹ thuật, tổ chức và vật lý để bảo vệ Dữ liệu cá nhân khỏi truy cập trái
+                phép, mất mát hoặc hư hại:</p>
             <ul>
-                <li>Đối với trẻ em dưới 14 tuổi (Hàn Quốc) hoặc dưới độ tuổi tối thiểu theo quy định của từng quốc gia thành viên EU (13-16 tuổi tùy quốc gia), Vietjet Air chỉ thu thập dữ liệu với sự đồng ý của cha mẹ hoặc người giám hộ hợp pháp.</li>
-                <li>Cha mẹ/người giám hộ có thể yêu cầu xem, chỉnh sửa hoặc rút lại sự đồng ý bất kỳ lúc nào thông qua các kênh liên hệ chính thức.</li>
+                <li th:text="#{privacy_VII_1}"><strong>Mã hóa và bảo mật</strong>: Dữ liệu nhạy cảm được mã hóa và lưu trữ trong hệ thống có mật
+                    khẩu, giới hạn truy cập chỉ dành cho nhân viên được ủy quyền.
+                </li>
+                <li th:text="#{privacy_VII_2}"><strong>Tường lửa và phần mềm bảo mật</strong>: Sử dụng tường lửa, phần mềm diệt virus và hệ thống
+                    phát hiện xâm nhập để ngăn chặn tấn công mạng.
+                </li>
+                <li th:text="#{privacy_VII_3}"><strong>Quản lý nội bộ</strong>: Đào tạo nhân viên về bảo mật, giám sát thường xuyên và áp dụng
+                    chính sách bảo mật nghiêm ngặt.
+                </li>
+                <li th:text="#{privacy_VII_4}"><strong>Bảo mật vật lý</strong>: Sử dụng khóa an ninh, camera giám sát và kiểm soát truy cập vào các
+                    khu vực lưu trữ Dữ liệucá nhân.
+                </li>
             </ul>
-            <h3><strong>10. Liên kết đến Trang web Khác</strong></h3>
-            <p>Website và ứng dụng của chúng tôi có thể chứa liên kết đến các trang web bên thứ ba. Chúng tôi không kiểm soát hoặc chịu trách nhiệm về chính sách bảo mật của các trang này. Quý khách nên xem xét kỹ chính sách bảo mật của các trang web bên thứ ba trước khi cung cấp thông tin.</p>
-            <h3><strong>11. Xử lý Vi phạm Dữ liệu</strong></h3>
-            <p>Nếu xảy ra vi phạm trong quá trình xử lý Dữ liệu cá nhân, Vietjet Air sẽ:</p>
+            <p th:text="#{privacy_VII_note}">Mặc dù chúng tôi nỗ lực hết sức, không phương thức truyền tải hoặc lưu trữ nào đảm bảo an toàn tuyệt đối.
+                Vietjet Air cam kết xử lý kịp thời mọi sự cố bảo mật nếu xảy ra.</p>
+            <h3><strong th:text="#{privacy_VIII_title}">8. Tính minh bạch và kiểm soát từ phía người dùng</strong></h3>
+            <p th:text="#{privacy_VIII_intro}">Ứng dụng của Vietjet sẽ yêu cầu rõ ràng sự cho phép truy cập vào các quyền như:</p>
             <ul>
-                <li>Thông báo cho Quý khách và cơ quan chức năng trong thời gian sớm nhất theo quy định pháp luật.</li>
-                <li>Cung cấp thông tin về bản chất vi phạm, hậu quả tiềm tàng, biện pháp khắc phục và thông tin liên hệ để Quý khách yêu cầu hỗ trợ.</li>
+                <li th:text="#{privacy_VIII_1}">Vị trí, camera, bộ nhớ thiết bị (nếu có liên quan đến chức năng).</li>
+                <li th:text="#{privacy_VIII_2}">Các yêu cầu truy cập này sẽ được thông báo rõ ràng theo tiêu chuẩn của Google và Apple.</li>
             </ul>
-            <p>Chúng tôi có thể được miễn thông báo nếu dữ liệu đã được mã hóa, vi phạm không gây rủi ro cao hoặc thông báo không thể thực hiện được. Trong trường hợp này, chúng tôi sẽ sử dụng các kênh công khai để thông báo.</p>
-            <h3><strong>12. Thay đổi Chính sách Bảo mật</strong></h3>
-            <p>Chúng tôi có thể cập nhật chính sách này để phản ánh thay đổi trong quy trình xử lý dữ liệu hoặc quy định pháp luật. Mọi thay đổi sẽ được thông báo qua email hoặc trên website trước khi có hiệu lực, kèm theo ngày “Cập nhật lần cuối”. Quý khách nên kiểm tra định kỳ để cập nhật thông tin mới nhất.</p>
-            <h3><strong>13. Liên hệ</strong></h3>
-            <p>Mọi thắc mắc, yêu cầu hoặc khiếu nại về chính sách bảo mật, vui lòng liên hệ:</p>
-            <p><strong>Công ty Cổ phần Hàng không Vietjet</strong></p>
+            <h3><strong th:text="#{privacy_IX_title}">9. Quyền Riêng tư của Trẻ em</strong></h3>
             <ul>
-                <li><strong>Văn phòng</strong>: Tầng 8, Tòa nhà C.T Plaza, 60A Trường Sơn, Phường 2, Quận Tân Bình, TP. Hồ Chí Minh</li>
-                <li><strong>Tổng đài</strong>: 1900 1886</li>
+                <li th:text="#{privacy_IX_1}">Đối với trẻ em dưới 14 tuổi (Hàn Quốc) hoặc dưới độ tuổi tối thiểu theo quy định của từng quốc gia
+                    thành viên EU (13-16 tuổi tùy quốc gia), Vietjet Air chỉ thu thập dữ liệu với sự đồng ý của cha mẹ
+                    hoặc người giám hộ hợp pháp.
+                </li>
+                <li th:text="#{privacy_IX_2}">Cha mẹ/người giám hộ có thể yêu cầu xem, chỉnh sửa hoặc rút lại sự đồng ý bất kỳ lúc nào thông qua
+                    các kênh liên hệ chính thức.
+                </li>
+            </ul>
+            <h3><strong th:text="#{privacy_X_title}">10. Liên kết đến Trang web Khác</strong></h3>
+            <p th:text="#{privacy_X_content}">Website và ứng dụng của chúng tôi có thể chứa liên kết đến các trang web bên thứ ba. Chúng tôi không kiểm
+                soát hoặc chịu trách nhiệm về chính sách bảo mật của các trang này. Quý khách nên xem xét kỹ chính sách
+                bảo mật của các trang web bên thứ ba trước khi cung cấp thông tin.</p>
+            <h3><strong th:text="#{privacy_XI_title}">11. Xử lý Vi phạm Dữ liệu</strong></h3>
+            <p th:text="#{privacy_XI_intro}">Nếu xảy ra vi phạm trong quá trình xử lý Dữ liệu cá nhân, Vietjet Air sẽ:</p>
+            <ul>
+                <li th:text="#{privacy_XI_1}">Thông báo cho Quý khách và cơ quan chức năng trong thời gian sớm nhất theo quy định pháp luật.</li>
+                <li th:text="#{privacy_XI_2}">Cung cấp thông tin về bản chất vi phạm, hậu quả tiềm tàng, biện pháp khắc phục và thông tin liên hệ
+                    để Quý khách yêu cầu hỗ trợ.
+                </li>
+            </ul>
+            <p th:text="#{privacy_XI_note}">Chúng tôi có thể được miễn thông báo nếu dữ liệu đã được mã hóa, vi phạm không gây rủi ro cao hoặc thông
+                báo không thể thực hiện được. Trong trường hợp này, chúng tôi sẽ sử dụng các kênh công khai để thông
+                báo.</p>
+            <h3><strong th:text="#{privacy_XII_title}">12. Thay đổi Chính sách Bảo mật</strong></h3>
+            <p th:text="#{privacy_XII_content}">Chúng tôi có thể cập nhật chính sách này để phản ánh thay đổi trong quy trình xử lý dữ liệu hoặc quy định
+                pháp luật. Mọi thay đổi sẽ được thông báo qua email hoặc trên website trước khi có hiệu lực, kèm theo
+                ngày “Cập nhật lần cuối”. Quý khách nên kiểm tra định kỳ để cập nhật thông tin mới nhất.</p>
+            <h3><strong th:text="#{privacy_XIII_title}">13. Liên hệ</strong></h3>
+            <p th:text="#{privacy_XIII_intro}">Mọi thắc mắc, yêu cầu hoặc khiếu nại về chính sách bảo mật, vui lòng liên hệ:</p>
+            <p th:text="#{company}"><strong>Công ty Cổ phần Hàng không Vietjet</strong></p>
+            <ul>
+                <li th:text="#{privacy_XIII_office}"><strong>Văn phòng</strong>: Tầng 8, Tòa nhà C.T Plaza, 60A Trường Sơn, Phường 2, Quận Tân Bình, TP.
+                    Hồ Chí Minh
+                </li>
+                <li><strong th:text="#{hotline}">Tổng đài</strong>: 1900 1886</li>
                 <li><strong>Email</strong>: info@vietjetair.com</li>
             </ul>
         </div>
