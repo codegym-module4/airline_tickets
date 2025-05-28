@@ -46,22 +46,22 @@
 
                         </div>
                         <div class="d-flex">
-                            <p class="me-3">Mã chuyến bay: </p>
+                            <p class="me-3" th:text="#{flight.flight_code}">Mã chuyến bay: </p>
                             <p th:text="${flight.flightCode}"></p>
                         </div>
                         <div class="d-flex">
-                            <p class="me-3">Thời gian bay: </p>
+                            <p class="me-3" th:text="#{flight_time}">Thời gian bay: </p>
                             <p th:text="${flight.flightTime}"></p>
                         </div>
                         <div class="info-select-flight">
                             <div class="d-flex">
-                                <p class="me-3">Giá vé người lớn:</p>
+                                <p class="me-3" th:text="#{adult_ticket_price}">Giá vé người lớn:</p>
                                 <p th:text="${flight.price} + 'VNĐ'"></p>
                             </div>
-                            <p>Giá vé em bé: 100,000 VNĐ</p>
-                            <p>Thuế: O VNĐ</p>
-                            <p>Dịch vụ: 0 VNĐ</p>
-                            <p>Hành lý: Hành lý xách tay 10kg.</p>
+                            <p th:text="#{infant_ticket_price}">Giá vé em bé: 100,000 VNĐ</p>
+                            <p th:text="#{tax}">Thuế: O VNĐ</p>
+                            <p th:text="#{service_fee}">Dịch vụ: 0 VNĐ</p>
+                            <p th:text="#{baggage_info}">Hành lý: Hành lý xách tay 10kg.</p>
                         </div>
 
                         <th:block th:if="${'Bamboo Airways'.equals(flight.airlineName)}"

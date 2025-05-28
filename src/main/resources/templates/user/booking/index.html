@@ -16,12 +16,12 @@
         <th:block th:each="item, stat : ${data.items}">
             <div th:if="${item.customerType == 1}" class="container mt-4 p-4 border rounded bg-light">
                 <div class="mb-3">
-                    <h4>Người lớn </h4>
+                    <h4 th:text="#{adult}">Người lớn </h4>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'fullName' + ${stat.index}" class="col-sm-3">Họ và Tên: </label>
+                            <label th:for="'fullName' + ${stat.index}" class="col-sm-3" th:text="#{full_name}">Họ và Tên: </label>
                             <div class="col-sm-9">
                                 <input type="text" th:id="'fullName' + ${stat.index}" th:field="*{items[__${stat.index}__].fullName}" class="form-control name-adult">
                                 <span class="invalid-feedback" role="alert">
@@ -34,7 +34,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'birthDate' + ${stat.index}" class="col-sm-3">Ngày sinh</label>
+                            <label th:for="'birthDate' + ${stat.index}" class="col-sm-3" th:text="#{dob}">Ngày sinh</label>
                             <div class="col-sm-9">
                                 <input type="date" th:id="'birthDate' + ${stat.index}" class="form-control" th:field="*{items[__${stat.index}__].birthDate}">
                                 <span class="invalid-feedback" role="alert">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'nationality' + ${stat.index}" class="col-sm-3">Quốc gia</label>
+                            <label th:for="'nationality' + ${stat.index}" class="col-sm-3" th:text="#{nation}">Quốc gia</label>
                             <div class="col-sm-9">
                                 <select th:id="'nationality' + ${stat.index}" th:field="*{items[__${stat.index}__].nationality}" class="form-select">
                                     <option value="">-- Chọn quốc gia --</option>
@@ -63,12 +63,12 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'gender' + ${stat.index}" class="col-sm-3" >Giới tính:</label>
+                            <label th:for="'gender' + ${stat.index}" class="col-sm-3" th:text="#{gender}">Giới tính:</label>
                             <div class="col-sm-9">
                                 <select th:id="'gender' + ${stat.index}" th:field="*{items[__${stat.index}__].gender}" class="form-select">
-                                    <option value="Male">Nam</option>
-                                    <option value="Female">Nữ</option>
-                                    <option value="Other">Khác</option>
+                                    <option value="Male" th:text="#{male}">Nam</option>
+                                    <option value="Female" th:text="#{female}">Nữ</option>
+                                    <option value="Other" th:text="#{other}">Khác</option>
                                 </select>
                                 <span class="text-danger" style="font-size: 80%" role="alert">
                                     <strong></strong>
@@ -91,7 +91,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:id="'phone' + ${stat.index}" class="col-sm-3">Điện thoại:</label>
+                            <label th:id="'phone' + ${stat.index}" class="col-sm-3" th:text="#{phone_number}">Điện thoại:</label>
                             <div class="col-sm-9">
                                 <input type="text" th:for="'phone' + ${stat.index}" th:field="*{items[__${stat.index}__].phone}" class="form-control" required>
                                 <span class="invalid-feedback" role="alert">
@@ -115,14 +115,14 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'luggage_go' + ${stat.index}" class="col-sm-3">Hành lý chuyến đi: </label>
+                            <label th:for="'luggage_go' + ${stat.index}" class="col-sm-3" th:text="#{departure_baggage}">Hành lý chuyến đi: </label>
                             <div class="col-sm-9">
                                 <select th:id="'luggage_go' + ${stat.index}" th:field="*{items[__${stat.index}__].extraKgGo}" class="form-select luggage-select">
-                                    <option value="0">Mua thêm khối lượng hành lý</option>
-                                    <option value="15">Mua thêm 15kg - 150.000 VNĐ</option>
-                                    <option value="20">Mua thêm 20kg - 200.000 VNĐ</option>
-                                    <option value="25">Mua thêm 25kg - 250.000 VNĐ</option>
-                                    <option value="30">Mua thêm 30kg - 300.000 VNĐ</option>
+                                    <option value="0" th:text="#{purchase_more_baggage}">Mua thêm khối lượng hành lý</option>
+                                    <option value="15" th:text="#{buy_more} +' 15kg - 150.000 VND'">Mua thêm 15kg - 150.000 VNĐ</option>
+                                    <option value="20" th:text="#{buy_more}+' 20kg - 200.000 VND'">Mua thêm 20kg - 200.000 VNĐ</option>
+                                    <option value="25" th:text="#{buy_more}+' 25kg - 250.000 VND'">Mua thêm 25kg - 250.000 VNĐ</option>
+                                    <option value="30" th:text="#{buy_more}+' 30kg - 300.000 VND'">Mua thêm 30kg - 300.000 VNĐ</option>
                                 </select>
                                 <span class="text-danger" style="font-size: 80%" role="alert">
                                     <strong></strong>
@@ -133,14 +133,14 @@
 
                     <div class="col-md-6" th:if="${data.flightType == 2}">
                         <div class="row align-items-center">
-                            <label th:for="'luggage_return' + ${stat.index}" class="col-sm-3">Hành lý chuyến về: </label>
+                            <label th:for="'luggage_return' + ${stat.index}" class="col-sm-3" th:text="#{return_baggage}">Hành lý chuyến về: </label>
                             <div class="col-sm-9">
                                 <select th:id="'luggage_return' + ${stat.index}" th:field="*{items[__${stat.index}__].extraKgReturn}" class="form-select luggage-select">
-                                    <option value="0">Mua thêm khối lượng hành lý</option>
-                                    <option value="15">Mua thêm 15kg - 150.000 VNĐ</option>
-                                    <option value="20">Mua thêm 20kg - 200.000 VNĐ</option>
-                                    <option value="25">Mua thêm 25kg - 250.000 VNĐ</option>
-                                    <option value="30">Mua thêm 30kg - 300.000 VNĐ</option>
+                                    <option value="0" th:text="#{purchase_more_baggage}">Mua thêm khối lượng hành lý</option>
+                                    <option value="15" th:text="#{buy_more} +' 15kg - 150.000 VND'">Mua thêm 15kg - 150.000 VNĐ</option>
+                                    <option value="20" th:text="#{buy_more}+' 20kg - 200.000 VND'">Mua thêm 20kg - 200.000 VNĐ</option>
+                                    <option value="25" th:text="#{buy_more}+' 25kg - 250.000 VND'">Mua thêm 25kg - 250.000 VNĐ</option>
+                                    <option value="30" th:text="#{buy_more}+' 30kg - 300.000 VND'">Mua thêm 30kg - 300.000 VNĐ</option>
                                 </select>
                                 <span class="text-danger" style="font-size: 80%" role="alert">
                                     <strong></strong>
@@ -154,12 +154,12 @@
 
             <div th:if="${item.customerType == 2}" class="container mt-4 p-4 border rounded bg-light">
                 <div class="mb-3">
-                    <h4>Trẻ em </h4>
+                    <h4 th:text="#{child}">Trẻ em </h4>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'fullName' + ${stat.index}" class="col-sm-3 mb-0">Họ và Tên: </label>
+                            <label th:for="'fullName' + ${stat.index}" class="col-sm-3 mb-0" th:text="#{full_name}">Họ và Tên: </label>
                             <div class="col-sm-9">
                                 <input type="text" th:id="'fullName' + ${stat.index}" th:field="*{items[__${stat.index}__].fullName}" class="form-control">
                                 <span class="invalid-feedback" role="alert">
@@ -170,12 +170,12 @@
                     </div>
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'gender' + ${stat.index}" class="col-sm-3 mb-0">Giới tính:</label>
+                            <label th:for="'gender' + ${stat.index}" class="col-sm-3 mb-0" th:text="#{gender}">Giới tính:</label>
                             <div class="col-sm-9">
                                 <select th:id="'gender' + ${stat.index}" th:field="*{items[__${stat.index}__].gender}" class="form-select">
-                                    <option value="Male">Nam</option>
-                                    <option value="Female">Nữ</option>
-                                    <option value="Other">Khác</option>
+                                    <option value="Male" th:text="#{male}">Nam</option>
+                                    <option value="Female" th:text="#{female}">Nữ</option>
+                                    <option value="Other" th:text="#{other}">Khác</option>
                                 </select>
                                 <span class="text-danger" style="font-size: 80%" role="alert">
                                     <strong></strong>
@@ -188,7 +188,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'birthDate' + ${stat.index}" class="col-sm-3 mb-0">Ngày sinh</label>
+                            <label th:for="'birthDate' + ${stat.index}" class="col-sm-3 mb-0" th:text="#{dob}">Ngày sinh</label>
                             <div class="col-sm-9">
                                 <input type="date" th:id="'birthDate' + ${stat.index}" class="form-control" th:field="*{items[__${stat.index}__].birthDate}">
                                 <span class="invalid-feedback" role="alert">
@@ -203,12 +203,12 @@
 
             <div th:if="${item.customerType == 3}" class="container mt-4 p-4 border rounded bg-light">
                 <div class="mb-3">
-                    <h4>Em bé </h4>
+                    <h4 th:text="#{baby}">Em bé </h4>
                 </div>
                 <div class="row mb-3">
                     <div class="col-12">
                         <div class="row align-items-center">
-                            <label th:for="'seat_with' + ${stat.index}" class="col-sm-1 mb-0">Ngồi cùng: </label>
+                            <label th:for="'seat_with' + ${stat.index}" class="col-sm-1 mb-0"><span th:text="#{sitting_with}">Ngồi cùng: </span></label>
                             <div class="col-sm-10" style="margin-left: 3.3rem">
                                 <select class="form-control form-control-sm select-index-seat" th:id="'seat_with' + ${stat.index}" th:field="*{items[__${stat.index}__].indexSeatWith}">
                                 </select>
@@ -219,7 +219,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'fullName' + ${stat.index}" class="col-sm-3 mb-0">Họ và Tên: </label>
+                            <label th:for="'fullName' + ${stat.index}" class="col-sm-3 mb-0" th:text="#{full_name}">Họ và Tên: </label>
                             <div class="col-sm-9">
                                 <input type="text" th:id="'fullName' + ${stat.index}" th:field="*{items[__${stat.index}__].fullName}" class="form-control">
                                 <span class="invalid-feedback" role="alert">
@@ -230,12 +230,12 @@
                     </div>
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'gender' + ${stat.index}" class="col-sm-3 mb-0">Giới tính:</label>
+                            <label th:for="'gender' + ${stat.index}" class="col-sm-3 mb-0" th:text="#{gender}">Giới tính:</label>
                             <div class="col-sm-9">
                                 <select th:id="'gender' + ${stat.index}" th:field="*{items[__${stat.index}__].gender}" class="form-select">
-                                    <option value="Male">Nam</option>
-                                    <option value="Female">Nữ</option>
-                                    <option value="Other">Khác</option>
+                                    <option value="Male" th:text="#{male}">Nam</option>
+                                    <option value="Female" th:text="#{female}">Nữ</option>
+                                    <option value="Other" th:text="#{other}">Khác</option>
                                 </select>
                                 <span class="text-danger" style="font-size: 80%" role="alert">
                                     <strong></strong>
@@ -248,7 +248,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="row align-items-center">
-                            <label th:for="'birthDate' + ${stat.index}" class="col-sm-3 mb-0">Ngày sinh</label>
+                            <label th:for="'birthDate' + ${stat.index}" class="col-sm-3 mb-0" th:text="#{dob}">Ngày sinh</label>
                             <div class="col-sm-9">
                                 <input type="date" th:id="'birthDate' + ${stat.index}" class="form-control" th:field="*{items[__${stat.index}__].birthDate}">
                                 <span class="invalid-feedback" role="alert">
@@ -263,8 +263,8 @@
         </th:block>
         <input type="hidden" name="ticket_total" th:value="${data.totalPrice}">
         <div class="container mt-4 d-flex justify-content-between">
-            <button type="button" class="btn btn-outline-secondary" th:onclick="'history.back()'" style="width: 15%">Chọn lại chuyến bay</button>
-            <button type="button" class="btn btn-custom mx-auto" id="btnSubmitBooking" data-form_id="#form_submit" style="width: 15%">Đặt vé</button>
+            <button type="button" class="btn btn-outline-secondary" th:onclick="'history.back()'" style="width: 15%" th:text="#{select_flight_again}">Chọn lại chuyến bay</button>
+            <button type="button" class="btn btn-custom mx-auto" id="btnSubmitBooking" data-form_id="#form_submit" style="width: 15%" th:text="#{flight.book}">Đặt vé</button>
         </div>
     </form>
 </div>
@@ -272,16 +272,16 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Thông báo</h4>
+                <h4 class="modal-title" th:text="#{notification}">Thông báo</h4>
             </div>
             <div class="modal-body">
-                <p>Hãy chọn ghế ngồi mà bạn mong muốn (Không bắt buộc).</p>
+                <p th:text="#{seat_selection_instruction}">Hãy chọn ghế ngồi mà bạn mong muốn (Không bắt buộc).</p>
                 <p>
-                    <b>Lưu ý: Nếu bạn không thực hiện việc chọn ghế thì chúng tôi sẽ tự động chọn ghế ngồi cho bạn.</b>
+                    <b th:text="#{seat_selection_note}">Lưu ý: Nếu bạn không thực hiện việc chọn ghế thì chúng tôi sẽ tự động chọn ghế ngồi cho bạn.</b>
                 </p>
             </div>
             <div class="modal-footer">
-                <a role="button" class="btn btn-primary link-seat-select" href="#">Tiếp tục</a>
+                <a role="button" class="btn btn-primary link-seat-select" href="#" th:text="#{continue}">Tiếp tục</a>
             </div>
         </div>
     </div>

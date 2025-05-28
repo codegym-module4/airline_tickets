@@ -1,7 +1,7 @@
 <th:block th:fragment="data-flight-confirm">
     <div>
         <div class="mb-5">
-            <h2>Thông tin chuyến đi</h2>
+            <h2 th:text="#{departure_info}">Thông tin chuyến đi</h2>
             <table class="table table-borderless table-nowrap">
                 <thead>
                 <tr>
@@ -20,14 +20,14 @@
                 <tr>
                     <td class="fw-bold" th:text="${#temporals.format(flightDepart.departureTime, 'HH:mm, dd/MM/yyyy')}"></td>
                     <td class="fw-bold" th:text="${#temporals.format(flightDepart.arrivalTime, 'HH:mm, dd/MM/yyyy')}"></td>
-                    <td th:text="'Chuyến bay: ' + ${flightDepart.flightCode}"></td>
+                    <td th:text="#{flight} + ' ' + ${flightDepart.flightCode}"></td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td th:text="${flightDepart.departureAirportCity}"></td>
                     <td th:text="${flightDepart.arrivalAirportCity}"></td>
-                    <td>Loại vé: Phổ thông</td>
+                    <td th:text="#{ticket_type}+': ' +#{economy}">Loại vé: Phổ thông</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -36,23 +36,23 @@
             <table class="table table-bordered border-black table-nowrap mt-3">
                 <thead class="fw-bold text-center">
                     <tr>
-                        <td>Loại khách hàng</td>
-                        <td>Số lượng vé</td>
-                        <td>Giá mỗi vé</td>
-                        <td>Thuế & Phí</td>
-                        <td>Tổng giá</td>
+                        <td th:text="#{customer_type}">Loại khách hàng</td>
+                        <td th:text="#{number_of_tickets}">Số lượng vé</td>
+                        <td th:text="#{price_per_ticket}">Giá mỗi vé</td>
+                        <td th:text="#{tax_and_fee}">Thuế & Phí</td>
+                        <td th:text="#{total_price}">Tổng giá</td>
                     </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>Người lớn, Trẻ em</td>
+                    <td th:text="#{adult} +','+#{child}">Người lớn, Trẻ em</td>
                     <td class="text-end" th:text="${num_of_ticket}"></td>
                     <td class="text-end" th:text="${flightDepart.price} + ' VNĐ'"></td>
                     <td class="text-end">0 VNĐ</td>
                     <td class="text-end" th:text="${flightDepart.priceVATTotal} + ' VNĐ'"></td>
                 </tr>
                 <tr th:if="${num_of_baby > 0}">
-                    <td>Em bé</td>
+                    <td th:text="#{baby}">Em bé</td>
                     <td class="text-end" th:text="${num_of_baby}"></td>
                     <td class="text-end">100,000 VNĐ</td>
                     <td class="text-end">0 VNĐ</td>
@@ -63,19 +63,19 @@
             <table class="table table-bordered border-black mt-3">
                 <thead class="fw-bold">
                 <tr>
-                    <td colspan="2">Điều kiện hành lý</td>
+                    <td colspan="2" th:text="#{baggage_condition}">Điều kiện hành lý</td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>Hành lý xách tay</td>
+                    <td th:text="#{cabin_baggage}">Hành lý xách tay</td>
                     <td>10 kg</td>
                 </tr>
                 </tbody>
             </table>
         </div>
         <div class="mt-3" th:if="${flightArrival != null && flightArrival.id != null}">
-            <h2>Thông tin chuyến về</h2>
+            <h2 th:text="#{return_info}">Thông tin chuyến về</h2>
             <table class="table table-borderless table-nowrap">
                 <thead>
                 <tr>
@@ -94,14 +94,14 @@
                 <tr>
                     <td class="fw-bold" th:text="${#temporals.format(flightArrival.departureTime, 'HH:mm, dd/MM/yyyy')}"></td>
                     <td class="fw-bold" th:text="${#temporals.format(flightArrival.arrivalTime, 'HH:mm, dd/MM/yyyy')}"></td>
-                    <td th:text="'Chuyến bay: ' + ${flightArrival.flightCode}"></td>
+                    <td th:text="#{flight} + ${flightArrival.flightCode}"></td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td th:text="${flightArrival.departureAirportCity}"></td>
                     <td th:text="${flightArrival.arrivalAirportCity}"></td>
-                    <td>Loại vé: Phổ thông</td>
+                    <td th:text="#{ticket_type}+': '+ #{economy}">Loại vé: Phổ thông</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -110,23 +110,23 @@
             <table class="table table-bordered border-black table-nowrap mt-3">
                 <thead>
                     <tr class="text-center fw-bold">
-                        <td>Loại khách hàng</td>
-                        <td>Số lượng vé</td>
-                        <td>Giá mỗi vé</td>
-                        <td>Thuế & Phí</td>
-                        <td>Tổng giá</td>
+                        <td th:text="#{customer_type}">Loại khách hàng</td>
+                        <td th:text="#{number_of_tickets}">Số lượng vé</td>
+                        <td th:text="#{price_per_ticket}">Giá mỗi vé</td>
+                        <td th:text="#{tax_and_fee}">Thuế & Phí</td>
+                        <td th:text="#{total_price}">Tổng giá</td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Người lớn, Trẻ em</td>
+                        <td th:text="#{adult} + ', ' + #{child}">Người lớn, Trẻ em</td>
                         <td class="text-end" th:text="${num_of_ticket}"></td>
                         <td class="text-end" th:text="${flightArrival.price} + ' VNĐ'"></td>
                         <td class="text-end">0 VNĐ</td>
                         <td class="text-end" th:text="${flightArrival.priceVATTotal} + ' VNĐ'"></td>
                     </tr>
                     <tr th:if="${num_of_baby > 0}">
-                        <td>Em bé</td>
+                        <td th:text="#{baby}">Em bé</td>
                         <td class="text-end" th:text="${num_of_baby}"></td>
                         <td class="text-end">100,000 VNĐ</td>
                         <td class="text-end">0 VNĐ</td>
@@ -137,12 +137,12 @@
             <table class="table table-bordered border-black mt-3">
                 <thead class="fw-bold">
                 <tr>
-                    <td colspan="2">Điều kiện hành lý</td>
+                    <td colspan="2" th:text="#{baggage_condition}">Điều kiện hành lý</td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>Hành lý xách tay</td>
+                    <td th:text="#{cabin_baggage}">Hành lý xách tay</td>
                     <td>10 kg</td>
                 </tr>
                 </tbody>
