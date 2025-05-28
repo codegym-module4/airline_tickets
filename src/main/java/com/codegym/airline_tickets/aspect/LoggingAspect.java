@@ -248,6 +248,8 @@ public class LoggingAspect {
         newsCreatedLog.setAction("Thêm mới/Cập nhật tin tức");
         if (news.getId() != null) {
             newsCreatedLog.setIdAffected(news.getId().toString());
+        } else {
+            newsCreatedLog.setIdAffected("N/A");
         }
         newsCreatedLog.setTimestamp(LocalDateTime.now());
         logService.save(newsCreatedLog);
