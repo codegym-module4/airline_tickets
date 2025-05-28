@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+
 @Service
 public class EmployeeService implements IEmployeeService {
     @Autowired
@@ -159,20 +161,17 @@ public class EmployeeService implements IEmployeeService {
         System.out.println("roleId: " + dto.getRoleId());
         System.out.println("password: " + dto.getPassword());
 
-        // 1. Lấy thông tin nhân viên
         Employee employee = employeeRepository.findById(dto.getEmployeeId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
 
         System.out.println("Tìm thấy nhân viên: " + employee.getFullName());
 
 
-        // 2. Lấy thông tin tài khoản
         Account account = accountRepository.findById(dto.getAccountId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
 
         System.out.println("Tìm thấy tài khoản: " + account.getEmail());
 
-        // 3. Kiểm tra email đã tồn tại chưa (trừ khi giữ nguyên email cũ)
         Optional<Account> emailExistedOpt = accountRepository.findByEmail(dto.getEmail());
         if (emailExistedOpt.isPresent()) {
             Account emailExisted = emailExistedOpt.get();
@@ -185,14 +184,12 @@ public class EmployeeService implements IEmployeeService {
         }
 
 
-        // 4. Cập nhật thông tin nhân viên
         employee.setFullName(dto.getFullName());
         employee.setPhone(dto.getPhone());
         employee.setGender(dto.getGender());
         employee.setDob(dto.getDob());
         employee.setAddress(dto.getAddress());
 
-        // 5. Cập nhật thông tin tài khoản
         account.setEmail(dto.getEmail());
 
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
@@ -206,7 +203,6 @@ public class EmployeeService implements IEmployeeService {
         System.out.println("Gán vai trò: " + role.getRoleName());
 
 
-        // 6. Lưu lại
         employeeRepository.save(employee);
         accountRepository.save(account);
 

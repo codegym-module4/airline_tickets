@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: 'Arial', sans-serif; }
+    h2 { color: #d9534f; text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    td, th { border: 1px solid #ddd; padding: 8px; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+<h2>Thông tin vé máy bay</h2>
+<table>
+  <tr>
+    <th>Mã vé</th>
+    <td th:text="${ticket.code}"></td>
+  </tr>
+  <tr>
+    <th>Tên hành khách</th>
+    <td th:text="${ticket.name}"></td>
+  </tr>
+  <tr>
+    <th>Số điện thoại</th>
+    <td th:text="${ticket.phone}"></td>
+  </tr>
+  <tr>
+    <th>Email</th>
+    <td th:text="${ticket.email}"></td>
+  </tr>
+  <tr>
+    <th>Giới tính</th>
+    <td th:text="${ticket.gender}"></td>
+  </tr>
+  <tr>
+    <th>Ngày sinh</th>
+    <td th:text="${#temporals.format(ticket.dob, 'dd/MM/yyyy')}"></td>
+  </tr>
+  <tr>
+    <th>CMND/CCCD</th>
+    <td th:text="${ticket.citizenIdentification}"></td>
+  </tr>
+  <tr>
+    <th>Sân bay đi</th>
+    <td th:text="${ticket.flight.departureAirport.name}"></td>
+  </tr>
+  <tr>
+    <th>Sân bay đến</th>
+    <td th:text="${ticket.flight.arrivalAirport.name}"></td>
+  </tr>
+  <tr>
+    <th>Giá vé</th>
+    <td th:text="${#numbers.formatDecimal(ticket.price, 0, 'COMMA', 2, 'POINT')} + ' VND'"></td>
+  </tr>
+</table>
+</body>
+</html>

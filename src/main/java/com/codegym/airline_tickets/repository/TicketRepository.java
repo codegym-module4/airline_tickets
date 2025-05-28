@@ -42,4 +42,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> searchByAirportName(@Param("keyword") String keyword);
 
     Ticket findByCode(String code);
+
+    @Query("SELECT t FROM Ticket t LEFT JOIN FETCH t.booking b LEFT JOIN FETCH t.flight f LEFT JOIN FETCH f.departureAirport LEFT JOIN FETCH f.arrivalAirport")
+    List<Ticket> findAllWithDetails();
+
 }

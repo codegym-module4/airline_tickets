@@ -31,7 +31,16 @@ public class TicketService implements ITicketService {
 
     @Override
     public void update(long id, Ticket s) {
-
+        Ticket existing = ticketRepository.findById(id).orElse(null);
+        if (existing != null) {
+            existing.setName(s.getName());
+            existing.setPhone(s.getPhone());
+            existing.setEmail(s.getEmail());
+            existing.setPrice(s.getPrice());
+            existing.setFlight(s.getFlight());
+            existing.setBooking(s.getBooking());
+            ticketRepository.save(existing);
+        }
     }
 
     @Override
@@ -117,6 +126,10 @@ public class TicketService implements ITicketService {
             default:
                 return new ArrayList<>();
         }
+    }
+
+    public List<Ticket> findAllWithDetails() {
+        return ticketRepository.findAllWithDetails(); // hoặc dùng @EntityGraph
     }
 
 

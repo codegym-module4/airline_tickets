@@ -24,12 +24,12 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-    
+
     @Bean
     public SecurityContextRepository securityContextRepository() {
         return new HttpSessionSecurityContextRepository();
     }
-    
+
     @Bean
     public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new SessionFixationProtectionStrategy();
@@ -39,32 +39,32 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/login","/login/google",
-                                "/register",
-                                "/forgot-password",
-                                "/reset-password",
-                                "/verify-registration",
-                                "/user/css/**",
-                                "/user/js/**",
-                                "/user/plugins/**",
-                                "/user/img/**",
-                                "/user/icon/**",
-                                "/admin/css/**",
-                                "/admin/js/**",
-                                "/admin/flight-seat/flight/**",
-                                "/news",
-                                "/news/detail/**",
-                                "/policy/**",
-                                "/ws-chat/**",
-                                "/api/**",
-                                "/admin/**"
-                        ).permitAll()
+                                .requestMatchers(
+                                        "/",
+                                        "/login","/login/google",
+                                        "/register",
+                                        "/forgot-password",
+                                        "/reset-password",
+                                        "/verify-registration",
+                                        "/user/css/**",
+                                        "/user/js/**",
+                                        "/user/plugins/**",
+                                        "/user/img/**",
+                                        "/user/icon/**",
+                                        "/admin/css/**",
+                                        "/admin/js/**",
+                                        "/admin/flight-seat/flight/**",
+                                        "/news",
+                                        "/news/detail/**",
+                                        "/policy/**",
+                                        "/ws-chat/**",
+                                        "/api/**",
+                                        "/admin/**"
+                                ).permitAll()
 //                        .requestMatchers("/admin/**").hasAnyRole("ADMIN,EMPLOYEE")
 //                                .requestMatchers("/admin/news/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**").authenticated()
-                        .anyRequest().authenticated()
+                                .requestMatchers("/profile/**", "/payment/**", "/booking/**", "/user/**").authenticated()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
