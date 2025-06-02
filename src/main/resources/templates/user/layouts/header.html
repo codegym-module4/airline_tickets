@@ -18,10 +18,11 @@
                             <div class="d-flex" sec:authorize="!isAuthenticated()">
                                 <a class="nav-link text-white" href="/register" th:text="#{register}">Đăng kí</a>
                                 <span style="font-weight: bold; color: #ffffff; margin-left:7px;">|</span>
-                                <a class="nav-link text-white" style="margin-left: 3px;" href="/login" th:text="#{login}">Đăng nhập</a>
+                                <a class="nav-link text-white" style="margin-left: 3px;" href="/login"
+                                   th:text="#{login}">Đăng nhập</a>
                             </div>
                             <div class="d-flex" sec:authorize="isAuthenticated()">
-                                <a class="nav-link text-white" th:href="@{/profile}"  th:text="#{my_profile}"
+                                <a class="nav-link text-white" th:href="@{/profile}" th:text="#{my_profile}"
                                    sec:authentication="principal.fullName"></a>
                                 <span style="font-weight: bold; color: #ffffff; margin-left:7px;">|</span>
                                 <div class="nav-item" style="margin-left: 3px;">
@@ -36,64 +37,85 @@
         <span th:switch="${#locale.language}">
             <span th:case="'vi'">Tiếng Việt</span>
             <span th:case="'en'">English</span>
-            <span th:case="*"  th:text="#{language}">Language</span>
+            <span th:case="*" th:text="#{language}">Language</span>
         </span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="?lang=vi">Tiếng Việt</a></li>
-                                <li><a class="dropdown-item" href="?lang=en">English</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changeLanguage('vi'); return false;">Tiếng Việt</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changeLanguage('en'); return false;">English</a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="nav-item d-flex justify-content-between align-items-center">
                         <ul class="nav">
-                            <li class="nav-item-select"><a class="nav-link text-white" href="#"  th:text="#{my_flight}">CHUYẾN BAY CỦA TÔI</a>
+                            <li class="nav-item-select"><a class="nav-link text-white" href="#" th:text="#{my_flight}">CHUYẾN
+                                BAY CỦA TÔI</a>
                             </li>
-                            <li class="nav-item-select"><a class="nav-link text-white" href="#" th:text="#{check_in}">CHECK-IN</a></li>
-                            <li class="nav-item-select"><a class="nav-link text-white" href="#" th:text="#{flight_service}">DỊCH VỤ CHUYẾN BAY</a>
+                            <li class="nav-item-select"><a class="nav-link text-white" href="#" th:text="#{check_in}">CHECK-IN</a>
                             </li>
-                            <li class="nav-item-select"><a class="nav-link text-white" href="#" th:text="#{finance_service}">DỊCH VỤ TÀI CHÍNH</a>
+                            <li class="nav-item-select"><a class="nav-link text-white" href="#"
+                                                           th:text="#{flight_service}">DỊCH VỤ CHUYẾN BAY</a>
+                            </li>
+                            <li class="nav-item-select"><a class="nav-link text-white" href="#"
+                                                           th:text="#{finance_service}">DỊCH VỤ TÀI CHÍNH</a>
                             </li>
                             <li class="nav-item-select position-relative">
-                                <a class="nav-link text-white" href="#" th:text="#{transaction_policy}">CHÍNH SÁCH GIAO DỊCH</a>
+                                <a class="nav-link text-white" href="#" th:text="#{transaction_policy}">CHÍNH SÁCH GIAO
+                                    DỊCH</a>
                                 <div class="policy-modal">
                                     <div class="policy-grid">
                                         <div class="policy-item">
-                                            <a href="/policy/chinh-sach-bao-mat-quyen-rieng-tu" th:text="#{privacy_policy}">Chính sách bảo mật quyền
+                                            <a href="/policy/chinh-sach-bao-mat-quyen-rieng-tu"
+                                               th:text="#{privacy_policy}">Chính sách bảo mật quyền
                                                 riêng tư</a>
-                                            <p th:text="#{privacy_policy_content}">Thông tin chỉ được sử dụng cho mục đích liên quan đến dịch vụ hàng không
+                                            <p th:text="#{privacy_policy_content}">Thông tin chỉ được sử dụng cho mục
+                                                đích liên quan đến dịch vụ hàng không
                                                 và tuân thủ quy định pháp luật.</p>
                                         </div>
                                         <div class="policy-item">
-                                            <a href="/policy/chinh-sach-hanh-ly" th:text="#{baggage_policy}">Chính sách hành lý</a>
-                                            <p th:text="#{baggage_policy_content}">Quy định về kích thước, trọng lượng và số lượng hành lý xách tay hoặc ký
+                                            <a href="/policy/chinh-sach-hanh-ly" th:text="#{baggage_policy}">Chính sách
+                                                hành lý</a>
+                                            <p th:text="#{baggage_policy_content}">Quy định về kích thước, trọng lượng
+                                                và số lượng hành lý xách tay hoặc ký
                                                 gửi.</p>
                                         </div>
                                         <div class="policy-item">
-                                            <a href="/policy/chinh-sach-dat-ve" th:text="#{booking_policy}">Chính sách đặt vé</a>
-                                            <p th:text="#{booking_policy_content}">Bao gồm các quy định về việc đặt vé.</p>
+                                            <a href="/policy/chinh-sach-dat-ve" th:text="#{booking_policy}">Chính sách
+                                                đặt vé</a>
+                                            <p th:text="#{booking_policy_content}">Bao gồm các quy định về việc đặt
+                                                vé.</p>
                                         </div>
                                         <div class="policy-item">
-                                            <a href="/policy/chinh-sach-huy-ve" th:text="#{cancel_policy}">Chính sách hủy vé</a>
-                                            <p  th:text="#{cancel_policy_content}">>Bao gồm các quy định về việc thay đổi, hủy vé và hoàn tiền.</p>
+                                            <a href="/policy/chinh-sach-huy-ve" th:text="#{cancel_policy}">Chính sách
+                                                hủy vé</a>
+                                            <p th:text="#{cancel_policy_content}">>Bao gồm các quy định về việc thay
+                                                đổi, hủy vé và hoàn tiền.</p>
                                         </div>
                                         <div class="policy-item">
-                                            <a href="/policy/chinh-sach-doi-ve" th:text="#{change_policy}">Chính sách đổi vé</a>
-                                            <p th:text="#{change_policy_content}">Bao gồm các quy định về việc đổi vé và hoàn tiền.</p>
+                                            <a href="/policy/chinh-sach-doi-ve" th:text="#{change_policy}">Chính sách
+                                                đổi vé</a>
+                                            <p th:text="#{change_policy_content}">Bao gồm các quy định về việc đổi vé và
+                                                hoàn tiền.</p>
                                         </div>
                                         <div class="policy-item">
-                                            <a href="/policy/chinh-sach-bao-ve-khach-hang" th:text="#{customer_protection_policy}">Chính sách bảo vệ khách
+                                            <a href="/policy/chinh-sach-bao-ve-khach-hang"
+                                               th:text="#{customer_protection_policy}">Chính sách bảo vệ khách
                                                 hàng</a>
-                                            <p th:text="#{customer_protection_policy_content}">Chính sách bảo vệ hành khách khi thực hiện các chuyến bay cùng
+                                            <p th:text="#{customer_protection_policy_content}">Chính sách bảo vệ hành
+                                                khách khi thực hiện các chuyến bay cùng
                                                 Vietjet.</p>
                                         </div>
                                         <div class="policy-item">
-                                            <a href="/policy/chinh-sach-ho-tro-dac-biet" th:text="#{special_support_policy}">Chính sách hỗ trợ đặc biệt</a>
-                                            <p th:text="#{special_support_policy_content}">Dành cho người khuyết tật hoặc hành khách cần sự hỗ trợ đặc biệt.</p>
+                                            <a href="/policy/chinh-sach-ho-tro-dac-biet"
+                                               th:text="#{special_support_policy}">Chính sách hỗ trợ đặc biệt</a>
+                                            <p th:text="#{special_support_policy_content}">Dành cho người khuyết tật
+                                                hoặc hành khách cần sự hỗ trợ đặc biệt.</p>
                                         </div>
                                         <div class="policy-item">
-                                            <a href="/policy/kenh-thanh-toan" th:text="#{payment_channels}">Kênh thanh toán</a>
-                                            <p th:text="#{payment_channels_content}">Các hình thức thanh toán liên quan đến đặt vé máy bay.</p>
+                                            <a href="/policy/kenh-thanh-toan" th:text="#{payment_channels}">Kênh thanh
+                                                toán</a>
+                                            <p th:text="#{payment_channels_content}">Các hình thức thanh toán liên quan
+                                                đến đặt vé máy bay.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -104,4 +126,12 @@
             </div>
         </div>
     </header>
+    <script>
+        function changeLanguage(lang) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', lang);  // Thêm hoặc thay lang
+            document.documentElement.lang = lang;
+            window.location.href = url.toString();  // Reload trang với param mới
+        }
+    </script>
 </th:block>

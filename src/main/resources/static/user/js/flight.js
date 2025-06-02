@@ -81,13 +81,17 @@
 
     $(document).on("click", ".btn-data-flight", function () {
         let id = $(this).data("id");
+        let urlParams = new URLSearchParams(window.location.search);
+        let lang = urlParams.get('lang') || 'vi';
+        console.log(lang);
         $.ajax({
             type: 'GET',
-            url: '/api/flight/' + id,
+            url: '/api/flight/' + id + '?lang=' + lang,
             dataType: 'json'
         }).done(function (data) {
             if (data.html) {
                 $("#detailModal .modal-body").html(data.html);
+                console.log(data.html)
                 $("#detailModal").modal("show");
             }
         }).fail(function (jqXhr, json, errorThrown) {
@@ -114,7 +118,10 @@
             return
         }
 
+        let lang = new URLSearchParams(window.location.search).get("lang") || "vi";
         let data = getDataRequired();
+        data.lang = lang;
+
         $.ajax({
             type: 'GET',
             url: '/api/flight/confirm',

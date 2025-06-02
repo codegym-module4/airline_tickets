@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -46,7 +47,11 @@ public class FlightController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<FlightResponse> getDataFlightById(@PathVariable("id") Long id) {
+    public ResponseEntity<FlightResponse> getDataFlightById(@PathVariable("id") Long id,
+                                                            @RequestParam(value = "lang", required = false) String lang, Model model) {
+        System.out.println("lang param = " + lang);
+        Locale locale = (lang != null && !lang.isEmpty()) ? Locale.forLanguageTag(lang) : Locale.getDefault();
+        System.out.println("Locale sử dụng: " + locale);
         Flight flight = flightService.findById(id);
         if (flight == null) {
             return ResponseEntity.badRequest().body(
@@ -57,6 +62,7 @@ public class FlightController {
                             .build()
             );
         }
+        model.addAttribute("lang", locale.getLanguage());
 
         String departure = flight.getDepartureAirport().getName();
         String arrival = flight.getArrivalAirport().getName();
@@ -72,7 +78,7 @@ public class FlightController {
                 .priceVATTotal(FormaterCustom.formatPriceVAT(flight.getPrice()))
                 .priceVAT("0")
                 .build();
-        Context context = new Context();
+        Context context = new Context(locale);
         context.setVariable("departure", departure);
         context.setVariable("arrival", arrival);
         context.setVariable("flight", flightResponseDTO);
@@ -87,7 +93,7 @@ public class FlightController {
     }
 
     @GetMapping("/confirm")
-    public ResponseEntity<FlightResponse> getDataFlightConfirm(@RequestParam Map<String, String> request) {
+    public ResponseEntity<FlightResponse> getDataFlightConfirm(@RequestParam Map<String, String> request, Locale locale) {
         int num_of_adult = Integer.parseInt(request.get("num_of_adult"));
         int num_of_child = Integer.parseInt(request.get("num_of_child"));
         int num_of_ticket = num_of_adult + num_of_child;
@@ -148,7 +154,7 @@ public class FlightController {
                     .priceVAT("0")
                     .build();
         }
-        Context context = new Context();
+        Context context = new Context(locale);
         context.setVariable("num_of_ticket", num_of_ticket);
         context.setVariable("num_of_baby", num_of_baby);
         context.setVariable("flightDepart", flightDepartDTO);
