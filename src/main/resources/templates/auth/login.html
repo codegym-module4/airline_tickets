@@ -6,10 +6,33 @@
     <th:block th:replace="~{user/layouts/header::header}"></th:block>
     <div class="auth-container">
         <h2 th:text="#{login}">Đăng nhập</h2>
-        <div th:if="${param.error}" class="alert alert-danger" th:text="#{login_deny}">Email hoặc mật khẩu không đúng!</div>
-        <div th:if="${param.logout}" class="alert alert-success" th:text="#{logout_success}">Bạn đã đăng xuất thành công!</div>
-        <div th:if="${param.register_success}" class="alert alert-success" th:text="#{register_success}">Đăng ký thành công! Vui lòng đăng nhập.</div>
-        <div th:if="${param.account_deleted}" class="alert alert-success" th:text="#{delete_success}">Tài khoản của bạn đã được xóa thành công!</div>
+
+        <!-- Nếu có param.error thì kiểm tra tiếp -->
+        <div th:if="${param.error != null}">
+            <!-- Khi ?error=true -->
+            <div th:if="${#strings.equals(param.error[0], 'true')}" class="alert alert-success">
+                Email hoặc mật khẩu không đúng!
+            </div>
+            <!-- Khi ?error=locked -->
+            <div th:if="${#strings.equals(param.error[0], 'locked')}" class="alert alert-success">
+                Tài khoản của bạn đã bị khóa. Vui lòng chờ
+                <span th:text="${session.LOCK_REMAINING != null ? session.LOCK_REMAINING : 0}"></span> phút.
+            </div>
+        </div>
+
+        <!-- Nếu logout=true -->
+        <div th:if="${param.logout}" class="alert alert-success" th:text="#{logout_success}">
+            Bạn đã đăng xuất thành công!
+        </div>
+        <!-- Nếu register_success=true -->
+        <div th:if="${param.register_success}" class="alert alert-success" th:text="#{register_success}">
+            Đăng ký thành công! Vui lòng đăng nhập.
+        </div>
+        <!-- Nếu account_deleted=true -->
+        <div th:if="${param.account_deleted}" class="alert alert-success" th:text="#{delete_success}">
+            Tài khoản của bạn đã được xóa thành công!
+        </div>
+
         <form th:action="@{/login}" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label" th:text="#{email}">Email:</label>
@@ -37,7 +60,5 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="/user/js/firebase-auth.js"></script>
-
 </body>
-
 </html>
