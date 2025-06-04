@@ -47,6 +47,7 @@ public class FlightsController {
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
                                        @RequestParam(required = false, defaultValue = "price") String sortProperty,
+                                       @RequestParam(value = "lang", required = false) String lang,
                                        Model model, RedirectAttributes redirectAttributes, HttpSession session
     ){
 
@@ -141,6 +142,8 @@ public class FlightsController {
            model.addAttribute("message","Tìm kiếm thành công");
 
         }
+        String currentLang = lang != null ? lang : "vi"; // mặc định vi
+        redirectAttributes.addAttribute("lang", currentLang);
         return "user/flight/flight";
     }
 
