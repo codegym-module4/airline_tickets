@@ -4,13 +4,14 @@ import com.codegym.airline_tickets.entity.Ticket;
 import com.itextpdf.html2pdf.HtmlConverter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-@Component
+@Service
 public class ExportPDFTicket2 {
 
     private final TemplateEngine templateEngine;
