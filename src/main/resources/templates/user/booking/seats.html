@@ -96,7 +96,7 @@
                                                  th:data-id="${flightSeat.id}">
                                                 <span th:text="${seat.seatAlphabet + seat.seatNumber}"></span>
                                             </div>
-                                            <div th:if="${flightSeat == null || (flightSeat != null && flightSeat.status == 3)}" th:id="'flight_seat_' + ${flightSeat.id}" class="col-1 seat seat-not-found" th:data-id="${flightSeat.id}"></div>
+                                            <div th:if="${flightSeat == null || (flightSeat != null && flightSeat.status == 3)}" th:id="'seat_' + ${seat.id}" class="col-1 seat seat-not-found" th:data-id="${seat.id}"></div>
                                         </th:block>
                                         <div th:if="${seat.seatAlphabet == 'C'}" class="col-1"></div>
                                     </th:block>
@@ -258,7 +258,8 @@
     function addSeat(data) {
         let flightSeat = JSON.parse(data);
         let id = flightSeat.id;
-        let seat = $("#flight_seat_" + id);
+        let seat_id = flightSeat.seat.id;
+        let seat = $("#seat_" + seat_id);
         let div = `<div class="col-1 seat seat-available"
                              id="flight_seat_${id}"
                              data-id="${id}">
@@ -270,8 +271,9 @@
     function removeSeat(data) {
         let flightSeat = JSON.parse(data);
         let id = flightSeat.id;
+        let seat_id = flightSeat.seat.id;
         let seat = $("#flight_seat_" + id);
-        let div = '<div id="flight_seat_'+id+'" class="col-1 seat seat-not-found" data-id="'+data.id+'"></div>';
+        let div = '<div id="seat_'+seat_id+'" class="col-1 seat seat-not-found" data-id="'+data.seat_id+'"></div>';
         seat.replaceWith(div);
         $('.seat-selection').each(function() {
             let el = $(this);
