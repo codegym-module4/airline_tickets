@@ -56,7 +56,7 @@ public class LoggingAspect {
     }
 
     @Around("updateUser()")
-    public void LogAroundUpdateUser (ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object LogAroundUpdateUser (ProceedingJoinPoint joinPoint) throws Throwable {
         User user = (User) joinPoint.getArgs()[1];
 
         joinPoint.proceed();
@@ -73,6 +73,8 @@ public class LoggingAspect {
         }
         userUpdatedLog.setTimestamp(LocalDateTime.now());
         logService.save(userUpdatedLog);
+
+        return joinPoint.proceed();
     }
 
     @Pointcut("execution(* com.codegym.airline_tickets.service.impl.EmployeeService.updateEmployeeAndAccount(..))")
@@ -80,7 +82,7 @@ public class LoggingAspect {
     }
 
     @Around("updateEmployee()")
-    public void LogAroundUpdateEmployee(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object LogAroundUpdateEmployee(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         EmployeeAccountDTO employee = (EmployeeAccountDTO) args[0];
 
@@ -100,6 +102,8 @@ public class LoggingAspect {
         }
         employeeUpdatedLog.setTimestamp(LocalDateTime.now());
         logService.save(employeeUpdatedLog);
+
+        return joinPoint.proceed();
     }
 
 
@@ -129,7 +133,7 @@ public class LoggingAspect {
     }
 
     @Around("createEmployee()")
-    public void logAroundCreateEmployee(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logAroundCreateEmployee(ProceedingJoinPoint joinPoint) throws Throwable {
         Employee result = (Employee) joinPoint.proceed();
 
         Log employeeCreatedLog = new Log();
@@ -142,6 +146,8 @@ public class LoggingAspect {
         }
         employeeCreatedLog.setTimestamp(LocalDateTime.now());
         logService.save(employeeCreatedLog);
+
+        return joinPoint.proceed();
     }
 
     @Pointcut("execution(* com.codegym.airline_tickets.service.impl.AccountService.register(..))")
@@ -149,7 +155,7 @@ public class LoggingAspect {
     }
 
     @Around("createUser()")
-    public void logAfterCreateUser(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logAfterCreateUser(ProceedingJoinPoint joinPoint) throws Throwable {
         Account account = (Account) joinPoint.getArgs()[0];
         User user = account.getUser();
 
@@ -163,6 +169,8 @@ public class LoggingAspect {
             userCreatedLog.setTimestamp(LocalDateTime.now());
             logService.save(userCreatedLog);
         }
+
+        return joinPoint.proceed();
     }
 
     //Ghi log khi xóa nhân viên, xóa khách hàng, xóa đặt vé
